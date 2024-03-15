@@ -12,7 +12,7 @@ namespace SwitchBlocksMod.Behaviours
     /// </summary>
     public class BehaviourCountdownLever : IBlockBehaviour
     {
-        public float BlockPriority => 2f;
+        public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
 
@@ -43,7 +43,6 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            //TODO_HI: Softlock countermeasures.
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
             {
                 return true;

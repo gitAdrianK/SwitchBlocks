@@ -12,7 +12,7 @@ namespace SwitchBlocksMod.Behaviours
     /// </summary>
     public class BehaviourSandLever : IBlockBehaviour
     {
-        public float BlockPriority => 2f;
+        public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
 

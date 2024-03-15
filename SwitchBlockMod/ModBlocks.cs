@@ -346,7 +346,8 @@ namespace SwitchBlocksMod.Util
                     "On",
                     "Off",
                     "Lever",
-                    "LeverSolid");
+                    "LeverSolid",
+                    "Duration");
                 Color? countdownOn = null;
                 if (dictionaryCountdown.ContainsKey("On"))
                 {

@@ -25,7 +25,7 @@ namespace SwitchBlocksMod.Blocks
             if (collider.Intersects(hitbox))
             {
                 intersection = Rectangle.Intersect(hitbox, collider);
-                return BlockCollisionType.Collision_Blocking;
+                return BlockCollisionType.Collision_NonBlocking;
             }
             else
             {
