@@ -4,6 +4,7 @@ using JumpKing.API;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
+using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Behaviours;
 using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Entities;
@@ -39,8 +40,15 @@ namespace SwitchBlocksMod
             foreach (var item in blockFactories.Where(pair => pair.Item1))
             {
                 var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
-                LevelManager.RegisterBlockFactory((JumpKing.API.IBlockFactory)constructorInfo.Invoke(null));
+                LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
             };
+
+            var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
+            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
+            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
+            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
         }
 
         /// <summary>
@@ -95,7 +103,7 @@ namespace SwitchBlocksMod
                     EntityBasicLevers.Instance.Dispose();
                 }
                 BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
-                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
+                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
                 {
                     (ModBlocks.BASIC_LEVER, typeof(BlockBasicLever), behaviourBasicLever),
                     (ModBlocks.BASIC_LEVER_ON, typeof(BlockBasicLeverOn), behaviourBasicLever),
@@ -125,7 +133,7 @@ namespace SwitchBlocksMod
                     EntityCountdownLevers.Instance.Dispose();
                 }
                 BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
-                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
+                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
                 {
                     (ModBlocks.COUNTDOWN_LEVER, typeof(BlockBasicLever), behaviourCountdownLever),
                     (ModBlocks.COUNTDOWN_LEVER_SOLID, typeof(BlockBasicLeverSolid), behaviourCountdownLever),
@@ -150,17 +158,9 @@ namespace SwitchBlocksMod
                     EntitySandLevers.Instance.Dispose();
                 }
 
-                // TODO_LO: Move into more sensible place (probably BehaviourSand)
-                var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
-                harmony.PatchAll(Assembly.GetExecutingAssembly());
-                MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-                MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-                originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-                harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
-
                 BehaviourSand behaviourSand = new BehaviourSand();
                 BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
+                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
                 {
                     (ModBlocks.SAND_ON, typeof(BlockSandOn), behaviourSand),
                     (ModBlocks.SAND_OFF, typeof(BlockSandOff), behaviourSand),
