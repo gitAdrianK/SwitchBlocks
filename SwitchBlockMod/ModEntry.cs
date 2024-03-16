@@ -1,4 +1,5 @@
 ﻿using EntityComponent;
+using Harmony;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
@@ -7,6 +8,8 @@ using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
+using System;
+using System.Reflection;
 
 namespace SwitchBlocksMod
 {
@@ -89,36 +92,36 @@ namespace SwitchBlocksMod
                 {
                     entityManager.AddObject(EntityBasicPlatforms.Instance);
                     entityManager.AddObject(EntityBasicLevers.Instance);
-                    BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
-                    if (ModBlocks.BASIC_LEVER != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
-                    }
-                    if (ModBlocks.BASIC_LEVER_ON != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
-                    }
-                    if (ModBlocks.BASIC_LEVER_OFF != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOff), behaviourBasicLever);
-                    }
-                    if (ModBlocks.BASIC_LEVER_SOLID != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolid), behaviourBasicLever);
-                    }
-                    if (ModBlocks.BASIC_LEVER_SOLID_ON != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOn), behaviourBasicLever);
-                    }
-                    if (ModBlocks.BASIC_LEVER_SOLID_OFF != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
-                    }
                 }
                 else
                 {
                     EntityBasicPlatforms.Instance.Dispose();
                     EntityBasicLevers.Instance.Dispose();
+                }
+                BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
+                if (ModBlocks.BASIC_LEVER != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
+                }
+                if (ModBlocks.BASIC_LEVER_ON != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
+                }
+                if (ModBlocks.BASIC_LEVER_OFF != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOff), behaviourBasicLever);
+                }
+                if (ModBlocks.BASIC_LEVER_SOLID != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolid), behaviourBasicLever);
+                }
+                if (ModBlocks.BASIC_LEVER_SOLID_ON != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOn), behaviourBasicLever);
+                }
+                if (ModBlocks.BASIC_LEVER_SOLID_OFF != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
                 }
             }
             // Countdown
@@ -127,22 +130,23 @@ namespace SwitchBlocksMod
                 if (EntityCountdownPlatforms.Instance.PlatformDictionary.Count != 0
                     && EntityCountdownLevers.Instance.LeverDictionary.Count != 0)
                 {
+
                     entityManager.AddObject(EntityCountdownPlatforms.Instance);
                     entityManager.AddObject(EntityCountdownLevers.Instance);
-                    BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
-                    if (ModBlocks.COUNTDOWN_LEVER != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
-                    }
-                    if (ModBlocks.COUNTDOWN_LEVER_SOLID != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
-                    }
                 }
                 else
                 {
                     EntityCountdownPlatforms.Instance.Dispose();
                     EntityCountdownLevers.Instance.Dispose();
+                }
+                BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
+                if (ModBlocks.COUNTDOWN_LEVER != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
+                }
+                if (ModBlocks.COUNTDOWN_LEVER_SOLID != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
                 }
             }
             // Sand
@@ -153,47 +157,56 @@ namespace SwitchBlocksMod
                 {
                     entityManager.AddObject(EntitySandPlatforms.Instance);
                     entityManager.AddObject(EntitySandLevers.Instance);
-                    BehaviourSand behaviourSand = new BehaviourSand();
-                    if (ModBlocks.SAND_ON != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSand);
-                    }
-                    if (ModBlocks.SAND_OFF != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSand);
-                    }
-                    BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-                    if (ModBlocks.SAND_LEVER != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
-                    }
-                    if (ModBlocks.SAND_LEVER_ON != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
-                    }
-                    if (ModBlocks.SAND_LEVER_OFF != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
-                    }
-                    if (ModBlocks.SAND_LEVER_SOLID != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
-                    }
-                    if (ModBlocks.SAND_LEVER_SOLID_ON != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
-                    }
-                    if (ModBlocks.SAND_LEVER_SOLID_OFF != null)
-                    {
-                        player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
-                    }
                 }
                 else
                 {
                     EntitySandPlatforms.Instance.Dispose();
                     EntitySandLevers.Instance.Dispose();
                 }
+
+                var harmony = HarmonyInstance.Create("zebra.switchBlocksMod");
+                harmony.PatchAll(Assembly.GetExecutingAssembly());
+                MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
+                MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
+                originalIsOnBlock = harmony.Patch(isOnBlockMethod);
+                harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
+
+                BehaviourSand behaviourSand = new BehaviourSand();
+                if (ModBlocks.SAND_ON != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSand);
+                }
+                if (ModBlocks.SAND_OFF != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSand);
+                }
+                BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
+                if (ModBlocks.SAND_LEVER != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
+                }
+                if (ModBlocks.SAND_LEVER_ON != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
+                }
+                if (ModBlocks.SAND_LEVER_OFF != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
+                }
+                if (ModBlocks.SAND_LEVER_SOLID != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
+                }
+                if (ModBlocks.SAND_LEVER_SOLID_ON != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
+                }
+                if (ModBlocks.SAND_LEVER_SOLID_OFF != null)
+                {
+                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
+                }
             }
+            // End
             EntityManager.instance.MoveToFront(player);
         }
 
@@ -204,6 +217,17 @@ namespace SwitchBlocksMod
         public static void OnLevelEnd()
         {
             ModSaves.SaveData();
+        }
+
+        private static MethodInfo originalIsOnBlock;
+        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
+        {
+            if (__0 == typeof(SandBlock) && originalIsOnBlock != null)
+            {
+                __result = (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(SandBlock) })
+                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOn) })
+                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
+            }
         }
     }
 }
