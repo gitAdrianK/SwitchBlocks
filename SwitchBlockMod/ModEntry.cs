@@ -9,6 +9,9 @@ using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace SwitchBlocksMod
@@ -23,28 +26,20 @@ namespace SwitchBlocksMod
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
 
-            // Auto
-            if (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED)
+            List<(bool, Type)> blockFactories = new List<(bool, Type)>
             {
-                LevelManager.RegisterBlockFactory(new FactoryAuto());
-            }
-            // Basic
-            if (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED)
+                (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED, typeof(FactoryAuto)),
+                (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED, typeof(FactoryBasic)),
+                (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED, typeof(FactoryCountdown)),
+                (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED, typeof(FactorySand)),
+            };
+            foreach (var item in blockFactories.Where(pair => pair.Item1))
             {
-                LevelManager.RegisterBlockFactory(new FactoryBasic());
-            }
-            // Countdown
-            if (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED)
-            {
-                LevelManager.RegisterBlockFactory(new FactoryCountdown());
-            }
-            // Sand
-            if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
-            {
-                LevelManager.RegisterBlockFactory(new FactorySand());
-            }
+                var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
+                LevelManager.RegisterBlockFactory((JumpKing.API.IBlockFactory)constructorInfo.Invoke(null));
+            };
         }
 
         /// <summary>
@@ -63,6 +58,7 @@ namespace SwitchBlocksMod
         [OnLevelStart]
         public static void OnLevelStart()
         {
+            //TODO_LO: "Cleanup" like BeforeLevelLoad()
             ModSaves.LoadData();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
@@ -164,7 +160,8 @@ namespace SwitchBlocksMod
                     EntitySandLevers.Instance.Dispose();
                 }
 
-                var harmony = HarmonyInstance.Create("zebra.switchBlocksMod");
+                // TODO_LO: Move into more sensible place (probably BehaviourSand)
+                var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
                 MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
                 MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
