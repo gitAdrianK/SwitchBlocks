@@ -1,5 +1,6 @@
 ﻿using EntityComponent;
 using Harmony;
+using JumpKing.API;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
@@ -58,7 +59,6 @@ namespace SwitchBlocksMod
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            //TODO_LO: "Cleanup" like BeforeLevelLoad()
             ModSaves.LoadData();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
@@ -95,29 +95,18 @@ namespace SwitchBlocksMod
                     EntityBasicLevers.Instance.Dispose();
                 }
                 BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
-                if (ModBlocks.BASIC_LEVER != null)
+                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
-                }
-                if (ModBlocks.BASIC_LEVER_ON != null)
+                    (ModBlocks.BASIC_LEVER, typeof(BlockBasicLever), behaviourBasicLever),
+                    (ModBlocks.BASIC_LEVER_ON, typeof(BlockBasicLeverOn), behaviourBasicLever),
+                    (ModBlocks.BASIC_LEVER_OFF, typeof(BlockBasicLeverOff), behaviourBasicLever),
+                    (ModBlocks.BASIC_LEVER_SOLID, typeof(BlockBasicLeverSolid), behaviourBasicLever),
+                    (ModBlocks.BASIC_LEVER_SOLID_ON, typeof(BlockBasicLeverSolidOn), behaviourBasicLever),
+                    (ModBlocks.BASIC_LEVER_SOLID_OFF, typeof(BlockBasicLeverSolidOff), behaviourBasicLever),
+                };
+                foreach (var item in blocks.Where(triple => triple.Item1 != null))
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
-                }
-                if (ModBlocks.BASIC_LEVER_OFF != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOff), behaviourBasicLever);
-                }
-                if (ModBlocks.BASIC_LEVER_SOLID != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolid), behaviourBasicLever);
-                }
-                if (ModBlocks.BASIC_LEVER_SOLID_ON != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOn), behaviourBasicLever);
-                }
-                if (ModBlocks.BASIC_LEVER_SOLID_OFF != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
+                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
             // Countdown
@@ -136,13 +125,14 @@ namespace SwitchBlocksMod
                     EntityCountdownLevers.Instance.Dispose();
                 }
                 BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
-                if (ModBlocks.COUNTDOWN_LEVER != null)
+                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
-                }
-                if (ModBlocks.COUNTDOWN_LEVER_SOLID != null)
+                    (ModBlocks.COUNTDOWN_LEVER, typeof(BlockBasicLever), behaviourCountdownLever),
+                    (ModBlocks.COUNTDOWN_LEVER_SOLID, typeof(BlockBasicLeverSolid), behaviourCountdownLever),
+                };
+                foreach (var item in blocks.Where(triple => triple.Item1 != null))
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
+                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
             // Sand
@@ -169,38 +159,21 @@ namespace SwitchBlocksMod
                 harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
 
                 BehaviourSand behaviourSand = new BehaviourSand();
-                if (ModBlocks.SAND_ON != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSand);
-                }
-                if (ModBlocks.SAND_OFF != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSand);
-                }
                 BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-                if (ModBlocks.SAND_LEVER != null)
+                List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)> blocks = new List<(Microsoft.Xna.Framework.Color?, Type, IBlockBehaviour)>
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
-                }
-                if (ModBlocks.SAND_LEVER_ON != null)
+                    (ModBlocks.SAND_ON, typeof(BlockSandOn), behaviourSand),
+                    (ModBlocks.SAND_OFF, typeof(BlockSandOff), behaviourSand),
+                    (ModBlocks.SAND_LEVER, typeof(BlockSandLever), behaviourSandLever),
+                    (ModBlocks.SAND_LEVER_ON, typeof(BlockSandLeverOn), behaviourSandLever),
+                    (ModBlocks.SAND_LEVER_OFF, typeof(BlockSandLeverOff), behaviourSandLever),
+                    (ModBlocks.SAND_LEVER_SOLID, typeof(BlockSandLeverSolid), behaviourSandLever),
+                    (ModBlocks.SAND_LEVER_SOLID_ON, typeof(BlockSandLeverSolidOn), behaviourSandLever),
+                    (ModBlocks.SAND_LEVER_SOLID_OFF, typeof(BlockSandLeverSolidOff), behaviourSandLever),
+                };
+                foreach (var item in blocks.Where(triple => triple.Item1 != null))
                 {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
-                }
-                if (ModBlocks.SAND_LEVER_OFF != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
-                }
-                if (ModBlocks.SAND_LEVER_SOLID != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
-                }
-                if (ModBlocks.SAND_LEVER_SOLID_ON != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
-                }
-                if (ModBlocks.SAND_LEVER_SOLID_OFF != null)
-                {
-                    player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
+                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
             // End
