@@ -35,8 +35,11 @@ namespace SwitchBlocksMod.Blocks
                     return BlockCollisionType.Collision_NonBlocking;
                 }
             }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
+            else
+            {
+                intersection = Rectangle.Empty;
+                return BlockCollisionType.NoCollision;
+            }
         }
     }
 }
