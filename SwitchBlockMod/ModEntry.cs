@@ -68,6 +68,7 @@ namespace SwitchBlocksMod
         public static void OnLevelStart()
         {
             ModSaves.LoadData();
+            ModSounds.LoadSounds();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -186,6 +187,14 @@ namespace SwitchBlocksMod
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
+            EntityAutoPlatforms.Instance.Dispose();
+            EntityBasicPlatforms.Instance.Dispose();
+            EntityBasicLevers.Instance.Dispose();
+            EntityCountdownPlatforms.Instance.Dispose();
+            EntityCountdownLevers.Instance.Dispose();
+            EntitySandPlatforms.Instance.Dispose();
+            EntitySandLevers.Instance.Dispose();
+            ModSounds.UnloadSounds();
             ModSaves.SaveData();
         }
 

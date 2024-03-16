@@ -23,32 +23,32 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// Sound played when the auto block blinks.
         /// </summary>
-        public static readonly JKSound AUTO_BLINK;
+        public static JKSound AUTO_BLINK;
         /// <summary>
         /// Sound played when the auto block flips state.
         /// </summary>
-        public static readonly JKSound AUTO_FLIP;
+        public static JKSound AUTO_FLIP;
 
         /// <summary>
         /// Sound played when the basic block flips state.
         /// </summary>
-        public static readonly JKSound BASIC_FLIP;
+        public static JKSound BASIC_FLIP;
 
         /// <summary>
         /// Sound played when the countdown block blinks.
         /// </summary>
-        public static readonly JKSound COUNTDOWN_BLINK;
+        public static JKSound COUNTDOWN_BLINK;
         /// <summary>
         /// Sound played when the countdown block flips state.
         /// </summary>
-        public static readonly JKSound COUNTDOWN_FLIP;
+        public static JKSound COUNTDOWN_FLIP;
 
         /// <summary>
         /// Sound played when the sand block flips state.
         /// </summary>
-        public static readonly JKSound SAND_FLIP;
+        public static JKSound SAND_FLIP;
 
-        static ModSounds()
+        public static void LoadSounds()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -85,6 +85,22 @@ namespace SwitchBlocksMod.Util
             {
                 SAND_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
+        }
+
+        public static void UnloadSounds()
+        {
+            AUTO_BLINK.Dispose();
+            AUTO_BLINK = null;
+            AUTO_FLIP.Dispose();
+            AUTO_FLIP = null;
+            BASIC_FLIP.Dispose();
+            BASIC_FLIP = null;
+            COUNTDOWN_BLINK.Dispose();
+            COUNTDOWN_BLINK = null;
+            COUNTDOWN_FLIP.Dispose();
+            COUNTDOWN_FLIP = null;
+            SAND_FLIP.Dispose();
+            SAND_FLIP = null;
         }
     }
 }
