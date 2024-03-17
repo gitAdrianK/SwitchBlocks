@@ -16,6 +16,7 @@ namespace SwitchBlocksMod.Entities
     {
         public Texture2D texture;
         public Vector2 position;
+        public Point size;
         public bool startState;
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace SwitchBlocksMod.Entities
                     return dictionary;
                 }
 
-                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep);
+                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep, subfolder);
                 if (platforms.Count != 0)
                 {
                     dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, platforms);
@@ -73,13 +74,23 @@ namespace SwitchBlocksMod.Entities
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
         /// <returns>List&lt;Platform&gt;</returns>
-        private static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep)
+        private static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep, string subfolder)
         {
             List<Platform> list = new List<Platform>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
             {
                 XmlNodeList xmlPlatform = xmlElement.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "StartState");
+                Dictionary<string, int> dictionary;
+                // TODO_LO: Put all strings somewhere and only reference those instead of typing them out.
+                // Seeing strings in code is kind of a codesmell.
+                if (subfolder == "sand")
+                {
+                    dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "Size", "StartState");
+                }
+                else
+                {
+                    dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "StartState");
+                }
                 if (dictionary == null)
                 {
                     continue;
@@ -103,6 +114,21 @@ namespace SwitchBlocksMod.Entities
                     continue;
                 }
                 platform.position = (Vector2)position;
+
+                //Size
+                if (dictionary.ContainsKey("Size"))
+                {
+                    Point? size = Xml.GetPoint(xmlPlatform[dictionary["Size"]]);
+                    if (size == null)
+                    {
+                        continue;
+                    }
+                    platform.size = (Point)size;
+                }
+                else
+                {
+                    platform.size = new Point(platform.texture.Width, platform.texture.Height);
+                }
 
                 // Start state
                 string stateInnerText = xmlPlatform[dictionary["StartState"]].InnerText;

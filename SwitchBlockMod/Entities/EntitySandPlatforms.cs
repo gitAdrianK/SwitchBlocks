@@ -84,32 +84,52 @@ namespace SwitchBlocksMod.Entities
 
         private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
         {
-            int roundedOffset = (int)offset % (platform.texture.Height / 2);
+            //TODO: Scrolling for the new texture system
+            int scroll = Math.Abs((int)offset % (platform.texture.Height - platform.size.Y + 1));
             if (platform.startState == DataSand.State)
             {
+                // Scrolling inside
+                spriteBatch.Draw(
+                texture: platform.texture,
+                position: platform.position,
+                sourceRectangle: new Rectangle(
+                    platform.size.X,
+                    scroll,
+                    platform.size.X,
+                    platform.size.Y),
+                color: Color.White);
+                // Overlay outside
                 spriteBatch.Draw(
                 texture: platform.texture,
                 position: platform.position,
                 sourceRectangle: new Rectangle(
                     0,
-                    roundedOffset,
-                    platform.texture.Width,
-                    platform.texture.Height / 2),
-                color: Color.White);
-            }
-            else
-            {
-                spriteBatch.Draw(
-                texture: platform.texture,
-                position: platform.position,
-                sourceRectangle: new Rectangle(
                     0,
-                    platform.texture.Height / 2 - roundedOffset,
-                    platform.texture.Width,
-                    platform.texture.Height / 2),
+                    platform.size.X,
+                    platform.size.Y),
                 color: Color.White);
-
+                return;
             }
+            // Scrolling inside
+            spriteBatch.Draw(
+            texture: platform.texture,
+            position: platform.position,
+            sourceRectangle: new Rectangle(
+                platform.size.X,
+                platform.texture.Height - platform.size.Y - scroll,
+                platform.size.X,
+                platform.size.Y),
+            color: Color.White);
+            // Overlay outside
+            spriteBatch.Draw(
+            texture: platform.texture,
+            position: platform.position,
+            sourceRectangle: new Rectangle(
+                0,
+                platform.size.Y,
+                platform.size.X,
+                platform.size.Y),
+            color: Color.White);
         }
     }
 }

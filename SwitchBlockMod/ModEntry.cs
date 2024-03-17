@@ -12,7 +12,6 @@ using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -28,7 +27,7 @@ namespace SwitchBlocksMod
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            Debugger.Launch();
+            //Debugger.Launch();
 
             List<(bool, Type)> blockFactories = new List<(bool, Type)>
             {

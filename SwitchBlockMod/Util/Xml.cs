@@ -95,5 +95,24 @@ namespace SwitchBlocksMod
                 int.Parse(children[dictionary["X"]].InnerText),
                 int.Parse(children[dictionary["Y"]].InnerText));
         }
+
+        /// <summary>
+        /// Creates a Point from a given xml node should the node contain 2
+        /// children named "X", and "Y"
+        /// </summary>
+        /// <param name="root">Xml node to create the point from.</param>
+        /// <returns>Point or null</returns>
+        public static Point? GetPoint(XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            Dictionary<string, int> dictionary = MapNamesExact(children, "X", "Y");
+            if (dictionary == null)
+            {
+                return null;
+            }
+            return new Point(
+                int.Parse(children[dictionary["X"]].InnerText),
+                int.Parse(children[dictionary["Y"]].InnerText));
+        }
     }
 }
