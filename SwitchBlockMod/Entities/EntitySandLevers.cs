@@ -26,6 +26,13 @@ namespace SwitchBlocksMod.Entities
 
         public void Dispose()
         {
+            foreach (List<Lever> list in LeverDictionary.Values)
+            {
+                foreach (Lever lever in list)
+                {
+                    lever.texture.Dispose();
+                }
+            }
             LeverDictionary = null;
             currentLeverList = null;
             instance = null;

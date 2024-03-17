@@ -26,6 +26,13 @@ namespace SwitchBlocksMod.Entities
 
         public void Dispose()
         {
+            foreach (List<Platform> list in PlatformDictionary.Values)
+            {
+                foreach (Platform platform in list)
+                {
+                    platform.texture.Dispose();
+                }
+            }
             PlatformDictionary = null;
             currentPlatformList = null;
             instance = null;
@@ -84,7 +91,6 @@ namespace SwitchBlocksMod.Entities
 
         private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
         {
-            //TODO: Scrolling for the new texture system
             int scroll = Math.Abs((int)offset % (platform.texture.Height - platform.size.Y + 1));
             if (platform.startState == DataSand.State)
             {

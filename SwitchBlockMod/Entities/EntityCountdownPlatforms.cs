@@ -27,6 +27,13 @@ namespace SwitchBlocksMod.Entities
 
         public void Dispose()
         {
+            foreach (List<Platform> list in PlatformDictionary.Values)
+            {
+                foreach (Platform platform in list)
+                {
+                    platform.texture.Dispose();
+                }
+            }
             PlatformDictionary = null;
             currentPlatformList = null;
             instance = null;
