@@ -15,7 +15,7 @@ namespace SwitchBlocksMod.Util
         /// Only creates a savefile if the SwitchBlocksMod folder exists.<br />
         /// Saves to "Steam Workshop Path\1061090\MAP ID\SwitchBlocksMod\save"
         /// </summary>
-        public static void SaveData()
+        public static void Save()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -70,7 +70,7 @@ namespace SwitchBlocksMod.Util
         /// Loads the various blocks states and fields, if present.<br />
         /// Loads from "Steam Workshop Path\1061090\MAP ID\SwitchBlocksMod\save"
         /// </summary>
-        public static void LoadData()
+        public static void Load()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;

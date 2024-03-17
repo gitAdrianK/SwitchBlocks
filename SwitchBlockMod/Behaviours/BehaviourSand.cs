@@ -76,7 +76,7 @@ namespace SwitchBlocksMod.Behaviours
                 || (isCollidingWithOff && DataSand.State))
             {
                 // Going down (positive speed)
-                return behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return !IsPlayerOnBlock && behaviourContext.BodyComp.Velocity.Y < 0.0f;
             }
             return false;
         }

@@ -5,12 +5,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Util;
-using System;
 using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
-    public class EntityAutoPlatforms : Entity, IDisposable
+    public class EntityAutoPlatforms : Entity
     {
         private static EntityAutoPlatforms instance;
         public static EntityAutoPlatforms Instance
@@ -25,17 +24,8 @@ namespace SwitchBlocksMod.Entities
             }
         }
 
-        public void Dispose()
+        public void Reset()
         {
-            foreach (List<Platform> list in PlatformDictionary.Values)
-            {
-                foreach (Platform platform in list)
-                {
-                    platform.texture.Dispose();
-                }
-            }
-            PlatformDictionary = null;
-            currentPlatformList = null;
             instance = null;
         }
 

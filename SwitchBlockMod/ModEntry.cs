@@ -12,6 +12,7 @@ using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -27,7 +28,7 @@ namespace SwitchBlocksMod
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
 
             List<(bool, Type)> blockFactories = new List<(bool, Type)>
             {
@@ -66,8 +67,8 @@ namespace SwitchBlocksMod
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            ModSaves.LoadData();
-            ModSounds.LoadSounds();
+            ModSaves.Load();
+            ModSounds.Load();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -79,28 +80,19 @@ namespace SwitchBlocksMod
             // Auto
             if (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityAutoPlatforms.Instance.PlatformDictionary.Count != 0)
+                if (EntityAutoPlatforms.Instance.PlatformDictionary.Count > 0)
                 {
                     entityManager.AddObject(EntityAutoPlatforms.Instance);
-                }
-                else
-                {
-                    EntityAutoPlatforms.Instance.Dispose();
                 }
             }
             // Basic
             if (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityBasicPlatforms.Instance.PlatformDictionary.Count != 0
-                    && EntityBasicLevers.Instance.LeverDictionary.Count != 0)
+                if (EntityBasicPlatforms.Instance.PlatformDictionary.Count > 0
+                    && EntityBasicLevers.Instance.LeverDictionary.Count > 0)
                 {
                     entityManager.AddObject(EntityBasicPlatforms.Instance);
                     entityManager.AddObject(EntityBasicLevers.Instance);
-                }
-                else
-                {
-                    EntityBasicPlatforms.Instance.Dispose();
-                    EntityBasicLevers.Instance.Dispose();
                 }
                 BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
                 List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
@@ -120,23 +112,17 @@ namespace SwitchBlocksMod
             // Countdown
             if (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityCountdownPlatforms.Instance.PlatformDictionary.Count != 0
-                    && EntityCountdownLevers.Instance.LeverDictionary.Count != 0)
+                if (EntityCountdownPlatforms.Instance.PlatformDictionary.Count > 0
+                    && EntityCountdownLevers.Instance.LeverDictionary.Count > 0)
                 {
-
                     entityManager.AddObject(EntityCountdownPlatforms.Instance);
                     entityManager.AddObject(EntityCountdownLevers.Instance);
-                }
-                else
-                {
-                    EntityCountdownPlatforms.Instance.Dispose();
-                    EntityCountdownLevers.Instance.Dispose();
                 }
                 BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
                 List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
                 {
-                    (ModBlocks.COUNTDOWN_LEVER, typeof(BlockBasicLever), behaviourCountdownLever),
-                    (ModBlocks.COUNTDOWN_LEVER_SOLID, typeof(BlockBasicLeverSolid), behaviourCountdownLever),
+                    (ModBlocks.COUNTDOWN_LEVER, typeof(BlockCountdownLever), behaviourCountdownLever),
+                    (ModBlocks.COUNTDOWN_LEVER_SOLID, typeof(BlockCountdownLeverSolid), behaviourCountdownLever),
                 };
                 foreach (var item in blocks.Where(triple => triple.Item1 != null))
                 {
@@ -146,18 +132,18 @@ namespace SwitchBlocksMod
             // Sand
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntitySandPlatforms.Instance.PlatformDictionary.Count != 0
-                    && EntitySandLevers.Instance.LeverDictionary.Count != 0)
+                Debugger.Log(1, "", ">>> Sand Platforms "
+                        + EntitySandPlatforms.Instance.PlatformDictionary.Count
+                        + ", Levers "
+                        + EntitySandLevers.Instance.LeverDictionary.Count
+                        + "\n");
+                if (EntitySandPlatforms.Instance.PlatformDictionary.Count > 0
+                    && EntitySandLevers.Instance.LeverDictionary.Count > 0)
                 {
+                    Debugger.Log(1, "", "Yeah\n");
                     entityManager.AddObject(EntitySandPlatforms.Instance);
                     entityManager.AddObject(EntitySandLevers.Instance);
                 }
-                else
-                {
-                    EntitySandPlatforms.Instance.Dispose();
-                    EntitySandLevers.Instance.Dispose();
-                }
-
                 BehaviourSand behaviourSand = new BehaviourSand();
                 BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
                 List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
@@ -186,15 +172,23 @@ namespace SwitchBlocksMod
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
-            EntityAutoPlatforms.Instance.Dispose();
-            EntityBasicPlatforms.Instance.Dispose();
-            EntityBasicLevers.Instance.Dispose();
-            EntityCountdownPlatforms.Instance.Dispose();
-            EntityCountdownLevers.Instance.Dispose();
-            EntitySandPlatforms.Instance.Dispose();
-            EntitySandLevers.Instance.Dispose();
-            ModSounds.UnloadSounds();
-            ModSaves.SaveData();
+            EntityManager entityManager = EntityManager.instance;
+            entityManager.RemoveObject(EntityAutoPlatforms.Instance);
+            entityManager.RemoveObject(EntityBasicPlatforms.Instance);
+            entityManager.RemoveObject(EntityBasicLevers.Instance);
+            entityManager.RemoveObject(EntityCountdownPlatforms.Instance);
+            entityManager.RemoveObject(EntityCountdownLevers.Instance);
+            entityManager.RemoveObject(EntitySandPlatforms.Instance);
+            entityManager.RemoveObject(EntitySandLevers.Instance);
+            EntityAutoPlatforms.Instance.Reset();
+            EntityBasicPlatforms.Instance.Reset();
+            EntityBasicLevers.Instance.Reset();
+            EntityCountdownPlatforms.Instance.Reset();
+            EntityCountdownLevers.Instance.Reset();
+            EntitySandPlatforms.Instance.Reset();
+            EntitySandLevers.Instance.Reset();
+            ModSounds.Reset();
+            ModSaves.Save();
         }
 
         private static MethodInfo originalIsOnBlock;

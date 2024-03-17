@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
-    public class EntitySandPlatforms : Entity, IDisposable
+    public class EntitySandPlatforms : Entity
     {
         private static EntitySandPlatforms instance;
         public static EntitySandPlatforms Instance
@@ -24,17 +24,8 @@ namespace SwitchBlocksMod.Entities
             }
         }
 
-        public void Dispose()
+        public void Reset()
         {
-            foreach (List<Platform> list in PlatformDictionary.Values)
-            {
-                foreach (Platform platform in list)
-                {
-                    platform.texture.Dispose();
-                }
-            }
-            PlatformDictionary = null;
-            currentPlatformList = null;
             instance = null;
         }
 

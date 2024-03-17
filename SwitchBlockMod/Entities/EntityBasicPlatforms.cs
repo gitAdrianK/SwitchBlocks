@@ -4,12 +4,11 @@ using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
-using System;
 using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
-    public class EntityBasicPlatforms : Entity, IDisposable
+    public class EntityBasicPlatforms : Entity
     {
         private static EntityBasicPlatforms instance;
         public static EntityBasicPlatforms Instance
@@ -24,17 +23,8 @@ namespace SwitchBlocksMod.Entities
             }
         }
 
-        public void Dispose()
+        public void Reset()
         {
-            foreach (List<Platform> list in PlatformDictionary.Values)
-            {
-                foreach (Platform platform in list)
-                {
-                    platform.texture.Dispose();
-                }
-            }
-            PlatformDictionary = null;
-            currentPlatformList = null;
             instance = null;
         }
 

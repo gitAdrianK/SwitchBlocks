@@ -4,12 +4,11 @@ using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
-using System;
 using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
-    public class EntityBasicLevers : Entity, IDisposable
+    public class EntityBasicLevers : Entity
     {
         private static EntityBasicLevers instance;
         public static EntityBasicLevers Instance
@@ -24,17 +23,8 @@ namespace SwitchBlocksMod.Entities
             }
         }
 
-        public void Dispose()
+        public void Reset()
         {
-            foreach (List<Lever> list in LeverDictionary.Values)
-            {
-                foreach (Lever lever in list)
-                {
-                    lever.texture.Dispose();
-                }
-            }
-            LeverDictionary = null;
-            currentLeverList = null;
             instance = null;
         }
 

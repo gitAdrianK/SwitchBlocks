@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -85,6 +86,7 @@ namespace SwitchBlocksMod.Entities
                 // Seeing strings in code is kind of a codesmell.
                 if (subfolder == "sand")
                 {
+                    Debugger.Log(1, "", "Trying to load sand platform\n");
                     dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "Size", "StartState");
                 }
                 else
@@ -93,6 +95,10 @@ namespace SwitchBlocksMod.Entities
                 }
                 if (dictionary == null)
                 {
+                    if (subfolder == "sand")
+                    {
+                        Debugger.Log(1, "", "But it was missing names\n");
+                    }
                     continue;
                 }
 
@@ -103,6 +109,10 @@ namespace SwitchBlocksMod.Entities
                 string filePath = $"{path}textures{sep}{xmlPlatform[dictionary["Texture"]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
+                    if (subfolder == "sand")
+                    {
+                        Debugger.Log(1, "", "No texture\n");
+                    }
                     continue;
                 }
                 platform.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
@@ -111,6 +121,10 @@ namespace SwitchBlocksMod.Entities
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary["Position"]]);
                 if (position == null)
                 {
+                    if (subfolder == "sand")
+                    {
+                        Debugger.Log(1, "", "No position\n");
+                    }
                     continue;
                 }
                 platform.position = (Vector2)position;
@@ -121,6 +135,10 @@ namespace SwitchBlocksMod.Entities
                     Point? size = Xml.GetPoint(xmlPlatform[dictionary["Size"]]);
                     if (size == null)
                     {
+                        if (subfolder == "sand")
+                        {
+                            Debugger.Log(1, "", "No size\n");
+                        }
                         continue;
                     }
                     platform.size = (Point)size;
@@ -143,6 +161,10 @@ namespace SwitchBlocksMod.Entities
                 else
                 {
                     // Yeah I am limiting it to on/off, what are you gonna do about it?
+                    if (subfolder == "sand")
+                    {
+                        Debugger.Log(1, "", "No startstate\n");
+                    }
                     continue;
                 }
 

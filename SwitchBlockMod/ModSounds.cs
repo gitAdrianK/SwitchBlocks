@@ -48,7 +48,7 @@ namespace SwitchBlocksMod.Util
         /// </summary>
         public static JKSound SAND_FLIP;
 
-        public static void LoadSounds()
+        public static void Load()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -87,19 +87,13 @@ namespace SwitchBlocksMod.Util
             }
         }
 
-        public static void UnloadSounds()
+        public static void Reset()
         {
-            AUTO_BLINK.Dispose();
             AUTO_BLINK = null;
-            AUTO_FLIP.Dispose();
             AUTO_FLIP = null;
-            BASIC_FLIP.Dispose();
             BASIC_FLIP = null;
-            COUNTDOWN_BLINK.Dispose();
             COUNTDOWN_BLINK = null;
-            COUNTDOWN_FLIP.Dispose();
             COUNTDOWN_FLIP = null;
-            SAND_FLIP.Dispose();
             SAND_FLIP = null;
         }
     }
