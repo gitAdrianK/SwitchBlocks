@@ -12,7 +12,6 @@ using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -28,7 +27,7 @@ namespace SwitchBlocksMod
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            Debugger.Launch();
+            //Debugger.Launch();
 
             List<(bool, Type)> blockFactories = new List<(bool, Type)>
             {
@@ -132,15 +131,9 @@ namespace SwitchBlocksMod
             // Sand
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
-                Debugger.Log(1, "", ">>> Sand Platforms "
-                        + EntitySandPlatforms.Instance.PlatformDictionary.Count
-                        + ", Levers "
-                        + EntitySandLevers.Instance.LeverDictionary.Count
-                        + "\n");
                 if (EntitySandPlatforms.Instance.PlatformDictionary.Count > 0
                     && EntitySandLevers.Instance.LeverDictionary.Count > 0)
                 {
-                    Debugger.Log(1, "", "Yeah\n");
                     entityManager.AddObject(EntitySandPlatforms.Instance);
                     entityManager.AddObject(EntitySandLevers.Instance);
                 }
