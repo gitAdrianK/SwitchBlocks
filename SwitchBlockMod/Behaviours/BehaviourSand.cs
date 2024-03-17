@@ -30,11 +30,13 @@ namespace SwitchBlocksMod.Behaviours
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
             BodyComp bodyComp = behaviourContext.BodyComp;
+
             if ((IsPlayerOnBlockOn && DataSand.State)
                 || (IsPlayerOnBlockOff && !DataSand.State))
             {
                 // Going up (negative speed)
-                return (2.0f * PlayerValues.GRAVITY) - inputYVelocity;
+                // Does this even work the way i think it works?
+                return inputYVelocity - (2.0f * PlayerValues.GRAVITY);
             }
             else if ((IsPlayerOnBlockOn && !DataSand.State)
                 || (IsPlayerOnBlockOff && DataSand.State))
@@ -64,7 +66,10 @@ namespace SwitchBlocksMod.Behaviours
                 || (isCollidingWithOff && !DataSand.State))
             {
                 // Going up (negative speed)
-                // BUG: Entering with low enough speed to go down again snaps to the top
+                if (IsPlayerOnBlock)
+                {
+                    return behaviourContext.BodyComp.IsOnGround;
+                }
                 return behaviourContext.BodyComp.Velocity.Y > 0.0f;
             }
             if ((isCollidingWithOn && !DataSand.State)
@@ -97,6 +102,11 @@ namespace SwitchBlocksMod.Behaviours
                 || (IsPlayerOnBlockOff && !DataSand.State))
             {
                 // Going up (negative speed)
+                if (bodyComp.IsOnGround)
+                {
+                    return true;
+                }
+                bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
             }
             else if ((IsPlayerOnBlockOn && !DataSand.State)
                 || (IsPlayerOnBlockOff && DataSand.State))
