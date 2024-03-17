@@ -92,7 +92,7 @@ namespace SwitchBlocksMod.Entities
                 position: platform.position,
                 sourceRectangle: new Rectangle(
                     0,
-                    platform.texture.Height / 2 - roundedOffset,
+                    roundedOffset,
                     platform.texture.Width,
                     platform.texture.Height / 2),
                 color: Color.White);
@@ -104,7 +104,7 @@ namespace SwitchBlocksMod.Entities
                 position: platform.position,
                 sourceRectangle: new Rectangle(
                     0,
-                    roundedOffset,
+                    platform.texture.Height / 2 - roundedOffset,
                     platform.texture.Width,
                     platform.texture.Height / 2),
                 color: Color.White);

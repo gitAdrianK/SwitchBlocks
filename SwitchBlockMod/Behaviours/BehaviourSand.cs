@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using JumpKing;
 using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
@@ -28,17 +29,21 @@ namespace SwitchBlocksMod.Behaviours
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
-            //TODO: Move player upwards
-            // Up is negative, down is positive
             BodyComp bodyComp = behaviourContext.BodyComp;
-            float num = ((IsPlayerOnBlock && bodyComp.Velocity.Y <= 0f) ? 0.5f : 1f);
-            float result = inputYVelocity * num;
-            if (!IsPlayerOnBlock && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0f)
+            if ((IsPlayerOnBlockOn && DataSand.State)
+                || (IsPlayerOnBlockOff && !DataSand.State))
             {
-                bodyComp.Position.Y += 1f;
+                // Going up (negative speed)
+                return (2.0f * PlayerValues.GRAVITY) - inputYVelocity;
             }
-
-            return result;
+            else if ((IsPlayerOnBlockOn && !DataSand.State)
+                || (IsPlayerOnBlockOff && DataSand.State))
+            {
+                // Going down (positive speed)
+                float num = bodyComp.Velocity.Y <= 0f ? 0.5f : 1f;
+                return inputYVelocity * num;
+            }
+            return inputYVelocity;
         }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
@@ -47,27 +52,32 @@ namespace SwitchBlocksMod.Behaviours
             {
                 return !IsPlayerOnBlock;
             }
-
             return false;
         }
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            //TODO: Block top when platform is moving up
+            bool isCollidingWithOn = info.IsCollidingWith<BlockSandOn>();
+            bool isCollidingWithOff = info.IsCollidingWith<BlockSandOff>();
 
-            if (((info.IsCollidingWith<BlockSandOn>() && DataSand.State)
-                || (info.IsCollidingWith<BlockSandOff>()) && !DataSand.State)
-                && !IsPlayerOnBlock)
+            if ((isCollidingWithOn && DataSand.State)
+                || (isCollidingWithOff && !DataSand.State))
             {
-                return behaviourContext.BodyComp.Velocity.Y < 0f;
+                // Going up (negative speed)
+                // BUG: Entering with low enough speed to go down again snaps to the top
+                return behaviourContext.BodyComp.Velocity.Y > 0.0f;
             }
-
+            if ((isCollidingWithOn && !DataSand.State)
+                || (isCollidingWithOff && DataSand.State))
+            {
+                // Going down (positive speed)
+                return behaviourContext.BodyComp.Velocity.Y < 0.0f;
+            }
             return false;
         }
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            //TODO: Sand
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
             {
                 return true;
@@ -81,15 +91,24 @@ namespace SwitchBlocksMod.Behaviours
             BodyComp bodyComp = behaviourContext.BodyComp;
             if (IsPlayerOnBlock)
             {
-                bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+            }
+            if ((IsPlayerOnBlockOn && DataSand.State)
+                || (IsPlayerOnBlockOff && !DataSand.State))
+            {
+                // Going up (negative speed)
+            }
+            else if ((IsPlayerOnBlockOn && !DataSand.State)
+                || (IsPlayerOnBlockOff && DataSand.State))
+            {
+                // Going down (positive speed)
+                bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;
         }
 
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
         {
-            // TODO: Gravity doesn't apply?
             return inputGravity;
         }
     }
