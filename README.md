@@ -20,3 +20,7 @@ Switches its state when touching a lever, automatically switches back after a se
 ## Sand Blocks
 Behaves like the vanilla sand block sinking the player and slowing them down. When state has been switched, it instead pushes the player up.
 Switches its state when touching a lever.
+
+## Find the mod and an example map on steam here
+[Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3188962826)
+[Map](https://steamcommunity.com/sharedfiles/filedetails/?id=3175561853)
