@@ -48,6 +48,9 @@ namespace SwitchBlocksMod.Util
         /// </summary>
         public static JKSound SAND_FLIP;
 
+        /// <summary>
+        /// Tries to load sounds used in the mod.
+        /// </summary>
         public static void Load()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
@@ -87,6 +90,9 @@ namespace SwitchBlocksMod.Util
             }
         }
 
+        /// <summary>
+        /// Sets all sounds to null.
+        /// </summary>
         public static void Reset()
         {
             AUTO_BLINK = null;

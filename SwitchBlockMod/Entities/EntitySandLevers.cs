@@ -8,6 +8,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering sand levers in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntitySandLevers : Entity
     {
         private static EntitySandLevers instance;

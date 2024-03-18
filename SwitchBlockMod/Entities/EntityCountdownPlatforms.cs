@@ -9,6 +9,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering countdown platforms in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntityCountdownPlatforms : Entity
     {
         private static EntityCountdownPlatforms instance;

@@ -8,6 +8,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering basic levers in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntityBasicLevers : Entity
     {
         private static EntityBasicLevers instance;

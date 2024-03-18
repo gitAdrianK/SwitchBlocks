@@ -9,6 +9,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering auto platforms in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntityAutoPlatforms : Entity
     {
         private static EntityAutoPlatforms instance;

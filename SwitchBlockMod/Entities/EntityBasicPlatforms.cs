@@ -8,6 +8,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering basic platforms in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntityBasicPlatforms : Entity
     {
         private static EntityBasicPlatforms instance;

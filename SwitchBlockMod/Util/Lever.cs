@@ -72,7 +72,7 @@ namespace SwitchBlocksMod.Entities
         /// <param name="xmlLevers">The levers xml node</param>
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
-        /// <returns>List&lt;Lever&gt;</returns>
+        /// <returns>A list containing all successfully created levers</returns>
         private static List<Lever> GetLeverList(XmlNode xmlLevers, string path, char sep)
         {
             List<Lever> list = new List<Lever>();

@@ -9,6 +9,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering sand platforms in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntitySandPlatforms : Entity
     {
         private static EntitySandPlatforms instance;

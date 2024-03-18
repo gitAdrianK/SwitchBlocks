@@ -10,7 +10,8 @@ using System.Xml;
 namespace SwitchBlocksMod.Entities
 {
     /// <summary>
-    /// Represent a platform with a texture, position, and start state.
+    /// Represent a platform with a texture, position, size, and start state.<br />
+    /// The size field is exclusively used and looked for when creating a sand platform.
     /// </summary>
     public struct Platform
     {
@@ -73,7 +74,7 @@ namespace SwitchBlocksMod.Entities
         /// <param name="xmlPlatforms">The platforms xml node</param>
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
-        /// <returns>List&lt;Platform&gt;</returns>
+        /// <returns>A list containing all successfully created platforms</returns>
         private static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep, string subfolder)
         {
             List<Platform> list = new List<Platform>();

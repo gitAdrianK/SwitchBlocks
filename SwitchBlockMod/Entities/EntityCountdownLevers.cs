@@ -8,6 +8,10 @@ using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
+    /// <summary>
+    /// Entity responsible for rendering countdown levers in the level.<br />
+    /// Singleton.
+    /// </summary>
     public class EntityCountdownLevers : Entity
     {
         private static EntityCountdownLevers instance;

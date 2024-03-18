@@ -185,6 +185,13 @@ namespace SwitchBlocksMod
         }
 
         private static MethodInfo originalIsOnBlock;
+        /// <summary>
+        /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
+        /// in the IsOnBlock function when asked if the player is on a sand block.
+        /// </summary>
+        /// <param name="__instance">Object instance of the body comp</param>
+        /// <param name="__result">Result of the patched function, returning true if the player is on any sand block</param>
+        /// <param name="__0">Type of the sand block</param>
         public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
         {
             if (__0 == typeof(SandBlock) && originalIsOnBlock != null)
