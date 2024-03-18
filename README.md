@@ -3,7 +3,9 @@
 This mod adds custom blocks to Jump King, each with its own unique *switching-its-state* themed mechanic.
 - It is customizable what colour each block uses on the level.png
 - Texture of the levers and platforms
-- When applicable the duration of timed gimmics
+- Sounds played when a lever is touched
+- Sounds played after one third and two thirds have passed for timed gimmick
+- When applicable the duration of timed gimmick
 
 ## Auto Blocks
 Automatically switches state after a set amount of time.
@@ -16,5 +18,5 @@ Switches its state when touching a lever.
 Switches its state when touching a lever, automatically switches back after a set amount of time.
 
 ## Sand Blocks
-Behaves like the vanilla sand block sinking the player and slowing them down. When state has been switched, it instead pushes the player up
+Behaves like the vanilla sand block sinking the player and slowing them down. When state has been switched, it instead pushes the player up.
 Switches its state when touching a lever.
