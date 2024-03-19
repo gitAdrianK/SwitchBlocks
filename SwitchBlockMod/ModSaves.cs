@@ -26,13 +26,15 @@ namespace SwitchBlocksMod.Util
             {
                 return;
             }
-            if (!Directory.Exists(path))
+            if (!File.Exists($"{path}save"))
             {
                 return;
             }
+            FileStream fileStream = null;
             BinaryWriter binaryWriter = null;
             try
             {
+                fileStream = File.Open($"{path}save", FileMode.Create);
                 binaryWriter = new BinaryWriter(File.Open($"{path}save", FileMode.Create));
                 // Auto
                 binaryWriter.Write(DataAuto.State);
@@ -58,10 +60,13 @@ namespace SwitchBlocksMod.Util
             }
             finally
             {
+                if (fileStream != null)
+                {
+                    fileStream.Dispose();
+                }
                 if (binaryWriter != null)
                 {
-                    binaryWriter.Flush();
-                    binaryWriter.Close();
+                    binaryWriter.Dispose();
                 }
             }
         }
@@ -88,9 +93,11 @@ namespace SwitchBlocksMod.Util
             {
                 return;
             }
+            FileStream fileStream = null;
             BinaryReader binaryReader = null;
             try
             {
+                fileStream = File.Open($"{path}save", FileMode.Create);
                 binaryReader = new BinaryReader(File.Open($"{path}save", FileMode.Open));
                 // Auto
                 DataAuto.State = binaryReader.ReadBoolean();
@@ -109,6 +116,12 @@ namespace SwitchBlocksMod.Util
                 // Sand
                 DataSand.State = binaryReader.ReadBoolean();
                 DataSand.HasSwitched = binaryReader.ReadBoolean();
+
+                // 1.0.0 End
+                if (binaryReader.PeekChar() == -1)
+                {
+                    return;
+                }
             }
             catch (Exception e)
             {
@@ -116,10 +129,13 @@ namespace SwitchBlocksMod.Util
             }
             finally
             {
+                if (fileStream != null)
+                {
+                    fileStream.Dispose();
+                }
                 if (binaryReader != null)
                 {
                     binaryReader.Dispose();
-                    binaryReader.Close();
                 }
             }
         }
