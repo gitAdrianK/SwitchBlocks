@@ -24,3 +24,6 @@ Switches its state when touching a lever.
 ## Find the mod and an example map on steam here
 [Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3188962826)
 [Map](https://steamcommunity.com/sharedfiles/filedetails/?id=3175561853)
+
+## Why are the switches called levers?
+switch is a programming keyword, so i would have to name them something along the line of \_switch or switch\_ or zwitch or whatever monstrosity of a name you can think of
