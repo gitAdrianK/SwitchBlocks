@@ -23,7 +23,7 @@ namespace SwitchBlocksMod.Entities
         /// It should be noted that the screens xml start counting at 1 while the ingame screens start at 0.
         /// </summary>
         /// <param name="subfolder">The subfolder to look for xml in. The main path is the path to the mod folder.</param>
-        /// <returns>Dictionary&lt;int,List&lt;Lever&gt;&gt;</returns>
+        /// <returns>A dictionary containing lists of levers with the screennumber they appear on as key</returns>
         public static Dictionary<int, List<Lever>> GetLeversDictonary(string subfolder)
         {
             JKContentManager contentManager = Game1.instance.contentManager;

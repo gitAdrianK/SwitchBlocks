@@ -11,9 +11,9 @@ using System;
 namespace SwitchBlocksMod.Behaviours
 {
     /// <summary>
-    /// Behaviour related to sand.
+    /// Behaviour related to sand platforms.
     /// </summary>
-    public class BehaviourSand : IBlockBehaviour
+    public class BehaviourSandPlatform : IBlockBehaviour
     {
         public float BlockPriority => 1.0f;
 

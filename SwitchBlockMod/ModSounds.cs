@@ -7,7 +7,7 @@ namespace SwitchBlocksMod.Util
 {
     /// <summary>
     /// Contains sounds used in this mod for its blocks.<br />
-    /// Initializes the blocks sounds from "Steam Workshop Path\1061090\MAP ID\SwitchBlocksMod\Audio\"<br />
+    /// Initializes the blocks sounds from "Steam Workshop Path\1061090\MAP ID\switchBlocksMod\audio\"<br />
     /// <list type="bullet">
     ///     <item>autoBlink.xnb</item>
     ///     <item>autoFlip.xnb</item>

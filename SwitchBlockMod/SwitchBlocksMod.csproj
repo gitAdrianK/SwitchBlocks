@@ -93,7 +93,7 @@
   <ItemGroup>
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
     <Compile Include="Behaviours\BehaviourCountdownLever.cs" />
-    <Compile Include="Behaviours\BehaviourSand.cs" />
+    <Compile Include="Behaviours\BehaviourSandPlatform.cs" />
     <Compile Include="Behaviours\BehaviourSandLever.cs" />
     <Compile Include="Blocks\BlockAutoOff.cs" />
     <Compile Include="Blocks\BlockAutoOn.cs" />

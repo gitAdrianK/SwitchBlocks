@@ -49,9 +49,14 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            if (advCollisionInfo.IsCollidingWith<BlockSandLeverSolid>()
-                || advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOn>()
-                || advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOff>())
+            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockSandLever>()
+                || advCollisionInfo.IsCollidingWith<BlockSandLeverSolid>();
+            bool collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockSandLeverOn>()
+                || advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOn>();
+            bool collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockSandLeverOff>()
+                || advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOff>();
+
+            if (collidingWithLever || collidingWithLeverOn || collidingWithLeverOff)
             {
                 if (DataSand.HasSwitched)
                 {
@@ -60,15 +65,15 @@ namespace SwitchBlocksMod.Behaviours
                 DataSand.HasSwitched = true;
 
                 bool stateBefore = DataSand.State;
-                if (advCollisionInfo.IsCollidingWith<BlockSandLeverSolid>())
+                if (collidingWithLever)
                 {
                     DataSand.State = !DataSand.State;
                 }
-                else if (advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOn>())
+                else if (collidingWithLeverOn)
                 {
                     DataSand.State = true;
                 }
-                else if (advCollisionInfo.IsCollidingWith<BlockSandLeverSolidOff>())
+                else if (collidingWithLeverOff)
                 {
                     DataSand.State = false;
                 }

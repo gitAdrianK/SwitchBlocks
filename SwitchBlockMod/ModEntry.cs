@@ -41,13 +41,15 @@ namespace SwitchBlocksMod
                 var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
                 LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
             };
-
-            var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-            MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
+            if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
+            {
+                var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
+                // harmony.PatchAll(Assembly.GetExecutingAssembly());
+                MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
+                MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
+                originalIsOnBlock = harmony.Patch(isOnBlockMethod);
+                harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
+            }
         }
 
         /// <summary>
@@ -137,7 +139,7 @@ namespace SwitchBlocksMod
                     entityManager.AddObject(EntitySandPlatforms.Instance);
                     entityManager.AddObject(EntitySandLevers.Instance);
                 }
-                BehaviourSand behaviourSand = new BehaviourSand();
+                BehaviourSandPlatform behaviourSand = new BehaviourSandPlatform();
                 BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
                 List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
                 {

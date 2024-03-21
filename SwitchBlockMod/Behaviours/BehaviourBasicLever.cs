@@ -49,9 +49,14 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            if (advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>()
-                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>()
-                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>())
+            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockBasicLever>()
+                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>();
+            bool collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverOn>()
+                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>();
+            bool collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverOff>()
+                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>();
+
+            if (collidingWithLever || collidingWithLeverOn || collidingWithLeverOff)
             {
                 if (DataBasic.HasSwitched)
                 {
@@ -60,15 +65,15 @@ namespace SwitchBlocksMod.Behaviours
                 DataBasic.HasSwitched = true;
 
                 bool stateBefore = DataBasic.State;
-                if (advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>())
+                if (collidingWithLever)
                 {
                     DataBasic.State = !DataBasic.State;
                 }
-                else if (advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>())
+                else if (collidingWithLeverOn)
                 {
                     DataBasic.State = true;
                 }
-                else if (advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>())
+                else if (collidingWithLeverOff)
                 {
                     DataBasic.State = false;
                 }

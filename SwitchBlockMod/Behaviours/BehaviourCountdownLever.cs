@@ -49,7 +49,10 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            if (advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>())
+            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>()
+                || advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
+
+            if (collidingWithLever)
             {
                 DataCountdown.RemainingTime = ModBlocks.COUNTDOWN_DURATION;
                 DataCountdown.HasBlinkedOnce = false;

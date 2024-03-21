@@ -162,22 +162,22 @@ namespace SwitchBlocksMod.Util
                 switch (block.Name)
                 {
                     case "Auto":
-                        ValueTuple<Color?, Color?, float>? autoTuple = LoadAuto(block);
-                        if (autoTuple == null)
+                        ValueTuple<Color?, Color?>? autoPlatformsTuple = LoadPlatforms(block);
+                        if (autoPlatformsTuple == null)
                         {
                             break;
                         }
-                        (Color?, Color?, float) autoValues = autoTuple.Value;
-                        AUTO_ON = autoValues.Item1;
-                        AUTO_OFF = autoValues.Item2;
-                        AUTO_DURATION = autoValues.Item3;
+                        (Color?, Color?) autoPlatformsValues = autoPlatformsTuple.Value;
+                        AUTO_ON = autoPlatformsValues.Item1;
+                        AUTO_OFF = autoPlatformsValues.Item2;
+                        AUTO_DURATION = LoadDuration(block);
                         bool isAtLeastOneAutoPlatform = AUTO_ON != null || AUTO_OFF != null;
                         IS_AUTO_FUNCTIONALLY_INITIALIZED = (isAtLeastOneAutoPlatform && AUTO_DURATION > 0.0f);
                         break;
 
                     case "Basic":
-                        ValueTuple<Color?, Color?>? basicPlatformsTuple = LoadBasicPlatforms(block);
-                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? basicLeversTuple = LoadBasicLevers(block);
+                        ValueTuple<Color?, Color?>? basicPlatformsTuple = LoadPlatforms(block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? basicLeversTuple = LoadLevers(block);
                         if (basicPlatformsTuple == null || basicLeversTuple == null)
                         {
                             break;
@@ -200,25 +200,27 @@ namespace SwitchBlocksMod.Util
                         break;
 
                     case "Countdown":
-                        ValueTuple<Color?, Color?, Color?, Color?, float>? countdownTuple = LoadCountdown(block);
-                        if (countdownTuple == null)
+                        ValueTuple<Color?, Color?>? countdownPlatformsTuple = LoadPlatforms(block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? countdownLeversTuple = LoadLevers(block);
+                        if (countdownPlatformsTuple == null || countdownLeversTuple == null)
                         {
                             break;
                         }
-                        (Color?, Color?, Color?, Color?, float) countdownValues = countdownTuple.Value;
-                        COUNTDOWN_ON = countdownValues.Item1;
-                        COUNTDOWN_OFF = countdownValues.Item2;
-                        COUNTDOWN_LEVER = countdownValues.Item3;
-                        COUNTDOWN_LEVER_SOLID = countdownValues.Item4;
-                        COUNTDOWN_DURATION = countdownValues.Item5;
+                        (Color?, Color?) countdownPlatformsValues = countdownPlatformsTuple.Value;
+                        (Color?, Color?, Color?, Color?, Color?, Color?) countdownLeversValues = countdownLeversTuple.Value;
+                        COUNTDOWN_ON = countdownPlatformsValues.Item1;
+                        COUNTDOWN_OFF = countdownPlatformsValues.Item2;
+                        COUNTDOWN_LEVER = countdownLeversValues.Item1;
+                        COUNTDOWN_LEVER_SOLID = countdownLeversValues.Item4;
+                        COUNTDOWN_DURATION = LoadDuration(block);
                         bool isAtLeastOneCountdownPlatform = COUNTDOWN_ON != null || COUNTDOWN_OFF != null;
                         bool isAtLeastOneCountdownLever = COUNTDOWN_LEVER != null || COUNTDOWN_LEVER_SOLID != null;
                         IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED = isAtLeastOneCountdownPlatform && isAtLeastOneCountdownLever && COUNTDOWN_DURATION > 0.0f;
                         break;
 
                     case "Sand":
-                        ValueTuple<Color?, Color?>? sandPlatformsTuple = LoadSandPlatforms(block);
-                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? sandLeversTuple = LoadSandLevers(block);
+                        ValueTuple<Color?, Color?>? sandPlatformsTuple = LoadPlatforms(block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? sandLeversTuple = LoadLevers(block);
                         if (sandPlatformsTuple == null || sandLeversTuple == null)
                         {
                             break;
@@ -246,53 +248,43 @@ namespace SwitchBlocksMod.Util
                 }
             }
 
-            (Color?, Color?, float)? LoadAuto(XmlNode root)
+            // Looks for a "Duration" node and returns the inside declared float duration or 3.0f.
+            float LoadDuration(XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionaryAuto = Xml.MapNames(children, "On", "Off", "Duration");
-                Color? autoOn = null;
-                if (dictionaryAuto.ContainsKey("On"))
+                Dictionary<string, int> dictionary = Xml.MapNames(children, "Duration");
+                float duration = 3.0f;
+                if (dictionary.ContainsKey("Duration"))
                 {
-                    autoOn = Xml.GetColor(children[dictionaryAuto["On"]]);
+                    duration = float.Parse(children[dictionary["Duration"]].InnerText);
                 }
-                Color? autoOff = null;
-                if (dictionaryAuto.ContainsKey("Off"))
-                {
-                    autoOff = Xml.GetColor(children[dictionaryAuto["Off"]]);
-                }
-                float autoDuration = 3.0f;
-                if (dictionaryAuto.ContainsKey("Duration"))
-                {
-                    autoDuration = float.Parse(children[dictionaryAuto["Duration"]].InnerText);
-                }
-                return (autoOn, autoOff, autoDuration);
+                return duration;
             }
 
-            (Color?, Color?)? LoadBasicPlatforms(XmlNode root)
+            // Looks for "On" and "Off" nodes, the first value of the tuple being "On".
+            (Color?, Color?)? LoadPlatforms(XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionaryBasic = Xml.MapNames(
-                    children,
-                    "On",
-                    "Off");
-                Color? basicOn = null;
-                if (dictionaryBasic.ContainsKey("On"))
+                Dictionary<string, int> dictionary = Xml.MapNames(children, "On", "Off");
+                Color? on = null;
+                if (dictionary.ContainsKey("On"))
                 {
-                    basicOn = Xml.GetColor(children[dictionaryBasic["On"]]);
+                    on = Xml.GetColor(children[dictionary["On"]]);
                 }
-                Color? basicOff = null;
-                if (dictionaryBasic.ContainsKey("Off"))
+                Color? off = null;
+                if (dictionary.ContainsKey("Off"))
                 {
-                    basicOff = Xml.GetColor(children[dictionaryBasic["Off"]]);
+                    off = Xml.GetColor(children[dictionary["Off"]]);
                 }
-                return (basicOn,
-                    basicOff);
+                return (on, off);
             }
 
-            (Color?, Color?, Color?, Color?, Color?, Color?)? LoadBasicLevers(XmlNode root)
+            // Looks for the different types of lever
+            // Lever -> LeverOn -> LeverOff -> LeverSolid -> LeverSolidOn -> LeverSolidOff
+            (Color?, Color?, Color?, Color?, Color?, Color?)? LoadLevers(XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionaryBasic = Xml.MapNames(
+                Dictionary<string, int> dictionary = Xml.MapNames(
                     children,
                     "Lever",
                     "LeverOn",
@@ -300,150 +292,42 @@ namespace SwitchBlocksMod.Util
                     "LeverSolid",
                     "LeverSolidOn",
                     "LeverSolidOff");
-                Color? basicLever = null;
-                if (dictionaryBasic.ContainsKey("Lever"))
+                Color? lever = null;
+                if (dictionary.ContainsKey("Lever"))
                 {
-                    basicLever = Xml.GetColor(children[dictionaryBasic["Lever"]]);
+                    lever = Xml.GetColor(children[dictionary["Lever"]]);
                 }
-                Color? basicLeverOn = null;
-                if (dictionaryBasic.ContainsKey("LeverOn"))
+                Color? leverOn = null;
+                if (dictionary.ContainsKey("LeverOn"))
                 {
-                    basicLeverOn = Xml.GetColor(children[dictionaryBasic["LeverOn"]]);
+                    leverOn = Xml.GetColor(children[dictionary["LeverOn"]]);
                 }
-                Color? basicLeverOff = null;
-                if (dictionaryBasic.ContainsKey("LeverOff"))
+                Color? leverOff = null;
+                if (dictionary.ContainsKey("LeverOff"))
                 {
-                    basicLeverOff = Xml.GetColor(children[dictionaryBasic["LeverOff"]]);
+                    leverOff = Xml.GetColor(children[dictionary["LeverOff"]]);
                 }
-                Color? basicLeverSolid = null;
-                if (dictionaryBasic.ContainsKey("LeverSolid"))
+                Color? leverSolid = null;
+                if (dictionary.ContainsKey("LeverSolid"))
                 {
-                    basicLeverSolid = Xml.GetColor(children[dictionaryBasic["LeverSolid"]]);
+                    leverSolid = Xml.GetColor(children[dictionary["LeverSolid"]]);
                 }
-                Color? basicLeverSolidOn = null;
-                if (dictionaryBasic.ContainsKey("LeverSolidOn"))
+                Color? leverSolidOn = null;
+                if (dictionary.ContainsKey("LeverSolidOn"))
                 {
-                    basicLeverSolidOn = Xml.GetColor(children[dictionaryBasic["LeverSolidOn"]]);
+                    leverSolidOn = Xml.GetColor(children[dictionary["LeverSolidOn"]]);
                 }
-                Color? basicLeverSolidOff = null;
-                if (dictionaryBasic.ContainsKey("LeverSolidOff"))
+                Color? leverSolidOff = null;
+                if (dictionary.ContainsKey("LeverSolidOff"))
                 {
-                    basicLeverSolidOff = Xml.GetColor(children[dictionaryBasic["LeverSolidOff"]]);
+                    leverSolidOff = Xml.GetColor(children[dictionary["LeverSolidOff"]]);
                 }
-                return (basicLever,
-                    basicLeverOn,
-                    basicLeverOff,
-                    basicLeverSolid,
-                    basicLeverSolidOn,
-                    basicLeverSolidOff);
-            }
-
-            (Color?, Color?, Color?, Color?, float)? LoadCountdown(XmlNode root)
-            {
-                XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionaryCountdown = Xml.MapNames(
-                    children,
-                    "On",
-                    "Off",
-                    "Lever",
-                    "LeverSolid",
-                    "Duration");
-                Color? countdownOn = null;
-                if (dictionaryCountdown.ContainsKey("On"))
-                {
-                    countdownOn = Xml.GetColor(children[dictionaryCountdown["On"]]);
-                }
-                Color? countdownOff = null;
-                if (dictionaryCountdown.ContainsKey("Off"))
-                {
-                    countdownOff = Xml.GetColor(children[dictionaryCountdown["Off"]]);
-                }
-                Color? countdownLever = null;
-                if (dictionaryCountdown.ContainsKey("Lever"))
-                {
-                    countdownLever = Xml.GetColor(children[dictionaryCountdown["Lever"]]);
-                }
-                Color? countdownLeverSolid = null;
-                if (dictionaryCountdown.ContainsKey("LeverSolid"))
-                {
-                    countdownLeverSolid = Xml.GetColor(children[dictionaryCountdown["LeverSolid"]]);
-                }
-                float countdownDuration = 3.0f;
-                if (dictionaryCountdown.ContainsKey("Duration"))
-                {
-                    countdownDuration = float.Parse(children[dictionaryCountdown["Duration"]].InnerText);
-                }
-                return (countdownOn, countdownOff, countdownLever, countdownLeverSolid, countdownDuration);
-            }
-
-            (Color?, Color?)? LoadSandPlatforms(XmlNode root)
-            {
-                XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionarySand = Xml.MapNames(
-                    children,
-                    "On",
-                    "Off");
-                Color? sandOn = null;
-                if (dictionarySand.ContainsKey("On"))
-                {
-                    sandOn = Xml.GetColor(children[dictionarySand["On"]]);
-                }
-                Color? sandOff = null;
-                if (dictionarySand.ContainsKey("Off"))
-                {
-                    sandOff = Xml.GetColor(children[dictionarySand["Off"]]);
-                }
-                return (sandOn,
-                    sandOff);
-            }
-
-            (Color?, Color?, Color?, Color?, Color?, Color?)? LoadSandLevers(XmlNode root)
-            {
-                XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionarySand = Xml.MapNames(
-                    children,
-                    "Lever",
-                    "LeverOn",
-                    "LeverOff",
-                    "LeverSolid",
-                    "LeverSolidOn",
-                    "LeverSolidOff");
-                Color? sandLever = null;
-                if (dictionarySand.ContainsKey("Lever"))
-                {
-                    sandLever = Xml.GetColor(children[dictionarySand["Lever"]]);
-                }
-                Color? sandLeverOn = null;
-                if (dictionarySand.ContainsKey("LeverOn"))
-                {
-                    sandLeverOn = Xml.GetColor(children[dictionarySand["LeverOn"]]);
-                }
-                Color? sandLeverOff = null;
-                if (dictionarySand.ContainsKey("LeverOff"))
-                {
-                    sandLeverOff = Xml.GetColor(children[dictionarySand["LeverOff"]]);
-                }
-                Color? sandLeverSolid = null;
-                if (dictionarySand.ContainsKey("LeverSolid"))
-                {
-                    sandLeverSolid = Xml.GetColor(children[dictionarySand["LeverSolid"]]);
-                }
-                Color? sandLeverSolidOn = null;
-                if (dictionarySand.ContainsKey("LeverSolidOn"))
-                {
-                    sandLeverSolidOn = Xml.GetColor(children[dictionarySand["LeverSolidOn"]]);
-                }
-                Color? sandLeverSolidOff = null;
-                if (dictionarySand.ContainsKey("LeverSolidOff"))
-                {
-                    sandLeverSolidOff = Xml.GetColor(children[dictionarySand["LeverSolidOff"]]);
-                }
-                return (sandLever,
-                    sandLeverOn,
-                    sandLeverOff,
-                    sandLeverSolid,
-                    sandLeverSolidOn,
-                    sandLeverSolidOff);
+                return (lever,
+                    leverOn,
+                    leverOff,
+                    leverSolid,
+                    leverSolidOn,
+                    leverSolidOff);
             }
         }
     }
