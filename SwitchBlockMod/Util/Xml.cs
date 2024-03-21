@@ -14,18 +14,13 @@ namespace SwitchBlocksMod
         /// Maps names to their position in an xml node list.
         /// </summary>
         /// <param name="nodeList">The xml node list to check.</param>
-        /// <param name="names">The names to check for.</param>
-        /// <returns>A dictionary mapping the name to its position in the node list.</returns>
-        public static Dictionary<string, int> MapNames(XmlNodeList nodeList, params string[] names)
+        /// <returns>A dictionary mapping the names to its position in the node list.</returns>
+        public static Dictionary<string, int> MapNames(XmlNodeList nodeList)
         {
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
             for (int i = 0; i < nodeList.Count; i++)
             {
                 XmlNode node = nodeList[i];
-                if (!names.Contains(node.Name))
-                {
-                    continue;
-                }
                 dictionary[node.Name] = i;
             }
             return dictionary;
@@ -37,7 +32,7 @@ namespace SwitchBlocksMod
         /// </summary>
         /// <param name="nodeList">The xml node list to check.</param>
         /// <param name="names">The names to check for.</param>
-        /// <returns>A dictionary mapping the name to its position in the node list, null otherwise.</returns>
+        /// <returns>A dictionary mapping the names to its position in the node list, null otherwise.</returns>
         public static Dictionary<string, int> MapNamesExact(XmlNodeList nodeList, params string[] names)
         {
             if (nodeList.Count != names.Length)

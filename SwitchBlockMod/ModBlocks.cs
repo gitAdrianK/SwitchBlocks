@@ -162,7 +162,8 @@ namespace SwitchBlocksMod.Util
                 switch (block.Name)
                 {
                     case "Auto":
-                        ValueTuple<Color?, Color?>? autoPlatformsTuple = LoadPlatforms(block);
+                        Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
+                        ValueTuple<Color?, Color?>? autoPlatformsTuple = LoadPlatforms(dictionaryAuto, block);
                         if (autoPlatformsTuple == null)
                         {
                             break;
@@ -170,14 +171,15 @@ namespace SwitchBlocksMod.Util
                         (Color?, Color?) autoPlatformsValues = autoPlatformsTuple.Value;
                         AUTO_ON = autoPlatformsValues.Item1;
                         AUTO_OFF = autoPlatformsValues.Item2;
-                        AUTO_DURATION = LoadDuration(block);
+                        AUTO_DURATION = LoadDuration(dictionaryAuto, block);
                         bool isAtLeastOneAutoPlatform = AUTO_ON != null || AUTO_OFF != null;
                         IS_AUTO_FUNCTIONALLY_INITIALIZED = (isAtLeastOneAutoPlatform && AUTO_DURATION > 0.0f);
                         break;
 
                     case "Basic":
-                        ValueTuple<Color?, Color?>? basicPlatformsTuple = LoadPlatforms(block);
-                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? basicLeversTuple = LoadLevers(block);
+                        Dictionary<string, int> dictionaryBasic = Xml.MapNames(block.ChildNodes);
+                        ValueTuple<Color?, Color?>? basicPlatformsTuple = LoadPlatforms(dictionaryBasic, block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? basicLeversTuple = LoadLevers(dictionaryBasic, block);
                         if (basicPlatformsTuple == null || basicLeversTuple == null)
                         {
                             break;
@@ -200,8 +202,9 @@ namespace SwitchBlocksMod.Util
                         break;
 
                     case "Countdown":
-                        ValueTuple<Color?, Color?>? countdownPlatformsTuple = LoadPlatforms(block);
-                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? countdownLeversTuple = LoadLevers(block);
+                        Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
+                        ValueTuple<Color?, Color?>? countdownPlatformsTuple = LoadPlatforms(dictionaryCountdown, block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? countdownLeversTuple = LoadLevers(dictionaryCountdown, block);
                         if (countdownPlatformsTuple == null || countdownLeversTuple == null)
                         {
                             break;
@@ -212,15 +215,16 @@ namespace SwitchBlocksMod.Util
                         COUNTDOWN_OFF = countdownPlatformsValues.Item2;
                         COUNTDOWN_LEVER = countdownLeversValues.Item1;
                         COUNTDOWN_LEVER_SOLID = countdownLeversValues.Item4;
-                        COUNTDOWN_DURATION = LoadDuration(block);
+                        COUNTDOWN_DURATION = LoadDuration(dictionaryCountdown, block);
                         bool isAtLeastOneCountdownPlatform = COUNTDOWN_ON != null || COUNTDOWN_OFF != null;
                         bool isAtLeastOneCountdownLever = COUNTDOWN_LEVER != null || COUNTDOWN_LEVER_SOLID != null;
                         IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED = isAtLeastOneCountdownPlatform && isAtLeastOneCountdownLever && COUNTDOWN_DURATION > 0.0f;
                         break;
 
                     case "Sand":
-                        ValueTuple<Color?, Color?>? sandPlatformsTuple = LoadPlatforms(block);
-                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? sandLeversTuple = LoadLevers(block);
+                        Dictionary<string, int> dictionarySand = Xml.MapNames(block.ChildNodes);
+                        ValueTuple<Color?, Color?>? sandPlatformsTuple = LoadPlatforms(dictionarySand, block);
+                        ValueTuple<Color?, Color?, Color?, Color?, Color?, Color?>? sandLeversTuple = LoadLevers(dictionarySand, block);
                         if (sandPlatformsTuple == null || sandLeversTuple == null)
                         {
                             break;
@@ -249,10 +253,9 @@ namespace SwitchBlocksMod.Util
             }
 
             // Looks for a "Duration" node and returns the inside declared float duration or 3.0f.
-            float LoadDuration(XmlNode root)
+            float LoadDuration(Dictionary<string, int> dictionary, XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNames(children, "Duration");
                 float duration = 3.0f;
                 if (dictionary.ContainsKey("Duration"))
                 {
@@ -262,10 +265,9 @@ namespace SwitchBlocksMod.Util
             }
 
             // Looks for "On" and "Off" nodes, the first value of the tuple being "On".
-            (Color?, Color?)? LoadPlatforms(XmlNode root)
+            (Color?, Color?)? LoadPlatforms(Dictionary<string, int> dictionary, XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNames(children, "On", "Off");
                 Color? on = null;
                 if (dictionary.ContainsKey("On"))
                 {
@@ -281,17 +283,9 @@ namespace SwitchBlocksMod.Util
 
             // Looks for the different types of lever
             // Lever -> LeverOn -> LeverOff -> LeverSolid -> LeverSolidOn -> LeverSolidOff
-            (Color?, Color?, Color?, Color?, Color?, Color?)? LoadLevers(XmlNode root)
+            (Color?, Color?, Color?, Color?, Color?, Color?)? LoadLevers(Dictionary<string, int> dictionary, XmlNode root)
             {
                 XmlNodeList children = root.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNames(
-                    children,
-                    "Lever",
-                    "LeverOn",
-                    "LeverOff",
-                    "LeverSolid",
-                    "LeverSolidOn",
-                    "LeverSolidOff");
                 Color? lever = null;
                 if (dictionary.ContainsKey("Lever"))
                 {
