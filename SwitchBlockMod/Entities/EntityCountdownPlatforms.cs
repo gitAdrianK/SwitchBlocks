@@ -1,11 +1,5 @@
-﻿using EntityComponent;
-using JumpKing;
-using JumpKing.Level;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocksMod.Data;
+﻿using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Util;
-using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
@@ -13,7 +7,7 @@ namespace SwitchBlocksMod.Entities
     /// Entity responsible for rendering countdown platforms in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntityCountdownPlatforms : Entity
+    public class EntityCountdownPlatforms : EntityPlatforms
     {
         private static EntityCountdownPlatforms instance;
         public static EntityCountdownPlatforms Instance
@@ -38,70 +32,29 @@ namespace SwitchBlocksMod.Entities
             PlatformDictionary = Platform.GetPlatformsDictonary("countdown");
         }
 
-        int currentScreen = -1;
-        int nextScreen;
-
-        float multiplier;
-        Color colorOn = Color.White;
-        Color colorOff = Color.Black;
-        Color colorNothing = Color.Transparent;
-
-        public Dictionary<int, List<Platform>> PlatformDictionary { get; private set; }
-        List<Platform> currentPlatformList;
-
         protected override void Update(float deltaTime)
         {
-            if (PlatformDictionary == null)
+            if (!UpdateCurrentScreen())
             {
                 return;
             }
 
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
-            if (currentScreen != nextScreen)
+            if (progress != 1.0f && DataCountdown.State)
             {
-                if (PlatformDictionary.ContainsKey(nextScreen))
+                progress += deltaTime;
+                if (progress >= 1.0f)
                 {
-                    currentPlatformList = PlatformDictionary[nextScreen];
-                }
-                else
-                {
-                    currentPlatformList = null;
-                }
-                currentScreen = nextScreen;
-            }
-
-            if (currentPlatformList == null)
-            {
-                return;
-            }
-
-            if (multiplier != 1.0f && DataCountdown.State)
-            {
-                multiplier += deltaTime * 5.0f;
-                if (multiplier >= 1.0f)
-                {
-                    multiplier = 1.0f;
+                    progress = 1.0f;
                 }
             }
-            else if (multiplier != 0.0f && !DataCountdown.State)
+            else if (progress != 0.0f && !DataCountdown.State)
             {
-                multiplier -= deltaTime * 5.0f;
-                if (multiplier <= 0.0f)
+                progress -= 5.0f * deltaTime;
+                if (progress <= 0.0f)
                 {
-                    multiplier = 0.0f;
+                    progress = 0.0f;
                 }
             }
-
-            byte nextColorOn = (byte)(255 * (1.0f - multiplier));
-            byte nextColorOff = (byte)(255 - nextColorOn);
-            colorOn.R = nextColorOn;
-            colorOn.G = nextColorOn;
-            colorOn.B = nextColorOn;
-            colorOn.A = nextColorOn;
-            colorOff.R = nextColorOff;
-            colorOff.G = nextColorOff;
-            colorOff.B = nextColorOff;
-            colorOff.A = nextColorOff;
 
             if (!DataCountdown.State)
             {
@@ -109,14 +62,11 @@ namespace SwitchBlocksMod.Entities
             }
             DataCountdown.RemainingTime -= deltaTime * 0.5f;
             ThirdElapsed();
+
         }
 
         private void ThirdElapsed()
         {
-            if (currentPlatformList == null)
-            {
-                return;
-            }
             if (DataCountdown.RemainingTime <= ModBlocks.COUNTDOWN_DURATION * 0.66 && !DataCountdown.HasBlinkedOnce)
             {
                 if (ModSounds.COUNTDOWN_BLINK != null)
@@ -146,34 +96,6 @@ namespace SwitchBlocksMod.Entities
                 DataCountdown.HasBlinkedOnce = false;
                 DataCountdown.HasBlinkedTwice = false;
             }
-        }
-
-        public override void Draw()
-        {
-            if (currentPlatformList == null)
-            {
-                return;
-            }
-
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            foreach (Platform platform in currentPlatformList)
-            {
-                DrawPlatform(platform, spriteBatch);
-            }
-        }
-
-        private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
-        {
-            //CONSIDER: Visual feedback for blinking.
-            Color color = platform.startState ? colorOn : colorOff;
-            if (color == colorNothing)
-            {
-                return;
-            }
-            spriteBatch.Draw(
-                texture: platform.texture,
-                position: platform.position,
-                color: color);
         }
     }
 }

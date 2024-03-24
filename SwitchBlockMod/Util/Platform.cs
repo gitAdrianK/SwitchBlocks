@@ -1,6 +1,7 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocksMod.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace SwitchBlocksMod.Entities
         public Vector2 position;
         public Point size;
         public bool startState;
+        public Animation animation;
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
@@ -86,11 +88,11 @@ namespace SwitchBlocksMod.Entities
                 // Seeing strings in code is kind of a codesmell.
                 if (subfolder == "sand")
                 {
-                    dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "Size", "StartState");
+                    dictionary = Xml.MapNamesRequired(xmlPlatform, "Texture", "Position", "Size", "StartState");
                 }
                 else
                 {
-                    dictionary = Xml.MapNamesExact(xmlPlatform, "Texture", "Position", "StartState");
+                    dictionary = Xml.MapNamesRequired(xmlPlatform, "Texture", "Position", "StartState");
                 }
                 if (dictionary == null)
                 {
@@ -117,6 +119,7 @@ namespace SwitchBlocksMod.Entities
                 platform.position = (Vector2)position;
 
                 //Size
+                platform.size = new Point(platform.texture.Width, platform.texture.Height);
                 if (dictionary.ContainsKey("Size"))
                 {
                     Point? size = Xml.GetPoint(xmlPlatform[dictionary["Size"]]);
@@ -125,10 +128,6 @@ namespace SwitchBlocksMod.Entities
                         continue;
                     }
                     platform.size = (Point)size;
-                }
-                else
-                {
-                    platform.size = new Point(platform.texture.Width, platform.texture.Height);
                 }
 
                 // Start state
@@ -145,6 +144,15 @@ namespace SwitchBlocksMod.Entities
                 {
                     // Yeah I am limiting it to on/off, what are you gonna do about it?
                     continue;
+                }
+
+                // Animation
+                platform.animation.style = Animation.Style.Fade;
+                platform.animation.curve = Animation.Curve.Linear;
+                if (dictionary.ContainsKey("Animation"))
+                {
+                    XmlNode animationNode = xmlPlatform[dictionary["Animation"]];
+                    platform.animation = Xml.GetAnimation(animationNode);
                 }
 
                 // The platform had all elements properly set.

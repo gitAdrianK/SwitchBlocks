@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using SwitchBlocksMod.Util;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 
 namespace SwitchBlocksMod
@@ -28,26 +28,24 @@ namespace SwitchBlocksMod
 
         /// <summary>
         /// Maps names to their position in an xml node list.<br />
-        /// The names must be in the nodes list, and the nodes list must only contain those names.
+        /// The names must be in the nodes list, and the nodes list must at least contain those names.
         /// </summary>
         /// <param name="nodeList">The xml node list to check.</param>
         /// <param name="names">The names to check for.</param>
         /// <returns>A dictionary mapping the names to its position in the node list, null otherwise.</returns>
-        public static Dictionary<string, int> MapNamesExact(XmlNodeList nodeList, params string[] names)
+        public static Dictionary<string, int> MapNamesRequired(XmlNodeList nodeList, params string[] names)
         {
-            if (nodeList.Count != names.Length)
+            if (nodeList.Count < names.Length)
             {
                 return null;
             }
-            Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            for (int i = 0; i < nodeList.Count; i++)
+            Dictionary<string, int> dictionary = MapNames(nodeList);
+            foreach (string name in names)
             {
-                XmlNode node = nodeList[i];
-                if (!names.Contains(node.Name))
+                if (!dictionary.ContainsKey(name))
                 {
                     return null;
                 }
-                dictionary[node.Name] = i;
             }
             return dictionary;
         }
@@ -61,7 +59,7 @@ namespace SwitchBlocksMod
         public static Color? GetColor(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesExact(children, "R", "G", "B");
+            Dictionary<string, int> dictionary = MapNamesRequired(children, "R", "G", "B");
             if (dictionary == null)
             {
                 return null;
@@ -81,14 +79,14 @@ namespace SwitchBlocksMod
         public static Vector2? GetVector2(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesExact(children, "X", "Y");
+            Dictionary<string, int> dictionary = MapNamesRequired(children, "X", "Y");
             if (dictionary == null)
             {
                 return null;
             }
             return new Vector2(
-                int.Parse(children[dictionary["X"]].InnerText),
-                int.Parse(children[dictionary["Y"]].InnerText));
+                float.Parse(children[dictionary["X"]].InnerText),
+                float.Parse(children[dictionary["Y"]].InnerText));
         }
 
         /// <summary>
@@ -100,7 +98,7 @@ namespace SwitchBlocksMod
         public static Point? GetPoint(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesExact(children, "X", "Y");
+            Dictionary<string, int> dictionary = MapNamesRequired(children, "X", "Y");
             if (dictionary == null)
             {
                 return null;
@@ -108,6 +106,69 @@ namespace SwitchBlocksMod
             return new Point(
                 int.Parse(children[dictionary["X"]].InnerText),
                 int.Parse(children[dictionary["Y"]].InnerText));
+        }
+
+        /// <summary>
+        /// Creates an Animation from a given xml node .
+        /// </summary>
+        /// <param name="root">Xml node to create the animation from.</param>
+        /// <returns>Animation</returns>
+        public static Animation GetAnimation(XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            Animation animation;
+            animation.style = Animation.Style.Fade;
+            animation.curve = Animation.Curve.Linear;
+            Dictionary<string, int> dictionary = MapNames(children);
+            if (dictionary.ContainsKey("Style"))
+            {
+                switch (children[dictionary["Style"]].InnerText)
+                {
+                    case "Fade":
+                        animation.style = Animation.Style.Fade;
+                        break;
+                    case "Top":
+                        animation.style = Animation.Style.Top;
+                        break;
+                    case "Bottom":
+                        animation.style = Animation.Style.Bottom;
+                        break;
+                    case "Left":
+                        animation.style = Animation.Style.Left;
+                        break;
+                    case "Right":
+                        animation.style = Animation.Style.Right;
+                        break;
+                    default:
+                        animation.style = Animation.Style.Fade;
+                        break;
+                }
+            }
+            if (dictionary.ContainsKey("Curve"))
+            {
+                switch (children[dictionary["Curve"]].InnerText)
+                {
+                    case "Stepped":
+                        animation.curve = Animation.Curve.Stepped;
+                        break;
+                    case "Linear":
+                        animation.curve = Animation.Curve.Linear;
+                        break;
+                    case "EaseIn":
+                        animation.curve = Animation.Curve.EaseIn;
+                        break;
+                    case "EaseOut":
+                        animation.curve = Animation.Curve.EaseOut;
+                        break;
+                    case "EaseInOut":
+                        animation.curve = Animation.Curve.EaseInOut;
+                        break;
+                    default:
+                        animation.curve = Animation.Curve.Stepped;
+                        break;
+                }
+            }
+            return animation;
         }
     }
 }
