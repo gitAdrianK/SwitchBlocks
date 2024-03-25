@@ -19,6 +19,10 @@ namespace SwitchBlocksMod.Entities
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
         List<Platform> currentPlatformList;
 
+        /// <summary>
+        /// Updates what screen is currently active and gets the platforms from the platform dictionary
+        /// </summary>
+        /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
             if (PlatformDictionary == null)
@@ -42,6 +46,31 @@ namespace SwitchBlocksMod.Entities
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Updates the progress of the platform that is used when animating.
+        /// </summary>
+        /// <param name="state">State of the platforms type</param>
+        /// <param name="amount">Amount to be added/subtracted from the progress</param>
+        protected void UpdateProgress(bool state, float amount)
+        {
+            if (progress != 1.0f && state)
+            {
+                progress += amount;
+                if (progress >= 1.0f)
+                {
+                    progress = 1.0f;
+                }
+            }
+            else if (progress != 0.0f && !state)
+            {
+                progress -= amount;
+                if (progress <= 0.0f)
+                {
+                    progress = 0.0f;
+                }
+            }
         }
 
         public override void Draw()
@@ -76,11 +105,11 @@ namespace SwitchBlocksMod.Entities
                 return;
             }
 
-            float progressActual;
+            float progressActual = 1.0f;
             switch (platform.animation.curve)
             {
                 case Curve.Stepped:
-                    progressActual = progressAdjusted < 0.5f ? 1.0f : 0.0f;
+                    progressActual = progressAdjusted < 0.9f ? 1.0f : 0.0f;
                     break;
                 case Curve.Linear:
                     progressActual = progressAdjusted;
@@ -94,35 +123,91 @@ namespace SwitchBlocksMod.Entities
                 case Curve.EaseInOut:
                     progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
                     break;
-                default:
-                    progressActual = progressAdjusted;
-                    break;
             }
 
+            int height = platform.texture.Height;
+            int width = platform.texture.Width;
             switch (platform.animation.style)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
-                    texture: platform.texture,
-                    position: platform.position,
-                    color: new Color(
-                        progressActual,
-                        progressActual,
-                        progressActual,
-                        progressActual)
-                    );
+                        texture: platform.texture,
+                        position: platform.position,
+                        color: new Color(
+                            progressActual,
+                            progressActual,
+                            progressActual,
+                            progressActual));
                     break;
+
                 case Style.Top:
-                    //TODO: Animation Top
+                    int heightTop = (int)(height * progressActual);
+                    Rectangle rectangleTop = new Rectangle(
+                        0,
+                        height - heightTop,
+                        width,
+                        heightTop);
+
+                    spriteBatch.Draw(
+                        texture: platform.texture,
+                        position: platform.position,
+                        sourceRectangle: rectangleTop,
+                        color: Color.White);
                     break;
+
                 case Style.Bottom:
-                    //TODO: Animation Bottom
+                    int heightBottom = (int)(height * progressActual);
+
+                    Vector2 vectorBottom = new Vector2(
+                        platform.position.X,
+                        platform.position.Y + heightBottom);
+
+                    Rectangle rectangleBottom = new Rectangle(
+                        0,
+                        0,
+                        width,
+                        height - heightBottom);
+
+                    spriteBatch.Draw(
+                        texture: platform.texture,
+                        position: vectorBottom,
+                        sourceRectangle: rectangleBottom,
+                        color: Color.White);
                     break;
+
                 case Style.Left:
-                    //TODO: Animation Left
+                    int widthLeft = (int)(width * progressActual);
+                    Rectangle rectangleLeft = new Rectangle(
+                        width - widthLeft,
+                        0,
+                        widthLeft,
+                        height);
+
+                    spriteBatch.Draw(
+                        texture: platform.texture,
+                        position: platform.position,
+                        sourceRectangle: rectangleLeft,
+                        color: Color.White);
                     break;
+
                 case Style.Right:
-                    //TODO: Animation Right
+                    int widthRight = (int)(width * progressActual);
+
+                    Vector2 vectorRight = new Vector2(
+                        platform.position.X + widthRight,
+                        platform.position.Y);
+
+                    Rectangle rectangleRight = new Rectangle(
+                        0,
+                        0,
+                        width - widthRight,
+                        height);
+
+                    spriteBatch.Draw(
+                        texture: platform.texture,
+                        position: vectorRight,
+                        sourceRectangle: rectangleRight,
+                        color: Color.White);
                     break;
             }
         }

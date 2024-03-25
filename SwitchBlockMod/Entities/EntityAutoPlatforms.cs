@@ -39,22 +39,7 @@ namespace SwitchBlocksMod.Entities
                 return;
             }
 
-            if (progress != 1.0f && DataAuto.State)
-            {
-                progress += deltaTime;
-                if (progress >= 1.0f)
-                {
-                    progress = 1.0f;
-                }
-            }
-            else if (progress != 0.0f && !DataAuto.State)
-            {
-                progress -= 5.0f * deltaTime;
-                if (progress <= 0.0f)
-                {
-                    progress = 0.0f;
-                }
-            }
+            UpdateProgress(DataAuto.State, deltaTime);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
             ThirdElapsed();

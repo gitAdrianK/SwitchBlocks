@@ -124,19 +124,19 @@ namespace SwitchBlocksMod
             {
                 switch (children[dictionary["Style"]].InnerText)
                 {
-                    case "Fade":
+                    case "fade":
                         animation.style = Animation.Style.Fade;
                         break;
-                    case "Top":
+                    case "top":
                         animation.style = Animation.Style.Top;
                         break;
-                    case "Bottom":
+                    case "bottom":
                         animation.style = Animation.Style.Bottom;
                         break;
-                    case "Left":
+                    case "left":
                         animation.style = Animation.Style.Left;
                         break;
-                    case "Right":
+                    case "right":
                         animation.style = Animation.Style.Right;
                         break;
                     default:
@@ -148,19 +148,19 @@ namespace SwitchBlocksMod
             {
                 switch (children[dictionary["Curve"]].InnerText)
                 {
-                    case "Stepped":
+                    case "stepped":
                         animation.curve = Animation.Curve.Stepped;
                         break;
-                    case "Linear":
+                    case "linear":
                         animation.curve = Animation.Curve.Linear;
                         break;
-                    case "EaseIn":
+                    case "easeIn":
                         animation.curve = Animation.Curve.EaseIn;
                         break;
-                    case "EaseOut":
+                    case "easeOut":
                         animation.curve = Animation.Curve.EaseOut;
                         break;
-                    case "EaseInOut":
+                    case "easeInOut":
                         animation.curve = Animation.Curve.EaseInOut;
                         break;
                     default:
