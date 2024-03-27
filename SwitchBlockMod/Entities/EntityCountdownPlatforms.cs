@@ -24,12 +24,14 @@ namespace SwitchBlocksMod.Entities
 
         public void Reset()
         {
+            DataCountdown.Progress = progress;
             instance = null;
         }
 
         private EntityCountdownPlatforms()
         {
             PlatformDictionary = Platform.GetPlatformsDictonary("countdown");
+            progress = DataCountdown.Progress;
         }
 
         protected override void Update(float deltaTime)

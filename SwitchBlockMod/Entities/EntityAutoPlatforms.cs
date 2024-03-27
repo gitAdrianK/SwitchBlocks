@@ -24,12 +24,14 @@ namespace SwitchBlocksMod.Entities
 
         public void Reset()
         {
+            DataAuto.Progress = progress;
             instance = null;
         }
 
         private EntityAutoPlatforms()
         {
             PlatformDictionary = Platform.GetPlatformsDictonary("auto");
+            progress = DataAuto.Progress;
         }
 
         protected override void Update(float deltaTime)

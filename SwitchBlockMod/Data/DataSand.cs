@@ -9,6 +9,7 @@
         /// Its current state.
         /// </summary>
         public static bool State { get; set; }
+
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch

@@ -160,13 +160,13 @@ namespace SwitchBlocksMod.Entities
 
                     Vector2 vectorBottom = new Vector2(
                         platform.position.X,
-                        platform.position.Y + heightBottom);
+                        platform.position.Y + height - heightBottom);
 
                     Rectangle rectangleBottom = new Rectangle(
                         0,
                         0,
                         width,
-                        height - heightBottom);
+                        heightBottom);
 
                     spriteBatch.Draw(
                         texture: platform.texture,
@@ -194,13 +194,13 @@ namespace SwitchBlocksMod.Entities
                     int widthRight = (int)(width * progressActual);
 
                     Vector2 vectorRight = new Vector2(
-                        platform.position.X + widthRight,
+                        platform.position.X + width - widthRight,
                         platform.position.Y);
 
                     Rectangle rectangleRight = new Rectangle(
                         0,
                         0,
-                        width - widthRight,
+                        widthRight,
                         height);
 
                     spriteBatch.Draw(

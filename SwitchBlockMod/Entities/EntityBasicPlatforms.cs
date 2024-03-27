@@ -23,12 +23,14 @@ namespace SwitchBlocksMod.Entities
 
         public void Reset()
         {
+            DataBasic.Progress = progress;
             instance = null;
         }
 
         private EntityBasicPlatforms()
         {
             PlatformDictionary = Platform.GetPlatformsDictonary("basic");
+            progress = DataBasic.Progress;
         }
 
         protected override void Update(float deltaTime)
