@@ -38,14 +38,17 @@ namespace SwitchBlocksMod.Util
                 binaryWriter = new BinaryWriter(File.Open($"{path}save", FileMode.Create));
                 // Auto
                 binaryWriter.Write(DataAuto.State);
+                binaryWriter.Write(DataAuto.Progress);
                 binaryWriter.Write(DataAuto.RemainingTime);
                 binaryWriter.Write(DataAuto.HasBlinkedOnce);
                 binaryWriter.Write(DataAuto.HasBlinkedTwice);
                 // Basic
                 binaryWriter.Write(DataBasic.State);
+                binaryWriter.Write(DataBasic.Progress);
                 binaryWriter.Write(DataBasic.HasSwitched);
                 // Countdown
                 binaryWriter.Write(DataCountdown.State);
+                binaryWriter.Write(DataCountdown.Progress);
                 binaryWriter.Write(DataCountdown.HasSwitched);
                 binaryWriter.Write(DataCountdown.RemainingTime);
                 binaryWriter.Write(DataCountdown.HasBlinkedOnce);
@@ -101,14 +104,17 @@ namespace SwitchBlocksMod.Util
                 binaryReader = new BinaryReader(File.Open($"{path}save", FileMode.Open));
                 // Auto
                 DataAuto.State = binaryReader.ReadBoolean();
+                DataAuto.Progress = binaryReader.ReadSingle();
                 DataAuto.RemainingTime = binaryReader.ReadSingle();
                 DataAuto.HasBlinkedOnce = binaryReader.ReadBoolean();
                 DataAuto.HasBlinkedTwice = binaryReader.ReadBoolean();
                 // Basic
                 DataBasic.State = binaryReader.ReadBoolean();
+                DataBasic.Progress = binaryReader.ReadSingle();
                 DataBasic.HasSwitched = binaryReader.ReadBoolean();
                 // Countdown
                 DataCountdown.State = binaryReader.ReadBoolean();
+                DataCountdown.Progress = binaryReader.ReadSingle();
                 DataCountdown.HasSwitched = binaryReader.ReadBoolean();
                 DataCountdown.RemainingTime = binaryReader.ReadSingle();
                 DataCountdown.HasBlinkedOnce = binaryReader.ReadBoolean();

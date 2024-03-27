@@ -79,7 +79,7 @@ namespace SwitchBlocksMod.Entities
             foreach (XmlElement xmlElement in xmlLevers.ChildNodes)
             {
                 XmlNodeList xmlLever = xmlElement.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNamesExact(xmlLever, "Texture", "Position");
+                Dictionary<string, int> dictionary = Xml.MapNamesRequired(xmlLever, "Texture", "Position");
                 if (dictionary == null)
                 {
                     continue;
