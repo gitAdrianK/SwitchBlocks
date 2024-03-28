@@ -91,7 +91,7 @@ namespace SwitchBlocksMod.Entities
         private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
         {
             //CONSIDER: Visual feedback for blinking.
-            float progressAdjusted = platform.startState ? progress : 1.0f - progress;
+            float progressAdjusted = platform.startState ? 1.0f - progress : progress;
             if (progressAdjusted == 0.0f)
             {
                 return;
