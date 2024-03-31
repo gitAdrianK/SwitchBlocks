@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using JumpKing;
 using JumpKing.API;
 using JumpKing.BodyCompBehaviours;

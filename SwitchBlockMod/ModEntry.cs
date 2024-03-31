@@ -1,5 +1,5 @@
 ﻿using EntityComponent;
-using Harmony;
+using HarmonyLib;
 using JumpKing.API;
 using JumpKing.Level;
 using JumpKing.Mods;
@@ -43,7 +43,7 @@ namespace SwitchBlocksMod
             };
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
-                var harmony = HarmonyInstance.Create("Zebra.SwitchBlocksMod");
+                var harmony = new Harmony("Zebra.SwitchBlocksMod");
                 // harmony.PatchAll(Assembly.GetExecutingAssembly());
                 MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
                 MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
