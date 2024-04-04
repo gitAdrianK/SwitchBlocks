@@ -36,11 +36,6 @@ namespace SwitchBlocksMod.Entities
 
         protected override void Update(float deltaTime)
         {
-            if (!UpdateCurrentScreen())
-            {
-                return;
-            }
-
             UpdateProgress(DataAuto.State, deltaTime);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
@@ -50,27 +45,27 @@ namespace SwitchBlocksMod.Entities
         {
             if (DataAuto.RemainingTime <= ModBlocks.AUTO_DURATION * 0.66 && !DataAuto.HasBlinkedOnce)
             {
-                if (ModSounds.AUTO_BLINK != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.AUTO_BLINK.Play();
+                    ModSounds.AUTO_BLINK?.Play();
                 }
                 DataAuto.HasBlinkedOnce = true;
                 return;
             }
             if (DataAuto.RemainingTime <= ModBlocks.AUTO_DURATION * 0.33 && !DataAuto.HasBlinkedTwice)
             {
-                if (ModSounds.AUTO_BLINK != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.AUTO_BLINK.Play();
+                    ModSounds.AUTO_BLINK?.Play();
                 }
                 DataAuto.HasBlinkedTwice = true;
                 return;
             }
             if (DataAuto.RemainingTime <= 0.0f)
             {
-                if (ModSounds.AUTO_FLIP != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.AUTO_FLIP.Play();
+                    ModSounds.AUTO_FLIP?.Play();
                 }
                 DataAuto.State = !DataAuto.State;
                 DataAuto.RemainingTime = ModBlocks.AUTO_DURATION; ;

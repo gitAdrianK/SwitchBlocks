@@ -78,9 +78,9 @@ namespace SwitchBlocksMod.Behaviours
                     DataBasic.State = false;
                 }
 
-                if (ModSounds.BASIC_FLIP != null && stateBefore != DataBasic.State)
+                if (stateBefore != DataBasic.State)
                 {
-                    ModSounds.BASIC_FLIP.Play();
+                    ModSounds.BASIC_FLIP?.Play();
                 }
             }
             else

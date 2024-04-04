@@ -1,11 +1,8 @@
-﻿using EntityComponent;
-using JumpKing;
-using JumpKing.Level;
+﻿using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
 using System;
-using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
 {
@@ -13,7 +10,7 @@ namespace SwitchBlocksMod.Entities
     /// Entity responsible for rendering sand platforms in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntitySandPlatforms : Entity
+    public class EntitySandPlatforms : EntityPlatforms
     {
         private static EntitySandPlatforms instance;
         public static EntitySandPlatforms Instance
@@ -30,6 +27,7 @@ namespace SwitchBlocksMod.Entities
 
         public void Reset()
         {
+            DataCountdown.Progress = progress;
             instance = null;
         }
 
@@ -38,41 +36,16 @@ namespace SwitchBlocksMod.Entities
             PlatformDictionary = Platform.GetPlatformsDictonary("sand");
         }
 
-        int currentScreen = -1;
-        int nextScreen;
-
         float offset;
-
-        public Dictionary<int, List<Platform>> PlatformDictionary { get; private set; }
-        List<Platform> currentPlatformList;
 
         protected override void Update(float deltaTime)
         {
-            if (PlatformDictionary == null)
-            {
-                return;
-            }
-
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
-            if (currentScreen != nextScreen)
-            {
-                if (PlatformDictionary.ContainsKey(nextScreen))
-                {
-                    currentPlatformList = PlatformDictionary[nextScreen];
-                }
-                else
-                {
-                    currentPlatformList = null;
-                }
-                currentScreen = nextScreen;
-            }
-
             offset += deltaTime;
         }
 
         public override void Draw()
         {
-            if (currentPlatformList == null)
+            if (!UpdateCurrentScreen())
             {
                 return;
             }

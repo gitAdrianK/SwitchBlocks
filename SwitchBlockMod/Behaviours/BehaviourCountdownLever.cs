@@ -63,9 +63,9 @@ namespace SwitchBlocksMod.Behaviours
                     return true;
                 }
 
-                if (!DataCountdown.State && ModSounds.COUNTDOWN_FLIP != null)
+                if (!DataCountdown.State)
                 {
-                    ModSounds.COUNTDOWN_FLIP.Play();
+                    ModSounds.COUNTDOWN_FLIP?.Play();
                 }
 
                 DataCountdown.HasSwitched = true;

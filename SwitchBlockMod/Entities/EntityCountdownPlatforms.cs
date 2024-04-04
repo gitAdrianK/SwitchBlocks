@@ -36,11 +36,6 @@ namespace SwitchBlocksMod.Entities
 
         protected override void Update(float deltaTime)
         {
-            if (!UpdateCurrentScreen())
-            {
-                return;
-            }
-
             UpdateProgress(DataCountdown.State, deltaTime);
 
             if (!DataCountdown.State)
@@ -56,27 +51,27 @@ namespace SwitchBlocksMod.Entities
         {
             if (DataCountdown.RemainingTime <= ModBlocks.COUNTDOWN_DURATION * 0.66 && !DataCountdown.HasBlinkedOnce)
             {
-                if (ModSounds.COUNTDOWN_BLINK != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_BLINK.Play();
+                    ModSounds.COUNTDOWN_BLINK?.Play();
                 }
                 DataCountdown.HasBlinkedOnce = true;
                 return;
             }
             if (DataCountdown.RemainingTime <= ModBlocks.COUNTDOWN_DURATION * 0.33 && !DataCountdown.HasBlinkedTwice)
             {
-                if (ModSounds.COUNTDOWN_BLINK != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_BLINK.Play();
+                    ModSounds.COUNTDOWN_BLINK?.Play();
                 }
                 DataCountdown.HasBlinkedTwice = true;
                 return;
             }
             if (DataCountdown.RemainingTime <= 0.0f)
             {
-                if (ModSounds.COUNTDOWN_FLIP != null)
+                if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_FLIP.Play();
+                    ModSounds.COUNTDOWN_FLIP?.Play();
                 }
                 DataCountdown.State = false;
                 DataCountdown.RemainingTime = ModBlocks.COUNTDOWN_DURATION; ;

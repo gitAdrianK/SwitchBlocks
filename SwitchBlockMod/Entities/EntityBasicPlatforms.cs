@@ -35,11 +35,6 @@ namespace SwitchBlocksMod.Entities
 
         protected override void Update(float deltaTime)
         {
-            if (!UpdateCurrentScreen())
-            {
-                return;
-            }
-
             UpdateProgress(DataBasic.State, deltaTime);
         }
     }

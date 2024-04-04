@@ -81,7 +81,7 @@ namespace SwitchBlocksMod
             // Auto
             if (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityAutoPlatforms.Instance.PlatformDictionary.Count > 0)
+                if (EntityAutoPlatforms.Instance.PlatformDictionary != null)
                 {
                     entityManager.AddObject(EntityAutoPlatforms.Instance);
                 }
@@ -89,8 +89,8 @@ namespace SwitchBlocksMod
             // Basic
             if (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityBasicPlatforms.Instance.PlatformDictionary.Count > 0
-                    && EntityBasicLevers.Instance.LeverDictionary.Count > 0)
+                if (EntityBasicPlatforms.Instance.PlatformDictionary != null
+                    && EntityBasicLevers.Instance.LeverDictionary != null)
                 {
                     entityManager.AddObject(EntityBasicPlatforms.Instance);
                     entityManager.AddObject(EntityBasicLevers.Instance);
@@ -113,8 +113,8 @@ namespace SwitchBlocksMod
             // Countdown
             if (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntityCountdownPlatforms.Instance.PlatformDictionary.Count > 0
-                    && EntityCountdownLevers.Instance.LeverDictionary.Count > 0)
+                if (EntityCountdownPlatforms.Instance.PlatformDictionary != null
+                    && EntityCountdownLevers.Instance.LeverDictionary != null)
                 {
                     entityManager.AddObject(EntityCountdownPlatforms.Instance);
                     entityManager.AddObject(EntityCountdownLevers.Instance);
@@ -133,8 +133,8 @@ namespace SwitchBlocksMod
             // Sand
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
-                if (EntitySandPlatforms.Instance.PlatformDictionary.Count > 0
-                    && EntitySandLevers.Instance.LeverDictionary.Count > 0)
+                if (EntitySandPlatforms.Instance.PlatformDictionary != null
+                    && EntityCountdownLevers.Instance.LeverDictionary != null)
                 {
                     entityManager.AddObject(EntitySandPlatforms.Instance);
                     entityManager.AddObject(EntitySandLevers.Instance);

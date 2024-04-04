@@ -17,7 +17,7 @@ namespace SwitchBlocksMod.Entities
 
         protected float progress;
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
-        List<Platform> currentPlatformList;
+        protected List<Platform> currentPlatformList;
 
         /// <summary>
         /// Updates what screen is currently active and gets the platforms from the platform dictionary
@@ -25,11 +25,6 @@ namespace SwitchBlocksMod.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            if (PlatformDictionary == null)
-            {
-                return false;
-            }
-
             nextScreen = LevelManager.CurrentScreen.GetIndex0();
             if (currentScreen != nextScreen)
             {
@@ -75,7 +70,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (currentPlatformList == null)
+            if (!UpdateCurrentScreen())
             {
                 return;
             }

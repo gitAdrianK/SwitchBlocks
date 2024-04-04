@@ -78,9 +78,9 @@ namespace SwitchBlocksMod.Behaviours
                     DataSand.State = false;
                 }
 
-                if (ModSounds.SAND_FLIP != null && stateBefore != DataSand.State)
+                if (stateBefore != DataSand.State)
                 {
-                    ModSounds.SAND_FLIP.Play();
+                    ModSounds.SAND_FLIP?.Play();
                 }
             }
             else
