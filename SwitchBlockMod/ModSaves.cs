@@ -63,14 +63,8 @@ namespace SwitchBlocksMod.Util
             }
             finally
             {
-                if (fileStream != null)
-                {
-                    fileStream.Dispose();
-                }
-                if (binaryWriter != null)
-                {
-                    binaryWriter.Dispose();
-                }
+                fileStream?.Dispose();
+                binaryWriter?.Dispose();
             }
         }
 
@@ -135,14 +129,8 @@ namespace SwitchBlocksMod.Util
             }
             finally
             {
-                if (fileStream != null)
-                {
-                    fileStream.Dispose();
-                }
-                if (binaryReader != null)
-                {
-                    binaryReader.Dispose();
-                }
+                fileStream?.Dispose();
+                binaryReader?.Dispose();
             }
         }
     }
