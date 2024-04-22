@@ -26,7 +26,7 @@ namespace SwitchBlocksMod.Util
             {
                 return;
             }
-            if (!Directory.Exists(path))
+            if (!File.Exists($"{path}save"))
             {
                 return;
             }
@@ -35,7 +35,7 @@ namespace SwitchBlocksMod.Util
             try
             {
                 fileStream = File.Open($"{path}save", FileMode.Create);
-                binaryWriter = new BinaryWriter(fileStream);
+                binaryWriter = new BinaryWriter(File.Open($"{path}save", FileMode.Create));
                 // Auto
                 binaryWriter.Write(DataAuto.State);
                 binaryWriter.Write(DataAuto.Progress);
@@ -90,13 +90,12 @@ namespace SwitchBlocksMod.Util
             {
                 return;
             }
-
             FileStream fileStream = null;
             BinaryReader binaryReader = null;
             try
             {
                 fileStream = File.Open($"{path}save", FileMode.Create);
-                binaryReader = new BinaryReader(fileStream);
+                binaryReader = new BinaryReader(File.Open($"{path}save", FileMode.Open));
                 // Auto
                 DataAuto.State = binaryReader.ReadBoolean();
                 DataAuto.Progress = binaryReader.ReadSingle();
