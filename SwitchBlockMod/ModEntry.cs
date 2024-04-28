@@ -20,6 +20,10 @@ namespace SwitchBlocksMod
     [JumpKingMod("Zebra.SwitchBlocksMod")]
     public static class ModEntry
     {
+        public static bool IsEven = true; //It checks Jumps is even or odd.(even:true)
+        static void jumpswitch() {
+            IsEven = !IsEven;
+        }
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -41,6 +45,8 @@ namespace SwitchBlocksMod
                 var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
                 LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
             };
+            LevelManager.RegisterBlockFactory(new JumpSwitchBlockONFactory());
+            LevelManager.RegisterBlockFactory(new JumpSwitchBlockOFFFactory());
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
                 var harmony = new Harmony("Zebra.SwitchBlocksMod");
@@ -147,6 +153,9 @@ namespace SwitchBlocksMod
                     player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
+
+            // for jumpswitch blocks
+            JumpKing.Player.PlayerEntity.OnJumpCall += jumpswitch;
             // End
             EntityManager.instance.MoveToFront(player);
         }
@@ -191,6 +200,142 @@ namespace SwitchBlocksMod
                 __result = (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(SandBlock) })
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOn) })
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
+            }
+        }
+    }
+
+    public class JumpSwitchBlockON : IBlock
+    {
+        private readonly Rectangle m_collider;
+
+        public JumpSwitchBlockON(Rectangle p_collider)
+        {
+            m_collider = p_collider;
+        }
+
+        public Rectangle GetRect()
+        {
+            return ModEntry.IsEven ? m_collider : new Rectangle(0, 0, 0, 0);
+        }
+
+        public bool IsSolidBlock(Color blockCode)
+        {
+            return ModEntry.IsEven;
+        }
+
+        public BlockCollisionType Intersects(Rectangle p_hitbox, out Rectangle p_intersection)
+        {
+            bool ret = m_collider.Intersects(p_hitbox);
+
+            if (ret)
+            {
+                p_intersection = Rectangle.Intersect(p_hitbox, m_collider);
+                return ModEntry.IsEven ? BlockCollisionType.Collision_Blocking : BlockCollisionType.Collision_NonBlocking;
+            }
+            else
+            {
+                p_intersection = new Rectangle(0, 0, 0, 0);
+                return BlockCollisionType.NoCollision;
+            }
+        }
+    }
+
+    public class JumpSwitchBlockONFactory : IBlockFactory
+    {
+        private static readonly Color BLOCKCODE_LOWGRAVITY = new Color(95, 95, 95);
+
+        private readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>()
+        {
+            BLOCKCODE_LOWGRAVITY,
+        };
+
+        public bool CanMakeBlock(Color blockCode, Level level)
+        {
+            return supportedBlockCodes.Contains(blockCode);
+        }
+
+        public bool IsSolidBlock(Color blockCode)
+        {
+            return !ModEntry.IsEven;
+        }
+
+        public IBlock GetBlock(Color blockCode, Rectangle blockRect, JumpKing.Workshop.Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
+        {
+            if (blockCode == BLOCKCODE_LOWGRAVITY)
+            {
+                return new JumpSwitchBlockON(blockRect);
+            }
+            else
+            {
+                throw new InvalidOperationException($"It is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+            }
+        }
+    }
+
+    public class JumpSwitchBlockOFF : IBlock
+    {
+        private readonly Rectangle m_collider;
+
+        public JumpSwitchBlockOFF(Rectangle p_collider)
+        {
+            m_collider = p_collider;
+        }
+
+        public Rectangle GetRect()
+        {
+            return !ModEntry.IsEven ? m_collider : new Rectangle(0, 0, 0, 0);
+        }
+
+        public bool IsSolidBlock(Color blockCode)
+        {
+            return !ModEntry.IsEven;
+        }
+
+        public BlockCollisionType Intersects(Rectangle p_hitbox, out Rectangle p_intersection)
+        {
+            bool ret = m_collider.Intersects(p_hitbox);
+
+            if (ret)
+            {
+                p_intersection = Rectangle.Intersect(p_hitbox, m_collider);
+                return ModEntry.IsEven ? BlockCollisionType.Collision_NonBlocking : BlockCollisionType.Collision_Blocking;
+            }
+            else
+            {
+                p_intersection = new Rectangle(0, 0, 0, 0);
+                return BlockCollisionType.NoCollision;
+            }
+        }
+    }
+
+    public class JumpSwitchBlockOFFFactory : IBlockFactory
+    {
+        private static readonly Color BLOCKCODE_LOWGRAVITY = new Color(31, 31, 31);
+
+        private readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>()
+        {
+            BLOCKCODE_LOWGRAVITY,
+        };
+
+        public bool CanMakeBlock(Color blockCode, Level level)
+        {
+            return supportedBlockCodes.Contains(blockCode);
+        }
+
+        public bool IsSolidBlock(Color blockCode)
+        {
+            return !ModEntry.IsEven;
+        }
+
+        public IBlock GetBlock(Color blockCode, Rectangle blockRect, JumpKing.Workshop.Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
+        {
+            if (blockCode == BLOCKCODE_LOWGRAVITY)
+            {
+                return new JumpSwitchBlockOFF(blockRect);
+            }
+            else
+            {
+                throw new InvalidOperationException($"It is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }
