@@ -53,16 +53,6 @@ namespace SwitchBlocksMod
         }
 
         /// <summary>
-        /// Called by Jump King when the level unloads
-        /// -> OnGameEnd
-        /// </summary>
-        [OnLevelUnload]
-        public static void OnLevelUnload()
-        {
-            // Your code here
-        }
-
-        /// <summary>
         /// Called by Jump King when the Level Starts
         /// </summary>
         [OnLevelStart]
