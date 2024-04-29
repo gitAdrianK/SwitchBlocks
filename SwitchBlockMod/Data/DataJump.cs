@@ -9,5 +9,10 @@
         /// Its current state.
         /// </summary>
         public static bool State { get; set; }
+
+        /// <summary>
+        /// Animation progress.
+        /// </summary>
+        public static float Progress { get; set; }
     }
 }

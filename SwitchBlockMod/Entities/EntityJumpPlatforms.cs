@@ -19,12 +19,14 @@ namespace SwitchBlocksMod.Entities
 
         public void Reset()
         {
+            DataJump.Progress = progress;
             instance = null;
         }
 
         private EntityJumpPlatforms()
         {
             PlatformDictionary = Platform.GetPlatformsDictonary("jump");
+            progress = DataJump.Progress;
         }
 
         protected override void Update(float deltaTime)

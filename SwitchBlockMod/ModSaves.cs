@@ -56,6 +56,7 @@ namespace SwitchBlocksMod.Util
                 binaryWriter.Write(DataSand.HasSwitched);
                 // Jump
                 binaryWriter.Write(DataJump.State);
+                binaryWriter.Write(DataJump.Progress);
             }
             catch (Exception e)
             {
@@ -113,21 +114,9 @@ namespace SwitchBlocksMod.Util
                 // Sand
                 DataSand.State = binaryReader.ReadBoolean();
                 DataSand.HasSwitched = binaryReader.ReadBoolean();
-
-                // 1.0.0 End
-                if (binaryReader.PeekChar() == -1)
-                {
-                    return;
-                }
-
                 // Jump
                 DataJump.State = binaryReader.ReadBoolean();
-
-                // 1.2.0 End
-                if (binaryReader.PeekChar() == -1)
-                {
-                    return;
-                }
+                DataJump.Progress = binaryReader.ReadSingle();
             }
             catch (Exception e)
             {
