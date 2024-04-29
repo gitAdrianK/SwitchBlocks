@@ -17,6 +17,9 @@ Switches its state when touching a lever.
 ## Countdown Blocks
 Switches its state when touching a lever, automatically switches back after a set amount of time.
 
+## Jump Blocks
+Switches its state when the player jumps.
+
 ## Sand Blocks
 Behaves like the vanilla sand block sinking the player and slowing them down. When state has been switched, it instead pushes the player up.
 Switches its state when touching a lever.
