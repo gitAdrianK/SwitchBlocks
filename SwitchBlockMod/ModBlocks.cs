@@ -102,6 +102,20 @@ namespace SwitchBlocksMod.Util
         public static readonly float COUNTDOWN_DURATION;
 
         /// <summary>
+        /// If the jump blocks have been functionally initialized and are ready to be used.<br />
+        /// A functional initialization is at least one platform.
+        /// </summary>
+        public static readonly bool IS_JUMP_FUNCTIONALLY_INITIALIZED;
+        /// <summary>
+        /// Color that represents the jump on block. 
+        /// </summary>
+        public static readonly Color? JUMP_ON;
+        /// <summary>
+        /// Color that represents the jump off block. 
+        /// </summary>
+        public static readonly Color? JUMP_OFF;
+
+        /// <summary>
         /// If the sand blocks have been initialized and are ready to be used.<br />
         /// A functional initialization is at least one platform, and either a lever, or both On/Off levers.
         /// </summary>
@@ -219,6 +233,18 @@ namespace SwitchBlocksMod.Util
                         bool isAtLeastOneCountdownPlatform = COUNTDOWN_ON != null || COUNTDOWN_OFF != null;
                         bool isAtLeastOneCountdownLever = COUNTDOWN_LEVER != null || COUNTDOWN_LEVER_SOLID != null;
                         IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED = isAtLeastOneCountdownPlatform && isAtLeastOneCountdownLever && COUNTDOWN_DURATION > 0.0f;
+                        break;
+
+                    case "Jump":
+                        Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
+                        ValueTuple<Color?, Color?>? jumpPlatformsTuple = LoadPlatforms(dictionaryJump, block);
+                        if (jumpPlatformsTuple == null)
+                        {
+                            break;
+                        }
+                        (Color?, Color?) jumpPlatformsValues = jumpPlatformsTuple.Value;
+                        JUMP_ON = jumpPlatformsValues.Item1;
+                        JUMP_OFF = jumpPlatformsValues.Item2;
                         break;
 
                     case "Sand":

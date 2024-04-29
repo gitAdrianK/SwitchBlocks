@@ -18,7 +18,12 @@ namespace SwitchBlocksMod.Blocks
 
         public Rectangle GetRect()
         {
-            return collider;
+            return DataBasic.State ? collider : new Rectangle(0, 0, 0, 0);
+        }
+
+        public bool IsSolidBlock(Color blockCode)
+        {
+            return DataBasic.State;
         }
 
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
@@ -30,10 +35,7 @@ namespace SwitchBlocksMod.Blocks
                 {
                     return BlockCollisionType.Collision_Blocking;
                 }
-                else
-                {
-                    return BlockCollisionType.Collision_NonBlocking;
-                }
+                return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;
             return BlockCollisionType.NoCollision;

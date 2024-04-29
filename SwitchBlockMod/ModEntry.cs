@@ -7,6 +7,7 @@ using JumpKing.Player;
 using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Behaviours;
 using SwitchBlocksMod.Blocks;
+using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
@@ -20,10 +21,6 @@ namespace SwitchBlocksMod
     [JumpKingMod("Zebra.SwitchBlocksMod")]
     public static class ModEntry
     {
-        public static bool IsEven = true; //It checks Jumps is even or odd.(even:true)
-        static void jumpswitch() {
-            IsEven = !IsEven;
-        }
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -38,6 +35,7 @@ namespace SwitchBlocksMod
                 (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED, typeof(FactoryAuto)),
                 (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED, typeof(FactoryBasic)),
                 (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED, typeof(FactoryCountdown)),
+                (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED, typeof(FactoryJump)),
                 (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED, typeof(FactorySand)),
             };
             foreach (var item in blockFactories.Where(pair => pair.Item1))
@@ -45,12 +43,10 @@ namespace SwitchBlocksMod
                 var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
                 LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
             };
-            LevelManager.RegisterBlockFactory(new JumpSwitchBlockONFactory());
-            LevelManager.RegisterBlockFactory(new JumpSwitchBlockOFFFactory());
+
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
                 var harmony = new Harmony("Zebra.SwitchBlocksMod");
-                // harmony.PatchAll(Assembly.GetExecutingAssembly());
                 MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
                 MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
                 originalIsOnBlock = harmony.Patch(isOnBlockMethod);
@@ -65,7 +61,6 @@ namespace SwitchBlocksMod
         public static void OnLevelStart()
         {
             ModSaves.Load();
-            ModSounds.Load();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -126,6 +121,15 @@ namespace SwitchBlocksMod
                     player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
+            // Jump
+            if (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED)
+            {
+                if (EntityJumpPlatforms.Instance.PlatformDictionary != null)
+                {
+                    entityManager.AddObject(EntityJumpPlatforms.Instance);
+                }
+                PlayerEntity.OnJumpCall += jumpswitch;
+            }
             // Sand
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
@@ -154,8 +158,6 @@ namespace SwitchBlocksMod
                 }
             }
 
-            // for jumpswitch blocks
-            JumpKing.Player.PlayerEntity.OnJumpCall += jumpswitch;
             // End
             EntityManager.instance.MoveToFront(player);
         }
@@ -172,6 +174,7 @@ namespace SwitchBlocksMod
             entityManager.RemoveObject(EntityBasicLevers.Instance);
             entityManager.RemoveObject(EntityCountdownPlatforms.Instance);
             entityManager.RemoveObject(EntityCountdownLevers.Instance);
+            entityManager.RemoveObject(EntityJumpPlatforms.Instance);
             entityManager.RemoveObject(EntitySandPlatforms.Instance);
             entityManager.RemoveObject(EntitySandLevers.Instance);
             EntityAutoPlatforms.Instance.Reset();
@@ -179,10 +182,13 @@ namespace SwitchBlocksMod
             EntityBasicLevers.Instance.Reset();
             EntityCountdownPlatforms.Instance.Reset();
             EntityCountdownLevers.Instance.Reset();
+            EntityJumpPlatforms.Instance.Reset();
             EntitySandPlatforms.Instance.Reset();
             EntitySandLevers.Instance.Reset();
-            ModSounds.Reset();
             ModSaves.Save();
+
+            // for jumpswitch blocks
+            PlayerEntity.OnJumpCall -= jumpswitch;
         }
 
         private static MethodInfo originalIsOnBlock;
@@ -202,141 +208,9 @@ namespace SwitchBlocksMod
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
             }
         }
-    }
-
-    public class JumpSwitchBlockON : IBlock
-    {
-        private readonly Rectangle m_collider;
-
-        public JumpSwitchBlockON(Rectangle p_collider)
+        private static void jumpswitch()
         {
-            m_collider = p_collider;
-        }
-
-        public Rectangle GetRect()
-        {
-            return ModEntry.IsEven ? m_collider : new Rectangle(0, 0, 0, 0);
-        }
-
-        public bool IsSolidBlock(Color blockCode)
-        {
-            return ModEntry.IsEven;
-        }
-
-        public BlockCollisionType Intersects(Rectangle p_hitbox, out Rectangle p_intersection)
-        {
-            bool ret = m_collider.Intersects(p_hitbox);
-
-            if (ret)
-            {
-                p_intersection = Rectangle.Intersect(p_hitbox, m_collider);
-                return ModEntry.IsEven ? BlockCollisionType.Collision_Blocking : BlockCollisionType.Collision_NonBlocking;
-            }
-            else
-            {
-                p_intersection = new Rectangle(0, 0, 0, 0);
-                return BlockCollisionType.NoCollision;
-            }
-        }
-    }
-
-    public class JumpSwitchBlockONFactory : IBlockFactory
-    {
-        private static readonly Color BLOCKCODE_LOWGRAVITY = new Color(95, 95, 95);
-
-        private readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>()
-        {
-            BLOCKCODE_LOWGRAVITY,
-        };
-
-        public bool CanMakeBlock(Color blockCode, Level level)
-        {
-            return supportedBlockCodes.Contains(blockCode);
-        }
-
-        public bool IsSolidBlock(Color blockCode)
-        {
-            return !ModEntry.IsEven;
-        }
-
-        public IBlock GetBlock(Color blockCode, Rectangle blockRect, JumpKing.Workshop.Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
-        {
-            if (blockCode == BLOCKCODE_LOWGRAVITY)
-            {
-                return new JumpSwitchBlockON(blockRect);
-            }
-            else
-            {
-                throw new InvalidOperationException($"It is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
-            }
-        }
-    }
-
-    public class JumpSwitchBlockOFF : IBlock
-    {
-        private readonly Rectangle m_collider;
-
-        public JumpSwitchBlockOFF(Rectangle p_collider)
-        {
-            m_collider = p_collider;
-        }
-
-        public Rectangle GetRect()
-        {
-            return !ModEntry.IsEven ? m_collider : new Rectangle(0, 0, 0, 0);
-        }
-
-        public bool IsSolidBlock(Color blockCode)
-        {
-            return !ModEntry.IsEven;
-        }
-
-        public BlockCollisionType Intersects(Rectangle p_hitbox, out Rectangle p_intersection)
-        {
-            bool ret = m_collider.Intersects(p_hitbox);
-
-            if (ret)
-            {
-                p_intersection = Rectangle.Intersect(p_hitbox, m_collider);
-                return ModEntry.IsEven ? BlockCollisionType.Collision_NonBlocking : BlockCollisionType.Collision_Blocking;
-            }
-            else
-            {
-                p_intersection = new Rectangle(0, 0, 0, 0);
-                return BlockCollisionType.NoCollision;
-            }
-        }
-    }
-
-    public class JumpSwitchBlockOFFFactory : IBlockFactory
-    {
-        private static readonly Color BLOCKCODE_LOWGRAVITY = new Color(31, 31, 31);
-
-        private readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>()
-        {
-            BLOCKCODE_LOWGRAVITY,
-        };
-
-        public bool CanMakeBlock(Color blockCode, Level level)
-        {
-            return supportedBlockCodes.Contains(blockCode);
-        }
-
-        public bool IsSolidBlock(Color blockCode)
-        {
-            return !ModEntry.IsEven;
-        }
-
-        public IBlock GetBlock(Color blockCode, Rectangle blockRect, JumpKing.Workshop.Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
-        {
-            if (blockCode == BLOCKCODE_LOWGRAVITY)
-            {
-                return new JumpSwitchBlockOFF(blockRect);
-            }
-            else
-            {
-                throw new InvalidOperationException($"It is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
-            }
+            DataJump.State = !DataJump.State;
         }
     }
 }
