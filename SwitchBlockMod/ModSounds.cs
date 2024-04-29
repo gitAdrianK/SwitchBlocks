@@ -14,6 +14,7 @@ namespace SwitchBlocksMod.Util
     ///     <item>basicFlip.xnb</item>
     ///     <item>countdownBlink.xnb</item>
     ///     <item>countdownFlip.xnb</item>
+    ///     <item>jumpFlip.xnb</item>
     ///     <item>sandFlip.xnb</item>
     /// </list>
     /// A sound can be null, this should be checked for before trying to play it.
@@ -23,35 +24,40 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// Sound played when the auto block blinks.
         /// </summary>
-        public static JKSound AUTO_BLINK;
+        public static readonly JKSound AUTO_BLINK;
         /// <summary>
         /// Sound played when the auto block flips state.
         /// </summary>
-        public static JKSound AUTO_FLIP;
+        public static readonly JKSound AUTO_FLIP;
 
         /// <summary>
         /// Sound played when the basic block flips state.
         /// </summary>
-        public static JKSound BASIC_FLIP;
+        public static readonly JKSound BASIC_FLIP;
 
         /// <summary>
         /// Sound played when the countdown block blinks.
         /// </summary>
-        public static JKSound COUNTDOWN_BLINK;
+        public static readonly JKSound COUNTDOWN_BLINK;
         /// <summary>
         /// Sound played when the countdown block flips state.
         /// </summary>
-        public static JKSound COUNTDOWN_FLIP;
+        public static readonly JKSound COUNTDOWN_FLIP;
+
+        /// <summary>
+        /// Sound played when the jump block flips state.
+        /// </summary>
+        public static readonly JKSound JUMP_FLIP;
 
         /// <summary>
         /// Sound played when the sand block flips state.
         /// </summary>
-        public static JKSound SAND_FLIP;
+        public static readonly JKSound SAND_FLIP;
 
         /// <summary>
         /// Tries to load sounds used in the mod.
         /// </summary>
-        public static void Load()
+        static ModSounds()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -83,24 +89,18 @@ namespace SwitchBlocksMod.Util
                 COUNTDOWN_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
             }
 
+            // TODO: While in place the sound is not played yet.
+            // Jump
+            if (File.Exists($"{path}jumpFlip.xnb"))
+            {
+                JUMP_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
+            }
+
             // Sand
             if (File.Exists($"{path}sandFlip.xnb"))
             {
                 SAND_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
-        }
-
-        /// <summary>
-        /// Sets all sounds to null.
-        /// </summary>
-        public static void Reset()
-        {
-            AUTO_BLINK = null;
-            AUTO_FLIP = null;
-            BASIC_FLIP = null;
-            COUNTDOWN_BLINK = null;
-            COUNTDOWN_FLIP = null;
-            SAND_FLIP = null;
         }
     }
 }

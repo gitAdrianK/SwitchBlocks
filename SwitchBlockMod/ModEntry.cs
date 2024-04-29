@@ -7,6 +7,7 @@ using JumpKing.Player;
 using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Behaviours;
 using SwitchBlocksMod.Blocks;
+using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
@@ -34,6 +35,7 @@ namespace SwitchBlocksMod
                 (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED, typeof(FactoryAuto)),
                 (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED, typeof(FactoryBasic)),
                 (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED, typeof(FactoryCountdown)),
+                (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED, typeof(FactoryJump)),
                 (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED, typeof(FactorySand)),
             };
             foreach (var item in blockFactories.Where(pair => pair.Item1))
@@ -41,10 +43,10 @@ namespace SwitchBlocksMod
                 var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
                 LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
             };
+
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
                 var harmony = new Harmony("Zebra.SwitchBlocksMod");
-                // harmony.PatchAll(Assembly.GetExecutingAssembly());
                 MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
                 MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
                 originalIsOnBlock = harmony.Patch(isOnBlockMethod);
@@ -59,7 +61,6 @@ namespace SwitchBlocksMod
         public static void OnLevelStart()
         {
             ModSaves.Load();
-            ModSounds.Load();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -120,6 +121,15 @@ namespace SwitchBlocksMod
                     player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
+            // Jump
+            if (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED)
+            {
+                if (EntityJumpPlatforms.Instance.PlatformDictionary != null)
+                {
+                    entityManager.AddObject(EntityJumpPlatforms.Instance);
+                }
+                PlayerEntity.OnJumpCall += jumpswitch;
+            }
             // Sand
             if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
             {
@@ -147,6 +157,7 @@ namespace SwitchBlocksMod
                     player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
                 }
             }
+
             // End
             EntityManager.instance.MoveToFront(player);
         }
@@ -163,6 +174,7 @@ namespace SwitchBlocksMod
             entityManager.RemoveObject(EntityBasicLevers.Instance);
             entityManager.RemoveObject(EntityCountdownPlatforms.Instance);
             entityManager.RemoveObject(EntityCountdownLevers.Instance);
+            entityManager.RemoveObject(EntityJumpPlatforms.Instance);
             entityManager.RemoveObject(EntitySandPlatforms.Instance);
             entityManager.RemoveObject(EntitySandLevers.Instance);
             EntityAutoPlatforms.Instance.Reset();
@@ -170,10 +182,13 @@ namespace SwitchBlocksMod
             EntityBasicLevers.Instance.Reset();
             EntityCountdownPlatforms.Instance.Reset();
             EntityCountdownLevers.Instance.Reset();
+            EntityJumpPlatforms.Instance.Reset();
             EntitySandPlatforms.Instance.Reset();
             EntitySandLevers.Instance.Reset();
-            ModSounds.Reset();
             ModSaves.Save();
+
+            // for jumpswitch blocks
+            PlayerEntity.OnJumpCall -= jumpswitch;
         }
 
         private static MethodInfo originalIsOnBlock;
@@ -192,6 +207,10 @@ namespace SwitchBlocksMod
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOn) })
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
             }
+        }
+        private static void jumpswitch()
+        {
+            DataJump.State = !DataJump.State;
         }
     }
 }

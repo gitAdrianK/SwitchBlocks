@@ -102,6 +102,8 @@
     <Compile Include="Blocks\BlockBasicLeverOff.cs" />
     <Compile Include="Blocks\BlockBasicLeverOn.cs" />
     <Compile Include="Blocks\BlockCountdownLever.cs" />
+    <Compile Include="Blocks\BlockJumpOff.cs" />
+    <Compile Include="Blocks\BlockJumpOn.cs" />
     <Compile Include="Blocks\BlockSandLever.cs" />
     <Compile Include="Blocks\BlockSandLeverOff.cs" />
     <Compile Include="Blocks\BlockSandLeverSolidOff.cs" />
@@ -121,8 +123,10 @@
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
     <Compile Include="Data\DataCountdown.cs" />
+    <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
     <Compile Include="Entities\EntityAutoPlatforms.cs" />
+    <Compile Include="Entities\EntityJumpPlatforms.cs" />
     <Compile Include="Entities\EntityLevers.cs" />
     <Compile Include="Entities\EntityPlatforms.cs" />
     <Compile Include="Entities\EntitySandPlatforms.cs" />
@@ -131,6 +135,7 @@
     <Compile Include="Entities\EntityBasicPlatforms.cs" />
     <Compile Include="Entities\EntityCountdownLevers.cs" />
     <Compile Include="Entities\EntityCountdownPlatforms.cs" />
+    <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Util\Platform.cs" />
