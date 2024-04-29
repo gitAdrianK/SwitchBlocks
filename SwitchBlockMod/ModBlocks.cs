@@ -245,6 +245,8 @@ namespace SwitchBlocksMod.Util
                         (Color?, Color?) jumpPlatformsValues = jumpPlatformsTuple.Value;
                         JUMP_ON = jumpPlatformsValues.Item1;
                         JUMP_OFF = jumpPlatformsValues.Item2;
+                        bool isAtLeastOneJumpPlatform = JUMP_ON != null || JUMP_OFF != null;
+                        IS_JUMP_FUNCTIONALLY_INITIALIZED = isAtLeastOneJumpPlatform;
                         break;
 
                     case "Sand":

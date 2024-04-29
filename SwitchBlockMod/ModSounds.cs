@@ -89,6 +89,7 @@ namespace SwitchBlocksMod.Util
                 COUNTDOWN_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
             }
 
+            // TODO: While in place the sound is not played yet.
             // Jump
             if (File.Exists($"{path}jumpFlip.xnb"))
             {
