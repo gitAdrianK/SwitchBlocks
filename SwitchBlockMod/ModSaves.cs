@@ -64,6 +64,8 @@ namespace SwitchBlocksMod.Util
             }
             finally
             {
+                binaryWriter?.Flush();
+                binaryWriter?.Close();
                 binaryWriter?.Dispose();
             }
         }
@@ -120,7 +122,29 @@ namespace SwitchBlocksMod.Util
             }
             catch (Exception e)
             {
-                throw e;
+                // throw e;
+                DataAuto.State = false;
+                DataAuto.Progress = 0.0f;
+                DataAuto.RemainingTime = 0.0f;
+                DataAuto.HasBlinkedOnce = false;
+                DataAuto.HasBlinkedTwice = false;
+                // Basic
+                DataBasic.State = false;
+                DataBasic.Progress = 0.0f;
+                DataBasic.HasSwitched = false;
+                // Countdown
+                DataCountdown.State = false;
+                DataCountdown.Progress = 0.0f;
+                DataCountdown.HasSwitched = false;
+                DataCountdown.RemainingTime = 0.0f;
+                DataCountdown.HasBlinkedOnce = false;
+                DataCountdown.HasBlinkedTwice = false;
+                // Sand
+                DataSand.State = false;
+                DataSand.HasSwitched = false;
+                // Jump
+                DataJump.State = false;
+                DataJump.Progress = 0.0f;
             }
             finally
             {
