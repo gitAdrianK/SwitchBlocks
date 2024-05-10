@@ -66,7 +66,6 @@ namespace SwitchBlocksMod.Util
             {
                 binaryWriter?.Flush();
                 binaryWriter?.Close();
-                binaryWriter?.Dispose();
             }
         }
 
@@ -82,14 +81,17 @@ namespace SwitchBlocksMod.Util
 
             if (contentManager.level == null)
             {
+                SetDefault();
                 return;
             }
             if (JumpKing.SaveThread.SaveManager.instance.IsNewGame)
             {
+                SetDefault();
                 return;
             }
             if (!File.Exists($"{path}save"))
             {
+                SetDefault();
                 return;
             }
             BinaryReader binaryReader = null;
@@ -120,36 +122,45 @@ namespace SwitchBlocksMod.Util
                 DataJump.State = binaryReader.ReadBoolean();
                 DataJump.Progress = binaryReader.ReadSingle();
             }
-            catch (Exception e)
+            catch
             {
-                // throw e;
-                DataAuto.State = false;
-                DataAuto.Progress = 0.0f;
-                DataAuto.RemainingTime = 0.0f;
-                DataAuto.HasBlinkedOnce = false;
-                DataAuto.HasBlinkedTwice = false;
-                // Basic
-                DataBasic.State = false;
-                DataBasic.Progress = 0.0f;
-                DataBasic.HasSwitched = false;
-                // Countdown
-                DataCountdown.State = false;
-                DataCountdown.Progress = 0.0f;
-                DataCountdown.HasSwitched = false;
-                DataCountdown.RemainingTime = 0.0f;
-                DataCountdown.HasBlinkedOnce = false;
-                DataCountdown.HasBlinkedTwice = false;
-                // Sand
-                DataSand.State = false;
-                DataSand.HasSwitched = false;
-                // Jump
-                DataJump.State = false;
-                DataJump.Progress = 0.0f;
+                SetDefault();
             }
             finally
             {
-                binaryReader?.Dispose();
+                binaryReader?.Close();
             }
+        }
+
+        /// <summary>
+        /// Loads the default values for all fields saved in the mod.
+        /// While the values are the same as the default values should a variable not be set,
+        /// should a change happen requiring the values to be different we have easy access here.
+        /// </summary>
+        private static void SetDefault()
+        {
+            DataAuto.State = false;
+            DataAuto.Progress = 0.0f;
+            DataAuto.RemainingTime = 0.0f;
+            DataAuto.HasBlinkedOnce = false;
+            DataAuto.HasBlinkedTwice = false;
+            // Basic
+            DataBasic.State = false;
+            DataBasic.Progress = 0.0f;
+            DataBasic.HasSwitched = false;
+            // Countdown
+            DataCountdown.State = false;
+            DataCountdown.Progress = 0.0f;
+            DataCountdown.HasSwitched = false;
+            DataCountdown.RemainingTime = 0.0f;
+            DataCountdown.HasBlinkedOnce = false;
+            DataCountdown.HasBlinkedTwice = false;
+            // Sand
+            DataSand.State = false;
+            DataSand.HasSwitched = false;
+            // Jump
+            DataJump.State = false;
+            DataJump.Progress = 0.0f;
         }
     }
 }
