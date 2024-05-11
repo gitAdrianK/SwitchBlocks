@@ -11,9 +11,6 @@ namespace SwitchBlocksMod.Util
     /// </summary>
     public static class ModBlocks
     {
-        private static readonly char sep = Path.DirectorySeparatorChar;
-        private static readonly string path = $"{Game1.instance.contentManager.root}{sep}switchBlocksMod{sep}blocks.xml";
-
         /// <summary>
         /// Color that represents the auto on block. 
         /// </summary>
@@ -129,6 +126,8 @@ namespace SwitchBlocksMod.Util
         /// </summary>
         public static void LoadDuration()
         {
+            char sep = Path.DirectorySeparatorChar;
+            string path = $"{Game1.instance.contentManager.root}{sep}switchBlocksMod{sep}blocks.xml";
             if (!File.Exists(path))
             {
                 return;
