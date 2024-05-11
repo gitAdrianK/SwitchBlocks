@@ -1,10 +1,8 @@
 ﻿using EntityComponent;
 using HarmonyLib;
-using JumpKing.API;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
-using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Behaviours;
 using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
@@ -12,8 +10,6 @@ using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
 using SwitchBlocksMod.Util;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace SwitchBlocksMod
@@ -30,28 +26,17 @@ namespace SwitchBlocksMod
         {
             //Debugger.Launch();
 
-            List<(bool, Type)> blockFactories = new List<(bool, Type)>
-            {
-                (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED, typeof(FactoryAuto)),
-                (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED, typeof(FactoryBasic)),
-                (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED, typeof(FactoryCountdown)),
-                (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED, typeof(FactoryJump)),
-                (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED, typeof(FactorySand)),
-            };
-            foreach (var item in blockFactories.Where(pair => pair.Item1))
-            {
-                var constructorInfo = item.Item2.GetConstructor(Type.EmptyTypes);
-                LevelManager.RegisterBlockFactory((IBlockFactory)constructorInfo.Invoke(null));
-            };
+            LevelManager.RegisterBlockFactory(new FactoryAuto());
+            LevelManager.RegisterBlockFactory(new FactoryBasic());
+            LevelManager.RegisterBlockFactory(new FactoryCountdown());
+            LevelManager.RegisterBlockFactory(new FactoryJump());
+            LevelManager.RegisterBlockFactory(new FactorySand());
 
-            if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
-            {
-                var harmony = new Harmony("Zebra.SwitchBlocksMod");
-                MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-                MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-                originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-                harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
-            }
+            var harmony = new Harmony("Zebra.SwitchBlocksMod");
+            MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
+            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
+            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
+            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
         }
 
         /// <summary>
@@ -70,93 +55,63 @@ namespace SwitchBlocksMod
             }
 
             // Auto
-            if (ModBlocks.IS_AUTO_FUNCTIONALLY_INITIALIZED)
+            if (EntityAutoPlatforms.Instance.PlatformDictionary != null)
             {
-                if (EntityAutoPlatforms.Instance.PlatformDictionary != null)
-                {
-                    entityManager.AddObject(EntityAutoPlatforms.Instance);
-                }
+                entityManager.AddObject(EntityAutoPlatforms.Instance);
             }
+
             // Basic
-            if (ModBlocks.IS_BASIC_FUNCTIONALLY_INITIALIZED)
+            if (EntityBasicPlatforms.Instance.PlatformDictionary != null
+                && EntityBasicLevers.Instance.LeverDictionary != null)
             {
-                if (EntityBasicPlatforms.Instance.PlatformDictionary != null
-                    && EntityBasicLevers.Instance.LeverDictionary != null)
-                {
-                    entityManager.AddObject(EntityBasicPlatforms.Instance);
-                    entityManager.AddObject(EntityBasicLevers.Instance);
-                }
-                BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
-                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
-                {
-                    (ModBlocks.BASIC_LEVER, typeof(BlockBasicLever), behaviourBasicLever),
-                    (ModBlocks.BASIC_LEVER_ON, typeof(BlockBasicLeverOn), behaviourBasicLever),
-                    (ModBlocks.BASIC_LEVER_OFF, typeof(BlockBasicLeverOff), behaviourBasicLever),
-                    (ModBlocks.BASIC_LEVER_SOLID, typeof(BlockBasicLeverSolid), behaviourBasicLever),
-                    (ModBlocks.BASIC_LEVER_SOLID_ON, typeof(BlockBasicLeverSolidOn), behaviourBasicLever),
-                    (ModBlocks.BASIC_LEVER_SOLID_OFF, typeof(BlockBasicLeverSolidOff), behaviourBasicLever),
-                };
-                foreach (var item in blocks.Where(triple => triple.Item1 != null))
-                {
-                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
-                }
+                entityManager.AddObject(EntityBasicPlatforms.Instance);
+                entityManager.AddObject(EntityBasicLevers.Instance);
             }
+            BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOff), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolid), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOn), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
+
             // Countdown
-            if (ModBlocks.IS_COUNTDOWN_FUNCTIONALLY_INITIALIZED)
+            if (EntityCountdownPlatforms.Instance.PlatformDictionary != null
+                && EntityCountdownLevers.Instance.LeverDictionary != null)
             {
-                if (EntityCountdownPlatforms.Instance.PlatformDictionary != null
-                    && EntityCountdownLevers.Instance.LeverDictionary != null)
-                {
-                    entityManager.AddObject(EntityCountdownPlatforms.Instance);
-                    entityManager.AddObject(EntityCountdownLevers.Instance);
-                }
-                BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
-                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
-                {
-                    (ModBlocks.COUNTDOWN_LEVER, typeof(BlockCountdownLever), behaviourCountdownLever),
-                    (ModBlocks.COUNTDOWN_LEVER_SOLID, typeof(BlockCountdownLeverSolid), behaviourCountdownLever),
-                };
-                foreach (var item in blocks.Where(triple => triple.Item1 != null))
-                {
-                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
-                }
+                entityManager.AddObject(EntityCountdownPlatforms.Instance);
+                entityManager.AddObject(EntityCountdownLevers.Instance);
             }
+            BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
+
             // Jump
-            if (ModBlocks.IS_JUMP_FUNCTIONALLY_INITIALIZED)
+            if (EntityJumpPlatforms.Instance.PlatformDictionary != null)
             {
-                if (EntityJumpPlatforms.Instance.PlatformDictionary != null)
-                {
-                    entityManager.AddObject(EntityJumpPlatforms.Instance);
-                }
-                PlayerEntity.OnJumpCall += jumpswitch;
+                entityManager.AddObject(EntityJumpPlatforms.Instance);
             }
+            PlayerEntity.OnJumpCall += jumpswitch;
+
             // Sand
-            if (ModBlocks.IS_SAND_FUNCTIONALLY_INITIALIZED)
+            if (EntitySandPlatforms.Instance.PlatformDictionary != null
+                && EntityCountdownLevers.Instance.LeverDictionary != null)
             {
-                if (EntitySandPlatforms.Instance.PlatformDictionary != null
-                    && EntityCountdownLevers.Instance.LeverDictionary != null)
-                {
-                    entityManager.AddObject(EntitySandPlatforms.Instance);
-                    entityManager.AddObject(EntitySandLevers.Instance);
-                }
-                BehaviourSandPlatform behaviourSand = new BehaviourSandPlatform();
-                BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-                List<(Color?, Type, IBlockBehaviour)> blocks = new List<(Color?, Type, IBlockBehaviour)>
-                {
-                    (ModBlocks.SAND_ON, typeof(BlockSandOn), behaviourSand),
-                    (ModBlocks.SAND_OFF, typeof(BlockSandOff), behaviourSand),
-                    (ModBlocks.SAND_LEVER, typeof(BlockSandLever), behaviourSandLever),
-                    (ModBlocks.SAND_LEVER_ON, typeof(BlockSandLeverOn), behaviourSandLever),
-                    (ModBlocks.SAND_LEVER_OFF, typeof(BlockSandLeverOff), behaviourSandLever),
-                    (ModBlocks.SAND_LEVER_SOLID, typeof(BlockSandLeverSolid), behaviourSandLever),
-                    (ModBlocks.SAND_LEVER_SOLID_ON, typeof(BlockSandLeverSolidOn), behaviourSandLever),
-                    (ModBlocks.SAND_LEVER_SOLID_OFF, typeof(BlockSandLeverSolidOff), behaviourSandLever),
-                };
-                foreach (var item in blocks.Where(triple => triple.Item1 != null))
-                {
-                    player.m_body.RegisterBlockBehaviour(item.Item2, item.Item3);
-                }
+                entityManager.AddObject(EntitySandPlatforms.Instance);
+                entityManager.AddObject(EntitySandLevers.Instance);
             }
+            BehaviourSandPlatform behaviourSand = new BehaviourSandPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSand);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSand);
+            BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourBasicLever);
+
+            ModBlocks.LoadDuration();
 
             // End
             EntityManager.instance.MoveToFront(player);
