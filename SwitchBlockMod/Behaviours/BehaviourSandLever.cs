@@ -80,7 +80,7 @@ namespace SwitchBlocksMod.Behaviours
 
                 if (stateBefore != DataSand.State)
                 {
-                    ModSounds.SAND_FLIP?.Play();
+                    ModSounds.sandFlip?.Play();
                 }
             }
             else

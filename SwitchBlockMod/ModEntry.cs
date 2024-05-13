@@ -1,5 +1,6 @@
 ﻿using EntityComponent;
 using HarmonyLib;
+using JumpKing;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
@@ -45,7 +46,6 @@ namespace SwitchBlocksMod
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            ModSaves.Load();
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -53,6 +53,9 @@ namespace SwitchBlocksMod
             {
                 return;
             }
+
+            ModSaves.Load();
+            ModSounds.Load();
 
             // Auto
             if (EntityAutoPlatforms.Instance.PlatformDictionary != null)
@@ -165,6 +168,11 @@ namespace SwitchBlocksMod
         }
         private static void jumpswitch()
         {
+            if (EntityJumpPlatforms.Instance.PlatformDictionary != null
+                && EntityJumpPlatforms.Instance.PlatformDictionary.ContainsKey(Camera.CurrentScreen))
+            {
+                ModSounds.jumpFlip?.Play();
+            }
             DataJump.State = !DataJump.State;
         }
     }

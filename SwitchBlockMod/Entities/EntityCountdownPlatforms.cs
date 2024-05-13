@@ -49,20 +49,20 @@ namespace SwitchBlocksMod.Entities
 
         private void ThirdElapsed()
         {
-            if (DataCountdown.RemainingTime <= ModBlocks.COUNTDOWN_DURATION * 0.66 && !DataCountdown.HasBlinkedOnce)
+            if (DataCountdown.RemainingTime <= ModBlocks.countdownDuration * 0.66 && !DataCountdown.HasBlinkedOnce)
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_BLINK?.Play();
+                    ModSounds.countdownBlink?.Play();
                 }
                 DataCountdown.HasBlinkedOnce = true;
                 return;
             }
-            if (DataCountdown.RemainingTime <= ModBlocks.COUNTDOWN_DURATION * 0.33 && !DataCountdown.HasBlinkedTwice)
+            if (DataCountdown.RemainingTime <= ModBlocks.countdownDuration * 0.33 && !DataCountdown.HasBlinkedTwice)
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_BLINK?.Play();
+                    ModSounds.countdownBlink?.Play();
                 }
                 DataCountdown.HasBlinkedTwice = true;
                 return;
@@ -71,10 +71,10 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.COUNTDOWN_FLIP?.Play();
+                    ModSounds.countdownFlip?.Play();
                 }
                 DataCountdown.State = false;
-                DataCountdown.RemainingTime = ModBlocks.COUNTDOWN_DURATION; ;
+                DataCountdown.RemainingTime = ModBlocks.countdownDuration; ;
                 DataCountdown.HasBlinkedOnce = false;
                 DataCountdown.HasBlinkedTwice = false;
             }

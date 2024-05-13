@@ -54,7 +54,7 @@ namespace SwitchBlocksMod.Behaviours
 
             if (collidingWithLever)
             {
-                DataCountdown.RemainingTime = ModBlocks.COUNTDOWN_DURATION;
+                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
                 DataCountdown.HasBlinkedOnce = false;
                 DataCountdown.HasBlinkedTwice = false;
 
@@ -65,7 +65,7 @@ namespace SwitchBlocksMod.Behaviours
 
                 if (!DataCountdown.State)
                 {
-                    ModSounds.COUNTDOWN_FLIP?.Play();
+                    ModSounds.countdownFlip?.Play();
                 }
 
                 DataCountdown.HasSwitched = true;

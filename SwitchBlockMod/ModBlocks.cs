@@ -22,7 +22,7 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float AUTO_DURATION = 3.0f;
+        public static float autoDuration = 3.0f;
 
         /// <summary>
         /// Color that represents the basic on block. 
@@ -76,7 +76,7 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float COUNTDOWN_DURATION = 3.0f;
+        public static float countdownDuration = 3.0f;
 
         /// <summary>
         /// Color that represents the jump on block. 
@@ -145,11 +145,11 @@ namespace SwitchBlocksMod.Util
                 {
                     case "Auto":
                         Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
-                        AUTO_DURATION = ParseDuration(dictionaryAuto, block);
+                        autoDuration = ParseDuration(dictionaryAuto, block);
                         break;
                     case "Countdown":
                         Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
-                        COUNTDOWN_DURATION = ParseDuration(dictionaryCountdown, block);
+                        countdownDuration = ParseDuration(dictionaryCountdown, block);
                         break;
                     default:
                         // Do nothing.

@@ -24,40 +24,40 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// Sound played when the auto block blinks.
         /// </summary>
-        public static readonly JKSound AUTO_BLINK;
+        public static JKSound autoBlink;
         /// <summary>
         /// Sound played when the auto block flips state.
         /// </summary>
-        public static readonly JKSound AUTO_FLIP;
+        public static JKSound autoFlip;
 
         /// <summary>
         /// Sound played when the basic block flips state.
         /// </summary>
-        public static readonly JKSound BASIC_FLIP;
+        public static JKSound basicFlip;
 
         /// <summary>
         /// Sound played when the countdown block blinks.
         /// </summary>
-        public static readonly JKSound COUNTDOWN_BLINK;
+        public static JKSound countdownBlink;
         /// <summary>
         /// Sound played when the countdown block flips state.
         /// </summary>
-        public static readonly JKSound COUNTDOWN_FLIP;
+        public static JKSound countdownFlip;
 
         /// <summary>
         /// Sound played when the jump block flips state.
         /// </summary>
-        public static readonly JKSound JUMP_FLIP;
+        public static JKSound jumpFlip;
 
         /// <summary>
         /// Sound played when the sand block flips state.
         /// </summary>
-        public static readonly JKSound SAND_FLIP;
+        public static JKSound sandFlip;
 
         /// <summary>
         /// Tries to load sounds used in the mod.
         /// </summary>
-        static ModSounds()
+        public static void Load()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -66,40 +66,40 @@ namespace SwitchBlocksMod.Util
             // Auto
             if (File.Exists($"{path}autoBlink.xnb"))
             {
-                AUTO_BLINK = new JKSound(contentManager.Load<SoundEffect>($"{path}autoBlink"), SoundType.SFX);
+                autoBlink = new JKSound(contentManager.Load<SoundEffect>($"{path}autoBlink"), SoundType.SFX);
             }
             if (File.Exists($"{path}autoFlip.xnb"))
             {
-                AUTO_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+                autoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
             }
 
             // Basic
             if (File.Exists($"{path}basicFlip.xnb"))
             {
-                BASIC_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
+                basicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
             }
 
             // Countdown
             if (File.Exists($"{path}countdownBlink.xnb"))
             {
-                COUNTDOWN_BLINK = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownBlink"), SoundType.SFX);
+                countdownBlink = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownBlink"), SoundType.SFX);
             }
             if (File.Exists($"{path}countdownFlip.xnb"))
             {
-                COUNTDOWN_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+                countdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
             }
 
             // TODO: While in place the sound is not played yet.
             // Jump
             if (File.Exists($"{path}jumpFlip.xnb"))
             {
-                JUMP_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
+                jumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
             }
 
             // Sand
             if (File.Exists($"{path}sandFlip.xnb"))
             {
-                SAND_FLIP = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
+                sandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
         }
     }
