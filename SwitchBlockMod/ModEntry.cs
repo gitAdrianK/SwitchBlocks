@@ -107,12 +107,12 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
             BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
 
             ModBlocks.LoadDuration();
 
