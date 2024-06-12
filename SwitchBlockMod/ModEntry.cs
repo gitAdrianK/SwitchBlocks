@@ -15,7 +15,7 @@ using System.Reflection;
 
 namespace SwitchBlocksMod
 {
-    [JumpKingMod("Zebra.SwitchBlocksMod")]
+    [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace SwitchBlocksMod
             LevelManager.RegisterBlockFactory(new FactoryJump());
             LevelManager.RegisterBlockFactory(new FactorySand());
 
-            var harmony = new Harmony("Zebra.SwitchBlocksMod");
+            var harmony = new Harmony(ModStrings.MODNAME);
             MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
             MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
             originalIsOnBlock = harmony.Patch(isOnBlockMethod);
@@ -94,7 +94,7 @@ namespace SwitchBlocksMod
             {
                 entityManager.AddObject(EntityJumpPlatforms.Instance);
             }
-            PlayerEntity.OnJumpCall += jumpswitch;
+            PlayerEntity.OnJumpCall += JumpSwitch;
 
             // Sand
             if (EntitySandPlatforms.Instance.PlatformDictionary != null
@@ -103,9 +103,9 @@ namespace SwitchBlocksMod
                 entityManager.AddObject(EntitySandPlatforms.Instance);
                 entityManager.AddObject(EntitySandLevers.Instance);
             }
-            BehaviourSandPlatform behaviourSand = new BehaviourSandPlatform();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSand);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSand);
+            BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
             BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourBasicLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourBasicLever);
@@ -146,7 +146,7 @@ namespace SwitchBlocksMod
             ModSaves.Save();
 
             // for jumpswitch blocks
-            PlayerEntity.OnJumpCall -= jumpswitch;
+            PlayerEntity.OnJumpCall -= JumpSwitch;
         }
 
         private static MethodInfo originalIsOnBlock;
@@ -155,7 +155,7 @@ namespace SwitchBlocksMod
         /// in the IsOnBlock function when asked if the player is on a sand block.
         /// </summary>
         /// <param name="__instance">Object instance of the body comp</param>
-        /// <param name="__result">Result of the patched function, returning true if the player is on any sand block</param>
+        /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
         /// <param name="__0">Original object the function is called with</param>
         public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
         {
@@ -166,7 +166,7 @@ namespace SwitchBlocksMod
                     || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
             }
         }
-        private static void jumpswitch()
+        private static void JumpSwitch()
         {
             if (EntityJumpPlatforms.Instance.PlatformDictionary != null
                 && EntityJumpPlatforms.Instance.PlatformDictionary.ContainsKey(Camera.CurrentScreen))

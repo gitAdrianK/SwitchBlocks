@@ -25,7 +25,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityJumpPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary("jump");
+            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
             progress = DataJump.Progress;
         }
 

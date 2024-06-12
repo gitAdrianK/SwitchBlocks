@@ -28,7 +28,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntitySandLevers()
         {
-            LeverDictionary = Lever.GetLeversDictonary("sand");
+            LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
         }
 
         protected override void Update(float deltaTime)

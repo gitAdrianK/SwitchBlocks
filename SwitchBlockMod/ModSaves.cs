@@ -13,13 +13,13 @@ namespace SwitchBlocksMod.Util
         /// <summary>
         /// Saves the various block states and relevant fields.<br />
         /// Only creates a savefile if the SwitchBlocksMod folder exists.<br />
-        /// Saves to "Steam Workshop Path\1061090\MAP ID\SwitchBlocksMod\save"
+        /// Saves to "Steam Workshop Path\1061090\MAP ID\switchBlocksMod\save"
         /// </summary>
         public static void Save()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}switchBlocksMod{sep}";
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
 
             // Level being null means the vanilla map is being started/ended.
             if (contentManager.level == null)
@@ -71,13 +71,13 @@ namespace SwitchBlocksMod.Util
 
         /// <summary>
         /// Loads the various blocks states and fields, if present.<br />
-        /// Loads from "Steam Workshop Path\1061090\MAP ID\SwitchBlocksMod\save"
+        /// Loads from "Steam Workshop Path\1061090\MAP ID\switchBlocksMod\save"
         /// </summary>
         public static void Load()
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}switchBlocksMod{sep}";
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
 
             if (contentManager.level == null)
             {

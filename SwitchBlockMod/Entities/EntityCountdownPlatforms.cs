@@ -30,7 +30,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityCountdownPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary("countdown");
+            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.COUNTDOWN);
             progress = DataCountdown.Progress;
         }
 

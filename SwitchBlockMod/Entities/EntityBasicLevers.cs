@@ -28,7 +28,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityBasicLevers()
         {
-            LeverDictionary = Lever.GetLeversDictonary("basic");
+            LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
         }
 
         protected override void Update(float deltaTime)

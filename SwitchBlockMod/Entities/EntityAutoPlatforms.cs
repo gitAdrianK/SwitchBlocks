@@ -30,7 +30,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityAutoPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary("auto");
+            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
             progress = DataAuto.Progress;
         }
 

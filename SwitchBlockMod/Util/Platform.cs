@@ -32,7 +32,7 @@ namespace SwitchBlocksMod.Entities
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}switchBlocksMod{sep}platforms{sep}{subfolder}{sep}";
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
             Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
 
             if (!Directory.Exists(path))
@@ -55,7 +55,7 @@ namespace SwitchBlocksMod.Entities
                 document.Load(xmlFilePath);
                 XmlNode xmlPlatforms = document.LastChild;
 
-                if (xmlPlatforms.Name != "Platforms")
+                if (xmlPlatforms.Name != ModStrings.XML_PLATFORMS)
                 {
                     return dictionary;
                 }
@@ -84,15 +84,20 @@ namespace SwitchBlocksMod.Entities
             {
                 XmlNodeList xmlPlatform = xmlElement.ChildNodes;
                 Dictionary<string, int> dictionary;
-                // TODO_LO: Put all strings somewhere and only reference those instead of typing them out.
-                // Seeing strings in code is kind of a codesmell.
-                if (subfolder == "sand")
+                if (subfolder == ModStrings.SAND)
                 {
-                    dictionary = Xml.MapNamesRequired(xmlPlatform, "Texture", "Position", "Size", "StartState");
+                    dictionary = Xml.MapNamesRequired(xmlPlatform,
+                        ModStrings.TEXTURE,
+                        ModStrings.POSITION,
+                        ModStrings.SIZE,
+                        ModStrings.START_STATE);
                 }
                 else
                 {
-                    dictionary = Xml.MapNamesRequired(xmlPlatform, "Texture", "Position", "StartState");
+                    dictionary = Xml.MapNamesRequired(xmlPlatform,
+                        ModStrings.TEXTURE,
+                        ModStrings.POSITION,
+                        ModStrings.START_STATE);
                 }
                 if (dictionary == null)
                 {
@@ -103,7 +108,7 @@ namespace SwitchBlocksMod.Entities
                 // CONSIDER: Using a stiched texture, and just saving a Rectangle w/ start xy, width, height, would probably be more performant.
                 // Implement if needed.
                 // Texture
-                string filePath = $"{path}textures{sep}{xmlPlatform[dictionary["Texture"]].InnerText}";
+                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.TEXTURE]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
@@ -111,7 +116,7 @@ namespace SwitchBlocksMod.Entities
                 platform.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
 
                 // Position
-                Vector2? position = Xml.GetVector2(xmlPlatform[dictionary["Position"]]);
+                Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
                 if (position == null)
                 {
                     continue;
@@ -120,9 +125,9 @@ namespace SwitchBlocksMod.Entities
 
                 //Size
                 platform.size = new Point(platform.texture.Width, platform.texture.Height);
-                if (dictionary.ContainsKey("Size"))
+                if (dictionary.ContainsKey(ModStrings.SIZE))
                 {
-                    Point? size = Xml.GetPoint(xmlPlatform[dictionary["Size"]]);
+                    Point? size = Xml.GetPoint(xmlPlatform[dictionary[ModStrings.SIZE]]);
                     if (size == null)
                     {
                         continue;
@@ -131,7 +136,7 @@ namespace SwitchBlocksMod.Entities
                 }
 
                 // Start state
-                string stateInnerText = xmlPlatform[dictionary["StartState"]].InnerText;
+                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;
                 if (stateInnerText == "on")
                 {
                     platform.startState = true;
@@ -149,9 +154,9 @@ namespace SwitchBlocksMod.Entities
                 // Animation
                 platform.animation.style = Animation.Style.Fade;
                 platform.animation.curve = Animation.Curve.Linear;
-                if (dictionary.ContainsKey("Animation"))
+                if (dictionary.ContainsKey(ModStrings.ANIMATION))
                 {
-                    XmlNode animationNode = xmlPlatform[dictionary["Animation"]];
+                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION]];
                     platform.animation = Xml.GetAnimation(animationNode);
                 }
 

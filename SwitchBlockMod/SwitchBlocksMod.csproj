@@ -133,6 +133,7 @@
     <Compile Include="Entities\EntityCountdownLevers.cs" />
     <Compile Include="Entities\EntityCountdownPlatforms.cs" />
     <Compile Include="Factories\FactoryJump.cs" />
+    <Compile Include="ModStrings.cs" />
     <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Util\Platform.cs" />

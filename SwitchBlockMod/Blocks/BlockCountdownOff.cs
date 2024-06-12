@@ -18,7 +18,7 @@ namespace SwitchBlocksMod.Blocks
 
         public Rectangle GetRect()
         {
-            return collider;
+            return !DataCountdown.State ? collider : new Rectangle(0, 0, 0, 0);
         }
 
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)

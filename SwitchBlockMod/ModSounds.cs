@@ -61,7 +61,7 @@ namespace SwitchBlocksMod.Util
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{Game1.instance.contentManager.root}{sep}switchBlocksMod{sep}audio{sep}";
+            string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
 
             // Auto
             if (File.Exists($"{path}autoBlink.xnb"))

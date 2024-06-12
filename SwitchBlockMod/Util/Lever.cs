@@ -28,7 +28,7 @@ namespace SwitchBlocksMod.Entities
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}switchBlocksMod{sep}levers{sep}{subfolder}{sep}";
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.LEVERS}{sep}{subfolder}{sep}";
             Dictionary<int, List<Lever>> dictionary = new Dictionary<int, List<Lever>>();
 
             if (!Directory.Exists(path))
@@ -51,7 +51,7 @@ namespace SwitchBlocksMod.Entities
                 document.Load(xmlFilePath);
                 XmlNode xmlLevers = document.LastChild;
 
-                if (xmlLevers.Name != "Levers")
+                if (xmlLevers.Name != ModStrings.XML_LEVERS)
                 {
                     return dictionary;
                 }
@@ -79,7 +79,7 @@ namespace SwitchBlocksMod.Entities
             foreach (XmlElement xmlElement in xmlLevers.ChildNodes)
             {
                 XmlNodeList xmlLever = xmlElement.ChildNodes;
-                Dictionary<string, int> dictionary = Xml.MapNamesRequired(xmlLever, "Texture", "Position");
+                Dictionary<string, int> dictionary = Xml.MapNamesRequired(xmlLever, ModStrings.TEXTURE, ModStrings.POSITION);
                 if (dictionary == null)
                 {
                     continue;
@@ -90,7 +90,7 @@ namespace SwitchBlocksMod.Entities
                 // CONSIDER: Using a stiched texture, and just saving a Rectangle w/ start xy, width, height, would probably be more performant.
                 // Implement if needed.
                 // Texture
-                string filePath = $"{path}textures{sep}{xmlLever[dictionary["Texture"]].InnerText}";
+                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlLever[dictionary[ModStrings.TEXTURE]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
@@ -98,7 +98,7 @@ namespace SwitchBlocksMod.Entities
                 lever.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
 
                 // Position
-                Vector2? position = Xml.GetVector2(xmlLever[dictionary["Position"]]);
+                Vector2? position = Xml.GetVector2(xmlLever[dictionary[ModStrings.POSITION]]);
                 if (position == null)
                 {
                     continue;

@@ -33,7 +33,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntitySandPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary("sand");
+            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.SAND);
         }
 
         float offset;

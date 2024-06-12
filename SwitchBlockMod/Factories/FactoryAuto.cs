@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Blocks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SwitchBlocksMod.Factories
 {
@@ -15,12 +14,10 @@ namespace SwitchBlocksMod.Factories
     /// </summary>
     public class FactoryAuto : IBlockFactory
     {
-        private static List<Color?> unfilteredColors = new List<Color?> {
+        private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             Util.ModBlocks.AUTO_ON,
             Util.ModBlocks.AUTO_OFF,
         };
-        private static List<Color> filteredColor = unfilteredColors.Where(color => color != null).Select(color => color.Value).ToList();
-        private readonly HashSet<Color> supportedBlockCodes = new HashSet<Color>(filteredColor);
 
         public bool CanMakeBlock(Color blockCode, Level level)
         {
@@ -36,9 +33,9 @@ namespace SwitchBlocksMod.Factories
         {
             switch (blockCode)
             {
-                case var _ when Util.ModBlocks.AUTO_ON != null && blockCode == (Color)Util.ModBlocks.AUTO_ON:
+                case var _ when blockCode == Util.ModBlocks.AUTO_ON:
                     return new BlockAutoOn(blockRect);
-                case var _ when Util.ModBlocks.AUTO_OFF != null && blockCode == (Color)Util.ModBlocks.AUTO_OFF:
+                case var _ when blockCode == Util.ModBlocks.AUTO_OFF:
                     return new BlockAutoOff(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

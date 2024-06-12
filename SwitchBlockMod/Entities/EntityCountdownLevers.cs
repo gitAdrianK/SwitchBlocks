@@ -28,7 +28,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityCountdownLevers()
         {
-            LeverDictionary = Lever.GetLeversDictonary("countdown");
+            LeverDictionary = Lever.GetLeversDictonary(ModStrings.COUNTDOWN);
         }
 
         protected override void Update(float deltaTime)

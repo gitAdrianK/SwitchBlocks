@@ -29,7 +29,7 @@ namespace SwitchBlocksMod.Entities
 
         private EntityBasicPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary("basic");
+            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
             progress = DataBasic.Progress;
         }
 
