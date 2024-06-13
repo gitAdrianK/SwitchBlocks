@@ -1,7 +1,6 @@
 # SwitchBlocksMod - A Jump King Mod
 
 This mod adds custom blocks to Jump King, each with its own unique *switching-its-state* themed mechanic.
-- It is customizable what colour each block uses on the level.png
 - Texture of the levers and platforms
 - Sounds played when a lever is touched
 - Sounds played after one third and two thirds have passed for timed gimmick
