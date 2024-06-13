@@ -15,8 +15,8 @@ namespace SwitchBlocksMod.Factories
     public class FactoryAuto : IBlockFactory
     {
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
-            Util.ModBlocks.AUTO_ON,
-            Util.ModBlocks.AUTO_OFF,
+            ModBlocks.AUTO_ON,
+            ModBlocks.AUTO_OFF,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level)
@@ -33,9 +33,9 @@ namespace SwitchBlocksMod.Factories
         {
             switch (blockCode)
             {
-                case var _ when blockCode == Util.ModBlocks.AUTO_ON:
+                case var _ when blockCode == ModBlocks.AUTO_ON:
                     return new BlockAutoOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.AUTO_OFF:
+                case var _ when blockCode == ModBlocks.AUTO_OFF:
                     return new BlockAutoOff(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

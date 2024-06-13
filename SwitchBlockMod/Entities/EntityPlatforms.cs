@@ -3,6 +3,7 @@ using JumpKing;
 using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocksMod.Util;
 using System;
 using System.Collections.Generic;
 using static SwitchBlocksMod.Util.Animation;
@@ -48,8 +49,10 @@ namespace SwitchBlocksMod.Entities
         /// </summary>
         /// <param name="state">State of the platforms type</param>
         /// <param name="amount">Amount to be added/subtracted from the progress</param>
-        protected void UpdateProgress(bool state, float amount)
+        /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
+        protected void UpdateProgress(bool state, float amount, float multiplier)
         {
+            amount = amount * multiplier;
             if (progress != 1.0f && state)
             {
                 progress += amount;

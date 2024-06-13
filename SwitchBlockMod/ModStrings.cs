@@ -19,6 +19,11 @@
         public const string START_STATE = "StartState";
         public const string ANIMATION = "Animation";
 
+        // Relevant for sand Xml
+        public const string BACKGROUND = "Background";
+        public const string SCROLLING = "Scrolling";
+        public const string FOREGROUND = "Foreground";
+
         // Block types
         public const string AUTO = "auto";
         public const string BASIC = "basic";
@@ -26,7 +31,7 @@
         public const string JUMP = "jump";
         public const string SAND = "sand";
 
-        // Animation or RGB/XY strings are not here because they are pretty much used in that one class,
+        // Blocks, Animation or RGB/XY strings are not here because they are pretty much used in that one class,
         // typos in there are easier to spot
     }
 }

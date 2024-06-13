@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
+using SwitchBlocksMod.Util;
 using System;
 
 namespace SwitchBlocksMod.Entities
@@ -33,14 +34,14 @@ namespace SwitchBlocksMod.Entities
 
         private EntitySandPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.SAND);
+            PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
         }
 
         float offset;
 
         protected override void Update(float deltaTime)
         {
-            offset += deltaTime;
+            offset += deltaTime * ModBlocks.sandMultiplier;
         }
 
         public override void Draw()
@@ -51,59 +52,98 @@ namespace SwitchBlocksMod.Entities
             }
 
             SpriteBatch spriteBatch = Game1.spriteBatch;
-            foreach (Platform platform in currentPlatformList)
+            foreach (PlatformSand platform in currentPlatformList)
             {
                 DrawPlatform(platform, spriteBatch);
             }
         }
 
-        private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
+        private void DrawPlatform(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            int scroll = Math.Abs((int)offset % (platform.texture.Height - platform.size.Y + 1));
+            Rectangle sourceRectangleBackground;
             if (platform.startState == DataSand.State)
             {
-                // Scrolling inside
-                spriteBatch.Draw(
-                texture: platform.texture,
-                position: platform.position,
-                sourceRectangle: new Rectangle(
-                    platform.size.X,
-                    scroll,
-                    platform.size.X,
-                    platform.size.Y),
-                color: Color.White);
-                // Overlay outside
-                spriteBatch.Draw(
-                texture: platform.texture,
-                position: platform.position,
-                sourceRectangle: new Rectangle(
+                sourceRectangleBackground = new Rectangle(
                     0,
                     0,
-                    platform.size.X,
-                    platform.size.Y),
+                    platform.background.Width / 2,
+                    platform.background.Height);
+            }
+            else
+            {
+                sourceRectangleBackground = new Rectangle(
+                    platform.background.Width / 2,
+                    0,
+                    platform.background.Width / 2,
+                    platform.background.Height);
+            }
+
+            // Background
+            spriteBatch.Draw(
+                texture: platform.background,
+                position: platform.position,
+                sourceRectangle: sourceRectangleBackground,
                 color: Color.White);
+
+            // Scrolling
+            int heightDifference = platform.scrolling.Height - platform.background.Height;
+            if (heightDifference > 0)
+            {
+                int scroll = Math.Abs((int)offset % (heightDifference + 1));
+
+                Rectangle sourceRectangleScrolling;
+                if (platform.startState == DataSand.State)
+                {
+                    sourceRectangleScrolling = new Rectangle(
+                        0,
+                        scroll,
+                        platform.scrolling.Width,
+                        platform.background.Height);
+                }
+                else
+                {
+                    sourceRectangleScrolling = new Rectangle(
+                        0,
+                        heightDifference - scroll,
+                        platform.scrolling.Width,
+                        platform.background.Height);
+                }
+
+                spriteBatch.Draw(
+                    texture: platform.scrolling,
+                    position: platform.position,
+                    sourceRectangle: sourceRectangleScrolling,
+                    color: Color.White);
+            }
+
+            // Foreground
+            if (platform.foreground == null)
+            {
                 return;
             }
-            // Scrolling inside
+
+            Rectangle sourceRectangleForeground;
+            if (platform.startState == DataSand.State)
+            {
+                sourceRectangleForeground = new Rectangle(
+                    0,
+                    0,
+                    platform.foreground.Width / 2,
+                    platform.foreground.Height);
+            }
+            else
+            {
+                sourceRectangleForeground = new Rectangle(
+                    platform.foreground.Width / 2,
+                    0,
+                    platform.foreground.Width / 2,
+                    platform.foreground.Height);
+            }
             spriteBatch.Draw(
-            texture: platform.texture,
-            position: platform.position,
-            sourceRectangle: new Rectangle(
-                platform.size.X,
-                platform.texture.Height - platform.size.Y - scroll,
-                platform.size.X,
-                platform.size.Y),
-            color: Color.White);
-            // Overlay outside
-            spriteBatch.Draw(
-            texture: platform.texture,
-            position: platform.position,
-            sourceRectangle: new Rectangle(
-                0,
-                platform.size.Y,
-                platform.size.X,
-                platform.size.Y),
-            color: Color.White);
+                texture: platform.foreground,
+                position: platform.position,
+                sourceRectangle: sourceRectangleForeground,
+                color: Color.White);
         }
     }
 }

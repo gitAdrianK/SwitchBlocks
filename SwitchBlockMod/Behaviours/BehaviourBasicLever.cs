@@ -3,7 +3,6 @@ using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
-using SwitchBlocksMod.Util;
 
 namespace SwitchBlocksMod.Behaviours
 {

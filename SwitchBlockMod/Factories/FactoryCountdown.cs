@@ -15,10 +15,10 @@ namespace SwitchBlocksMod.Factories
     public class FactoryCountdown : IBlockFactory
     {
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
-            Util.ModBlocks.COUNTDOWN_ON,
-            Util.ModBlocks.COUNTDOWN_OFF,
-            Util.ModBlocks.COUNTDOWN_LEVER,
-            Util.ModBlocks.COUNTDOWN_LEVER_SOLID,
+            ModBlocks.COUNTDOWN_ON,
+            ModBlocks.COUNTDOWN_OFF,
+            ModBlocks.COUNTDOWN_LEVER,
+            ModBlocks.COUNTDOWN_LEVER_SOLID,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level)
@@ -35,13 +35,13 @@ namespace SwitchBlocksMod.Factories
         {
             switch (blockCode)
             {
-                case var _ when blockCode == Util.ModBlocks.COUNTDOWN_ON:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_ON:
                     return new BlockCountdownOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.COUNTDOWN_OFF:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_OFF:
                     return new BlockCountdownOff(blockRect);
-                case var _ when blockCode == Util.ModBlocks.COUNTDOWN_LEVER:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER:
                     return new BlockCountdownLever(blockRect);
-                case var _ when blockCode == Util.ModBlocks.COUNTDOWN_LEVER_SOLID:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
                     return new BlockCountdownLeverSolid(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactoryCountdown).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

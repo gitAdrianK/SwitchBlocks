@@ -15,14 +15,14 @@ namespace SwitchBlocksMod.Factories
     public class FactorySand : IBlockFactory
     {
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
-            Util.ModBlocks.SAND_ON,
-            Util.ModBlocks.SAND_OFF,
-            Util.ModBlocks.SAND_LEVER,
-            Util.ModBlocks.SAND_LEVER_ON,
-            Util.ModBlocks.SAND_LEVER_OFF,
-            Util.ModBlocks.SAND_LEVER_SOLID,
-            Util.ModBlocks.SAND_LEVER_SOLID_ON,
-            Util.ModBlocks.SAND_LEVER_SOLID_OFF,
+            ModBlocks.SAND_ON,
+            ModBlocks.SAND_OFF,
+            ModBlocks.SAND_LEVER,
+            ModBlocks.SAND_LEVER_ON,
+            ModBlocks.SAND_LEVER_OFF,
+            ModBlocks.SAND_LEVER_SOLID,
+            ModBlocks.SAND_LEVER_SOLID_ON,
+            ModBlocks.SAND_LEVER_SOLID_OFF,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level)
@@ -39,21 +39,21 @@ namespace SwitchBlocksMod.Factories
         {
             switch (blockCode)
             {
-                case var _ when blockCode == Util.ModBlocks.SAND_ON:
+                case var _ when blockCode == ModBlocks.SAND_ON:
                     return new BlockSandOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_OFF:
+                case var _ when blockCode == ModBlocks.SAND_OFF:
                     return new BlockSandOff(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER:
+                case var _ when blockCode == ModBlocks.SAND_LEVER:
                     return new BlockSandLever(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER_ON:
+                case var _ when blockCode == ModBlocks.SAND_LEVER_ON:
                     return new BlockSandLeverOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER_OFF:
+                case var _ when blockCode == ModBlocks.SAND_LEVER_OFF:
                     return new BlockSandLeverOff(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER_SOLID:
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID:
                     return new BlockSandLeverSolid(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER_SOLID_ON:
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID_ON:
                     return new BlockSandLeverSolidOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.SAND_LEVER_SOLID_OFF:
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID_OFF:
                     return new BlockSandLeverSolidOff(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactorySand).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

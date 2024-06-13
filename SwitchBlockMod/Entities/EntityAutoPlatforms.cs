@@ -36,7 +36,7 @@ namespace SwitchBlocksMod.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataAuto.State, deltaTime);
+            UpdateProgress(DataAuto.State, deltaTime, ModBlocks.autoMultiplier);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
             ThirdElapsed();

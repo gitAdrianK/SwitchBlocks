@@ -86,9 +86,6 @@ namespace SwitchBlocksMod.Entities
                 }
 
                 Lever lever;
-
-                // CONSIDER: Using a stiched texture, and just saving a Rectangle w/ start xy, width, height, would probably be more performant.
-                // Implement if needed.
                 // Texture
                 string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlLever[dictionary[ModStrings.TEXTURE]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))

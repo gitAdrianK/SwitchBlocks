@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace SwitchBlocksMod.Util
+namespace SwitchBlocksMod
 {
     /// <summary>
     /// Contains colors used in this mod for its blocks.
@@ -23,6 +23,10 @@ namespace SwitchBlocksMod.Util
         /// How long the blocks stay in their state before switching.
         /// </summary>
         public static float autoDuration = 3.0f;
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the auto block type.
+        /// </summary>
+        public static float autoMultiplier = 1.0f;
 
         /// <summary>
         /// Color that represents the basic on block. 
@@ -56,6 +60,10 @@ namespace SwitchBlocksMod.Util
         /// Color that represents the basic solid lever block, that can only turn the state off. 
         /// </summary>
         public static readonly Color BASIC_LEVER_SOLID_OFF = new Color(238, 26, 124);
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the basic block type.
+        /// </summary>
+        public static float basicMultiplier = 1.0f;
 
         /// <summary>
         /// Color that represents the countdown on block. 
@@ -77,6 +85,10 @@ namespace SwitchBlocksMod.Util
         /// How long the blocks stay in their state before switching.
         /// </summary>
         public static float countdownDuration = 3.0f;
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the countdown block type.
+        /// </summary>
+        public static float countdownMultiplier = 1.0f;
 
         /// <summary>
         /// Color that represents the jump on block. 
@@ -86,6 +98,10 @@ namespace SwitchBlocksMod.Util
         /// Color that represents the jump off block. 
         /// </summary>
         public static readonly Color JUMP_OFF = new Color(95, 95, 95);
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the jump block type.
+        /// </summary>
+        public static float jumpMultiplier = 1.0f;
 
         /// <summary>
         /// Color that represents the sand on block. 
@@ -119,6 +135,10 @@ namespace SwitchBlocksMod.Util
         /// Color that represents the sand solid lever block, that can only turn the state off. 
         /// </summary>
         public static readonly Color SAND_LEVER_SOLID_OFF = new Color(238, 46, 124);
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the sand block type.
+        /// </summary>
+        public static float sandMultiplier = 1.0f;
 
 
         /// <summary>
@@ -127,7 +147,7 @@ namespace SwitchBlocksMod.Util
         public static void LoadDuration()
         {
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{Game1.instance.contentManager.root}{sep}switchBlocksMod{sep}blocks.xml";
+            string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
             if (!File.Exists(path))
             {
                 return;
@@ -146,10 +166,23 @@ namespace SwitchBlocksMod.Util
                     case "Auto":
                         Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
                         autoDuration = ParseDuration(dictionaryAuto, block);
+                        autoMultiplier = ParseMultiplier(dictionaryAuto, block);
+                        break;
+                    case "Basic":
+                        Dictionary<string, int> dictionaryBasic = Xml.MapNames(block.ChildNodes);
+                        basicMultiplier = ParseMultiplier(dictionaryBasic, block);
                         break;
                     case "Countdown":
                         Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
                         countdownDuration = ParseDuration(dictionaryCountdown, block);
+                        break;
+                    case "Jump":
+                        Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
+                        jumpMultiplier = ParseMultiplier(dictionaryJump, block);
+                        break;
+                    case "Sand":
+                        Dictionary<string, int> dictionarySand = Xml.MapNames(block.ChildNodes);
+                        sandMultiplier = ParseMultiplier(dictionarySand, block);
                         break;
                     default:
                         // Do nothing.
@@ -170,5 +203,16 @@ namespace SwitchBlocksMod.Util
             return duration;
         }
 
+        // Looks for a "Multiplier" node and returns the inside declared float multiplier or 1.0f.
+        private static float ParseMultiplier(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            float multiplier = 1.0f;
+            if (dictionary.ContainsKey("Multiplier"))
+            {
+                multiplier = float.Parse(children[dictionary["Multiplier"]].InnerText);
+            }
+            return multiplier;
+        }
     }
 }

@@ -3,7 +3,7 @@ using JumpKing.XnaWrappers;
 using Microsoft.Xna.Framework.Audio;
 using System.IO;
 
-namespace SwitchBlocksMod.Util
+namespace SwitchBlocksMod
 {
     /// <summary>
     /// Contains sounds used in this mod for its blocks.<br />
@@ -89,7 +89,6 @@ namespace SwitchBlocksMod.Util
                 countdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
             }
 
-            // TODO: While in place the sound is not played yet.
             // Jump
             if (File.Exists($"{path}jumpFlip.xnb"))
             {

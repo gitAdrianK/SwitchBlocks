@@ -9,7 +9,6 @@ using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
-using SwitchBlocksMod.Util;
 using System;
 using System.Reflection;
 

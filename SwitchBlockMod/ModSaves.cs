@@ -3,7 +3,7 @@ using SwitchBlocksMod.Data;
 using System;
 using System.IO;
 
-namespace SwitchBlocksMod.Util
+namespace SwitchBlocksMod
 {
     /// <summary>
     /// Saves and loads relevant data for the mod.

@@ -36,7 +36,7 @@ namespace SwitchBlocksMod.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataCountdown.State, deltaTime);
+            UpdateProgress(DataCountdown.State, deltaTime, ModBlocks.countdownMultiplier);
 
             if (!DataCountdown.State)
             {

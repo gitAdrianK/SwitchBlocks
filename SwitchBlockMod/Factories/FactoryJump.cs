@@ -12,8 +12,8 @@ namespace SwitchBlocksMod.Factories
     public class FactoryJump : IBlockFactory
     {
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
-            Util.ModBlocks.JUMP_ON,
-            Util.ModBlocks.JUMP_OFF,
+            ModBlocks.JUMP_ON,
+            ModBlocks.JUMP_OFF,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level)
@@ -30,9 +30,9 @@ namespace SwitchBlocksMod.Factories
         {
             switch (blockCode)
             {
-                case var _ when blockCode == Util.ModBlocks.JUMP_ON:
+                case var _ when blockCode == ModBlocks.JUMP_ON:
                     return new BlockJumpOn(blockRect);
-                case var _ when blockCode == Util.ModBlocks.JUMP_OFF:
+                case var _ when blockCode == ModBlocks.JUMP_OFF:
                     return new BlockJumpOff(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

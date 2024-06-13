@@ -7,17 +7,19 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
+// Don't like the code duplication but w/e
+
 namespace SwitchBlocksMod.Util
 {
     /// <summary>
-    /// Represents a platform with a texture, position, size, and start state.
+    /// Represents a subclass of platform, sandplatform with three textures, background, scrolling and, foreground. <br />
+    /// A foreground is optional.
     /// </summary>
-    public class Platform
+    public class PlatformSand : Platform
     {
-        public Texture2D texture;
-        public Vector2 position;
-        public bool startState;
-        public Animation animation;
+        public Texture2D background;
+        public Texture2D scrolling;
+        public Texture2D foreground;
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
@@ -25,7 +27,7 @@ namespace SwitchBlocksMod.Util
         /// </summary>
         /// <param name="subfolder">The subfolder to look for xml in. The main path is the path to the mod folder.</param>
         /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
-        public static Dictionary<int, List<Platform>> GetPlatformsDictonary(string subfolder)
+        public static new Dictionary<int, List<Platform>> GetPlatformsDictonary(string subfolder)
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -82,7 +84,8 @@ namespace SwitchBlocksMod.Util
                 XmlNodeList xmlPlatform = xmlElement.ChildNodes;
                 Dictionary<string, int> dictionary;
                 dictionary = Xml.MapNamesRequired(xmlPlatform,
-                    ModStrings.TEXTURE,
+                    ModStrings.BACKGROUND,
+                    ModStrings.SCROLLING,
                     ModStrings.POSITION,
                     ModStrings.START_STATE);
 
@@ -91,14 +94,34 @@ namespace SwitchBlocksMod.Util
                     continue;
                 }
 
-                Platform platform = new Platform();
-                // Texture
-                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.TEXTURE]].InnerText}";
+                PlatformSand platform = new PlatformSand();
+                // Background
+                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.BACKGROUND]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
                 }
-                platform.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                platform.background = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+
+
+                // Scrolling
+                filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.SCROLLING]].InnerText}";
+                if (!File.Exists($"{filePath}.xnb"))
+                {
+                    continue;
+                }
+                platform.scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+
+                // Foreground
+                if (dictionary.ContainsKey(ModStrings.FOREGROUND))
+                {
+                    filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.FOREGROUND]].InnerText}";
+                    if (!File.Exists($"{filePath}.xnb"))
+                    {
+                        continue;
+                    }
+                    platform.foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                }
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
@@ -122,15 +145,6 @@ namespace SwitchBlocksMod.Util
                 {
                     // Yeah I am limiting it to on/off, what are you gonna do about it?
                     continue;
-                }
-
-                // Animation
-                platform.animation.style = Animation.Style.Fade;
-                platform.animation.curve = Animation.Curve.Linear;
-                if (dictionary.ContainsKey(ModStrings.ANIMATION))
-                {
-                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION]];
-                    platform.animation = Xml.GetAnimation(animationNode);
                 }
 
                 // The platform had all elements properly set.
