@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The basic lever block.
     /// </summary>
-    public class BlockBasicLever : IBlock
+    public class BlockBasicLever : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockBasicLever(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.BASIC_LEVER; }
         }
 
         public Rectangle GetRect()

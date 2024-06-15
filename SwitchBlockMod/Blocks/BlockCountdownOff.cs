@@ -7,13 +7,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The countdown off block.
     /// </summary>
-    public class BlockCountdownOff : IBlock
+    public class BlockCountdownOff : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockCountdownOff(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.COUNTDOWN_OFF; }
         }
 
         public Rectangle GetRect()

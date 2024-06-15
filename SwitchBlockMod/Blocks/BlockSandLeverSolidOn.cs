@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The sand lever block, capable of only turning the state on.
     /// </summary>
-    public class BlockSandLeverSolidOn : IBlock
+    public class BlockSandLeverSolidOn : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockSandLeverSolidOn(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.SAND_LEVER_SOLID_ON; }
         }
 
         public Rectangle GetRect()

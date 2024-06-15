@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The basic lever block, capable of only turning the state on.
     /// </summary>
-    public class BlockBasicLeverOn : IBlock
+    public class BlockBasicLeverOn : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockBasicLeverOn(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.BASIC_LEVER_ON; }
         }
 
         public Rectangle GetRect()
