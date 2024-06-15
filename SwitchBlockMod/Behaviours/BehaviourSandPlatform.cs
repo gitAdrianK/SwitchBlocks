@@ -1,11 +1,9 @@
 ﻿using HarmonyLib;
-using JumpKing;
 using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using JumpKing.Player;
 using SwitchBlocksMod.Blocks;
-using SwitchBlocksMod.Data;
 using System;
 
 namespace SwitchBlocksMod.Behaviours
@@ -23,29 +21,22 @@ namespace SwitchBlocksMod.Behaviours
 
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
-            float num = IsPlayerOnBlock ? 0.25f : 1.0f;
+            // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
+            float num = (IsPlayerOnBlock ? 0.5f : 1.0f);
             return inputXVelocity * num;
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
             BodyComp bodyComp = behaviourContext.BodyComp;
+            float num = ((IsPlayerOnBlock && bodyComp.Velocity.Y <= 0.0f) ? 0.5f : 1.0f);
+            float result = inputYVelocity * num;
+            if (!IsPlayerOnBlock && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0f)
+            {
+                bodyComp.Position.Y += 1.0f;
+            }
 
-            if ((IsPlayerOnBlockOn && DataSand.State)
-                || (IsPlayerOnBlockOff && !DataSand.State))
-            {
-                // Going up (negative speed)
-                // Does this even work the way i think it works?
-                return inputYVelocity - (2.0f * PlayerValues.GRAVITY);
-            }
-            else if ((IsPlayerOnBlockOn && !DataSand.State)
-                || (IsPlayerOnBlockOff && DataSand.State))
-            {
-                // Going down (positive speed)
-                float num = bodyComp.Velocity.Y <= 0f ? 0.5f : 1f;
-                return inputYVelocity * num;
-            }
-            return inputYVelocity;
+            return result;
         }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
@@ -59,24 +50,9 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            bool isCollidingWithOn = info.IsCollidingWith<BlockSandOn>();
-            bool isCollidingWithOff = info.IsCollidingWith<BlockSandOff>();
-
-            if ((isCollidingWithOn && DataSand.State)
-                || (isCollidingWithOff && !DataSand.State))
+            if ((info.IsCollidingWith<BlockSandOn>() || info.IsCollidingWith<BlockSandOff>()) && !IsPlayerOnBlock)
             {
-                // Going up (negative speed)
-                if (IsPlayerOnBlock)
-                {
-                    return behaviourContext.BodyComp.IsOnGround;
-                }
-                return behaviourContext.BodyComp.Velocity.Y > 0.0f;
-            }
-            if ((isCollidingWithOn && !DataSand.State)
-                || (isCollidingWithOff && DataSand.State))
-            {
-                // Going down (positive speed)
-                return !IsPlayerOnBlock && behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return behaviourContext.BodyComp.Velocity.Y < 0.0f;
             }
             return false;
         }
@@ -89,6 +65,10 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+
+            // Needed so we can jumpt inside the block, but it also stops movement when touching the side as if inside
+            //Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
+
             IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();
             IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
             IsPlayerOnBlock = IsPlayerOnBlockOn || IsPlayerOnBlockOff;
@@ -97,21 +77,6 @@ namespace SwitchBlocksMod.Behaviours
             if (IsPlayerOnBlock)
             {
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
-            }
-            if ((IsPlayerOnBlockOn && DataSand.State)
-                || (IsPlayerOnBlockOff && !DataSand.State))
-            {
-                // Going up (negative speed)
-                if (bodyComp.IsOnGround)
-                {
-                    return true;
-                }
-                bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
-            }
-            else if ((IsPlayerOnBlockOn && !DataSand.State)
-                || (IsPlayerOnBlockOff && DataSand.State))
-            {
-                // Going down (positive speed)
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;

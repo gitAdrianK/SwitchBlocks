@@ -1,5 +1,4 @@
 ﻿using EntityComponent;
-using HarmonyLib;
 using JumpKing;
 using JumpKing.Level;
 using JumpKing.Mods;
@@ -9,8 +8,6 @@ using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
-using System;
-using System.Reflection;
 
 namespace SwitchBlocksMod
 {
@@ -31,12 +28,6 @@ namespace SwitchBlocksMod
             LevelManager.RegisterBlockFactory(new FactoryCountdown());
             LevelManager.RegisterBlockFactory(new FactoryJump());
             LevelManager.RegisterBlockFactory(new FactorySand());
-
-            var harmony = new Harmony(ModStrings.MODNAME);
-            MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
         }
 
         /// <summary>
@@ -148,23 +139,6 @@ namespace SwitchBlocksMod
             PlayerEntity.OnJumpCall -= JumpSwitch;
         }
 
-        private static MethodInfo originalIsOnBlock;
-        /// <summary>
-        /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
-        /// in the IsOnBlock function when asked if the player is on a sand block.
-        /// </summary>
-        /// <param name="__instance">Object instance of the body comp</param>
-        /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
-        /// <param name="__0">Original object the function is called with</param>
-        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
-        {
-            if (__0 == typeof(SandBlock) && originalIsOnBlock != null)
-            {
-                __result = (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(SandBlock) })
-                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOn) })
-                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
-            }
-        }
         private static void JumpSwitch()
         {
             if (EntityJumpPlatforms.Instance.PlatformDictionary != null
