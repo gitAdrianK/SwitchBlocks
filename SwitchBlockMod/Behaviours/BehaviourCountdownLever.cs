@@ -59,16 +59,6 @@ namespace SwitchBlocksMod.Behaviours
 
             if (collidingWithLever || collidingWithLeverSolid)
             {
-                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
-                DataCountdown.HasBlinkedOnce = false;
-                DataCountdown.HasBlinkedTwice = false;
-
-                if (DataCountdown.HasSwitched)
-                {
-                    prevVelocity = behaviourContext.BodyComp.Velocity;
-                    return true;
-                }
-
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid)
                 {
@@ -77,6 +67,16 @@ namespace SwitchBlocksMod.Behaviours
                         prevVelocity = behaviourContext.BodyComp.Velocity;
                         return true;
                     }
+                }
+
+                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
+                DataCountdown.HasBlinkedOnce = false;
+                DataCountdown.HasBlinkedTwice = false;
+
+                if (DataCountdown.HasSwitched)
+                {
+                    prevVelocity = behaviourContext.BodyComp.Velocity;
+                    return true;
                 }
 
                 if (!DataCountdown.State)
