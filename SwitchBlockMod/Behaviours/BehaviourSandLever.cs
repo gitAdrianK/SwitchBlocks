@@ -4,6 +4,8 @@ using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
+using SwitchBlocksMod.Util;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SwitchBlocksMod.Behaviours
@@ -16,6 +18,8 @@ namespace SwitchBlocksMod.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
+
+        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -67,6 +71,7 @@ namespace SwitchBlocksMod.Behaviours
             {
                 if (DataSand.HasSwitched)
                 {
+                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
                 DataSand.HasSwitched = true;
@@ -74,8 +79,9 @@ namespace SwitchBlocksMod.Behaviours
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
                 {
-                    if (!ResolveCollisionDirection(behaviourContext, advCollisionInfo))
+                    if (!ResolveCollisionDirection(behaviourContext, advCollisionInfo, prevVelocity))
                     {
+                        prevVelocity = behaviourContext.BodyComp.Velocity;
                         return true;
                     }
                 }
@@ -103,6 +109,7 @@ namespace SwitchBlocksMod.Behaviours
             {
                 DataSand.HasSwitched = false;
             }
+            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
 
@@ -112,44 +119,29 @@ namespace SwitchBlocksMod.Behaviours
         /// <param name="behaviourContext">Behaviour context</param>
         /// <param name="advCollisionInfo">Advanced collision info</param>
         /// <returns>True if the collision is allowed, false otherwise</returns>
-        private bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo)
+        private bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity)
         {
             IBlock block = advCollisionInfo.GetCollidedBlocks().ToList().Find(b => b.GetType() == typeof(BlockSandLeverSolid)
                         || b.GetType() == typeof(BlockSandLeverSolidOn)
                         || b.GetType() == typeof(BlockSandLeverSolidOff));
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            float bottomCollision = blockRect.Bottom - playerRect.Top;
-            float topCollision = playerRect.Bottom - blockRect.Top;
-            float leftCollision = playerRect.Right - blockRect.Left;
-            float rightCollision = blockRect.Right - playerRect.Left;
-            if (topCollision < bottomCollision && topCollision < leftCollision && topCollision < rightCollision)
+            HashSet<Directions> directions = ModBlocks.sandDirections;
+            if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
             {
-                if (ModBlocks.sandDirections.Contains(Util.Directions.Up))
-                {
-                    return true;
-                }
+                return true;
             }
-            else if (bottomCollision < topCollision && bottomCollision < leftCollision && bottomCollision < rightCollision)
+            else if (blockRect.Bottom - playerRect.Top == 0.0f && prevVelocity.Y < 0.0f && directions.Contains(Directions.Down))
             {
-                if (ModBlocks.sandDirections.Contains(Util.Directions.Down))
-                {
-                    return true;
-                }
+                return true;
             }
-            else if (leftCollision < topCollision && leftCollision < bottomCollision && leftCollision < rightCollision)
+            else if (playerRect.Right - blockRect.Left == 0.0f && prevVelocity.X > 0.0f && directions.Contains(Directions.Left))
             {
-                if (ModBlocks.sandDirections.Contains(Util.Directions.Left))
-                {
-                    return true;
-                }
+                return true;
             }
-            else if (rightCollision < topCollision && rightCollision < bottomCollision && rightCollision < leftCollision)
+            else if (blockRect.Right - playerRect.Left == 0.0f && prevVelocity.X < 0.0f && directions.Contains(Directions.Right))
             {
-                if (ModBlocks.sandDirections.Contains(Util.Directions.Right))
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }

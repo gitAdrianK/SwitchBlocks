@@ -68,7 +68,7 @@ namespace SwitchBlocksMod
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
-        public static List<Directions> basicDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> basicDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Color that represents the countdown on block. 
@@ -97,7 +97,7 @@ namespace SwitchBlocksMod
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
-        public static List<Directions> countdownDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> countdownDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Color that represents the jump on block. 
@@ -151,7 +151,7 @@ namespace SwitchBlocksMod
         /// <summary>
         /// Directions the sand lever can be activated from
         /// </summary>
-        public static List<Directions> sandDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> sandDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
 
         /// <summary>
@@ -232,11 +232,11 @@ namespace SwitchBlocksMod
         }
 
         // Looks for a "LeverSideDisable" node and parses the inside to look for directions
-        // "Up", "Down", "Left", "Right" and removes those from the list of possible directions.
-        private static List<Directions> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
+        private static HashSet<Directions> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            List<Directions> directions = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+            HashSet<Directions> directions = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
             if (!dictionary.ContainsKey("LeverSideDisable"))
             {
                 return directions;
