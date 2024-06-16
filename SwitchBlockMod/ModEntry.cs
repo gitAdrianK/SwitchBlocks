@@ -36,6 +36,7 @@ namespace SwitchBlocksMod
         [OnLevelStart]
         public static void OnLevelStart()
         {
+            JKContentManager contentManager = Game1.instance.contentManager;
             EntityManager entityManager = EntityManager.instance;
             PlayerEntity player = entityManager.Find<PlayerEntity>();
 
@@ -103,8 +104,10 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
+            player.RegisterLandSound<BlockSandOn>(contentManager.audio.player.SandLand);
+            player.RegisterLandSound<BlockSandOff>(contentManager.audio.player.SandLand);
 
-            ModBlocks.LoadDuration();
+            ModBlocks.LoadProperties();
 
             // End
             EntityManager.instance.MoveToFront(player);

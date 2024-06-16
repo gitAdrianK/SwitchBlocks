@@ -64,18 +64,18 @@ namespace SwitchBlocksMod.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
 
-            // Needed so we can jumpt inside the block, but it also stops movement when touching the side as if inside
-            //Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
+            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            BodyComp bodyComp = behaviourContext.BodyComp;
 
             IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();
             IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
             IsPlayerOnBlock = IsPlayerOnBlockOn || IsPlayerOnBlockOff;
 
-            BodyComp bodyComp = behaviourContext.BodyComp;
             if (IsPlayerOnBlock)
             {
+                //Camera.UpdateCamera(bodyComp.GetHitbox().Center);
+                //Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
