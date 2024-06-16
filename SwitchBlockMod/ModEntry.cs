@@ -107,7 +107,7 @@ namespace SwitchBlocksMod
             player.RegisterLandSound<BlockSandOn>(contentManager.audio.player.SandLand);
             player.RegisterLandSound<BlockSandOff>(contentManager.audio.player.SandLand);
 
-            ModBlocks.LoadProperties();
+            ModBlocks.LoadDuration();
 
             // End
             EntityManager.instance.MoveToFront(player);
