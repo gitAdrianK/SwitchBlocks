@@ -7,13 +7,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The auto on block.
     /// </summary>
-    public class BlockAutoOn : IBlock
+    public class BlockAutoOn : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockAutoOn(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.AUTO_ON; }
         }
 
         public Rectangle GetRect()

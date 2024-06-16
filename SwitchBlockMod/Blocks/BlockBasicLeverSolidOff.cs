@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The basic lever block, capable of only turning the state off.
     /// </summary>
-    public class BlockBasicLeverSolidOff : IBlock
+    public class BlockBasicLeverSolidOff : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockBasicLeverSolidOff(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.BASIC_LEVER_SOLID_OFF; }
         }
 
         public Rectangle GetRect()

@@ -7,13 +7,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The basic off block.
     /// </summary>
-    public class BlockBasicOff : IBlock
+    public class BlockBasicOff : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockBasicOff(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.BASIC_OFF; }
         }
 
         public Rectangle GetRect()

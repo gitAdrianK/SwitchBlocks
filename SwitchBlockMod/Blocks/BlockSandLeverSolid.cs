@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The sand lever block.
     /// </summary>
-    public class BlockSandLeverSolid : IBlock
+    public class BlockSandLeverSolid : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockSandLeverSolid(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.SAND_LEVER_SOLID; }
         }
 
         public Rectangle GetRect()

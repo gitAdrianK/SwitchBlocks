@@ -4,13 +4,18 @@ using SwitchBlocksMod.Data;
 
 namespace SwitchBlocksMod.Blocks
 {
-    public class BlockJumpOn : IBlock
+    public class BlockJumpOn : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockJumpOn(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.JUMP_ON; }
         }
 
         public Rectangle GetRect()

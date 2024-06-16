@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The sand on block.
     /// </summary>
-    public class BlockSandOn : IBlock
+    public class BlockSandOn : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockSandOn(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.SAND_ON; }
         }
 
         public Rectangle GetRect()

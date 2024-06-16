@@ -6,13 +6,18 @@ namespace SwitchBlocksMod.Blocks
     /// <summary>
     /// The countdown lever block.
     /// </summary>
-    public class BlockCountdownLeverSolid : IBlock
+    public class BlockCountdownLeverSolid : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
         public BlockCountdownLeverSolid(Rectangle collider)
         {
             this.collider = collider;
+        }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.COUNTDOWN_LEVER_SOLID; }
         }
 
         public Rectangle GetRect()

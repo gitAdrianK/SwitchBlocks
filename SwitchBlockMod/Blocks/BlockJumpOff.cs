@@ -4,7 +4,7 @@ using SwitchBlocksMod.Data;
 
 namespace SwitchBlocksMod.Blocks
 {
-    public class BlockJumpOff : IBlock
+    public class BlockJumpOff : IBlock, IBlockDebugColor
     {
         private readonly Rectangle collider;
 
@@ -12,6 +12,12 @@ namespace SwitchBlocksMod.Blocks
         {
             this.collider = collider;
         }
+
+        public Color DebugColor
+        {
+            get { return ModBlocks.JUMP_OFF; }
+        }
+
         public Rectangle GetRect()
         {
             return !DataJump.State ? collider : new Rectangle(0, 0, 0, 0);
