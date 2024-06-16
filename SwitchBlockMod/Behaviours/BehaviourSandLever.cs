@@ -87,15 +87,15 @@ namespace SwitchBlocksMod.Behaviours
                 }
 
                 bool stateBefore = DataSand.State;
-                if (collidingWithLever)
+                if (collidingWithAnyLever)
                 {
                     DataSand.State = !DataSand.State;
                 }
-                else if (collidingWithLeverOn)
+                else if (collidingWithAnyLeverOn)
                 {
                     DataSand.State = true;
                 }
-                else if (collidingWithLeverOff)
+                else if (collidingWithAnyLeverOff)
                 {
                     DataSand.State = false;
                 }
