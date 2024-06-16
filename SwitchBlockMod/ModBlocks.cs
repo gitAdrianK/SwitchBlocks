@@ -1,5 +1,6 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
+using SwitchBlocksMod.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -64,6 +65,10 @@ namespace SwitchBlocksMod
         /// Multiplier of the deltaTime used in the animation of the basic block type.
         /// </summary>
         public static float basicMultiplier = 1.0f;
+        /// <summary>
+        /// Directions the basic lever can be activated from
+        /// </summary>
+        public static List<Directions> basicDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Color that represents the countdown on block. 
@@ -89,6 +94,10 @@ namespace SwitchBlocksMod
         /// Multiplier of the deltaTime used in the animation of the countdown block type.
         /// </summary>
         public static float countdownMultiplier = 1.0f;
+        /// <summary>
+        /// Directions the basic lever can be activated from
+        /// </summary>
+        public static List<Directions> countdownDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Color that represents the jump on block. 
@@ -139,6 +148,10 @@ namespace SwitchBlocksMod
         /// Multiplier of the deltaTime used in the animation of the sand block type.
         /// </summary>
         public static float sandMultiplier = 1.0f;
+        /// <summary>
+        /// Directions the sand lever can be activated from
+        /// </summary>
+        public static List<Directions> sandDirections = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
 
         /// <summary>
@@ -171,10 +184,12 @@ namespace SwitchBlocksMod
                     case "Basic":
                         Dictionary<string, int> dictionaryBasic = Xml.MapNames(block.ChildNodes);
                         basicMultiplier = ParseMultiplier(dictionaryBasic, block);
+                        basicDirections = ParseLeverSideDisable(dictionaryBasic, block);
                         break;
                     case "Countdown":
                         Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
                         countdownDuration = ParseDuration(dictionaryCountdown, block);
+                        countdownDirections = ParseLeverSideDisable(dictionaryCountdown, block);
                         break;
                     case "Jump":
                         Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
@@ -183,6 +198,7 @@ namespace SwitchBlocksMod
                     case "Sand":
                         Dictionary<string, int> dictionarySand = Xml.MapNames(block.ChildNodes);
                         sandMultiplier = ParseMultiplier(dictionarySand, block);
+                        sandDirections = ParseLeverSideDisable(dictionarySand, block);
                         break;
                     default:
                         // Do nothing.
@@ -214,5 +230,45 @@ namespace SwitchBlocksMod
             }
             return multiplier;
         }
+
+        // Looks for a "LeverSideDisable" node and parses the inside to look for directions
+        // "Up", "Down", "Left", "Right" and removes those from the list of possible directions.
+        private static List<Directions> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            List<Directions> directions = new List<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+            if (!dictionary.ContainsKey("LeverSideDisable"))
+            {
+                return directions;
+            }
+            string inside = children[dictionary["LeverSideDisable"]].InnerText;
+            if (inside == string.Empty)
+            {
+                return directions;
+            }
+            string[] split = inside.Split(',');
+            foreach (string s in split)
+            {
+                string trim = s.Trim();
+                if (trim.Equals("Up"))
+                {
+                    directions.Remove(Directions.Up);
+                }
+                if (trim.Equals("Down"))
+                {
+                    directions.Remove(Directions.Down);
+                }
+                if (trim.Equals("Left"))
+                {
+                    directions.Remove(Directions.Left);
+                }
+                if (trim.Equals("Right"))
+                {
+                    directions.Remove(Directions.Right);
+                }
+            }
+            return directions;
+        }
+
     }
 }

@@ -135,6 +135,7 @@
     <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="ModStrings.cs" />
     <Compile Include="Util\Animation.cs" />
+    <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Util\Platform.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />
