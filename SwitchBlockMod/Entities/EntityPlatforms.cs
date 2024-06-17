@@ -1,6 +1,5 @@
 ﻿using EntityComponent;
 using JumpKing;
-using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Util;
@@ -13,8 +12,6 @@ namespace SwitchBlocksMod.Entities
 {
     public class EntityPlatforms : Entity
     {
-        int currentScreen = -1;
-        int nextScreen;
 
         protected float progress;
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
@@ -26,22 +23,21 @@ namespace SwitchBlocksMod.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
-            if (currentScreen != nextScreen)
-            {
-                currentPlatformList = null;
-                if (PlatformDictionary.ContainsKey(nextScreen))
-                {
-                    currentPlatformList = PlatformDictionary[nextScreen];
-                }
-                currentScreen = nextScreen;
-            }
-
-            if (currentPlatformList == null)
+            if (PlatformDictionary == null)
             {
                 return false;
             }
-            return true;
+            int currentScreen = Camera.CurrentScreen;
+            if (PlatformDictionary.ContainsKey(currentScreen))
+            {
+                currentPlatformList = PlatformDictionary[currentScreen];
+                return true;
+            }
+            else
+            {
+                currentPlatformList = null;
+                return false;
+            }
         }
 
         /// <summary>

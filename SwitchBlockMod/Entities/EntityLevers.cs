@@ -1,6 +1,5 @@
 ﻿using EntityComponent;
 using JumpKing;
-using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -9,8 +8,6 @@ namespace SwitchBlocksMod.Entities
 {
     public class EntityLevers : Entity
     {
-        int currentScreen = -1;
-        int nextScreen;
 
         protected bool state;
 
@@ -23,23 +20,17 @@ namespace SwitchBlocksMod.Entities
             {
                 return false;
             }
-
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
-            if (currentScreen != nextScreen)
+            int currentScreen = Camera.CurrentScreen;
+            if (LeverDictionary.ContainsKey(currentScreen))
+            {
+                currentLeverList = LeverDictionary[currentScreen];
+                return true;
+            }
+            else
             {
                 currentLeverList = null;
-                if (LeverDictionary.ContainsKey(nextScreen))
-                {
-                    currentLeverList = LeverDictionary[nextScreen];
-                }
-                currentScreen = nextScreen;
-            }
-
-            if (currentLeverList == null)
-            {
                 return false;
             }
-            return true;
         }
 
         public override void Draw()
