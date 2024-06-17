@@ -32,6 +32,25 @@ namespace SwitchBlocksMod.Factories
 
         public bool IsSolidBlock(Color blockCode)
         {
+            switch (blockCode)
+            {
+                case var _ when blockCode == ModBlocks.SAND_ON:
+                    return true;
+                case var _ when blockCode == ModBlocks.SAND_OFF:
+                    return true;
+                case var _ when blockCode == ModBlocks.SAND_LEVER:
+                    return false;
+                case var _ when blockCode == ModBlocks.SAND_LEVER_ON:
+                    return false;
+                case var _ when blockCode == ModBlocks.SAND_LEVER_OFF:
+                    return false;
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID:
+                    return true;
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID_ON:
+                    return true;
+                case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID_OFF:
+                    return true;
+            }
             return false;
         }
 
