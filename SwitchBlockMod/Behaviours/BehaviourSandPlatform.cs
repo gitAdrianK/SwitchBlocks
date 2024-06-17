@@ -1,9 +1,11 @@
 ﻿using HarmonyLib;
+using JumpKing;
 using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using JumpKing.Player;
 using SwitchBlocksMod.Blocks;
+using SwitchBlocksMod.Data;
 using System;
 
 namespace SwitchBlocksMod.Behaviours
@@ -15,28 +17,25 @@ namespace SwitchBlocksMod.Behaviours
     {
         public float BlockPriority => 1.0f;
 
+        // TODO: Player falls too fast
+        // TODO: Cant really jump to the side
+
         public bool IsPlayerOnBlock { get; set; }
         public bool IsPlayerOnBlockOn { get; set; }
         public bool IsPlayerOnBlockOff { get; set; }
+        public static bool HasEntered { get; private set; }
 
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            float num = (IsPlayerOnBlock ? 0.5f : 1.0f);
-            return inputXVelocity * num;
+            //float num = (IsPlayerOnBlock ? 0.5f : 1.0f);
+            //return inputXVelocity * num;
+            return inputXVelocity;
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
-            BodyComp bodyComp = behaviourContext.BodyComp;
-            float num = ((IsPlayerOnBlock && bodyComp.Velocity.Y <= 0.0f) ? 0.5f : 1.0f);
-            float result = inputYVelocity * num;
-            if (!IsPlayerOnBlock && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0f)
-            {
-                bodyComp.Position.Y += 1.0f;
-            }
-
-            return result;
+            return inputYVelocity;
         }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
@@ -50,9 +49,23 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            if ((info.IsCollidingWith<BlockSandOn>() || info.IsCollidingWith<BlockSandOff>()) && !IsPlayerOnBlock)
+            if ((info.IsCollidingWith<BlockSandOn>() && DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && !DataSand.State) && !IsPlayerOnBlock)
             {
-                return behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                if (HasEntered)
+                {
+                    return false;
+                }
+                HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
+                return !HasEntered;
+            }
+            else if ((info.IsCollidingWith<BlockSandOn>() && !DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && DataSand.State) && !IsPlayerOnBlock)
+            {
+                if (HasEntered)
+                {
+                    return false;
+                }
+                HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return !HasEntered;
             }
             return false;
         }
@@ -64,7 +77,6 @@ namespace SwitchBlocksMod.Behaviours
                 return true;
             }
 
-
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             BodyComp bodyComp = behaviourContext.BodyComp;
 
@@ -72,11 +84,16 @@ namespace SwitchBlocksMod.Behaviours
             IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
             IsPlayerOnBlock = IsPlayerOnBlockOn || IsPlayerOnBlockOff;
 
-            if (IsPlayerOnBlock)
+            if (!IsPlayerOnBlock)
             {
-                //Camera.UpdateCamera(bodyComp.GetHitbox().Center);
-                //Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
+                HasEntered = false;
+            }
+
+            if (HasEntered)
+            {
+                Camera.UpdateCamera(bodyComp.GetHitbox().Center);
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+                Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;
