@@ -28,9 +28,7 @@ namespace SwitchBlocksMod.Behaviours
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            //float num = (IsPlayerOnBlock ? 0.5f : 1.0f);
-            //return inputXVelocity * num;
-            return inputXVelocity;
+            return inputXVelocity * (HasEntered ? 0.5f : 1.0f);
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
