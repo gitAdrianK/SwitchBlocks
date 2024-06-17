@@ -1,8 +1,12 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using Microsoft.Xna.Framework;
 using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
+using SwitchBlocksMod.Util;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SwitchBlocksMod.Behaviours
 {
@@ -14,6 +18,8 @@ namespace SwitchBlocksMod.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
+
+        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -48,31 +54,48 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockBasicLever>()
-                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>();
-            bool collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverOn>()
-                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>();
-            bool collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverOff>()
-                || advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>();
+            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockBasicLever>();
+            bool collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverOn>();
+            bool collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverOff>();
+            bool collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>();
+            bool collidingWithLeverSolidOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>();
+            bool collidingWithLeverSolidOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>();
+            bool collidingWithAnyLever = collidingWithLever || collidingWithLeverSolid;
+            bool collidingWithAnyLeverOn = collidingWithLeverOn || collidingWithLeverSolidOn;
+            bool collidingWithAnyLeverOff = collidingWithLeverOff || collidingWithLeverSolidOff;
+            bool colliding = collidingWithAnyLever
+                || collidingWithAnyLeverOn
+                || collidingWithAnyLeverOff;
 
-            if (collidingWithLever || collidingWithLeverOn || collidingWithLeverOff)
+            if (colliding)
             {
                 if (DataBasic.HasSwitched)
                 {
+                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
                 DataBasic.HasSwitched = true;
 
+                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+                if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
+                {
+                    if (!ResolveCollisionDirection(behaviourContext, advCollisionInfo, prevVelocity))
+                    {
+                        prevVelocity = behaviourContext.BodyComp.Velocity;
+                        return true;
+                    }
+                }
+
                 bool stateBefore = DataBasic.State;
-                if (collidingWithLever)
+                if (collidingWithAnyLever)
                 {
                     DataBasic.State = !DataBasic.State;
                 }
-                else if (collidingWithLeverOn)
+                else if (collidingWithAnyLeverOn)
                 {
                     DataBasic.State = true;
                 }
-                else if (collidingWithLeverOff)
+                else if (collidingWithAnyLeverOff)
                 {
                     DataBasic.State = false;
                 }
@@ -86,7 +109,41 @@ namespace SwitchBlocksMod.Behaviours
             {
                 DataBasic.HasSwitched = false;
             }
+            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
+        }
+
+        /// <summary>
+        /// Checks direction a collision happened from and checks if the direction is allowed for that direction.
+        /// </summary>
+        /// <param name="behaviourContext">Behaviour context</param>
+        /// <param name="advCollisionInfo">Advanced collision info</param>
+        /// <returns>True if the collision is allowed, false otherwise</returns>
+        private bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity)
+        {
+            IBlock block = advCollisionInfo.GetCollidedBlocks().ToList().Find(b => b.GetType() == typeof(BlockBasicLeverSolid)
+                        || b.GetType() == typeof(BlockBasicLeverSolidOn)
+                        || b.GetType() == typeof(BlockBasicLeverSolidOff));
+            Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
+            Rectangle blockRect = block.GetRect();
+            HashSet<Directions> directions = ModBlocks.basicDirections;
+            if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
+            {
+                return true;
+            }
+            else if (blockRect.Bottom - playerRect.Top == 0.0f && prevVelocity.Y < 0.0f && directions.Contains(Directions.Down))
+            {
+                return true;
+            }
+            else if (playerRect.Right - blockRect.Left == 0.0f && prevVelocity.X > 0.0f && directions.Contains(Directions.Left))
+            {
+                return true;
+            }
+            else if (blockRect.Right - playerRect.Left == 0.0f && prevVelocity.X < 0.0f && directions.Contains(Directions.Right))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
