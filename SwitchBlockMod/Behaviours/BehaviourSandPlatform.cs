@@ -28,12 +28,21 @@ namespace SwitchBlocksMod.Behaviours
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            return inputXVelocity * (HasEntered ? 0.5f : 1.0f);
+            float num = (HasEntered ? 0.5f : 1.0f);
+            return inputXVelocity * num;
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
-            return inputYVelocity;
+            BodyComp bodyComp = behaviourContext.BodyComp;
+            float num = ((HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f);
+            float result = inputYVelocity * num;
+            if (!HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
+            {
+                bodyComp.Position.Y += 1.0f;
+            }
+
+            return result;
         }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
@@ -89,9 +98,13 @@ namespace SwitchBlocksMod.Behaviours
 
             if (HasEntered)
             {
-                Camera.UpdateCamera(bodyComp.GetHitbox().Center);
+                if ((IsPlayerOnBlockOn && !DataSand.State) || (IsPlayerOnBlockOff && DataSand.State))
+                {
+                    // Going up
+                    bodyComp.Position.Y -= 0.75f;
+                }
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
-                Traverse.Create(bodyComp).Field("_is_on_ground").SetValue(true);
+                Camera.UpdateCamera(bodyComp.GetHitbox().Center);
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;

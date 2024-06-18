@@ -113,13 +113,6 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
 
-            JKContentManager contentManager = Game1.instance.contentManager;
-            if (contentManager != null)
-            {
-                player.RegisterLandSound<BlockSandOn>(contentManager.audio.player.SandLand);
-                player.RegisterLandSound<BlockSandOff>(contentManager.audio.player.SandLand);
-            }
-
             ModBlocks.LoadProperties();
 
             // End
@@ -162,13 +155,18 @@ namespace SwitchBlocksMod
         /// </summary>
         /// <param name="__instance">Object instance of the body comp</param>
         /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
-        /// <param name="__0">Original object the function is called with</param>
-        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
+        /// <param name="blockType">Original object the function is called with</param>
+        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type blockType)
         {
-            if (__0 == typeof(SandBlock) && originalIsOnBlock != null)
+            if (blockType == typeof(SandBlock))
             {
                 __result = __result || BehaviourSandPlatform.HasEntered;
             }
+            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
+            {
+                __result = false;
+            }
+
         }
 
         private static void JumpSwitch()
