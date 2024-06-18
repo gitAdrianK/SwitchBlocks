@@ -38,12 +38,6 @@ namespace SwitchBlocksMod.Factories
                     return true;
                 case var _ when blockCode == ModBlocks.SAND_OFF:
                     return true;
-                case var _ when blockCode == ModBlocks.SAND_LEVER:
-                    return false;
-                case var _ when blockCode == ModBlocks.SAND_LEVER_ON:
-                    return false;
-                case var _ when blockCode == ModBlocks.SAND_LEVER_OFF:
-                    return false;
                 case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID:
                     return true;
                 case var _ when blockCode == ModBlocks.SAND_LEVER_SOLID_ON:
