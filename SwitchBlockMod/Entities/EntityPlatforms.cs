@@ -12,6 +12,8 @@ namespace SwitchBlocksMod.Entities
 {
     public class EntityPlatforms : Entity
     {
+        int currentScreen = -1;
+        int nextScreen;
 
         protected float progress;
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
@@ -27,17 +29,23 @@ namespace SwitchBlocksMod.Entities
             {
                 return false;
             }
-            int currentScreen = Camera.CurrentScreen;
-            if (PlatformDictionary.ContainsKey(currentScreen))
-            {
-                currentPlatformList = PlatformDictionary[currentScreen];
-                return true;
-            }
-            else
+
+            nextScreen = Camera.CurrentScreen;
+            if (currentScreen != nextScreen)
             {
                 currentPlatformList = null;
+                if (PlatformDictionary.ContainsKey(nextScreen))
+                {
+                    currentPlatformList = PlatformDictionary[nextScreen];
+                }
+                currentScreen = nextScreen;
+            }
+
+            if (currentPlatformList == null)
+            {
                 return false;
             }
+            return true;
         }
 
         /// <summary>
@@ -207,3 +215,4 @@ namespace SwitchBlocksMod.Entities
         }
     }
 }
+

@@ -8,6 +8,8 @@ namespace SwitchBlocksMod.Entities
 {
     public class EntityLevers : Entity
     {
+        int currentScreen = -1;
+        int nextScreen;
 
         protected bool state;
 
@@ -20,17 +22,23 @@ namespace SwitchBlocksMod.Entities
             {
                 return false;
             }
-            int currentScreen = Camera.CurrentScreen;
-            if (LeverDictionary.ContainsKey(currentScreen))
-            {
-                currentLeverList = LeverDictionary[currentScreen];
-                return true;
-            }
-            else
+
+            nextScreen = Camera.CurrentScreen;
+            if (currentScreen != nextScreen)
             {
                 currentLeverList = null;
+                if (LeverDictionary.ContainsKey(nextScreen))
+                {
+                    currentLeverList = LeverDictionary[nextScreen];
+                }
+                currentScreen = nextScreen;
+            }
+
+            if (currentLeverList == null)
+            {
                 return false;
             }
+            return true;
         }
 
         public override void Draw()
