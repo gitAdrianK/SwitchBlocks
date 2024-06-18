@@ -26,7 +26,14 @@ namespace SwitchBlocksMod.Factories
 
         public bool IsSolidBlock(Color blockCode)
         {
-            return supportedBlockCodes.Contains(blockCode); ;
+            switch (blockCode)
+            {
+                case var _ when blockCode == ModBlocks.AUTO_ON:
+                    return true;
+                case var _ when blockCode == ModBlocks.AUTO_OFF:
+                    return true;
+            }
+            return false;
         }
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
