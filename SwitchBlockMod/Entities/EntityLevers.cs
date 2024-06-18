@@ -1,6 +1,5 @@
 ﻿using EntityComponent;
 using JumpKing;
-using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace SwitchBlocksMod.Entities
                 return false;
             }
 
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
+            nextScreen = Camera.CurrentScreen;
             if (currentScreen != nextScreen)
             {
                 currentLeverList = null;

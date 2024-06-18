@@ -28,7 +28,11 @@ namespace SwitchBlocksMod.Factories
 
         public bool IsSolidBlock(Color blockCode)
         {
-            return false;
+            if (blockCode == ModBlocks.COUNTDOWN_LEVER)
+            {
+                return false;
+            }
+            return supportedBlockCodes.Contains(blockCode);
         }
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)

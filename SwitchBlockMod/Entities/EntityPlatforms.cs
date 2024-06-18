@@ -1,6 +1,5 @@
 ﻿using EntityComponent;
 using JumpKing;
-using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Util;
@@ -26,7 +25,12 @@ namespace SwitchBlocksMod.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            nextScreen = LevelManager.CurrentScreen.GetIndex0();
+            if (PlatformDictionary == null)
+            {
+                return false;
+            }
+
+            nextScreen = Camera.CurrentScreen;
             if (currentScreen != nextScreen)
             {
                 currentPlatformList = null;
@@ -211,3 +215,4 @@ namespace SwitchBlocksMod.Entities
         }
     }
 }
+
