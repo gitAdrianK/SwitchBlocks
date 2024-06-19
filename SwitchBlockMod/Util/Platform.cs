@@ -14,10 +14,12 @@ namespace SwitchBlocksMod.Util
     /// </summary>
     public class Platform
     {
-        public Texture2D texture;
-        public Vector2 position;
-        public bool startState;
-        public Animation animation;
+        public Texture2D Texture { get; private set; }
+        public Vector2 Position { get; protected set; }
+        public bool StartState { get; protected set; }
+        private Animation animation;
+
+        public Animation Animation => animation;
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
@@ -98,7 +100,7 @@ namespace SwitchBlocksMod.Util
                 {
                     continue;
                 }
-                platform.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
@@ -106,17 +108,17 @@ namespace SwitchBlocksMod.Util
                 {
                     continue;
                 }
-                platform.position = (Vector2)position;
+                platform.Position = (Vector2)position;
 
                 // Start state
                 string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;
                 if (stateInnerText == "on")
                 {
-                    platform.startState = true;
+                    platform.StartState = true;
                 }
                 else if (stateInnerText == "off")
                 {
-                    platform.startState = false;
+                    platform.StartState = false;
                 }
                 else
                 {

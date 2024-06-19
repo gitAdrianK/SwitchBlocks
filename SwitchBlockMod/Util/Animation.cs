@@ -4,7 +4,7 @@ namespace SwitchBlocksMod.Util
 {
     public struct Animation
     {
-        public static readonly double HALF_PI = Math.PI / 2.0d;
+        public const double HALF_PI = Math.PI / 2.0d;
 
         public enum Style
         {

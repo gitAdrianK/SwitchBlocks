@@ -37,8 +37,7 @@ namespace SwitchBlocksMod
             HarmonyMethod postfixMethod = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
             harmony.Patch(
                 isOnBlockMethod,
-                postfix: postfixMethod
-            );
+                postfix: postfixMethod);
         }
 
         /// <summary>
