@@ -34,9 +34,11 @@ namespace SwitchBlocksMod
 
             Harmony harmony = new Harmony(ModStrings.MODNAME);
             MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
+            HarmonyMethod postfixMethod = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
+            harmony.Patch(
+                isOnBlockMethod,
+                postfix: postfixMethod
+            );
         }
 
         /// <summary>
@@ -148,7 +150,6 @@ namespace SwitchBlocksMod
             PlayerEntity.OnJumpCall -= JumpSwitch;
         }
 
-        private static MethodInfo originalIsOnBlock;
         /// <summary>
         /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
         /// in the IsOnBlock function when asked if the player is on a sand block.
