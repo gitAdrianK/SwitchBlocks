@@ -155,9 +155,9 @@ namespace SwitchBlocksMod
 
 
         /// <summary>
-        /// Loads the duration for blocks with such a field
+        /// Loads the propertie for blocks with such fields
         /// </summary>
-        public static void LoadDuration()
+        public static void LoadProperties()
         {
             char sep = Path.DirectorySeparatorChar;
             string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";

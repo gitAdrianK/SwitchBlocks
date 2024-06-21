@@ -15,8 +15,10 @@ namespace SwitchBlocksMod.Entities
     /// </summary>
     public struct Lever
     {
-        public Texture2D texture;
-        public Vector2 position;
+        public Texture2D Texture { get; private set; }
+        public Vector2 Position { get; private set; }
+        public int Height { get; private set; }
+        public int Width { get; private set; }
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of levers as value.<br />
@@ -85,14 +87,16 @@ namespace SwitchBlocksMod.Entities
                     continue;
                 }
 
-                Lever lever;
+                Lever lever = new Lever();
                 // Texture
                 string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlLever[dictionary[ModStrings.TEXTURE]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
                 }
-                lever.texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                lever.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                lever.Width = lever.Texture.Width / 2;
+                lever.Height = lever.Texture.Height;
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlLever[dictionary[ModStrings.POSITION]]);
@@ -100,7 +104,7 @@ namespace SwitchBlocksMod.Entities
                 {
                     continue;
                 }
-                lever.position = (Vector2)position;
+                lever.Position = (Vector2)position;
 
                 // The lever had all elements properly set.
                 list.Add(lever);

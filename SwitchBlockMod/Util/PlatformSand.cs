@@ -17,9 +17,11 @@ namespace SwitchBlocksMod.Util
     /// </summary>
     public class PlatformSand : Platform
     {
-        public Texture2D background;
-        public Texture2D scrolling;
-        public Texture2D foreground;
+        public Texture2D Background { get; private set; }
+        public Texture2D Scrolling { get; private set; }
+        public Texture2D Foreground { get; private set; }
+        public int Height { get; private set; }
+        public int Width { get; private set; }
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
@@ -84,8 +86,6 @@ namespace SwitchBlocksMod.Util
                 XmlNodeList xmlPlatform = xmlElement.ChildNodes;
                 Dictionary<string, int> dictionary;
                 dictionary = Xml.MapNamesRequired(xmlPlatform,
-                    ModStrings.BACKGROUND,
-                    ModStrings.SCROLLING,
                     ModStrings.POSITION,
                     ModStrings.START_STATE);
 
@@ -94,23 +94,35 @@ namespace SwitchBlocksMod.Util
                     continue;
                 }
 
+                string filePath;
+                // Require at least one of the size giving textures to exist (Background or Foregroud)
+                if (!dictionary.ContainsKey(ModStrings.BACKGROUND) && !dictionary.ContainsKey(ModStrings.FOREGROUND))
+                {
+                    continue;
+                }
+
                 PlatformSand platform = new PlatformSand();
                 // Background
-                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.BACKGROUND]].InnerText}";
-                if (!File.Exists($"{filePath}.xnb"))
+                if (dictionary.ContainsKey(ModStrings.BACKGROUND))
                 {
-                    continue;
+                    filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.BACKGROUND]].InnerText}";
+                    if (!File.Exists($"{filePath}.xnb"))
+                    {
+                        continue;
+                    }
+                    platform.Background = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
-                platform.background = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-
 
                 // Scrolling
-                filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.SCROLLING]].InnerText}";
-                if (!File.Exists($"{filePath}.xnb"))
+                if (dictionary.ContainsKey(ModStrings.SCROLLING))
                 {
-                    continue;
+                    filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.SCROLLING]].InnerText}";
+                    if (!File.Exists($"{filePath}.xnb"))
+                    {
+                        continue;
+                    }
+                    platform.Scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
-                platform.scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
 
                 // Foreground
                 if (dictionary.ContainsKey(ModStrings.FOREGROUND))
@@ -120,7 +132,19 @@ namespace SwitchBlocksMod.Util
                     {
                         continue;
                     }
-                    platform.foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                    platform.Foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                }
+
+                // Size
+                if (platform.Background != null)
+                {
+                    platform.Width = platform.Background.Width / 2;
+                    platform.Height = platform.Background.Height;
+                }
+                else if (platform.Foreground != null)
+                {
+                    platform.Width = platform.Foreground.Width / 2;
+                    platform.Height = platform.Foreground.Height;
                 }
 
                 // Position
@@ -129,17 +153,17 @@ namespace SwitchBlocksMod.Util
                 {
                     continue;
                 }
-                platform.position = (Vector2)position;
+                platform.Position = (Vector2)position;
 
                 // Start state
                 string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;
                 if (stateInnerText == "on")
                 {
-                    platform.startState = true;
+                    platform.StartState = true;
                 }
                 else if (stateInnerText == "off")
                 {
-                    platform.startState = false;
+                    platform.StartState = false;
                 }
                 else
                 {

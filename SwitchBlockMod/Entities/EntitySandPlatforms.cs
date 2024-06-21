@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Util;
-using System;
 
 namespace SwitchBlocksMod.Entities
 {
@@ -60,89 +59,115 @@ namespace SwitchBlocksMod.Entities
 
         private void DrawPlatform(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangleBackground;
-            if (platform.startState == DataSand.State)
+            if (platform.Background != null)
             {
-                sourceRectangleBackground = new Rectangle(
+                DrawBackground(platform, spriteBatch);
+            }
+
+            if (platform.Scrolling != null)
+            {
+                DrawScrolling(platform, spriteBatch);
+            }
+
+            if (platform.Foreground != null)
+            {
+                DrawForeground(platform, spriteBatch);
+            }
+        }
+
+        private void DrawBackground(PlatformSand platform, SpriteBatch spriteBatch)
+        {
+            Rectangle sourceRectangle;
+            if (platform.StartState == DataSand.State)
+            {
+                sourceRectangle = new Rectangle(
                     0,
                     0,
-                    platform.background.Width / 2,
-                    platform.background.Height);
+                    platform.Width,
+                    platform.Height);
             }
             else
             {
-                sourceRectangleBackground = new Rectangle(
-                    platform.background.Width / 2,
+                sourceRectangle = new Rectangle(
+                    platform.Width,
                     0,
-                    platform.background.Width / 2,
-                    platform.background.Height);
+                    platform.Width,
+                    platform.Height);
             }
 
-            // Background
             spriteBatch.Draw(
-                texture: platform.background,
-                position: platform.position,
-                sourceRectangle: sourceRectangleBackground,
+                texture: platform.Background,
+                position: platform.Position,
+                sourceRectangle: sourceRectangle,
+                color: Color.White);
+        }
+
+        private void DrawScrolling(PlatformSand platform, SpriteBatch spriteBatch)
+        {
+            int actualOffset = (int)(offset % platform.Scrolling.Height);
+            actualOffset = platform.StartState == DataSand.State ? actualOffset : platform.Scrolling.Height - actualOffset;
+
+            // Depending on if the offset would make it so we go past the texture.
+            if (actualOffset + platform.Height > platform.Scrolling.Height)
+            {
+                int diff = platform.Scrolling.Height - actualOffset;
+                spriteBatch.Draw(
+                texture: platform.Scrolling,
+                position: platform.Position,
+                sourceRectangle: new Rectangle(
+                    0,
+                    actualOffset,
+                    platform.Width,
+                    diff),
                 color: Color.White);
 
-            // Scrolling
-            int heightDifference = platform.scrolling.Height - platform.background.Height;
-            if (heightDifference > 0)
-            {
-                int scroll = Math.Abs((int)offset % (heightDifference + 1));
-
-                Rectangle sourceRectangleScrolling;
-                if (platform.startState == DataSand.State)
-                {
-                    sourceRectangleScrolling = new Rectangle(
-                        0,
-                        scroll,
-                        platform.scrolling.Width,
-                        platform.background.Height);
-                }
-                else
-                {
-                    sourceRectangleScrolling = new Rectangle(
-                        0,
-                        heightDifference - scroll,
-                        platform.scrolling.Width,
-                        platform.background.Height);
-                }
-
                 spriteBatch.Draw(
-                    texture: platform.scrolling,
-                    position: platform.position,
-                    sourceRectangle: sourceRectangleScrolling,
-                    color: Color.White);
-            }
-
-            // Foreground
-            if (platform.foreground == null)
-            {
+                texture: platform.Scrolling,
+                position: new Vector2(
+                    platform.Position.X,
+                    platform.Position.Y + diff),
+                sourceRectangle: new Rectangle(
+                    0,
+                    0,
+                    platform.Width,
+                    platform.Height - diff),
+                color: Color.White);
                 return;
             }
+            spriteBatch.Draw(
+                texture: platform.Scrolling,
+                position: platform.Position,
+                sourceRectangle: new Rectangle(
+                    0,
+                    actualOffset,
+                    platform.Width,
+                    platform.Height),
+                color: Color.White);
+        }
 
-            Rectangle sourceRectangleForeground;
-            if (platform.startState == DataSand.State)
+        private void DrawForeground(PlatformSand platform, SpriteBatch spriteBatch)
+        {
+            Rectangle sourceRectangle;
+            if (platform.StartState == DataSand.State)
             {
-                sourceRectangleForeground = new Rectangle(
+                sourceRectangle = new Rectangle(
                     0,
                     0,
-                    platform.foreground.Width / 2,
-                    platform.foreground.Height);
+                    platform.Width,
+                    platform.Height);
             }
             else
             {
-                sourceRectangleForeground = new Rectangle(
-                    platform.foreground.Width / 2,
+                sourceRectangle = new Rectangle(
+                    platform.Width,
                     0,
-                    platform.foreground.Width / 2,
-                    platform.foreground.Height);
+                    platform.Width,
+                    platform.Height);
             }
             spriteBatch.Draw(
-                texture: platform.foreground,
-                position: platform.position,
-                sourceRectangle: sourceRectangleForeground,
+                texture: platform.Foreground,
+                position: platform.Position,
+                sourceRectangle: sourceRectangle,
                 color: Color.White);
         }
     }

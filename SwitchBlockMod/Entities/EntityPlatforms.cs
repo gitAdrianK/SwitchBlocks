@@ -93,7 +93,7 @@ namespace SwitchBlocksMod.Entities
         private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
         {
             //CONSIDER: Visual feedback for blinking.
-            float progressAdjusted = platform.startState ? 1.0f - progress : progress;
+            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
             if (progressAdjusted == 0.0f)
             {
                 return;
@@ -101,14 +101,14 @@ namespace SwitchBlocksMod.Entities
             if (progressAdjusted == 1.0f)
             {
                 spriteBatch.Draw(
-                    texture: platform.texture,
-                    position: platform.position,
+                    texture: platform.Texture,
+                    position: platform.Position,
                     color: Color.White);
                 return;
             }
 
             float progressActual = 1.0f;
-            switch (platform.animation.curve)
+            switch (platform.Animation.curve)
             {
                 case Curve.Stepped:
                     progressActual = progressAdjusted < 0.9f ? 1.0f : 0.0f;
@@ -127,14 +127,14 @@ namespace SwitchBlocksMod.Entities
                     break;
             }
 
-            int height = platform.texture.Height;
-            int width = platform.texture.Width;
-            switch (platform.animation.style)
+            int height = platform.Texture.Height;
+            int width = platform.Texture.Width;
+            switch (platform.Animation.style)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
-                        texture: platform.texture,
-                        position: platform.position,
+                        texture: platform.Texture,
+                        position: platform.Position,
                         color: new Color(
                             progressActual,
                             progressActual,
@@ -151,8 +151,8 @@ namespace SwitchBlocksMod.Entities
                         heightTop);
 
                     spriteBatch.Draw(
-                        texture: platform.texture,
-                        position: platform.position,
+                        texture: platform.Texture,
+                        position: platform.Position,
                         sourceRectangle: rectangleTop,
                         color: Color.White);
                     break;
@@ -161,8 +161,8 @@ namespace SwitchBlocksMod.Entities
                     int heightBottom = (int)(height * progressActual);
 
                     Vector2 vectorBottom = new Vector2(
-                        platform.position.X,
-                        platform.position.Y + height - heightBottom);
+                        platform.Position.X,
+                        platform.Position.Y + height - heightBottom);
 
                     Rectangle rectangleBottom = new Rectangle(
                         0,
@@ -171,7 +171,7 @@ namespace SwitchBlocksMod.Entities
                         heightBottom);
 
                     spriteBatch.Draw(
-                        texture: platform.texture,
+                        texture: platform.Texture,
                         position: vectorBottom,
                         sourceRectangle: rectangleBottom,
                         color: Color.White);
@@ -186,8 +186,8 @@ namespace SwitchBlocksMod.Entities
                         height);
 
                     spriteBatch.Draw(
-                        texture: platform.texture,
-                        position: platform.position,
+                        texture: platform.Texture,
+                        position: platform.Position,
                         sourceRectangle: rectangleLeft,
                         color: Color.White);
                     break;
@@ -196,8 +196,8 @@ namespace SwitchBlocksMod.Entities
                     int widthRight = (int)(width * progressActual);
 
                     Vector2 vectorRight = new Vector2(
-                        platform.position.X + width - widthRight,
-                        platform.position.Y);
+                        platform.Position.X + width - widthRight,
+                        platform.Position.Y);
 
                     Rectangle rectangleRight = new Rectangle(
                         0,
@@ -206,7 +206,7 @@ namespace SwitchBlocksMod.Entities
                         height);
 
                     spriteBatch.Draw(
-                        texture: platform.texture,
+                        texture: platform.Texture,
                         position: vectorRight,
                         sourceRectangle: rectangleRight,
                         color: Color.White);

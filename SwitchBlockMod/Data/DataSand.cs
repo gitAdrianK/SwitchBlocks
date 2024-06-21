@@ -15,5 +15,10 @@
         /// One time touching the lever = one switch
         /// </summary>
         public static bool HasSwitched { get; set; }
+
+        /// <summary>
+        /// Whether the player is currently inside the block.
+        /// </summary>
+        public static bool HasEntered { get; set; }
     }
 }

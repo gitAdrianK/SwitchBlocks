@@ -32,11 +32,12 @@ namespace SwitchBlocksMod
             LevelManager.RegisterBlockFactory(new FactoryJump());
             LevelManager.RegisterBlockFactory(new FactorySand());
 
-            var harmony = new Harmony(ModStrings.MODNAME);
+            Harmony harmony = new Harmony(ModStrings.MODNAME);
             MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            MethodInfo postfixMethod = typeof(ModEntry).GetMethod("IsOnBlockPostfix");
-            originalIsOnBlock = harmony.Patch(isOnBlockMethod);
-            harmony.Patch(isOnBlockMethod, postfix: new HarmonyMethod(postfixMethod));
+            HarmonyMethod postfixMethod = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
+            harmony.Patch(
+                isOnBlockMethod,
+                postfix: postfixMethod);
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
 
-            ModBlocks.LoadDuration();
+            ModBlocks.LoadProperties();
 
             // End
             EntityManager.instance.MoveToFront(player);
@@ -148,23 +149,26 @@ namespace SwitchBlocksMod
             PlayerEntity.OnJumpCall -= JumpSwitch;
         }
 
-        private static MethodInfo originalIsOnBlock;
         /// <summary>
         /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
         /// in the IsOnBlock function when asked if the player is on a sand block.
         /// </summary>
         /// <param name="__instance">Object instance of the body comp</param>
         /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
-        /// <param name="__0">Original object the function is called with</param>
-        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type __0)
+        /// <param name="blockType">Original object the function is called with</param>
+        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type blockType)
         {
-            if (__0 == typeof(SandBlock) && originalIsOnBlock != null)
+            if (blockType == typeof(SandBlock))
             {
-                __result = (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(SandBlock) })
-                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOn) })
-                    || (bool)originalIsOnBlock.Invoke(null, new object[] { (BodyComp)__instance, typeof(BlockSandOff) });
+                __result = __result || DataSand.HasEntered;
             }
+            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
+            {
+                __result = false;
+            }
+
         }
+
         private static void JumpSwitch()
         {
             if (EntityJumpPlatforms.Instance.PlatformDictionary != null

@@ -63,20 +63,20 @@ namespace SwitchBlocksMod.Entities
                 rectangle = new Rectangle(
                     0,
                     0,
-                    lever.texture.Width / 2,
-                    lever.texture.Height);
+                    lever.Width,
+                    lever.Height);
             }
             else
             {
                 rectangle = new Rectangle(
-                    lever.texture.Width / 2,
+                    lever.Width,
                     0,
-                    lever.texture.Width / 2,
-                    lever.texture.Height);
+                    lever.Width,
+                    lever.Height);
             }
             spriteBatch.Draw(
-                texture: lever.texture,
-                position: lever.position,
+                texture: lever.Texture,
+                position: lever.Position,
                 sourceRectangle: rectangle,
                 color: Color.White);
         }

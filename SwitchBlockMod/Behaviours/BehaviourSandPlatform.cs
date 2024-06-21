@@ -23,29 +23,21 @@ namespace SwitchBlocksMod.Behaviours
 
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
-            float num = IsPlayerOnBlock ? 0.25f : 1.0f;
+            // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
+            float num = (DataSand.HasEntered ? 0.5f : 1.0f);
             return inputXVelocity * num;
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
             BodyComp bodyComp = behaviourContext.BodyComp;
-
-            if ((IsPlayerOnBlockOn && DataSand.State)
-                || (IsPlayerOnBlockOff && !DataSand.State))
+            float num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
+            float result = inputYVelocity * num;
+            if (!DataSand.HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
             {
-                // Going up (negative speed)
-                // Does this even work the way i think it works?
-                return inputYVelocity - (2.0f * PlayerValues.GRAVITY);
+                bodyComp.Position.Y += 1.0f;
             }
-            else if ((IsPlayerOnBlockOn && !DataSand.State)
-                || (IsPlayerOnBlockOff && DataSand.State))
-            {
-                // Going down (positive speed)
-                float num = bodyComp.Velocity.Y <= 0f ? 0.5f : 1f;
-                return inputYVelocity * num;
-            }
-            return inputYVelocity;
+            return result;
         }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
@@ -59,24 +51,23 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            bool isCollidingWithOn = info.IsCollidingWith<BlockSandOn>();
-            bool isCollidingWithOff = info.IsCollidingWith<BlockSandOff>();
-
-            if ((isCollidingWithOn && DataSand.State)
-                || (isCollidingWithOff && !DataSand.State))
+            if ((info.IsCollidingWith<BlockSandOn>() && DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && !DataSand.State))
             {
-                // Going up (negative speed)
-                if (IsPlayerOnBlock)
+                if (DataSand.HasEntered)
                 {
-                    return behaviourContext.BodyComp.IsOnGround;
+                    return false;
                 }
-                return behaviourContext.BodyComp.Velocity.Y > 0.0f;
+                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return !DataSand.HasEntered;
             }
-            if ((isCollidingWithOn && !DataSand.State)
-                || (isCollidingWithOff && DataSand.State))
+            if ((info.IsCollidingWith<BlockSandOn>() && !DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && DataSand.State))
             {
-                // Going down (positive speed)
-                return !IsPlayerOnBlock && behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                if (DataSand.HasEntered)
+                {
+                    return false;
+                }
+                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
+                return !DataSand.HasEntered;
             }
             return false;
         }
@@ -89,29 +80,25 @@ namespace SwitchBlocksMod.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            BodyComp bodyComp = behaviourContext.BodyComp;
+
             IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();
             IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
             IsPlayerOnBlock = IsPlayerOnBlockOn || IsPlayerOnBlockOff;
 
-            BodyComp bodyComp = behaviourContext.BodyComp;
-            if (IsPlayerOnBlock)
+            if (!IsPlayerOnBlock)
             {
-                Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+                DataSand.HasEntered = false;
             }
-            if ((IsPlayerOnBlockOn && DataSand.State)
-                || (IsPlayerOnBlockOff && !DataSand.State))
+
+            if (DataSand.HasEntered)
             {
-                // Going up (negative speed)
-                if (bodyComp.IsOnGround)
+                if ((IsPlayerOnBlockOn && DataSand.State) || (IsPlayerOnBlockOff && !DataSand.State))
                 {
-                    return true;
+                    bodyComp.Position.Y -= 0.75f;
                 }
-                bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
-            }
-            else if ((IsPlayerOnBlockOn && !DataSand.State)
-                || (IsPlayerOnBlockOff && DataSand.State))
-            {
-                // Going down (positive speed)
+                Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+                Camera.UpdateCamera(bodyComp.GetHitbox().Center);
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;
