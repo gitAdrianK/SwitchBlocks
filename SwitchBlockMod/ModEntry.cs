@@ -160,7 +160,7 @@ namespace SwitchBlocksMod
         {
             if (blockType == typeof(SandBlock))
             {
-                __result = __result || BehaviourSandPlatform.HasEntered;
+                __result = __result || DataSand.HasEntered;
             }
             if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
             {

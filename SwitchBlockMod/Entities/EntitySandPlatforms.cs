@@ -77,10 +77,10 @@ namespace SwitchBlocksMod.Entities
 
         private void DrawBackground(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangleBackground;
+            Rectangle sourceRectangle;
             if (platform.StartState == DataSand.State)
             {
-                sourceRectangleBackground = new Rectangle(
+                sourceRectangle = new Rectangle(
                     0,
                     0,
                     platform.Width,
@@ -88,7 +88,7 @@ namespace SwitchBlocksMod.Entities
             }
             else
             {
-                sourceRectangleBackground = new Rectangle(
+                sourceRectangle = new Rectangle(
                     platform.Width,
                     0,
                     platform.Width,
@@ -98,21 +98,59 @@ namespace SwitchBlocksMod.Entities
             spriteBatch.Draw(
                 texture: platform.Background,
                 position: platform.Position,
-                sourceRectangle: sourceRectangleBackground,
+                sourceRectangle: sourceRectangle,
                 color: Color.White);
         }
 
         private void DrawScrolling(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            // TODO: Rework so any texture at least the size of the platform width/height works.
+            int actualOffset = (int)(offset % platform.Scrolling.Height);
+            actualOffset = platform.StartState == DataSand.State ? actualOffset : platform.Scrolling.Height - actualOffset;
+
+            // Depending on if the offset would make it so we go past the texture.
+            if (actualOffset + platform.Height > platform.Scrolling.Height)
+            {
+                int diff = platform.Scrolling.Height - actualOffset;
+                spriteBatch.Draw(
+                texture: platform.Scrolling,
+                position: platform.Position,
+                sourceRectangle: new Rectangle(
+                    0,
+                    actualOffset,
+                    platform.Width,
+                    diff),
+                color: Color.White);
+
+                spriteBatch.Draw(
+                texture: platform.Scrolling,
+                position: new Vector2(
+                    platform.Position.X,
+                    platform.Position.Y + diff),
+                sourceRectangle: new Rectangle(
+                    0,
+                    0,
+                    platform.Width,
+                    platform.Height - diff),
+                color: Color.White);
+                return;
+            }
+            spriteBatch.Draw(
+                texture: platform.Scrolling,
+                position: platform.Position,
+                sourceRectangle: new Rectangle(
+                    0,
+                    actualOffset,
+                    platform.Width,
+                    platform.Height),
+                color: Color.White);
         }
 
         private void DrawForeground(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangleForeground;
+            Rectangle sourceRectangle;
             if (platform.StartState == DataSand.State)
             {
-                sourceRectangleForeground = new Rectangle(
+                sourceRectangle = new Rectangle(
                     0,
                     0,
                     platform.Width,
@@ -120,7 +158,7 @@ namespace SwitchBlocksMod.Entities
             }
             else
             {
-                sourceRectangleForeground = new Rectangle(
+                sourceRectangle = new Rectangle(
                     platform.Width,
                     0,
                     platform.Width,
@@ -129,7 +167,7 @@ namespace SwitchBlocksMod.Entities
             spriteBatch.Draw(
                 texture: platform.Foreground,
                 position: platform.Position,
-                sourceRectangle: sourceRectangleForeground,
+                sourceRectangle: sourceRectangle,
                 color: Color.White);
         }
     }

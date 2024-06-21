@@ -17,31 +17,26 @@ namespace SwitchBlocksMod.Behaviours
     {
         public float BlockPriority => 1.0f;
 
-        // TODO: Player falls too fast
-        // TODO: Cant really jump to the side
-
         public bool IsPlayerOnBlock { get; set; }
         public bool IsPlayerOnBlockOn { get; set; }
         public bool IsPlayerOnBlockOff { get; set; }
-        public static bool HasEntered { get; private set; }
 
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            float num = (HasEntered ? 0.5f : 1.0f);
+            float num = (DataSand.HasEntered ? 0.5f : 1.0f);
             return inputXVelocity * num;
         }
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
             BodyComp bodyComp = behaviourContext.BodyComp;
-            float num = ((HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f);
+            float num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
             float result = inputYVelocity * num;
-            if (!HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
+            if (!DataSand.HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
             {
                 bodyComp.Position.Y += 1.0f;
             }
-
             return result;
         }
 
@@ -56,23 +51,23 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            if ((info.IsCollidingWith<BlockSandOn>() && DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && !DataSand.State) && !IsPlayerOnBlock)
+            if ((info.IsCollidingWith<BlockSandOn>() && DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && !DataSand.State))
             {
-                if (HasEntered)
+                if (DataSand.HasEntered)
                 {
                     return false;
                 }
-                HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
-                return !HasEntered;
+                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return !DataSand.HasEntered;
             }
-            else if ((info.IsCollidingWith<BlockSandOn>() && !DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && DataSand.State) && !IsPlayerOnBlock)
+            if ((info.IsCollidingWith<BlockSandOn>() && !DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && DataSand.State))
             {
-                if (HasEntered)
+                if (DataSand.HasEntered)
                 {
                     return false;
                 }
-                HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
-                return !HasEntered;
+                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
+                return !DataSand.HasEntered;
             }
             return false;
         }
@@ -93,14 +88,13 @@ namespace SwitchBlocksMod.Behaviours
 
             if (!IsPlayerOnBlock)
             {
-                HasEntered = false;
+                DataSand.HasEntered = false;
             }
 
-            if (HasEntered)
+            if (DataSand.HasEntered)
             {
-                if ((IsPlayerOnBlockOn && !DataSand.State) || (IsPlayerOnBlockOff && DataSand.State))
+                if ((IsPlayerOnBlockOn && DataSand.State) || (IsPlayerOnBlockOff && !DataSand.State))
                 {
-                    // Going up
                     bodyComp.Position.Y -= 0.75f;
                 }
                 Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
