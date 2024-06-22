@@ -181,11 +181,7 @@ namespace SwitchBlocksMod
 
         public static void CheckWinPostfix(bool __result)
         {
-            if (!__result)
-            {
-                return;
-            }
-            HasFinished = true;
+            HasFinished = __result;
         }
 
         private static void JumpSwitch()
