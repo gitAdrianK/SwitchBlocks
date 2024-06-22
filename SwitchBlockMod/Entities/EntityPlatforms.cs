@@ -77,7 +77,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen())
+            if (!UpdateCurrentScreen() || ModEntry.HasFinished)
             {
                 return;
             }

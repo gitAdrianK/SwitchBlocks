@@ -43,7 +43,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (currentLeverList == null)
+            if (currentLeverList == null || ModEntry.HasFinished)
             {
                 return;
             }

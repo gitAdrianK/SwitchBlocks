@@ -17,6 +17,8 @@ namespace SwitchBlocksMod
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
+        public static bool HasFinished { get; private set; }
+
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -33,11 +35,19 @@ namespace SwitchBlocksMod
             LevelManager.RegisterBlockFactory(new FactorySand());
 
             Harmony harmony = new Harmony(ModStrings.MODNAME);
+
             MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            HarmonyMethod postfixMethod = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
+            HarmonyMethod isOnBlockPatch = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
             harmony.Patch(
                 isOnBlockMethod,
-                postfix: postfixMethod);
+                postfix: isOnBlockPatch);
+
+            Type endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
+            MethodInfo checkWin = endingManager.GetMethod("CheckWin");
+            HarmonyMethod checkWinPatch = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(CheckWinPostfix)));
+            harmony.Patch(
+                checkWin,
+                postfix: checkWinPatch);
         }
 
         /// <summary>
@@ -167,6 +177,15 @@ namespace SwitchBlocksMod
                 __result = false;
             }
 
+        }
+
+        public static void CheckWinPostfix(bool __result)
+        {
+            if (!__result)
+            {
+                return;
+            }
+            HasFinished = true;
         }
 
         private static void JumpSwitch()
