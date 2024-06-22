@@ -6,6 +6,9 @@ This mod adds custom blocks to Jump King, each with its own unique *switching-it
 - Sounds played after one third and two thirds have passed for timed gimmick
 - When applicable the duration of timed gimmick
 
+## Logic
+The general logic is that a block is solid when it matches the current state, as such an OFF block will be solid/function when the state currently is OFF as well.
+
 ## Auto Blocks
 Automatically switches state after a set amount of time.
 
