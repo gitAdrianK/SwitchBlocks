@@ -42,6 +42,10 @@ namespace SwitchBlocksMod.Behaviours
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
+            if (DataSand.HasEntered)
+            {
+                return false;
+            }
             if (info.IsCollidingWith<BlockSandOn>() || info.IsCollidingWith<BlockSandOff>())
             {
                 return !IsPlayerOnBlock;
