@@ -30,6 +30,17 @@ namespace SwitchBlocksMod.Behaviours
 
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
+
+            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            {
+                return inputYVelocity;
+            }
+            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            if (!advCollisionInfo.IsCollidingWith<BlockSandOn>() && !advCollisionInfo.IsCollidingWith<BlockSandOff>())
+            {
+                return inputYVelocity;
+            }
+
             BodyComp bodyComp = behaviourContext.BodyComp;
             float num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
             float result = inputYVelocity * num;
