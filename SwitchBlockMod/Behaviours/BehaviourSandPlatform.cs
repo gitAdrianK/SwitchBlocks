@@ -36,7 +36,7 @@ namespace SwitchBlocksMod.Behaviours
                 return inputYVelocity;
             }
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            if (!advCollisionInfo.IsCollidingWith<BlockSandOn>() && !advCollisionInfo.IsCollidingWith<BlockSandOff>())
+            if (!(advCollisionInfo.IsCollidingWith<BlockSandOn>() || advCollisionInfo.IsCollidingWith<BlockSandOff>()))
             {
                 return inputYVelocity;
             }
