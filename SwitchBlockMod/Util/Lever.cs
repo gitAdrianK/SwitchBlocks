@@ -69,7 +69,7 @@ namespace SwitchBlocksMod.Entities
                 }
 
             }
-            return dictionary;
+            return dictionary.Count == 0 ? null : dictionary;
         }
 
         /// <summary>

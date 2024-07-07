@@ -155,7 +155,7 @@ namespace SwitchBlocksMod
 
 
         /// <summary>
-        /// Loads the propertie for blocks with such fields
+        /// Loads the properties for blocks with such fields
         /// </summary>
         public static void LoadProperties()
         {
