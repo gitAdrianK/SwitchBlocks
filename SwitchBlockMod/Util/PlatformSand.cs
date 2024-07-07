@@ -3,73 +3,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml;
-
-// Don't like the code duplication but w/e
 
 namespace SwitchBlocksMod.Util
 {
     /// <summary>
-    /// Represents a subclass of platform, sandplatform with three textures, background, scrolling and, foreground. <br />
-    /// A foreground is optional.
+    /// Represents a subclass of platform, sandplatform with two more textures, scrolling and foreground. <br />
+    /// Having at least a background OR foreground is required.
     /// </summary>
     public class PlatformSand : Platform
     {
-        public Texture2D Background { get; private set; }
         public Texture2D Scrolling { get; private set; }
         public Texture2D Foreground { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
-
-        /// <summary>
-        /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
-        /// It should be noted that the screens xml start counting at 1 while the ingame screens start at 0.
-        /// </summary>
-        /// <param name="subfolder">The subfolder to look for xml in. The main path is the path to the mod folder.</param>
-        /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
-        public static new Dictionary<int, List<Platform>> GetPlatformsDictonary(string subfolder)
-        {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
-            Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
-
-            if (!Directory.Exists(path))
-            {
-                return dictionary;
-            }
-
-            Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-
-            foreach (string xmlFilePath in Directory.GetFiles(path))
-            {
-                string xmlFile = xmlFilePath.Split(sep).Last();
-
-                if (!regex.IsMatch(xmlFile))
-                {
-                    continue;
-                }
-
-                XmlDocument document = new XmlDocument();
-                document.Load(xmlFilePath);
-                XmlNode xmlPlatforms = document.LastChild;
-
-                if (xmlPlatforms.Name != ModStrings.XML_PLATFORMS)
-                {
-                    return dictionary;
-                }
-
-                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep, subfolder);
-                if (platforms.Count != 0)
-                {
-                    dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, platforms);
-                }
-
-            }
-            return dictionary;
-        }
 
         /// <summary>
         /// Gets a list containing platforms, this list may be empty.
@@ -78,7 +23,7 @@ namespace SwitchBlocksMod.Util
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
         /// <returns>A list containing all successfully created platforms</returns>
-        private static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep, string subfolder)
+        protected static new List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep)
         {
             List<Platform> list = new List<Platform>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
@@ -110,7 +55,7 @@ namespace SwitchBlocksMod.Util
                     {
                         continue;
                     }
-                    platform.Background = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Scrolling
@@ -136,15 +81,19 @@ namespace SwitchBlocksMod.Util
                 }
 
                 // Size
-                if (platform.Background != null)
+                if (platform.Texture != null)
                 {
-                    platform.Width = platform.Background.Width / 2;
-                    platform.Height = platform.Background.Height;
+                    platform.Width = platform.Texture.Width / 2;
+                    platform.Height = platform.Texture.Height;
                 }
                 else if (platform.Foreground != null)
                 {
                     platform.Width = platform.Foreground.Width / 2;
                     platform.Height = platform.Foreground.Height;
+                }
+                else
+                {
+                    continue;
                 }
 
                 // Position

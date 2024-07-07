@@ -41,6 +41,7 @@ namespace SwitchBlocksMod.Entities
             DataAuto.RemainingTime -= deltaTime * 0.5f;
             ThirdElapsed();
         }
+
         private void ThirdElapsed()
         {
             if (DataAuto.RemainingTime <= ModBlocks.autoDuration * 0.66 && !DataAuto.HasBlinkedOnce)

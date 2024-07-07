@@ -2,6 +2,7 @@
 using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocksMod.Patching;
 using SwitchBlocksMod.Util;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || ModEntry.HasFinished)
+            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
@@ -127,8 +128,8 @@ namespace SwitchBlocksMod.Entities
                     break;
             }
 
-            int height = platform.Texture.Height;
-            int width = platform.Texture.Width;
+            int height = platform.Height;
+            int width = platform.Width;
             switch (platform.Animation.style)
             {
                 case Style.Fade:

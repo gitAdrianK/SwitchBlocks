@@ -9,16 +9,12 @@ using SwitchBlocksMod.Blocks;
 using SwitchBlocksMod.Data;
 using SwitchBlocksMod.Entities;
 using SwitchBlocksMod.Factories;
-using System;
-using System.Reflection;
 
 namespace SwitchBlocksMod
 {
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
-        public static bool HasFinished { get; private set; }
-
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -35,19 +31,8 @@ namespace SwitchBlocksMod
             LevelManager.RegisterBlockFactory(new FactorySand());
 
             Harmony harmony = new Harmony(ModStrings.MODNAME);
-
-            MethodInfo isOnBlockMethod = typeof(BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            HarmonyMethod isOnBlockPatch = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(IsOnBlockPostfix)));
-            harmony.Patch(
-                isOnBlockMethod,
-                postfix: isOnBlockPatch);
-
-            Type endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
-            MethodInfo checkWin = endingManager.GetMethod("CheckWin");
-            HarmonyMethod checkWinPatch = new HarmonyMethod(typeof(ModEntry).GetMethod(nameof(CheckWinPostfix)));
-            harmony.Patch(
-                checkWin,
-                postfix: checkWinPatch);
+            new Patching.BodyComp(harmony);
+            new Patching.EndingManager(harmony);
         }
 
         /// <summary>
@@ -74,10 +59,12 @@ namespace SwitchBlocksMod
             }
 
             // Basic
-            if (EntityBasicPlatforms.Instance.PlatformDictionary != null
-                && EntityBasicLevers.Instance.LeverDictionary != null)
+            if (EntityBasicPlatforms.Instance.PlatformDictionary != null)
             {
                 entityManager.AddObject(EntityBasicPlatforms.Instance);
+            }
+            if (EntityBasicLevers.Instance.LeverDictionary != null)
+            {
                 entityManager.AddObject(EntityBasicLevers.Instance);
             }
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
@@ -89,10 +76,12 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
 
             // Countdown
-            if (EntityCountdownPlatforms.Instance.PlatformDictionary != null
-                && EntityCountdownLevers.Instance.LeverDictionary != null)
+            if (EntityCountdownPlatforms.Instance.PlatformDictionary != null)
             {
                 entityManager.AddObject(EntityCountdownPlatforms.Instance);
+            }
+            if (EntityCountdownLevers.Instance.LeverDictionary != null)
+            {
                 entityManager.AddObject(EntityCountdownLevers.Instance);
             }
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
@@ -107,10 +96,12 @@ namespace SwitchBlocksMod
             PlayerEntity.OnJumpCall += JumpSwitch;
 
             // Sand
-            if (EntitySandPlatforms.Instance.PlatformDictionary != null
-                && EntityCountdownLevers.Instance.LeverDictionary != null)
+            if (EntitySandPlatforms.Instance.PlatformDictionary != null)
             {
                 entityManager.AddObject(EntitySandPlatforms.Instance);
+            }
+            if (EntityCountdownLevers.Instance.LeverDictionary != null)
+            {
                 entityManager.AddObject(EntitySandLevers.Instance);
             }
             BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
@@ -157,31 +148,6 @@ namespace SwitchBlocksMod
 
             // for jumpswitch blocks
             PlayerEntity.OnJumpCall -= JumpSwitch;
-        }
-
-        /// <summary>
-        /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
-        /// in the IsOnBlock function when asked if the player is on a sand block.
-        /// </summary>
-        /// <param name="__instance">Object instance of the body comp</param>
-        /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
-        /// <param name="blockType">Original object the function is called with</param>
-        public static void IsOnBlockPostfix(object __instance, ref bool __result, Type blockType)
-        {
-            if (blockType == typeof(SandBlock))
-            {
-                __result = __result || DataSand.HasEntered;
-            }
-            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
-            {
-                __result = false;
-            }
-
-        }
-
-        public static void CheckWinPostfix(bool __result)
-        {
-            HasFinished = __result;
         }
 
         private static void JumpSwitch()

@@ -59,7 +59,7 @@ namespace SwitchBlocksMod.Entities
 
         private void DrawPlatform(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            if (platform.Background != null)
+            if (platform.Texture != null)
             {
                 DrawBackground(platform, spriteBatch);
             }
@@ -96,7 +96,7 @@ namespace SwitchBlocksMod.Entities
             }
 
             spriteBatch.Draw(
-                texture: platform.Background,
+                texture: platform.Texture,
                 position: platform.Position,
                 sourceRectangle: sourceRectangle,
                 color: Color.White);

@@ -2,6 +2,7 @@
 using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocksMod.Patching;
 using System.Collections.Generic;
 
 namespace SwitchBlocksMod.Entities
@@ -43,7 +44,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (currentLeverList == null || ModEntry.HasFinished)
+            if (currentLeverList == null || EndingManager.HasFinished)
             {
                 return;
             }

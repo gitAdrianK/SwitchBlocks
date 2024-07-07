@@ -31,16 +31,21 @@ namespace SwitchBlocksMod.Entities
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
             string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.LEVERS}{sep}{subfolder}{sep}";
-            Dictionary<int, List<Lever>> dictionary = new Dictionary<int, List<Lever>>();
 
             if (!Directory.Exists(path))
             {
-                return dictionary;
+                return null;
+            }
+
+            string[] files = Directory.GetFiles(path);
+            if (files.Length == 0)
+            {
+                return null;
             }
 
             Regex regex = new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-
-            foreach (string xmlFilePath in Directory.GetFiles(path))
+            Dictionary<int, List<Lever>> dictionary = new Dictionary<int, List<Lever>>();
+            foreach (string xmlFilePath in files)
             {
                 string xmlFile = xmlFilePath.Split(sep).Last();
 
@@ -55,7 +60,7 @@ namespace SwitchBlocksMod.Entities
 
                 if (xmlLevers.Name != ModStrings.XML_LEVERS)
                 {
-                    return dictionary;
+                    continue;
                 }
 
                 List<Lever> lever = GetLeverList(xmlLevers, path, sep);

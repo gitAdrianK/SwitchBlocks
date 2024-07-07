@@ -14,8 +14,10 @@ namespace SwitchBlocksMod.Util
     /// </summary>
     public class Platform
     {
-        public Texture2D Texture { get; private set; }
+        public Texture2D Texture { get; protected set; }
         public Vector2 Position { get; protected set; }
+        public int Height { get; protected set; }
+        public int Width { get; protected set; }
         public bool StartState { get; protected set; }
         private Animation animation;
 
@@ -32,16 +34,21 @@ namespace SwitchBlocksMod.Util
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
             string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
-            Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
 
             if (!Directory.Exists(path))
             {
-                return dictionary;
+                return null;
+            }
+
+            string[] files = Directory.GetFiles(path);
+            if (files.Length == 0)
+            {
+                return null;
             }
 
             Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-
-            foreach (string xmlFilePath in Directory.GetFiles(path))
+            Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
+            foreach (string xmlFilePath in files)
             {
                 string xmlFile = xmlFilePath.Split(sep).Last();
 
@@ -56,10 +63,10 @@ namespace SwitchBlocksMod.Util
 
                 if (xmlPlatforms.Name != ModStrings.XML_PLATFORMS)
                 {
-                    return dictionary;
+                    continue;
                 }
 
-                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep, subfolder);
+                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep);
                 if (platforms.Count != 0)
                 {
                     dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, platforms);
@@ -76,7 +83,7 @@ namespace SwitchBlocksMod.Util
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
         /// <returns>A list containing all successfully created platforms</returns>
-        private static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep, string subfolder)
+        protected static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep)
         {
             List<Platform> list = new List<Platform>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
@@ -101,6 +108,8 @@ namespace SwitchBlocksMod.Util
                     continue;
                 }
                 platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                platform.Width = platform.Texture.Width;
+                platform.Height = platform.Texture.Height;
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
