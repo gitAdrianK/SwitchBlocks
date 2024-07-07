@@ -39,15 +39,14 @@ namespace SwitchBlocksMod.Util
             {
                 return null;
             }
-
             string[] files = Directory.GetFiles(path);
             if (files.Length == 0)
             {
                 return null;
             }
 
-            Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
             Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
+            Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
             foreach (string xmlFilePath in files)
             {
                 string xmlFile = xmlFilePath.Split(sep).Last();

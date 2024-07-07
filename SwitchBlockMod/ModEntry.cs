@@ -59,12 +59,10 @@ namespace SwitchBlocksMod
             }
 
             // Basic
-            if (EntityBasicPlatforms.Instance.PlatformDictionary != null)
+            if (EntityBasicPlatforms.Instance.PlatformDictionary != null
+                || EntityBasicLevers.Instance.LeverDictionary != null)
             {
                 entityManager.AddObject(EntityBasicPlatforms.Instance);
-            }
-            if (EntityBasicLevers.Instance.LeverDictionary != null)
-            {
                 entityManager.AddObject(EntityBasicLevers.Instance);
             }
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
@@ -76,12 +74,10 @@ namespace SwitchBlocksMod
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
 
             // Countdown
-            if (EntityCountdownPlatforms.Instance.PlatformDictionary != null)
+            if (EntityCountdownPlatforms.Instance.PlatformDictionary != null
+                || EntityCountdownLevers.Instance.LeverDictionary != null)
             {
                 entityManager.AddObject(EntityCountdownPlatforms.Instance);
-            }
-            if (EntityCountdownLevers.Instance.LeverDictionary != null)
-            {
                 entityManager.AddObject(EntityCountdownLevers.Instance);
             }
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
@@ -96,12 +92,10 @@ namespace SwitchBlocksMod
             PlayerEntity.OnJumpCall += JumpSwitch;
 
             // Sand
-            if (EntitySandPlatforms.Instance.PlatformDictionary != null)
+            if (EntitySandPlatforms.Instance.PlatformDictionary != null
+                || EntityCountdownLevers.Instance.LeverDictionary != null)
             {
                 entityManager.AddObject(EntitySandPlatforms.Instance);
-            }
-            if (EntityCountdownLevers.Instance.LeverDictionary != null)
-            {
                 entityManager.AddObject(EntitySandLevers.Instance);
             }
             BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();

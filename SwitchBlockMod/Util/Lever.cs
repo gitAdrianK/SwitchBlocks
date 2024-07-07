@@ -36,15 +36,14 @@ namespace SwitchBlocksMod.Entities
             {
                 return null;
             }
-
             string[] files = Directory.GetFiles(path);
             if (files.Length == 0)
             {
                 return null;
             }
 
-            Regex regex = new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
             Dictionary<int, List<Lever>> dictionary = new Dictionary<int, List<Lever>>();
+            Regex regex = new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
             foreach (string xmlFilePath in files)
             {
                 string xmlFile = xmlFilePath.Split(sep).Last();
