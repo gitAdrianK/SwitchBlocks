@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocksMod.Data;
+using SwitchBlocksMod.Patching;
 using SwitchBlocksMod.Util;
 
 namespace SwitchBlocksMod.Entities
@@ -45,7 +46,7 @@ namespace SwitchBlocksMod.Entities
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || ModEntry.HasFinished)
+            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }

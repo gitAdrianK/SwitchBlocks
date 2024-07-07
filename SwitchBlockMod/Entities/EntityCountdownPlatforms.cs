@@ -53,7 +53,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.countdownBlink?.Play();
+                    ModSounds.countdownBlink?.PlayOneShot();
                 }
                 DataCountdown.HasBlinkedOnce = true;
                 return;
@@ -62,7 +62,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.countdownBlink?.Play();
+                    ModSounds.countdownBlink?.PlayOneShot();
                 }
                 DataCountdown.HasBlinkedTwice = true;
                 return;
@@ -71,7 +71,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.countdownFlip?.Play();
+                    ModSounds.countdownFlip?.PlayOneShot();
                 }
                 DataCountdown.State = false;
                 DataCountdown.RemainingTime = ModBlocks.countdownDuration; ;

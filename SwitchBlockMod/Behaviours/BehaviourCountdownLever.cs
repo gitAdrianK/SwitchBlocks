@@ -81,7 +81,7 @@ namespace SwitchBlocksMod.Behaviours
 
                 if (!DataCountdown.State)
                 {
-                    ModSounds.countdownFlip?.Play();
+                    ModSounds.countdownFlip?.PlayOneShot();
                 }
 
                 DataCountdown.HasSwitched = true;

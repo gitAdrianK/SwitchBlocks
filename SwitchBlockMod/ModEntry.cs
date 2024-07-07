@@ -155,7 +155,7 @@ namespace SwitchBlocksMod
             if (EntityJumpPlatforms.Instance.PlatformDictionary != null
                 && EntityJumpPlatforms.Instance.PlatformDictionary.ContainsKey(Camera.CurrentScreen))
             {
-                ModSounds.jumpFlip?.Play();
+                ModSounds.jumpFlip?.PlayOneShot();
             }
             DataJump.State = !DataJump.State;
         }

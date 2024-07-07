@@ -48,7 +48,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.autoBlink?.Play();
+                    ModSounds.autoBlink?.PlayOneShot();
                 }
                 DataAuto.HasBlinkedOnce = true;
                 return;
@@ -57,7 +57,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.autoBlink?.Play();
+                    ModSounds.autoBlink?.PlayOneShot();
                 }
                 DataAuto.HasBlinkedTwice = true;
                 return;
@@ -66,7 +66,7 @@ namespace SwitchBlocksMod.Entities
             {
                 if (currentPlatformList != null)
                 {
-                    ModSounds.autoFlip?.Play();
+                    ModSounds.autoFlip?.PlayOneShot();
                 }
                 DataAuto.State = !DataAuto.State;
                 DataAuto.RemainingTime = ModBlocks.autoDuration; ;

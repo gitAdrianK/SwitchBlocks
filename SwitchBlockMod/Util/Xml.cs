@@ -164,7 +164,7 @@ namespace SwitchBlocksMod
                         animation.curve = Animation.Curve.EaseInOut;
                         break;
                     default:
-                        animation.curve = Animation.Curve.Stepped;
+                        animation.curve = Animation.Curve.Linear;
                         break;
                 }
             }

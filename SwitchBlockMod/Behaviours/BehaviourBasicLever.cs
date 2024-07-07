@@ -102,7 +102,7 @@ namespace SwitchBlocksMod.Behaviours
 
                 if (stateBefore != DataBasic.State)
                 {
-                    ModSounds.basicFlip?.Play();
+                    ModSounds.basicFlip?.PlayOneShot();
                 }
             }
             else
