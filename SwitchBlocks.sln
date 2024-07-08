@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchBlocks", "SwitchBlocks\SwitchBlocks.csproj", "{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Debug|ARM64.ActiveCfg = Debug|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Debug|x64.ActiveCfg = Debug|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Release|Any CPU.ActiveCfg = Release|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Release|ARM64.ActiveCfg = Release|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Release|x64.ActiveCfg = Release|x64
+		{91CA4A6D-743C-4F2D-927F-7FF8577CF9D5}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAB04ED1-429B-40BC-A02E-1E389FC545A7}
+	EndGlobalSection
+EndGlobal
