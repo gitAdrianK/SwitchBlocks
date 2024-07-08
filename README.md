@@ -1,4 +1,4 @@
-# SwitchBlocksMod - A Jump King Mod
+# SwitchBlocks - A Jump King Mod
 
 This mod adds custom blocks to Jump King, each with its own unique *switching-its-state* themed mechanic.
 - Texture of the levers and platforms
@@ -34,4 +34,4 @@ Switches its state when touching a lever.
 Sure, make an issue and I'll have a look at it.
 
 ## Why are the switches called levers?
-switch is a programming keyword, so i would have to name them something along the lines of \_switch or switch\_ or zwitch or whatever monstrosity of a name you can think of
+switch is a programming keyword, so i would have to name them something along the lines of \_switch or switch\_ or zwitch or whatever name you can think of, in the end I have to choose something ¯\_(ツ)_/¯
