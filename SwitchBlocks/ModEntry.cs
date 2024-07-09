@@ -9,7 +9,6 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 using SwitchBlocks.Factories;
-using System.Diagnostics;
 using System.IO;
 
 namespace SwitchBlocks
@@ -171,7 +170,6 @@ namespace SwitchBlocks
 
         private static void DoAutoSetup(EntityManager entityManager, PlayerEntity player)
         {
-            Debugger.Log(1, "", ">>> Doing Auto Setup\n");
             entityManager.AddObject(EntityAutoPlatforms.Instance);
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
@@ -179,7 +177,6 @@ namespace SwitchBlocks
 
         private static void DoBasicSetup(EntityManager entityManager, PlayerEntity player)
         {
-            Debugger.Log(1, "", ">>> Doing Basic Setup\n");
             entityManager.AddObject(EntityBasicPlatforms.Instance);
             entityManager.AddObject(EntityBasicLevers.Instance);
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
@@ -193,7 +190,6 @@ namespace SwitchBlocks
 
         private static void DoCountdownSetup(EntityManager entityManager, PlayerEntity player)
         {
-            Debugger.Log(1, "", ">>> Doing Countdown Setup\n");
             entityManager.AddObject(EntityCountdownPlatforms.Instance);
             entityManager.AddObject(EntityCountdownLevers.Instance);
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
@@ -203,14 +199,12 @@ namespace SwitchBlocks
 
         private static void DoJumpSetup(EntityManager entityManager)
         {
-            Debugger.Log(1, "", ">>> Doing Jump Setup\n");
             entityManager.AddObject(EntityJumpPlatforms.Instance);
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
 
         private static void DoSandSetup(EntityManager entityManager, PlayerEntity player)
         {
-            Debugger.Log(1, "", ">>> Doing Sand Setup\n");
             entityManager.AddObject(EntitySandPlatforms.Instance);
             entityManager.AddObject(EntitySandLevers.Instance);
             BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
