@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 
@@ -243,7 +244,7 @@ namespace SwitchBlocks
             float duration = 3.0f;
             if (dictionary.ContainsKey("Duration"))
             {
-                duration = float.Parse(children[dictionary["Duration"]].InnerText);
+                duration = float.Parse(children[dictionary["Duration"]].InnerText, CultureInfo.InvariantCulture);
             }
             return duration;
         }
@@ -255,7 +256,7 @@ namespace SwitchBlocks
             float multiplier = 1.0f;
             if (dictionary.ContainsKey("Multiplier"))
             {
-                multiplier = float.Parse(children[dictionary["Multiplier"]].InnerText);
+                multiplier = float.Parse(children[dictionary["Multiplier"]].InnerText, CultureInfo.InvariantCulture);
             }
             return multiplier;
         }

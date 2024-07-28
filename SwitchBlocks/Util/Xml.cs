@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 
 namespace SwitchBlocks
@@ -85,8 +86,8 @@ namespace SwitchBlocks
                 return null;
             }
             return new Vector2(
-                float.Parse(children[dictionary["X"]].InnerText),
-                float.Parse(children[dictionary["Y"]].InnerText));
+                float.Parse(children[dictionary["X"]].InnerText, CultureInfo.InvariantCulture),
+                float.Parse(children[dictionary["Y"]].InnerText, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
