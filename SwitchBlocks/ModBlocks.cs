@@ -256,7 +256,10 @@ namespace SwitchBlocks
             float multiplier = 1.0f;
             if (dictionary.ContainsKey("Multiplier"))
             {
-                multiplier = float.Parse(children[dictionary["Multiplier"]].InnerText, CultureInfo.InvariantCulture);
+                string multi = children[dictionary["Multiplier"]].InnerText;
+                multi = multi.Trim();
+                multi = multi.Replace(",", ".");
+                multiplier = float.Parse(multi, CultureInfo.InvariantCulture);
             }
             return multiplier;
         }

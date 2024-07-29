@@ -85,9 +85,15 @@ namespace SwitchBlocks
             {
                 return null;
             }
+            string xString = children[dictionary["X"]].InnerText;
+            xString = xString.Trim();
+            xString = xString.Replace(",", ".");
+            string yString = children[dictionary["Y"]].InnerText;
+            yString = yString.Trim();
+            yString = yString.Replace(",", ".");
             return new Vector2(
-                float.Parse(children[dictionary["X"]].InnerText, CultureInfo.InvariantCulture),
-                float.Parse(children[dictionary["Y"]].InnerText, CultureInfo.InvariantCulture));
+                float.Parse(xString, CultureInfo.InvariantCulture),
+                float.Parse(yString, CultureInfo.InvariantCulture));
         }
 
         /// <summary>
