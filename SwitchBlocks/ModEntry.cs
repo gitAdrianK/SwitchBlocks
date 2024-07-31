@@ -171,6 +171,9 @@ namespace SwitchBlocks
         private static void DoAutoSetup(EntityManager entityManager, PlayerEntity player)
         {
             entityManager.AddObject(EntityAutoPlatforms.Instance);
+            BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
         }
@@ -192,6 +195,9 @@ namespace SwitchBlocks
         {
             entityManager.AddObject(EntityCountdownPlatforms.Instance);
             entityManager.AddObject(EntityCountdownLevers.Instance);
+            BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), behaviourCountdownPlatform);
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);

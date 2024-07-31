@@ -1,4 +1,5 @@
-﻿using SwitchBlocks.Data;
+﻿using SwitchBlocks.Behaviours;
+using SwitchBlocks.Data;
 using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
@@ -9,6 +10,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityCountdownPlatforms : EntityPlatforms
     {
+        private bool switchOnceSafe = false;
         private static EntityCountdownPlatforms instance;
         public static EntityCountdownPlatforms Instance
         {
@@ -49,34 +51,32 @@ namespace SwitchBlocks.Entities
 
         private void ThirdElapsed()
         {
-            if (DataCountdown.RemainingTime <= ModBlocks.countdownDuration * 0.66 && !DataCountdown.HasBlinkedOnce)
-            {
-                if (currentPlatformList != null)
-                {
-                    ModSounds.countdownBlink?.PlayOneShot();
-                }
-                DataCountdown.HasBlinkedOnce = true;
-                return;
-            }
-            if (DataCountdown.RemainingTime <= ModBlocks.countdownDuration * 0.33 && !DataCountdown.HasBlinkedTwice)
-            {
-                if (currentPlatformList != null)
-                {
-                    ModSounds.countdownBlink?.PlayOneShot();
-                }
-                DataCountdown.HasBlinkedTwice = true;
-                return;
-            }
-            if (DataCountdown.RemainingTime <= 0.0f)
+            if (BehaviourCountdownPlatform.CanSwitchSafely && switchOnceSafe)
             {
                 if (currentPlatformList != null)
                 {
                     ModSounds.countdownFlip?.PlayOneShot();
                 }
                 DataCountdown.State = false;
-                DataCountdown.RemainingTime = ModBlocks.countdownDuration; ;
-                DataCountdown.HasBlinkedOnce = false;
-                DataCountdown.HasBlinkedTwice = false;
+                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
+                switchOnceSafe = false;
+                return;
+            }
+            if (DataCountdown.RemainingTime <= 0.0f)
+            {
+                if (BehaviourCountdownPlatform.CanSwitchSafely)
+                {
+                    if (currentPlatformList != null)
+                    {
+                        ModSounds.countdownFlip?.PlayOneShot();
+                    }
+                    DataCountdown.State = false;
+                }
+                else
+                {
+                    switchOnceSafe = true;
+                }
+                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
             }
         }
     }

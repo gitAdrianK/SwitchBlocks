@@ -6,7 +6,6 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace SwitchBlocks.Entities
 {
@@ -31,15 +30,12 @@ namespace SwitchBlocks.Entities
 
         public void Reset()
         {
-            DataCountdown.Progress = progress;
             instance = null;
         }
 
         private EntitySandPlatforms()
         {
-            Debugger.Log(1, "", ">>> Loading sand platforms\n");
             PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
-            Debugger.Log(1, "", ">>> Found " + PlatformDictionary?.Count + " sand platforms\n");
         }
 
         private float offset;
@@ -47,7 +43,6 @@ namespace SwitchBlocks.Entities
         private int currentScreen = -1;
         private int nextScreen;
 
-        private float progress;
         public Dictionary<int, List<PlatformSand>> PlatformDictionary { get; protected set; }
         private List<PlatformSand> currentPlatformList;
 

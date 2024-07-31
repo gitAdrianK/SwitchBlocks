@@ -71,8 +71,6 @@ namespace SwitchBlocks.Behaviours
                 }
 
                 DataCountdown.RemainingTime = ModBlocks.countdownDuration;
-                DataCountdown.HasBlinkedOnce = false;
-                DataCountdown.HasBlinkedTwice = false;
 
                 if (DataCountdown.HasSwitched)
                 {

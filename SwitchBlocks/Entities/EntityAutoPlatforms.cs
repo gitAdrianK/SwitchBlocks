@@ -1,4 +1,5 @@
-﻿using SwitchBlocks.Data;
+﻿using SwitchBlocks.Behaviours;
+using SwitchBlocks.Data;
 using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
@@ -9,6 +10,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityAutoPlatforms : EntityPlatforms
     {
+        private bool switchOnceSafe = false;
         private static EntityAutoPlatforms instance;
         public static EntityAutoPlatforms Instance
         {
@@ -39,39 +41,36 @@ namespace SwitchBlocks.Entities
             UpdateProgress(DataAuto.State, deltaTime, ModBlocks.autoMultiplier);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
-            ThirdElapsed();
+            TrySwitch();
         }
 
-        private void ThirdElapsed()
+        private void TrySwitch()
         {
-            if (DataAuto.RemainingTime <= ModBlocks.autoDuration * 0.66 && !DataAuto.HasBlinkedOnce)
-            {
-                if (currentPlatformList != null)
-                {
-                    ModSounds.autoBlink?.PlayOneShot();
-                }
-                DataAuto.HasBlinkedOnce = true;
-                return;
-            }
-            if (DataAuto.RemainingTime <= ModBlocks.autoDuration * 0.33 && !DataAuto.HasBlinkedTwice)
-            {
-                if (currentPlatformList != null)
-                {
-                    ModSounds.autoBlink?.PlayOneShot();
-                }
-                DataAuto.HasBlinkedTwice = true;
-                return;
-            }
-            if (DataAuto.RemainingTime <= 0.0f)
+            if (BehaviourAutoPlatform.CanSwitchSafely && switchOnceSafe)
             {
                 if (currentPlatformList != null)
                 {
                     ModSounds.autoFlip?.PlayOneShot();
                 }
                 DataAuto.State = !DataAuto.State;
-                DataAuto.RemainingTime = ModBlocks.autoDuration; ;
-                DataAuto.HasBlinkedOnce = false;
-                DataAuto.HasBlinkedTwice = false;
+                switchOnceSafe = false;
+                return;
+            }
+            if (DataAuto.RemainingTime <= 0.0f)
+            {
+                if (BehaviourAutoPlatform.CanSwitchSafely)
+                {
+                    if (currentPlatformList != null)
+                    {
+                        ModSounds.autoFlip?.PlayOneShot();
+                    }
+                    DataAuto.State = !DataAuto.State;
+                }
+                else
+                {
+                    switchOnceSafe = true;
+                }
+                DataAuto.RemainingTime = ModBlocks.autoDuration;
             }
         }
     }

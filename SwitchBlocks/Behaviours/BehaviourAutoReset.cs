@@ -38,8 +38,6 @@ namespace SwitchBlocks.Behaviours
             if (IsPlayerOnBlock)
             {
                 DataAuto.RemainingTime = ModBlocks.autoDuration;
-                DataAuto.HasBlinkedOnce = false;
-                DataAuto.HasBlinkedTwice = false;
             }
 
             return true;
