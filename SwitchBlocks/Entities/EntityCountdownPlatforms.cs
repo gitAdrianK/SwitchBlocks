@@ -45,11 +45,11 @@ namespace SwitchBlocks.Entities
                 return;
             }
             DataCountdown.RemainingTime -= deltaTime * 0.5f;
-            ThirdElapsed();
+            TrySwitch();
 
         }
 
-        private void ThirdElapsed()
+        private void TrySwitch()
         {
             if (BehaviourCountdownPlatform.CanSwitchSafely && switchOnceSafe)
             {
@@ -64,7 +64,7 @@ namespace SwitchBlocks.Entities
             }
             if (DataCountdown.RemainingTime <= 0.0f)
             {
-                if (BehaviourCountdownPlatform.CanSwitchSafely)
+                if (BehaviourCountdownPlatform.CanSwitchSafely || ModBlocks.countdownForceSwitch)
                 {
                     if (currentPlatformList != null)
                     {

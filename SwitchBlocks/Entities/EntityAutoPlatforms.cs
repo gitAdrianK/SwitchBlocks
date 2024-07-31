@@ -58,7 +58,7 @@ namespace SwitchBlocks.Entities
             }
             if (DataAuto.RemainingTime <= 0.0f)
             {
-                if (BehaviourAutoPlatform.CanSwitchSafely)
+                if (BehaviourAutoPlatform.CanSwitchSafely || ModBlocks.autoForceSwitch)
                 {
                     if (currentPlatformList != null)
                     {

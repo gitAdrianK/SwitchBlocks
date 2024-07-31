@@ -37,6 +37,10 @@ namespace SwitchBlocks
         /// Multiplier of the deltaTime used in the animation of the auto block type.
         /// </summary>
         public static float autoMultiplier = 1.0f;
+        /// <summary>
+        /// If the auto state switch is supposed to be forced, ignoring the safe switch.
+        /// </summary>
+        public static bool autoForceSwitch = false;
 
         /// <summary>
         /// Whether the basic block is inside the blocks.xml and counts as "used/enabled"
@@ -115,6 +119,10 @@ namespace SwitchBlocks
         /// Directions the basic lever can be activated from
         /// </summary>
         public static HashSet<Directions> countdownDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        /// <summary>
+        /// If the countdown state switch is supposed to be forced, ignoring the safe switch.
+        /// </summary>
+        public static bool countdownForceSwitch = false;
 
         /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
@@ -206,6 +214,7 @@ namespace SwitchBlocks
                         Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
                         autoDuration = ParseDuration(dictionaryAuto, block);
                         autoMultiplier = ParseMultiplier(dictionaryAuto, block);
+                        autoForceSwitch = ParseForceSwitch(dictionaryAuto);
                         break;
                     case "Basic":
                         IsBasicUsed = true;
@@ -218,6 +227,7 @@ namespace SwitchBlocks
                         Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
                         countdownDuration = ParseDuration(dictionaryCountdown, block);
                         countdownDirections = ParseLeverSideDisable(dictionaryCountdown, block);
+                        countdownForceSwitch = ParseForceSwitch(dictionaryCountdown);
                         break;
                     case "Jump":
                         IsJumpUsed = true;
@@ -303,5 +313,9 @@ namespace SwitchBlocks
             return directions;
         }
 
+        private static bool ParseForceSwitch(Dictionary<string, int> dictionary)
+        {
+            return dictionary.ContainsKey("ForceStateSwitch");
+        }
     }
 }
