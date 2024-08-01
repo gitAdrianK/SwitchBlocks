@@ -60,7 +60,7 @@ namespace SwitchBlocks.Behaviours
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);
-                    if (collision.X > 0 || collision.Y > 0)
+                    if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
                         CanSwitchSafely = false;
                         return true;
@@ -74,7 +74,7 @@ namespace SwitchBlocks.Behaviours
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);
-                    if (collision.X > 0 || collision.Y > 0)
+                    if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
                         CanSwitchSafely = false;
                         return true;
