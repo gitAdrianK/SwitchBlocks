@@ -1,8 +1,11 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -50,9 +53,33 @@ namespace SwitchBlocks.Behaviours
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
             CanSwitchSafely = true;
-            if ((isPlayerOnBlockOff && DataCountdown.State) || (isPlayerOnBlockOn && !DataCountdown.State))
+            if (isPlayerOnBlockOn && !DataCountdown.State)
             {
-                CanSwitchSafely = false;
+                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOn));
+                foreach (IBlock block in blocks)
+                {
+                    block.Intersects(playerRect, out Rectangle collision);
+                    if (collision.X > 0 || collision.Y > 0)
+                    {
+                        CanSwitchSafely = false;
+                        return true;
+                    }
+                }
+            }
+            if (isPlayerOnBlockOff && DataCountdown.State)
+            {
+                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOff));
+                foreach (IBlock block in blocks)
+                {
+                    block.Intersects(playerRect, out Rectangle collision);
+                    if (collision.X > 0 || collision.Y > 0)
+                    {
+                        CanSwitchSafely = false;
+                        return true;
+                    }
+                }
             }
 
             return true;
