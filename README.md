@@ -3,7 +3,6 @@
 This mod adds custom blocks to Jump King, each with its own unique *switching-its-state* themed mechanic.
 - Texture of the levers and platforms
 - Sounds played when a lever is touched
-- Sounds played after one third and two thirds have passed for timed gimmick
 - When applicable the duration of timed gimmick
 
 ## Logic
