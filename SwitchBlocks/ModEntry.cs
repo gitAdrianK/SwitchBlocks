@@ -163,7 +163,7 @@ namespace SwitchBlocks
             if (EntityJumpPlatforms.Instance.PlatformDictionary != null
                 && EntityJumpPlatforms.Instance.PlatformDictionary.ContainsKey(Camera.CurrentScreen))
             {
-                ModSounds.jumpFlip?.PlayOneShot();
+                ModSounds.JumpFlip?.PlayOneShot();
             }
             DataJump.State = !DataJump.State;
         }

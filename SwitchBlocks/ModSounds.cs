@@ -10,8 +10,10 @@ namespace SwitchBlocks
     /// Initializes the blocks sounds from "Steam Workshop Path\1061090\MAP ID\switchBlocksMod\audio\"<br />
     /// <list type="bullet">
     ///     <item>autoFlip.xnb</item>
+    ///     <item>autoWarn.xnb</item>
     ///     <item>basicFlip.xnb</item>
     ///     <item>countdownFlip.xnb</item>
+    ///     <item>countdownWarn.xnb</item>
     ///     <item>jumpFlip.xnb</item>
     ///     <item>sandFlip.xnb</item>
     /// </list>
@@ -22,27 +24,35 @@ namespace SwitchBlocks
         /// <summary>
         /// Sound played when the auto block flips state.
         /// </summary>
-        public static JKSound autoFlip;
+        public static JKSound AutoFlip { get; private set; }
+        /// <summary>
+        /// Sound played when the auto block warns of a certain amount of time passing.
+        /// </summary>
+        public static JKSound AutoWarn { get; private set; }
 
         /// <summary>
         /// Sound played when the basic block flips state.
         /// </summary>
-        public static JKSound basicFlip;
+        public static JKSound BasicFlip { get; private set; }
 
         /// <summary>
         /// Sound played when the countdown block flips state.
         /// </summary>
-        public static JKSound countdownFlip;
+        public static JKSound CountdownFlip { get; private set; }
+        /// <summary>
+        /// Sound played when the countdown block warns of a certain amount of time passing.
+        /// </summary>
+        public static JKSound CountdownWarn { get; private set; }
 
         /// <summary>
         /// Sound played when the jump block flips state.
         /// </summary>
-        public static JKSound jumpFlip;
+        public static JKSound JumpFlip { get; private set; }
 
         /// <summary>
         /// Sound played when the sand block flips state.
         /// </summary>
-        public static JKSound sandFlip;
+        public static JKSound SandFlip { get; private set; }
 
         /// <summary>
         /// Tries to load sounds used in the mod.
@@ -56,31 +66,39 @@ namespace SwitchBlocks
             // Auto
             if (File.Exists($"{path}autoFlip.xnb"))
             {
-                autoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+                AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+            }
+            if (File.Exists($"{path}autoWarn.xnb"))
+            {
+                AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
             }
 
             // Basic
             if (File.Exists($"{path}basicFlip.xnb"))
             {
-                basicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
+                BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
             }
 
             // Countdown
             if (File.Exists($"{path}countdownFlip.xnb"))
             {
-                countdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+                CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+            }
+            if (File.Exists($"{path}countdownWarn.xnb"))
+            {
+                CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
             }
 
             // Jump
             if (File.Exists($"{path}jumpFlip.xnb"))
             {
-                jumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
+                JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
             }
 
             // Sand
             if (File.Exists($"{path}sandFlip.xnb"))
             {
-                sandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
+                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
         }
     }

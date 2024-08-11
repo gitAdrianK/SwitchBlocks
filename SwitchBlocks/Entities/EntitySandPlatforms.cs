@@ -48,7 +48,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            offset += deltaTime * ModBlocks.sandMultiplier;
+            offset += deltaTime * ModBlocks.SandMultiplier;
         }
 
         public override void Draw()

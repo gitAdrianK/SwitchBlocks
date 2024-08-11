@@ -102,7 +102,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (stateBefore != DataBasic.State)
                 {
-                    ModSounds.basicFlip?.PlayOneShot();
+                    ModSounds.BasicFlip?.PlayOneShot();
                 }
             }
             else
@@ -126,7 +126,7 @@ namespace SwitchBlocks.Behaviours
                         || b.GetType() == typeof(BlockBasicLeverSolidOff));
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            HashSet<Directions> directions = ModBlocks.basicDirections;
+            HashSet<Directions> directions = ModBlocks.BasicDirections;
             if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
             {
                 return true;

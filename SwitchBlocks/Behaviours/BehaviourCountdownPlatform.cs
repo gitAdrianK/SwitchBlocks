@@ -14,7 +14,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-        public static bool CanSwitchSafely { get; private set; } = true;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -52,7 +51,7 @@ namespace SwitchBlocks.Behaviours
             bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownOn>();
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
-            CanSwitchSafely = true;
+            DataCountdown.CanSwitchSafely = true;
             if (isPlayerOnBlockOn && !DataCountdown.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
@@ -62,7 +61,7 @@ namespace SwitchBlocks.Behaviours
                     block.Intersects(playerRect, out Rectangle collision);
                     if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
-                        CanSwitchSafely = false;
+                        DataCountdown.CanSwitchSafely = false;
                         return true;
                     }
                 }
@@ -76,7 +75,7 @@ namespace SwitchBlocks.Behaviours
                     block.Intersects(playerRect, out Rectangle collision);
                     if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
-                        CanSwitchSafely = false;
+                        DataCountdown.CanSwitchSafely = false;
                         return true;
                     }
                 }

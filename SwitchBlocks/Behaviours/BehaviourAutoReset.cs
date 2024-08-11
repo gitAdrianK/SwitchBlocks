@@ -37,7 +37,7 @@ namespace SwitchBlocks.Behaviours
 
             if (IsPlayerOnBlock)
             {
-                DataAuto.RemainingTime = ModBlocks.autoDuration;
+                DataAuto.RemainingTime = ModBlocks.AutoDuration;
             }
 
             return true;

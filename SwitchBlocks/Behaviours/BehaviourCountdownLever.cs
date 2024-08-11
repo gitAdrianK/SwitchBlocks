@@ -70,7 +70,7 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                DataCountdown.RemainingTime = ModBlocks.countdownDuration;
+                DataCountdown.RemainingTime = ModBlocks.CountdownDuration;
 
                 if (DataCountdown.HasSwitched)
                 {
@@ -80,7 +80,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (!DataCountdown.State)
                 {
-                    ModSounds.countdownFlip?.PlayOneShot();
+                    ModSounds.CountdownFlip?.PlayOneShot();
                 }
 
                 DataCountdown.HasSwitched = true;
@@ -105,7 +105,7 @@ namespace SwitchBlocks.Behaviours
             IBlock block = advCollisionInfo.GetCollidedBlocks().ToList().Find(b => b.GetType() == typeof(BlockCountdownLeverSolid));
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            HashSet<Directions> directions = ModBlocks.countdownDirections;
+            HashSet<Directions> directions = ModBlocks.CountdownDirections;
             if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
             {
                 return true;

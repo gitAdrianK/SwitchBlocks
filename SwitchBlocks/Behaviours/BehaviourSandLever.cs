@@ -102,7 +102,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (stateBefore != DataSand.State)
                 {
-                    ModSounds.sandFlip?.PlayOneShot();
+                    ModSounds.SandFlip?.PlayOneShot();
                 }
             }
             else
@@ -126,7 +126,7 @@ namespace SwitchBlocks.Behaviours
                         || b.GetType() == typeof(BlockSandLeverSolidOff));
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            HashSet<Directions> directions = ModBlocks.sandDirections;
+            HashSet<Directions> directions = ModBlocks.SandDirections;
             if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
             {
                 return true;

@@ -9,7 +9,8 @@ using System.Xml;
 namespace SwitchBlocks
 {
     /// <summary>
-    /// Contains colors used in this mod for its blocks.
+    /// Contains colors used in this mod for its blocks as well as various other properties
+    /// that can be set for the types of blocks, like durations and animation speed multiplier.
     /// </summary>
     public static class ModBlocks
     {
@@ -32,15 +33,19 @@ namespace SwitchBlocks
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float autoDuration = 3.0f;
+        public static float AutoDuration { get; private set; } = 3.0f;
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the auto block type.
         /// </summary>
-        public static float autoMultiplier = 1.0f;
+        public static float AutoMultiplier { get; private set; } = 1.0f;
         /// <summary>
         /// If the auto state switch is supposed to be forced, ignoring the safe switch.
         /// </summary>
-        public static bool autoForceSwitch = false;
+        public static bool AutoForceSwitch { get; private set; } = false;
+        /// <summary>
+        /// Amount of times the auto warn sound is supposed to be played.
+        /// </summary>
+        public static int AutoWarnCount { get; private set; } = 2;
 
         /// <summary>
         /// Whether the basic block is inside the blocks.xml and counts as "used/enabled"
@@ -81,11 +86,11 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the basic block type.
         /// </summary>
-        public static float basicMultiplier = 1.0f;
+        public static float BasicMultiplier { get; private set; } = 1.0f;
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
-        public static HashSet<Directions> basicDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> BasicDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Whether the countdown block is inside the blocks.xml and counts as "used/enabled"
@@ -110,19 +115,23 @@ namespace SwitchBlocks
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float countdownDuration = 3.0f;
+        public static float CountdownDuration { get; private set; } = 3.0f;
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the countdown block type.
         /// </summary>
-        public static float countdownMultiplier = 1.0f;
+        public static float CountdownMultiplier { get; private set; } = 1.0f;
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
-        public static HashSet<Directions> countdownDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> CountdownDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
         /// <summary>
         /// If the countdown state switch is supposed to be forced, ignoring the safe switch.
         /// </summary>
-        public static bool countdownForceSwitch = false;
+        public static bool CountdownForceSwitch { get; private set; } = false;
+        /// <summary>
+        /// Amount of times the countdown warn sound is supposed to be played.
+        /// </summary>
+        public static int CountdownWarnCount { get; private set; } = 2;
 
         /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
@@ -139,7 +148,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the jump block type.
         /// </summary>
-        public static float jumpMultiplier = 1.0f;
+        public static float JumpMultiplier { get; private set; } = 1.0f;
 
         /// <summary>
         /// Whether the sand block is inside the blocks.xml and counts as "used/enabled"
@@ -180,11 +189,11 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the sand block type.
         /// </summary>
-        public static float sandMultiplier = 1.0f;
+        public static float SandMultiplier { get; private set; } = 1.0f;
         /// <summary>
         /// Directions the sand lever can be activated from
         /// </summary>
-        public static HashSet<Directions> sandDirections = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Directions> SandDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
 
         /// <summary>
@@ -212,33 +221,36 @@ namespace SwitchBlocks
                     case "Auto":
                         IsAutoUsed = true;
                         Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
-                        autoDuration = ParseDuration(dictionaryAuto, block);
-                        autoMultiplier = ParseMultiplier(dictionaryAuto, block);
-                        autoForceSwitch = ParseForceSwitch(dictionaryAuto);
+                        AutoDuration = ParseDuration(dictionaryAuto, block);
+                        AutoMultiplier = ParseMultiplier(dictionaryAuto, block);
+                        AutoForceSwitch = ParseForceSwitch(dictionaryAuto);
+                        AutoWarnCount = ParseWarnCount(dictionaryAuto, block);
                         break;
                     case "Basic":
                         IsBasicUsed = true;
                         Dictionary<string, int> dictionaryBasic = Xml.MapNames(block.ChildNodes);
-                        basicMultiplier = ParseMultiplier(dictionaryBasic, block);
-                        basicDirections = ParseLeverSideDisable(dictionaryBasic, block);
+                        BasicMultiplier = ParseMultiplier(dictionaryBasic, block);
+                        BasicDirections = ParseLeverSideDisable(dictionaryBasic, block);
                         break;
                     case "Countdown":
                         IsCountdownUsed = true;
                         Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
-                        countdownDuration = ParseDuration(dictionaryCountdown, block);
-                        countdownDirections = ParseLeverSideDisable(dictionaryCountdown, block);
-                        countdownForceSwitch = ParseForceSwitch(dictionaryCountdown);
+                        CountdownDuration = ParseDuration(dictionaryCountdown, block);
+                        CountdownMultiplier = ParseMultiplier(dictionaryCountdown, block);
+                        CountdownDirections = ParseLeverSideDisable(dictionaryCountdown, block);
+                        CountdownForceSwitch = ParseForceSwitch(dictionaryCountdown);
+                        CountdownWarnCount = ParseWarnCount(dictionaryCountdown, block);
                         break;
                     case "Jump":
                         IsJumpUsed = true;
                         Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
-                        jumpMultiplier = ParseMultiplier(dictionaryJump, block);
+                        JumpMultiplier = ParseMultiplier(dictionaryJump, block);
                         break;
                     case "Sand":
                         IsSandUsed = true;
                         Dictionary<string, int> dictionarySand = Xml.MapNames(block.ChildNodes);
-                        sandMultiplier = ParseMultiplier(dictionarySand, block);
-                        sandDirections = ParseLeverSideDisable(dictionarySand, block);
+                        SandMultiplier = ParseMultiplier(dictionarySand, block);
+                        SandDirections = ParseLeverSideDisable(dictionarySand, block);
                         break;
                     default:
                         // Do nothing.
@@ -316,6 +328,17 @@ namespace SwitchBlocks
         private static bool ParseForceSwitch(Dictionary<string, int> dictionary)
         {
             return dictionary.ContainsKey("ForceStateSwitch");
+        }
+
+        private static int ParseWarnCount(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            int count = 2;
+            if (dictionary.ContainsKey("WarnCount"))
+            {
+                count = int.Parse(children[dictionary["WarnCount"]].InnerText);
+            }
+            return count;
         }
     }
 }

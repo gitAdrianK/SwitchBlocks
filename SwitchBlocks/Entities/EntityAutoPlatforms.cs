@@ -1,5 +1,4 @@
-﻿using SwitchBlocks.Behaviours;
-using SwitchBlocks.Data;
+﻿using SwitchBlocks.Data;
 using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
@@ -10,7 +9,6 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityAutoPlatforms : EntityPlatforms
     {
-        private bool switchOnceSafe = false;
         private static EntityAutoPlatforms instance;
         public static EntityAutoPlatforms Instance
         {
@@ -38,39 +36,50 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataAuto.State, deltaTime, ModBlocks.autoMultiplier);
+            UpdateProgress(DataAuto.State, deltaTime, ModBlocks.AutoMultiplier);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
+            TryWarn();
             TrySwitch();
+        }
+
+        private void TryWarn()
+        {
+            if (ModSounds.AutoWarn == null || DataAuto.WarnCount == ModBlocks.AutoWarnCount)
+            {
+                return;
+            }
+            if (DataAuto.RemainingTime <= ModBlocks.AutoDuration - ModBlocks.AutoDuration * ((DataAuto.WarnCount + 1) / (ModBlocks.AutoWarnCount + 1)))
+            {
+                ModSounds.AutoWarn.PlayOneShot();
+                DataAuto.WarnCount++;
+            }
         }
 
         private void TrySwitch()
         {
-            if (BehaviourAutoPlatform.CanSwitchSafely && switchOnceSafe)
+            if (DataAuto.CanSwitchSafely && DataAuto.SwitchOnceSafe)
             {
-                if (currentPlatformList != null)
-                {
-                    ModSounds.autoFlip?.PlayOneShot();
-                }
                 DataAuto.State = !DataAuto.State;
-                switchOnceSafe = false;
+                DataAuto.SwitchOnceSafe = false;
                 return;
             }
             if (DataAuto.RemainingTime <= 0.0f)
             {
-                if (BehaviourAutoPlatform.CanSwitchSafely || ModBlocks.autoForceSwitch)
+                if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
                 {
-                    if (currentPlatformList != null)
-                    {
-                        ModSounds.autoFlip?.PlayOneShot();
-                    }
                     DataAuto.State = !DataAuto.State;
                 }
                 else
                 {
-                    switchOnceSafe = true;
+                    DataAuto.SwitchOnceSafe = true;
                 }
-                DataAuto.RemainingTime = ModBlocks.autoDuration;
+                if (currentPlatformList != null)
+                {
+                    ModSounds.AutoFlip?.PlayOneShot();
+                }
+                DataAuto.RemainingTime = ModBlocks.AutoDuration;
+                DataAuto.WarnCount = 0;
             }
         }
     }

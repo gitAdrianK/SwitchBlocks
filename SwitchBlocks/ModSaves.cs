@@ -38,8 +38,8 @@ namespace SwitchBlocks
                 binaryWriter.Write(DataAuto.State);
                 binaryWriter.Write(DataAuto.Progress);
                 binaryWriter.Write(DataAuto.RemainingTime);
-                binaryWriter.Write(DataAuto.HasBlinkedOnce);
-                binaryWriter.Write(DataAuto.HasBlinkedTwice);
+                binaryWriter.Write(DataAuto.CanSwitchSafely);
+                binaryWriter.Write(DataAuto.SwitchOnceSafe);
                 // Basic
                 binaryWriter.Write(DataBasic.State);
                 binaryWriter.Write(DataBasic.Progress);
@@ -49,8 +49,8 @@ namespace SwitchBlocks
                 binaryWriter.Write(DataCountdown.Progress);
                 binaryWriter.Write(DataCountdown.HasSwitched);
                 binaryWriter.Write(DataCountdown.RemainingTime);
-                binaryWriter.Write(DataCountdown.HasBlinkedOnce);
-                binaryWriter.Write(DataCountdown.HasBlinkedTwice);
+                binaryWriter.Write(DataCountdown.CanSwitchSafely);
+                binaryWriter.Write(DataCountdown.SwitchOnceSafe);
                 // Sand
                 binaryWriter.Write(DataSand.State);
                 binaryWriter.Write(DataSand.HasSwitched);
@@ -58,6 +58,9 @@ namespace SwitchBlocks
                 // Jump
                 binaryWriter.Write(DataJump.State);
                 binaryWriter.Write(DataJump.Progress);
+                // Warning sounds
+                binaryWriter.Write(DataAuto.WarnCount);
+                binaryWriter.Write(DataCountdown.WarnCount);
             }
             catch (Exception e)
             {
@@ -103,8 +106,8 @@ namespace SwitchBlocks
                 DataAuto.State = binaryReader.ReadBoolean();
                 DataAuto.Progress = binaryReader.ReadSingle();
                 DataAuto.RemainingTime = binaryReader.ReadSingle();
-                DataAuto.HasBlinkedOnce = binaryReader.ReadBoolean();
-                DataAuto.HasBlinkedTwice = binaryReader.ReadBoolean();
+                DataAuto.CanSwitchSafely = binaryReader.ReadBoolean();
+                DataAuto.SwitchOnceSafe = binaryReader.ReadBoolean();
                 // Basic
                 DataBasic.State = binaryReader.ReadBoolean();
                 DataBasic.Progress = binaryReader.ReadSingle();
@@ -114,8 +117,8 @@ namespace SwitchBlocks
                 DataCountdown.Progress = binaryReader.ReadSingle();
                 DataCountdown.HasSwitched = binaryReader.ReadBoolean();
                 DataCountdown.RemainingTime = binaryReader.ReadSingle();
-                DataCountdown.HasBlinkedOnce = binaryReader.ReadBoolean();
-                DataCountdown.HasBlinkedTwice = binaryReader.ReadBoolean();
+                DataCountdown.CanSwitchSafely = binaryReader.ReadBoolean();
+                DataCountdown.SwitchOnceSafe = binaryReader.ReadBoolean();
                 // Sand
                 DataSand.State = binaryReader.ReadBoolean();
                 DataSand.HasSwitched = binaryReader.ReadBoolean();
@@ -123,6 +126,15 @@ namespace SwitchBlocks
                 // Jump
                 DataJump.State = binaryReader.ReadBoolean();
                 DataJump.Progress = binaryReader.ReadSingle();
+                // Warning sounds, binary files aren't good at extendability.
+                if (binaryReader.PeekChar() == -1)
+                {
+                    DataAuto.WarnCount = 0;
+                    DataCountdown.WarnCount = 0;
+                    return;
+                }
+                DataAuto.WarnCount = binaryReader.ReadInt32();
+                DataCountdown.WarnCount = binaryReader.ReadInt32();
             }
             catch
             {
@@ -144,8 +156,9 @@ namespace SwitchBlocks
             DataAuto.State = false;
             DataAuto.Progress = 0.0f;
             DataAuto.RemainingTime = 0.0f;
-            DataAuto.HasBlinkedOnce = false;
-            DataAuto.HasBlinkedTwice = false;
+            DataAuto.CanSwitchSafely = true;
+            DataAuto.SwitchOnceSafe = false;
+            DataAuto.WarnCount = 0;
             // Basic
             DataBasic.State = false;
             DataBasic.Progress = 0.0f;
@@ -155,8 +168,9 @@ namespace SwitchBlocks
             DataCountdown.Progress = 0.0f;
             DataCountdown.HasSwitched = false;
             DataCountdown.RemainingTime = 0.0f;
-            DataCountdown.HasBlinkedOnce = false;
-            DataCountdown.HasBlinkedTwice = false;
+            DataCountdown.CanSwitchSafely = true;
+            DataCountdown.SwitchOnceSafe = false;
+            DataCountdown.WarnCount = 0;
             // Sand
             DataSand.State = false;
             DataSand.HasSwitched = false;

@@ -36,7 +36,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataBasic.State, deltaTime, ModBlocks.basicMultiplier);
+            UpdateProgress(DataBasic.State, deltaTime, ModBlocks.BasicMultiplier);
         }
     }
 }
