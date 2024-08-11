@@ -39,7 +39,10 @@ namespace SwitchBlocks.Entities
             UpdateProgress(DataAuto.State, deltaTime, ModBlocks.AutoMultiplier);
 
             DataAuto.RemainingTime -= deltaTime * 0.5f;
-            TryWarn();
+            if (IsActiveOnCurrentScreen)
+            {
+                TryWarn();
+            }
             TrySwitch();
         }
 
@@ -49,7 +52,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            if (DataAuto.RemainingTime <= ModBlocks.AutoDuration - ModBlocks.AutoDuration * ((DataAuto.WarnCount + 1) / (ModBlocks.AutoWarnCount + 1)))
+            if (DataAuto.RemainingTime <= ModBlocks.AutoWarnCount - DataAuto.WarnCount)
             {
                 ModSounds.AutoWarn.PlayOneShot();
                 DataAuto.WarnCount++;

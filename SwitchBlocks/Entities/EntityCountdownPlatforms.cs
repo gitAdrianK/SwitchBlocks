@@ -43,7 +43,10 @@ namespace SwitchBlocks.Entities
                 return;
             }
             DataCountdown.RemainingTime -= deltaTime * 0.5f;
-            TryWarn();
+            if (IsActiveOnCurrentScreen)
+            {
+                TryWarn();
+            }
             TrySwitch();
         }
 
@@ -53,7 +56,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            if (DataCountdown.RemainingTime <= ModBlocks.CountdownDuration - ModBlocks.CountdownDuration * ((DataCountdown.WarnCount + 1) / (ModBlocks.CountdownWarnCount + 1)))
+            if (DataCountdown.RemainingTime <= ModBlocks.CountdownWarnCount - DataCountdown.WarnCount)
             {
                 ModSounds.CountdownWarn.PlayOneShot();
                 DataCountdown.WarnCount++;
@@ -83,6 +86,7 @@ namespace SwitchBlocks.Entities
                         ModSounds.CountdownFlip?.PlayOneShot();
                     }
                     DataCountdown.State = false;
+                    DataCountdown.WarnCount = 0;
                 }
                 else
                 {

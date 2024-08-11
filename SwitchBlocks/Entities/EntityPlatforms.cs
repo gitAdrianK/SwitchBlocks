@@ -20,6 +20,8 @@ namespace SwitchBlocks.Entities
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
         protected List<Platform> currentPlatformList;
 
+        public bool IsActiveOnCurrentScreen => currentPlatformList != null;
+
         /// <summary>
         /// Updates what screen is currently active and gets the platforms from the platform dictionary
         /// </summary>
