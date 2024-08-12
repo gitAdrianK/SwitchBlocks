@@ -52,7 +52,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            if (DataAuto.RemainingTime <= ModBlocks.AutoWarnCount - DataAuto.WarnCount)
+            if (DataAuto.RemainingTime <= (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration)
             {
                 ModSounds.AutoWarn.PlayOneShot();
                 DataAuto.WarnCount++;

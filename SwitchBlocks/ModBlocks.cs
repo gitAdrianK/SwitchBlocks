@@ -46,6 +46,10 @@ namespace SwitchBlocks
         /// Amount of times the auto warn sound is supposed to be played.
         /// </summary>
         public static int AutoWarnCount { get; private set; } = 2;
+        /// <summary>
+        /// Duration between auto warn sounds.
+        /// </summary>
+        public static float AutoWarnDuration { get; private set; } = 1.0f;
 
         /// <summary>
         /// Whether the basic block is inside the blocks.xml and counts as "used/enabled"
@@ -132,6 +136,10 @@ namespace SwitchBlocks
         /// Amount of times the countdown warn sound is supposed to be played.
         /// </summary>
         public static int CountdownWarnCount { get; private set; } = 2;
+        /// <summary>
+        /// Duration between countdown warn sounds.
+        /// </summary>
+        public static float CountdownWarnDuration { get; private set; } = 1.0f;
 
         /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
@@ -220,11 +228,17 @@ namespace SwitchBlocks
                 {
                     case "Auto":
                         IsAutoUsed = true;
-                        Dictionary<string, int> dictionaryAuto = Xml.MapNames(block.ChildNodes);
+                        XmlNodeList childrenAuto = block.ChildNodes;
+                        Dictionary<string, int> dictionaryAuto = Xml.MapNames(childrenAuto);
                         AutoDuration = ParseDuration(dictionaryAuto, block);
                         AutoMultiplier = ParseMultiplier(dictionaryAuto, block);
                         AutoForceSwitch = ParseForceSwitch(dictionaryAuto);
-                        AutoWarnCount = ParseWarnCount(dictionaryAuto, block);
+                        if (dictionaryAuto.ContainsKey("Warn"))
+                        {
+                            Dictionary<string, int> dictionaryAutoWarn = Xml.MapNames(childrenAuto[dictionaryAuto["Warn"]].ChildNodes);
+                            AutoWarnCount = ParseWarnCount(dictionaryAutoWarn, block);
+                            AutoWarnDuration = ParseWarnDuration(dictionaryAutoWarn, block);
+                        }
                         break;
                     case "Basic":
                         IsBasicUsed = true;
@@ -234,12 +248,18 @@ namespace SwitchBlocks
                         break;
                     case "Countdown":
                         IsCountdownUsed = true;
-                        Dictionary<string, int> dictionaryCountdown = Xml.MapNames(block.ChildNodes);
+                        XmlNodeList childrenCountdown = block.ChildNodes;
+                        Dictionary<string, int> dictionaryCountdown = Xml.MapNames(childrenCountdown);
                         CountdownDuration = ParseDuration(dictionaryCountdown, block);
                         CountdownMultiplier = ParseMultiplier(dictionaryCountdown, block);
                         CountdownDirections = ParseLeverSideDisable(dictionaryCountdown, block);
                         CountdownForceSwitch = ParseForceSwitch(dictionaryCountdown);
-                        CountdownWarnCount = ParseWarnCount(dictionaryCountdown, block);
+                        if (dictionaryCountdown.ContainsKey("Warn"))
+                        {
+                            Dictionary<string, int> dictionaryCountdownWarn = Xml.MapNames(childrenCountdown[dictionaryCountdown["Warn"]].ChildNodes);
+                            CountdownWarnCount = ParseWarnCount(dictionaryCountdownWarn, block);
+                            CountdownWarnDuration = ParseWarnDuration(dictionaryCountdownWarn, block);
+                        }
                         break;
                     case "Jump":
                         IsJumpUsed = true;
@@ -334,11 +354,25 @@ namespace SwitchBlocks
         {
             XmlNodeList children = root.ChildNodes;
             int count = 2;
-            if (dictionary.ContainsKey("WarnCount"))
+            if (dictionary.ContainsKey("Count"))
             {
-                count = int.Parse(children[dictionary["WarnCount"]].InnerText);
+                count = int.Parse(children[dictionary["Count"]].InnerText);
             }
             return count;
+        }
+
+        private static float ParseWarnDuration(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            float duration = 1.0f;
+            if (dictionary.ContainsKey("Duration"))
+            {
+                string dur = children[dictionary["Duration"]].InnerText;
+                dur = dur.Trim();
+                dur = dur.Replace(",", ".");
+                duration = float.Parse(dur, CultureInfo.InvariantCulture);
+            }
+            return duration;
         }
     }
 }

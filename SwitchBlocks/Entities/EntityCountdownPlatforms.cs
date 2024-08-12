@@ -56,7 +56,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            if (DataCountdown.RemainingTime <= ModBlocks.CountdownWarnCount - DataCountdown.WarnCount)
+            if (DataCountdown.RemainingTime <= (ModBlocks.CountdownWarnCount - DataCountdown.WarnCount) * ModBlocks.CountdownWarnDuration)
             {
                 ModSounds.CountdownWarn.PlayOneShot();
                 DataCountdown.WarnCount++;

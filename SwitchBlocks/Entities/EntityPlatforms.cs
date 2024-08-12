@@ -85,7 +85,6 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-
             SpriteBatch spriteBatch = Game1.spriteBatch;
             foreach (Platform platform in currentPlatformList)
             {
@@ -217,4 +216,3 @@ namespace SwitchBlocks.Entities
         }
     }
 }
-
