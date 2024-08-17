@@ -235,9 +235,10 @@ namespace SwitchBlocks
                         AutoForceSwitch = ParseForceSwitch(dictionaryAuto);
                         if (dictionaryAuto.ContainsKey("Warn"))
                         {
-                            Dictionary<string, int> dictionaryAutoWarn = Xml.MapNames(childrenAuto[dictionaryAuto["Warn"]].ChildNodes);
-                            AutoWarnCount = ParseWarnCount(dictionaryAutoWarn, block);
-                            AutoWarnDuration = ParseWarnDuration(dictionaryAutoWarn, block);
+                            XmlNode rootAutoWarn = childrenAuto[dictionaryAuto["Warn"]];
+                            Dictionary<string, int> dictionaryAutoWarn = Xml.MapNames(rootAutoWarn.ChildNodes);
+                            AutoWarnCount = ParseWarnCount(dictionaryAutoWarn, rootAutoWarn);
+                            AutoWarnDuration = ParseWarnDuration(dictionaryAutoWarn, rootAutoWarn);
                         }
                         break;
                     case "Basic":
@@ -256,9 +257,10 @@ namespace SwitchBlocks
                         CountdownForceSwitch = ParseForceSwitch(dictionaryCountdown);
                         if (dictionaryCountdown.ContainsKey("Warn"))
                         {
-                            Dictionary<string, int> dictionaryCountdownWarn = Xml.MapNames(childrenCountdown[dictionaryCountdown["Warn"]].ChildNodes);
-                            CountdownWarnCount = ParseWarnCount(dictionaryCountdownWarn, block);
-                            CountdownWarnDuration = ParseWarnDuration(dictionaryCountdownWarn, block);
+                            XmlNode rootContdownWarn = childrenCountdown[dictionaryCountdown["Warn"]];
+                            Dictionary<string, int> dictionaryCountdownWarn = Xml.MapNames(rootContdownWarn.ChildNodes);
+                            CountdownWarnCount = ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
+                            CountdownWarnDuration = ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);
                         }
                         break;
                     case "Jump":
@@ -354,10 +356,11 @@ namespace SwitchBlocks
         {
             XmlNodeList children = root.ChildNodes;
             int count = 2;
-            if (dictionary.ContainsKey("Count"))
+            if (!dictionary.ContainsKey("Count"))
             {
-                count = int.Parse(children[dictionary["Count"]].InnerText);
+                return count;
             }
+            count = int.Parse(children[dictionary["Count"]].InnerText);
             return count;
         }
 
@@ -365,13 +368,14 @@ namespace SwitchBlocks
         {
             XmlNodeList children = root.ChildNodes;
             float duration = 1.0f;
-            if (dictionary.ContainsKey("Duration"))
+            if (!dictionary.ContainsKey("Duration"))
             {
-                string dur = children[dictionary["Duration"]].InnerText;
-                dur = dur.Trim();
-                dur = dur.Replace(",", ".");
-                duration = float.Parse(dur, CultureInfo.InvariantCulture);
+                return duration;
             }
+            string dur = children[dictionary["Duration"]].InnerText;
+            dur = dur.Trim();
+            dur = dur.Replace(",", ".");
+            duration = float.Parse(dur, CultureInfo.InvariantCulture);
             return duration;
         }
     }
