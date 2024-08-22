@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using JumpKing.Level;
 using SwitchBlocks.Behaviours;
+using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using System;
 using System.Reflection;
@@ -33,6 +34,10 @@ namespace SwitchBlocks.Patching
             if (blockType == typeof(SandBlock))
             {
                 __result = __result || DataSand.HasEntered;
+            }
+            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
+            {
+                __result = false;
             }
             if (blockType == typeof(IceBlock))
             {
