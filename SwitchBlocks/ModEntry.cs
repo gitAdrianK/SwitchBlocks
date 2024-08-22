@@ -175,12 +175,11 @@ namespace SwitchBlocks
             BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoPlatform);
 
-            BehaviourAutoIce behaviourAutoIce = new BehaviourAutoIce();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoIce);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoIce);
+            BehaviourAutoIceOn behaviourAutoIceOn = new BehaviourAutoIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoIceOn);
+            BehaviourAutoIceOff behaviourAutoIceOff = new BehaviourAutoIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoIceOff);
 
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
@@ -191,9 +190,10 @@ namespace SwitchBlocks
             entityManager.AddObject(EntityBasicPlatforms.Instance);
             entityManager.AddObject(EntityBasicLevers.Instance);
 
-            BehaviourBasicIce behaviourBasicIce = new BehaviourBasicIce();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIce);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOff), behaviourBasicIce);
+            BehaviourBasicIceOn behaviourBasicIceOn = new BehaviourBasicIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIceOn);
+            BehaviourBasicIceOff behaviourBasicIceOff = new BehaviourBasicIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOff), behaviourBasicIceOff);
 
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
@@ -215,9 +215,10 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownPlatform);
 
-            BehaviourCountdownIce behaviourCountdownIce = new BehaviourCountdownIce();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIce);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIce);
+            BehaviourCountdownIceOn behaviourCountdownIceOn = new BehaviourCountdownIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIceOn);
+            BehaviourCountdownIceOff behaviourCountdownIceOff = new BehaviourCountdownIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIceOff);
 
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
@@ -228,9 +229,10 @@ namespace SwitchBlocks
         {
             entityManager.AddObject(EntityJumpPlatforms.Instance);
 
-            BehaviourJumpIce behaviourJumpIce = new BehaviourJumpIce();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIce);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIce);
+            BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
+            BehaviourJumpIceOff behaviourJumpIceOff = new BehaviourJumpIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIceOff);
 
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
@@ -240,6 +242,9 @@ namespace SwitchBlocks
             entityManager.AddObject(EntitySandPlatforms.Instance);
             entityManager.AddObject(EntitySandLevers.Instance);
 
+            // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
+            // velocity or position! This technically needs updating, but I have to consider
+            // Ghost of the Immortal Babe breaking!
             BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);

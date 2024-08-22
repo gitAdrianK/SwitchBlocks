@@ -4,12 +4,15 @@ using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using JumpKing.Player;
+using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourBasicIce : IBlockBehaviour
+    public class BehaviourAutoIceOn : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
@@ -49,13 +52,26 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockBasicIceOff>();
-            IsPlayerOnIce = (isPlayerOnBlockOff && !DataBasic.State) || (isPlayerOnBlockOn && DataBasic.State);
+            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockAutoIceOn>();
+            IsPlayerOnIce = IsPlayerOnBlock && DataAuto.State;
             if (IsPlayerOnIce)
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;
                 bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
+            }
+            if (IsPlayerOnBlock && !DataAuto.State)
+            {
+                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockAutoIceOn));
+                foreach (IBlock block in blocks)
+                {
+                    block.Intersects(playerRect, out Rectangle collision);
+                    if (collision.Size.X > 0 || collision.Size.Y > 0)
+                    {
+                        DataAuto.CanSwitchSafely = false;
+                        return true;
+                    }
+                }
             }
 
             return true;

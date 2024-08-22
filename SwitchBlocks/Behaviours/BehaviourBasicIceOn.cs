@@ -9,7 +9,7 @@ using SwitchBlocks.Data;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourCountdownIce : IBlockBehaviour
+    public class BehaviourBasicIceOn : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
@@ -49,9 +49,8 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
-            IsPlayerOnIce = (isPlayerOnBlockOff && !DataCountdown.State) || (isPlayerOnBlockOn && DataCountdown.State);
+            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
+            IsPlayerOnIce = IsPlayerOnBlock && DataBasic.State;
             if (IsPlayerOnIce)
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;

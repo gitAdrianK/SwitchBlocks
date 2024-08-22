@@ -23,10 +23,10 @@ namespace SwitchBlocks.Patching
         }
 
         /// <summary>
-        /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
-        /// in the IsOnBlock function when asked if the player is on a sand block.
+        /// Function to be patched in with harmony, adds the custom blocks from this mod to also return true
+        /// in the IsOnBlock function when asked if the player is on a custom block imitating the vanilla blocks behaviour.
         /// </summary>
-        /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
+        /// <param name="__result">Result of the original function, returning true if the player is on a custom block</param>
         /// <param name="blockType">Original object the function is called with</param>
         public static void IsOnCustomBlock(ref bool __result, Type blockType)
         {
@@ -34,17 +34,17 @@ namespace SwitchBlocks.Patching
             {
                 __result = __result || DataSand.HasEntered;
             }
-            //if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
-            //{
-            //    __result = false;
-            //}
             if (blockType == typeof(IceBlock))
             {
                 __result = __result
-                    || BehaviourAutoIce.IsPlayerOnIce
-                    || BehaviourBasicIce.IsPlayerOnIce
-                    || BehaviourCountdownIce.IsPlayerOnIce
-                    || BehaviourJumpIce.IsPlayerOnIce;
+                    || BehaviourAutoIceOn.IsPlayerOnIce
+                    || BehaviourAutoIceOff.IsPlayerOnIce
+                    || BehaviourBasicIceOn.IsPlayerOnIce
+                    || BehaviourBasicIceOff.IsPlayerOnIce
+                    || BehaviourCountdownIceOn.IsPlayerOnIce
+                    || BehaviourCountdownIceOff.IsPlayerOnIce
+                    || BehaviourJumpIceOn.IsPlayerOnIce
+                    || BehaviourJumpIceOff.IsPlayerOnIce;
             }
         }
     }

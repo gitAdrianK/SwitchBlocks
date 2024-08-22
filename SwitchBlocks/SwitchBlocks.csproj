@@ -53,15 +53,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\BehaviourAutoIce.cs" />
+    <Compile Include="Behaviours\BehaviourAutoIceOff.cs" />
+    <Compile Include="Behaviours\BehaviourAutoIceOn.cs" />
     <Compile Include="Behaviours\BehaviourAutoPlatform.cs" />
     <Compile Include="Behaviours\BehaviourAutoReset.cs" />
-    <Compile Include="Behaviours\BehaviourBasicIce.cs" />
+    <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
+    <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
-    <Compile Include="Behaviours\BehaviourCountdownIce.cs" />
+    <Compile Include="Behaviours\BehaviourCountdownIceOff.cs" />
+    <Compile Include="Behaviours\BehaviourCountdownIceOn.cs" />
     <Compile Include="Behaviours\BehaviourCountdownLever.cs" />
     <Compile Include="Behaviours\BehaviourCountdownPlatform.cs" />
-    <Compile Include="Behaviours\BehaviourJumpIce.cs" />
+    <Compile Include="Behaviours\BehaviourJumpIceOff.cs" />
+    <Compile Include="Behaviours\BehaviourJumpIceOn.cs" />
     <Compile Include="Behaviours\BehaviourSandPlatform.cs" />
     <Compile Include="Behaviours\BehaviourSandLever.cs" />
     <Compile Include="Blocks\BlockAutoIceOff.cs" />
