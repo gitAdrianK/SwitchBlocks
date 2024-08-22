@@ -17,6 +17,8 @@ namespace SwitchBlocks.Factories
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.COUNTDOWN_ON,
             ModBlocks.COUNTDOWN_OFF,
+            ModBlocks.COUNTDOWN_ICE_ON,
+            ModBlocks.COUNTDOWN_ICE_OFF,
             ModBlocks.COUNTDOWN_LEVER,
             ModBlocks.COUNTDOWN_LEVER_SOLID,
         };
@@ -31,9 +33,9 @@ namespace SwitchBlocks.Factories
             switch (blockCode)
             {
                 case var _ when blockCode == ModBlocks.COUNTDOWN_ON:
-                    return true;
                 case var _ when blockCode == ModBlocks.COUNTDOWN_OFF:
-                    return true;
+                case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_ON:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_OFF:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
                     return true;
             }
@@ -48,6 +50,10 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownOn(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_OFF:
                     return new BlockCountdownOff(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_ON:
+                    return new BlockCountdownIceOn(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_OFF:
+                    return new BlockCountdownIceOff(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER:
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:

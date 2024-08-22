@@ -87,7 +87,7 @@ namespace SwitchBlocks
 
             if (ModBlocks.IsJumpUsed)
             {
-                DoJumpSetup(entityManager);
+                DoJumpSetup(entityManager, player);
             }
 
             if (ModBlocks.IsSandUsed)
@@ -171,9 +171,17 @@ namespace SwitchBlocks
         private static void DoAutoSetup(EntityManager entityManager, PlayerEntity player)
         {
             entityManager.AddObject(EntityAutoPlatforms.Instance);
+
             BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoPlatform);
+
+            BehaviourAutoIce behaviourAutoIce = new BehaviourAutoIce();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoIce);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoIce);
+
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
         }
@@ -182,6 +190,11 @@ namespace SwitchBlocks
         {
             entityManager.AddObject(EntityBasicPlatforms.Instance);
             entityManager.AddObject(EntityBasicLevers.Instance);
+
+            BehaviourBasicIce behaviourBasicIce = new BehaviourBasicIce();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIce);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOff), behaviourBasicIce);
+
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
@@ -195,17 +208,30 @@ namespace SwitchBlocks
         {
             entityManager.AddObject(EntityCountdownPlatforms.Instance);
             entityManager.AddObject(EntityCountdownLevers.Instance);
+
             BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), behaviourCountdownPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownPlatform);
+
+            BehaviourCountdownIce behaviourCountdownIce = new BehaviourCountdownIce();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIce);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIce);
+
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
         }
 
-        private static void DoJumpSetup(EntityManager entityManager)
+        private static void DoJumpSetup(EntityManager entityManager, PlayerEntity player)
         {
             entityManager.AddObject(EntityJumpPlatforms.Instance);
+
+            BehaviourJumpIce behaviourJumpIce = new BehaviourJumpIce();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIce);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIce);
+
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
 
@@ -213,9 +239,11 @@ namespace SwitchBlocks
         {
             entityManager.AddObject(EntitySandPlatforms.Instance);
             entityManager.AddObject(EntitySandLevers.Instance);
+
             BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
+
             BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);

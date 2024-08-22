@@ -48,8 +48,10 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>();
+            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownOn>()
+                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
+            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>()
+                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
             DataCountdown.CanSwitchSafely = true;
             if (isPlayerOnBlockOn && !DataCountdown.State)

@@ -17,6 +17,8 @@ namespace SwitchBlocks.Factories
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.AUTO_ON,
             ModBlocks.AUTO_OFF,
+            ModBlocks.AUTO_ICE_ON,
+            ModBlocks.AUTO_ICE_OFF,
             ModBlocks.AUTO_RESET,
         };
 
@@ -30,8 +32,9 @@ namespace SwitchBlocks.Factories
             switch (blockCode)
             {
                 case var _ when blockCode == ModBlocks.AUTO_ON:
-                    return true;
                 case var _ when blockCode == ModBlocks.AUTO_OFF:
+                case var _ when blockCode == ModBlocks.AUTO_ICE_ON:
+                case var _ when blockCode == ModBlocks.AUTO_ICE_OFF:
                     return true;
             }
             return false;
@@ -45,6 +48,10 @@ namespace SwitchBlocks.Factories
                     return new BlockAutoOn(blockRect);
                 case var _ when blockCode == ModBlocks.AUTO_OFF:
                     return new BlockAutoOff(blockRect);
+                case var _ when blockCode == ModBlocks.AUTO_ICE_ON:
+                    return new BlockAutoIceOn(blockRect);
+                case var _ when blockCode == ModBlocks.AUTO_ICE_OFF:
+                    return new BlockAutoIceOff(blockRect);
                 case var _ when blockCode == ModBlocks.AUTO_RESET:
                     return new BlockAutoReset(blockRect);
                 default:

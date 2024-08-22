@@ -26,7 +26,6 @@ namespace SwitchBlocks.Factories
             switch (blockCode)
             {
                 case var _ when blockCode == ModBlocks.JUMP_ON:
-                    return true;
                 case var _ when blockCode == ModBlocks.JUMP_OFF:
                     return true;
             }

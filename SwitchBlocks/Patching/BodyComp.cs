@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using JumpKing.Level;
-using SwitchBlocks.Blocks;
+using SwitchBlocks.Behaviours;
 using SwitchBlocks.Data;
 using System;
 using System.Reflection;
@@ -15,31 +15,37 @@ namespace SwitchBlocks.Patching
             Harmony harmony = ModEntry.Harmony;
 
             MethodInfo isOnBlock = typeof(JK.BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
-            HarmonyMethod isOnCustomSand = new HarmonyMethod(typeof(BodyComp).GetMethod(nameof(IsOnCustomSand)));
+
+            HarmonyMethod isOnCustomBlock = new HarmonyMethod(typeof(BodyComp).GetMethod(nameof(IsOnCustomBlock)));
             harmony.Patch(
                 isOnBlock,
-                postfix: isOnCustomSand);
+                postfix: isOnCustomBlock);
         }
 
         /// <summary>
         /// Function to be patched in with harmony, adds the custom sand blocks from this mod to also return true
         /// in the IsOnBlock function when asked if the player is on a sand block.
         /// </summary>
-        /// <param name="__instance">Object instance of the body comp</param>
         /// <param name="__result">Result of the original function, returning true if the player is on a sand block</param>
         /// <param name="blockType">Original object the function is called with</param>
-        public static void IsOnCustomSand(object __instance, ref bool __result, Type blockType)
+        public static void IsOnCustomBlock(ref bool __result, Type blockType)
         {
             if (blockType == typeof(SandBlock))
             {
                 __result = __result || DataSand.HasEntered;
             }
-            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
+            //if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
+            //{
+            //    __result = false;
+            //}
+            if (blockType == typeof(IceBlock))
             {
-                __result = false;
+                __result = __result
+                    || BehaviourAutoIce.IsPlayerOnIce
+                    || BehaviourBasicIce.IsPlayerOnIce
+                    || BehaviourCountdownIce.IsPlayerOnIce
+                    || BehaviourJumpIce.IsPlayerOnIce;
             }
-
         }
-
     }
 }

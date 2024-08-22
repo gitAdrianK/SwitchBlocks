@@ -53,20 +53,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\BehaviourAutoIce.cs" />
     <Compile Include="Behaviours\BehaviourAutoPlatform.cs" />
     <Compile Include="Behaviours\BehaviourAutoReset.cs" />
+    <Compile Include="Behaviours\BehaviourBasicIce.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourCountdownIce.cs" />
     <Compile Include="Behaviours\BehaviourCountdownLever.cs" />
     <Compile Include="Behaviours\BehaviourCountdownPlatform.cs" />
+    <Compile Include="Behaviours\BehaviourJumpIce.cs" />
     <Compile Include="Behaviours\BehaviourSandPlatform.cs" />
     <Compile Include="Behaviours\BehaviourSandLever.cs" />
+    <Compile Include="Blocks\BlockAutoIceOff.cs" />
     <Compile Include="Blocks\BlockAutoOff.cs" />
+    <Compile Include="Blocks\BlockAutoIceOn.cs" />
     <Compile Include="Blocks\BlockAutoOn.cs" />
     <Compile Include="Blocks\BlockAutoReset.cs" />
+    <Compile Include="Blocks\BlockBasicIceOff.cs" />
+    <Compile Include="Blocks\BlockBasicIceOn.cs" />
     <Compile Include="Blocks\BlockBasicLever.cs" />
     <Compile Include="Blocks\BlockBasicLeverOff.cs" />
     <Compile Include="Blocks\BlockBasicLeverOn.cs" />
+    <Compile Include="Blocks\BlockCountdownIceOff.cs" />
+    <Compile Include="Blocks\BlockCountdownIceOn.cs" />
     <Compile Include="Blocks\BlockCountdownLever.cs" />
+    <Compile Include="Blocks\BlockJumpIceOff.cs" />
+    <Compile Include="Blocks\BlockJumpIceOn.cs" />
     <Compile Include="Blocks\BlockJumpOff.cs" />
     <Compile Include="Blocks\BlockJumpOn.cs" />
     <Compile Include="Blocks\BlockSandLever.cs" />

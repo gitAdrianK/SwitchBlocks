@@ -17,6 +17,8 @@ namespace SwitchBlocks.Factories
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.BASIC_ON,
             ModBlocks.BASIC_OFF,
+            ModBlocks.BASIC_ICE_ON,
+            ModBlocks.BASIC_ICE_OFF,
             ModBlocks.BASIC_LEVER,
             ModBlocks.BASIC_LEVER_ON,
             ModBlocks.BASIC_LEVER_OFF,
@@ -35,13 +37,11 @@ namespace SwitchBlocks.Factories
             switch (blockCode)
             {
                 case var _ when blockCode == ModBlocks.BASIC_ON:
-                    return true;
                 case var _ when blockCode == ModBlocks.BASIC_OFF:
-                    return true;
+                case var _ when blockCode == ModBlocks.BASIC_ICE_ON:
+                case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID:
-                    return true;
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_ON:
-                    return true;
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
                     return true;
             }
@@ -56,6 +56,10 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicOn(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_OFF:
                     return new BlockBasicOff(blockRect);
+                case var _ when blockCode == ModBlocks.BASIC_ICE_ON:
+                    return new BlockBasicIceOn(blockRect);
+                case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
+                    return new BlockBasicIceOff(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_LEVER:
                     return new BlockBasicLever(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_ON:
