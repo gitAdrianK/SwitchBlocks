@@ -33,11 +33,13 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
+            bool isReset = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
+            bool isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
+            IsPlayerOnBlock = isReset || isResetFull;
 
             if (IsPlayerOnBlock)
             {
-                if (advCollisionInfo.IsCollidingWith<BlockAutoResetFull>())
+                if (isResetFull)
                 {
                     DataAuto.State = false;
                 }
