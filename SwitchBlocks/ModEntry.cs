@@ -183,6 +183,7 @@ namespace SwitchBlocks
 
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
         }
 
         private static void DoBasicSetup(EntityManager entityManager, PlayerEntity player)

@@ -20,6 +20,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.AUTO_ICE_ON,
             ModBlocks.AUTO_ICE_OFF,
             ModBlocks.AUTO_RESET,
+            ModBlocks.AUTO_RESET_FULL,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level)
@@ -54,6 +55,8 @@ namespace SwitchBlocks.Factories
                     return new BlockAutoIceOff(blockRect);
                 case var _ when blockCode == ModBlocks.AUTO_RESET:
                     return new BlockAutoReset(blockRect);
+                case var _ when blockCode == ModBlocks.AUTO_RESET_FULL:
+                    return new BlockAutoResetFull(blockRect);
                 default:
                     throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }

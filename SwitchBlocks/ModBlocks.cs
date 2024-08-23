@@ -39,6 +39,10 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color AUTO_RESET = new Color(238, 11, 124);
         /// <summary>
+        /// Color that represents the auto reset block. 
+        /// </summary>
+        public static readonly Color AUTO_RESET_FULL = new Color(238, 12, 124);
+        /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
         public static float AutoDuration { get; private set; } = 3.0f;

@@ -73,6 +73,7 @@
     <Compile Include="Blocks\BlockAutoIceOn.cs" />
     <Compile Include="Blocks\BlockAutoOn.cs" />
     <Compile Include="Blocks\BlockAutoReset.cs" />
+    <Compile Include="Blocks\BlockAutoResetFull.cs" />
     <Compile Include="Blocks\BlockBasicIceOff.cs" />
     <Compile Include="Blocks\BlockBasicIceOn.cs" />
     <Compile Include="Blocks\BlockBasicLever.cs" />

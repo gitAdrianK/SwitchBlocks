@@ -37,7 +37,12 @@ namespace SwitchBlocks.Behaviours
 
             if (IsPlayerOnBlock)
             {
+                if (advCollisionInfo.IsCollidingWith<BlockAutoResetFull>())
+                {
+                    DataAuto.State = false;
+                }
                 DataAuto.RemainingTime = ModBlocks.AutoDuration;
+                DataAuto.WarnCount = 0;
             }
 
             return true;
