@@ -1,4 +1,5 @@
 ﻿using SwitchBlocks.Data;
+using SwitchBlocks.Patching;
 using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
@@ -42,29 +43,38 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            DataCountdown.RemainingTime -= deltaTime * 0.5f;
+
+            int currentTick = AchievementManager.GetTicks();
             if (IsActiveOnCurrentScreen)
             {
-                TryWarn();
+                TryWarn(currentTick);
             }
-            TrySwitch();
+            TrySwitch(currentTick);
         }
 
-        private void TryWarn()
+        private void TryWarn(int currentTick)
         {
             if (ModSounds.CountdownWarn == null || DataCountdown.WarnCount == ModBlocks.CountdownWarnCount)
             {
                 return;
             }
+            /*
             if (DataCountdown.RemainingTime <= (ModBlocks.CountdownWarnCount - DataCountdown.WarnCount) * ModBlocks.CountdownWarnDuration)
             {
                 ModSounds.CountdownWarn.PlayOneShot();
                 DataCountdown.WarnCount++;
             }
+            */
         }
 
-        private void TrySwitch()
+
+        private void TrySwitch(int currentTick)
         {
+            if (!DataCountdown.State)
+            {
+                return;
+            }
+
             if (DataCountdown.CanSwitchSafely && DataCountdown.SwitchOnceSafe)
             {
                 if (currentPlatformList != null)
@@ -72,12 +82,12 @@ namespace SwitchBlocks.Entities
                     ModSounds.CountdownFlip?.PlayOneShot();
                 }
                 DataCountdown.State = false;
-                DataCountdown.RemainingTime = ModBlocks.CountdownDuration;
                 DataCountdown.SwitchOnceSafe = false;
                 DataCountdown.WarnCount = 0;
                 return;
             }
-            if (DataCountdown.RemainingTime <= 0.0f)
+
+            if (DataCountdown.ActivatedTick + ModBlocks.CountdownDuration <= currentTick)
             {
                 if (DataCountdown.CanSwitchSafely || ModBlocks.CountdownForceSwitch)
                 {
@@ -92,7 +102,6 @@ namespace SwitchBlocks.Entities
                 {
                     DataCountdown.SwitchOnceSafe = true;
                 }
-                DataCountdown.RemainingTime = ModBlocks.CountdownDuration;
             }
         }
     }

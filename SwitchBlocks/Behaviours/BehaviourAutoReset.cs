@@ -3,6 +3,7 @@ using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Patching;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -39,11 +40,11 @@ namespace SwitchBlocks.Behaviours
 
             if (IsPlayerOnBlock)
             {
-                if (isResetFull)
+                DataAuto.ResetTick = AchievementManager.GetTicks();
+                if (!isResetFull)
                 {
-                    DataAuto.State = false;
+                    DataAuto.ResetTick -= ModBlocks.AutoDuration;
                 }
-                DataAuto.RemainingTime = ModBlocks.AutoDuration;
                 DataAuto.WarnCount = 0;
             }
 

@@ -119,6 +119,7 @@
     <Compile Include="Entities\EntityCountdownPlatforms.cs" />
     <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="ModStrings.cs" />
+    <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />
     <Compile Include="Util\Animation.cs" />

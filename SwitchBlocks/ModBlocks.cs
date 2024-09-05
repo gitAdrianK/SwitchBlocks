@@ -15,6 +15,11 @@ namespace SwitchBlocks
     public static class ModBlocks
     {
         /// <summary>
+        /// Used to convert time seconds to ticks.
+        /// </summary>
+        private const float deltaTime = 0.01666667f;
+
+        /// <summary>
         /// Whether the auto block is inside the blocks.xml and counts as "used/enabled"
         /// </summary>
         public static bool IsAutoUsed { get; private set; } = false;
@@ -45,11 +50,11 @@ namespace SwitchBlocks
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float AutoDuration { get; private set; } = 3.0f;
+        public static int AutoDuration { get; private set; } = 180;
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the auto block type.
         /// </summary>
-        public static float AutoMultiplier { get; private set; } = 1.0f;
+        public static float AutoMultiplier { get; private set; } = 2.0f;
         /// <summary>
         /// If the auto state switch is supposed to be forced, ignoring the safe switch.
         /// </summary>
@@ -61,7 +66,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Duration between auto warn sounds.
         /// </summary>
-        public static float AutoWarnDuration { get; private set; } = 1.0f;
+        public static int AutoWarnDuration { get; private set; } = 60;
 
         /// <summary>
         /// Whether the basic block is inside the blocks.xml and counts as "used/enabled"
@@ -110,7 +115,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the basic block type.
         /// </summary>
-        public static float BasicMultiplier { get; private set; } = 1.0f;
+        public static float BasicMultiplier { get; private set; } = 2.0f;
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
@@ -147,11 +152,11 @@ namespace SwitchBlocks
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static float CountdownDuration { get; private set; } = 3.0f;
+        public static int CountdownDuration { get; private set; } = 180;
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the countdown block type.
         /// </summary>
-        public static float CountdownMultiplier { get; private set; } = 1.0f;
+        public static float CountdownMultiplier { get; private set; } = 2.0f;
         /// <summary>
         /// Directions the basic lever can be activated from
         /// </summary>
@@ -167,7 +172,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Duration between countdown warn sounds.
         /// </summary>
-        public static float CountdownWarnDuration { get; private set; } = 1.0f;
+        public static int CountdownWarnDuration { get; private set; } = 60;
 
         /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
@@ -192,7 +197,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the jump block type.
         /// </summary>
-        public static float JumpMultiplier { get; private set; } = 1.0f;
+        public static float JumpMultiplier { get; private set; } = 2.0f;
 
         /// <summary>
         /// Whether the sand block is inside the blocks.xml and counts as "used/enabled"
@@ -233,7 +238,7 @@ namespace SwitchBlocks
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the sand block type.
         /// </summary>
-        public static float SandMultiplier { get; private set; } = 1.0f;
+        public static float SandMultiplier { get; private set; } = 2.0f;
         /// <summary>
         /// Directions the sand lever can be activated from
         /// </summary>
@@ -317,8 +322,8 @@ namespace SwitchBlocks
             }
         }
 
-        // Looks for a "Duration" node and returns the inside declared float duration or 3.0f.
-        private static float ParseDuration(Dictionary<string, int> dictionary, XmlNode root)
+        // Looks for a "Duration" node and returns the inside declared float duration in ticks or 3 seconds/180 ticks. Rounded up.
+        private static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
             float duration = 3.0f;
@@ -326,7 +331,7 @@ namespace SwitchBlocks
             {
                 duration = float.Parse(children[dictionary["Duration"]].InnerText, CultureInfo.InvariantCulture);
             }
-            return duration;
+            return (int)((duration / deltaTime) + 0.5f);
         }
 
         // Looks for a "Multiplier" node and returns the inside declared float multiplier or 1.0f.
@@ -400,19 +405,19 @@ namespace SwitchBlocks
             return count;
         }
 
-        private static float ParseWarnDuration(Dictionary<string, int> dictionary, XmlNode root)
+        private static int ParseWarnDuration(Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
             float duration = 1.0f;
             if (!dictionary.ContainsKey("Duration"))
             {
-                return duration;
+                return (int)((duration / deltaTime) + 0.5f);
             }
             string dur = children[dictionary["Duration"]].InnerText;
             dur = dur.Trim();
             dur = dur.Replace(",", ".");
             duration = float.Parse(dur, CultureInfo.InvariantCulture);
-            return duration;
+            return (int)((duration / deltaTime) + 0.5f);
         }
     }
 }

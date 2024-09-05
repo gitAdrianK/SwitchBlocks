@@ -1,4 +1,6 @@
-﻿namespace SwitchBlocks.Data
+﻿using System;
+
+namespace SwitchBlocks.Data
 {
     /// <summary>
     /// Contains data relevant for the countdown block.
@@ -24,6 +26,7 @@
         /// <summary>
         /// Time before flipping state.
         /// </summary>
+        [Obsolete("Replaced with ticks")]
         public static float RemainingTime { get; set; }
 
         /// <summary>
@@ -40,5 +43,10 @@
         /// The amount of times the warning sound has been played.
         /// </summary>
         public static int WarnCount { get; set; }
+
+        /// <summary>
+        /// Tick the countdown block has been activated.
+        /// </summary>
+        public static int ActivatedTick { get; set; }
     }
 }

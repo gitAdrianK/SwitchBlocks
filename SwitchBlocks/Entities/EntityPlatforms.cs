@@ -59,7 +59,7 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(bool state, float amount, float multiplier)
         {
-            amount = amount * multiplier;
+            amount *= multiplier;
             if (progress != 1.0f && state)
             {
                 progress += amount;

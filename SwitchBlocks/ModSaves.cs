@@ -3,6 +3,7 @@ using SwitchBlocks.Data;
 using System;
 using System.IO;
 
+#pragma warning disable 0618
 namespace SwitchBlocks
 {
     /// <summary>
@@ -61,6 +62,9 @@ namespace SwitchBlocks
                 // Warning sounds
                 binaryWriter.Write(DataAuto.WarnCount);
                 binaryWriter.Write(DataCountdown.WarnCount);
+                // Switch to ticks
+                binaryWriter.Write(DataAuto.ResetTick);
+                binaryWriter.Write(DataCountdown.ActivatedTick);
             }
             catch (Exception e)
             {
@@ -131,10 +135,21 @@ namespace SwitchBlocks
                 {
                     DataAuto.WarnCount = 0;
                     DataCountdown.WarnCount = 0;
+                    DataAuto.ResetTick = 0;
+                    DataCountdown.ActivatedTick = Int32.MinValue;
                     return;
                 }
                 DataAuto.WarnCount = binaryReader.ReadInt32();
                 DataCountdown.WarnCount = binaryReader.ReadInt32();
+                // Ticks
+                if (binaryReader.PeekChar() == -1)
+                {
+                    DataAuto.ResetTick = 0;
+                    DataCountdown.ActivatedTick = Int32.MinValue;
+                    return;
+                }
+                DataAuto.ResetTick = binaryReader.ReadInt32();
+                DataCountdown.ActivatedTick = binaryReader.ReadInt32();
             }
             catch
             {
@@ -159,6 +174,7 @@ namespace SwitchBlocks
             DataAuto.CanSwitchSafely = true;
             DataAuto.SwitchOnceSafe = false;
             DataAuto.WarnCount = 0;
+            DataAuto.ResetTick = 0;
             // Basic
             DataBasic.State = false;
             DataBasic.Progress = 0.0f;
@@ -171,6 +187,7 @@ namespace SwitchBlocks
             DataCountdown.CanSwitchSafely = true;
             DataCountdown.SwitchOnceSafe = false;
             DataCountdown.WarnCount = 0;
+            DataCountdown.ActivatedTick = Int32.MinValue;
             // Sand
             DataSand.State = false;
             DataSand.HasSwitched = false;

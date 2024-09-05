@@ -1,4 +1,6 @@
-﻿namespace SwitchBlocks.Data
+﻿using System;
+
+namespace SwitchBlocks.Data
 {
     /// <summary>
     /// Contains data relevant for the auto block.
@@ -18,6 +20,7 @@
         /// <summary>
         /// Time before flipping state.
         /// </summary
+        [Obsolete("Replaced with ticks")]
         public static float RemainingTime { get; set; }
 
         /// <summary>
@@ -34,5 +37,10 @@
         /// The amount of times the warning sound has been played.
         /// </summary>
         public static int WarnCount { get; set; }
+
+        /// <summary>
+        /// Tick the auto block has been reset.
+        /// </summary>
+        public static int ResetTick { get; set; }
     }
 }

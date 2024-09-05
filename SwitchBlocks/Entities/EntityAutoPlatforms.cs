@@ -1,4 +1,5 @@
 ﻿using SwitchBlocks.Data;
+using SwitchBlocks.Patching;
 using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
@@ -38,52 +39,59 @@ namespace SwitchBlocks.Entities
         {
             UpdateProgress(DataAuto.State, deltaTime, ModBlocks.AutoMultiplier);
 
-            DataAuto.RemainingTime -= deltaTime * 0.5f;
+            int currentTick = AchievementManager.GetTicks();
             if (IsActiveOnCurrentScreen)
             {
-                TryWarn();
+                TryWarn(currentTick);
             }
-            TrySwitch();
+            TrySwitch(currentTick);
         }
 
-        private void TryWarn()
+        private void TryWarn(int currentTick)
         {
             if (ModSounds.AutoWarn == null || DataAuto.WarnCount == ModBlocks.AutoWarnCount)
             {
                 return;
             }
+            /*
             if (DataAuto.RemainingTime <= (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration)
             {
                 ModSounds.AutoWarn.PlayOneShot();
                 DataAuto.WarnCount++;
             }
+            */
         }
 
-        private void TrySwitch()
+        private void TrySwitch(int currentTick)
         {
+            bool currState = (currentTick - DataAuto.ResetTick) / ModBlocks.AutoDuration % 2 == 0;
+            if (DataAuto.State == currState)
+            {
+                return;
+            }
+
             if (DataAuto.CanSwitchSafely && DataAuto.SwitchOnceSafe)
             {
-                DataAuto.State = !DataAuto.State;
+                DataAuto.State = currState;
                 DataAuto.SwitchOnceSafe = false;
                 return;
             }
-            if (DataAuto.RemainingTime <= 0.0f)
+
+            if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
             {
-                if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
-                {
-                    DataAuto.State = !DataAuto.State;
-                }
-                else
-                {
-                    DataAuto.SwitchOnceSafe = true;
-                }
-                if (currentPlatformList != null)
-                {
-                    ModSounds.AutoFlip?.PlayOneShot();
-                }
-                DataAuto.RemainingTime = ModBlocks.AutoDuration;
-                DataAuto.WarnCount = 0;
+                DataAuto.State = currState;
             }
+            else
+            {
+                DataAuto.SwitchOnceSafe = true;
+            }
+
+            if (currentPlatformList != null)
+            {
+                ModSounds.AutoFlip?.PlayOneShot();
+            }
+            DataAuto.WarnCount = 0;
+
         }
     }
 }

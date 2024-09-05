@@ -9,6 +9,7 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 using SwitchBlocks.Factories;
+using System.Diagnostics;
 using System.IO;
 
 namespace SwitchBlocks
@@ -25,7 +26,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
 
             LevelManager.RegisterBlockFactory(new FactoryAuto());
             LevelManager.RegisterBlockFactory(new FactoryBasic());
@@ -72,27 +73,27 @@ namespace SwitchBlocks
 
             if (ModBlocks.IsAutoUsed)
             {
-                DoAutoSetup(entityManager, player);
+                DoAutoSetup(player);
             }
 
             if (ModBlocks.IsBasicUsed)
             {
-                DoBasicSetup(entityManager, player);
+                DoBasicSetup(player);
             }
 
             if (ModBlocks.IsCountdownUsed)
             {
-                DoCountdownSetup(entityManager, player);
+                DoCountdownSetup(player);
             }
 
             if (ModBlocks.IsJumpUsed)
             {
-                DoJumpSetup(entityManager, player);
+                DoJumpSetup(player);
             }
 
             if (ModBlocks.IsSandUsed)
             {
-                DoSandSetup(entityManager, player);
+                DoSandSetup(player);
             }
 
             EntityManager.instance.MoveToFront(player);
@@ -168,9 +169,9 @@ namespace SwitchBlocks
             DataJump.State = !DataJump.State;
         }
 
-        private static void DoAutoSetup(EntityManager entityManager, PlayerEntity player)
+        private static void DoAutoSetup(PlayerEntity player)
         {
-            entityManager.AddObject(EntityAutoPlatforms.Instance);
+            _ = EntityAutoPlatforms.Instance;
 
             BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
@@ -186,10 +187,10 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
         }
 
-        private static void DoBasicSetup(EntityManager entityManager, PlayerEntity player)
+        private static void DoBasicSetup(PlayerEntity player)
         {
-            entityManager.AddObject(EntityBasicPlatforms.Instance);
-            entityManager.AddObject(EntityBasicLevers.Instance);
+            _ = EntityBasicPlatforms.Instance;
+            _ = EntityBasicLevers.Instance;
 
             BehaviourBasicIceOn behaviourBasicIceOn = new BehaviourBasicIceOn();
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIceOn);
@@ -205,10 +206,10 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
         }
 
-        private static void DoCountdownSetup(EntityManager entityManager, PlayerEntity player)
+        private static void DoCountdownSetup(PlayerEntity player)
         {
-            entityManager.AddObject(EntityCountdownPlatforms.Instance);
-            entityManager.AddObject(EntityCountdownLevers.Instance);
+            _ = EntityCountdownPlatforms.Instance;
+            _ = EntityCountdownLevers.Instance;
 
             BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
@@ -226,9 +227,9 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
         }
 
-        private static void DoJumpSetup(EntityManager entityManager, PlayerEntity player)
+        private static void DoJumpSetup(PlayerEntity player)
         {
-            entityManager.AddObject(EntityJumpPlatforms.Instance);
+            _ = EntityJumpPlatforms.Instance;
 
             BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
@@ -238,10 +239,10 @@ namespace SwitchBlocks
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
 
-        private static void DoSandSetup(EntityManager entityManager, PlayerEntity player)
+        private static void DoSandSetup(PlayerEntity player)
         {
-            entityManager.AddObject(EntitySandPlatforms.Instance);
-            entityManager.AddObject(EntitySandLevers.Instance);
+            _ = EntitySandPlatforms.Instance;
+            _ = EntitySandLevers.Instance;
 
             // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
             // velocity or position! This technically needs updating, but I have to consider

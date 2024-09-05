@@ -4,6 +4,7 @@ using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Patching;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                DataCountdown.RemainingTime = ModBlocks.CountdownDuration;
+                DataCountdown.ActivatedTick = AchievementManager.GetTicks();
 
                 if (DataCountdown.HasSwitched)
                 {
