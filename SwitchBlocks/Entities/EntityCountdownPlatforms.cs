@@ -76,7 +76,7 @@ namespace SwitchBlocks.Entities
 
             if (DataCountdown.CanSwitchSafely && DataCountdown.SwitchOnceSafe)
             {
-                if (currentPlatformList != null)
+                if (IsActiveOnCurrentScreen)
                 {
                     ModSounds.CountdownFlip?.PlayOneShot();
                 }
@@ -90,7 +90,7 @@ namespace SwitchBlocks.Entities
             {
                 if (DataCountdown.CanSwitchSafely || ModBlocks.CountdownForceSwitch)
                 {
-                    if (currentPlatformList != null)
+                    if (IsActiveOnCurrentScreen)
                     {
                         ModSounds.CountdownFlip?.PlayOneShot();
                     }

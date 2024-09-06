@@ -78,6 +78,11 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
+            if (IsActiveOnCurrentScreen && !DataAuto.SwitchOnceSafe)
+            {
+                ModSounds.AutoFlip?.PlayOneShot();
+            }
+
             if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
             {
                 DataAuto.State = currState;
@@ -85,11 +90,6 @@ namespace SwitchBlocks.Entities
             else
             {
                 DataAuto.SwitchOnceSafe = true;
-            }
-
-            if (currentPlatformList != null)
-            {
-                ModSounds.AutoFlip?.PlayOneShot();
             }
             DataAuto.WarnCount = 0;
         }
