@@ -40,31 +40,32 @@ namespace SwitchBlocks.Entities
             UpdateProgress(DataAuto.State, deltaTime, ModBlocks.AutoMultiplier);
 
             int currentTick = AchievementManager.GetTicks();
+            int adjustedTick = currentTick - DataAuto.ResetTick;
             if (IsActiveOnCurrentScreen)
             {
-                TryWarn(currentTick);
+                TryWarn(adjustedTick);
             }
-            TrySwitch(currentTick);
+            TrySwitch(adjustedTick);
         }
 
-        private void TryWarn(int currentTick)
+        private void TryWarn(int adjustedTick)
         {
             if (ModSounds.AutoWarn == null || DataAuto.WarnCount == ModBlocks.AutoWarnCount)
             {
                 return;
             }
-            /*
-            if (DataAuto.RemainingTime <= (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration)
+            int warnAdjust = (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration;
+            int warnTick = (adjustedTick + warnAdjust) % ModBlocks.AutoDuration;
+            if (warnTick == 0)
             {
-                ModSounds.AutoWarn.PlayOneShot();
                 DataAuto.WarnCount++;
+                ModSounds.AutoWarn.PlayOneShot();
             }
-            */
         }
 
-        private void TrySwitch(int currentTick)
+        private void TrySwitch(int adjustedTick)
         {
-            bool currState = (currentTick - DataAuto.ResetTick) / ModBlocks.AutoDuration % 2 == 0;
+            bool currState = adjustedTick / ModBlocks.AutoDuration % 2 == 0;
             if (DataAuto.State == currState)
             {
                 return;
@@ -91,7 +92,6 @@ namespace SwitchBlocks.Entities
                 ModSounds.AutoFlip?.PlayOneShot();
             }
             DataAuto.WarnCount = 0;
-
         }
     }
 }

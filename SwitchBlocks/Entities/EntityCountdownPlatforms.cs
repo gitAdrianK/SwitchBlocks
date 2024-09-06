@@ -45,28 +45,27 @@ namespace SwitchBlocks.Entities
             }
 
             int currentTick = AchievementManager.GetTicks();
+            int adjustedTick = ModBlocks.CountdownDuration - (currentTick - DataCountdown.ActivatedTick);
             if (IsActiveOnCurrentScreen)
             {
-                TryWarn(currentTick);
+                TryWarn(adjustedTick);
             }
             TrySwitch(currentTick);
         }
 
-        private void TryWarn(int currentTick)
+        private void TryWarn(int adjustedTick)
         {
             if (ModSounds.CountdownWarn == null || DataCountdown.WarnCount == ModBlocks.CountdownWarnCount)
             {
                 return;
             }
-            /*
-            if (DataCountdown.RemainingTime <= (ModBlocks.CountdownWarnCount - DataCountdown.WarnCount) * ModBlocks.CountdownWarnDuration)
+            int warnAdjust = (ModBlocks.CountdownWarnCount - DataCountdown.WarnCount) * ModBlocks.CountdownWarnDuration;
+            if (adjustedTick - warnAdjust == 0)
             {
-                ModSounds.CountdownWarn.PlayOneShot();
                 DataCountdown.WarnCount++;
+                ModSounds.CountdownWarn.PlayOneShot();
             }
-            */
         }
-
 
         private void TrySwitch(int currentTick)
         {

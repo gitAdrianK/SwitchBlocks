@@ -9,7 +9,6 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 using SwitchBlocks.Factories;
-using System.Diagnostics;
 using System.IO;
 
 namespace SwitchBlocks
@@ -26,7 +25,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            Debugger.Launch();
+            //Debugger.Launch();
 
             LevelManager.RegisterBlockFactory(new FactoryAuto());
             LevelManager.RegisterBlockFactory(new FactoryBasic());

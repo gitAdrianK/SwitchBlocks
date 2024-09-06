@@ -59,6 +59,8 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(bool state, float amount, float multiplier)
         {
+            // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
+            amount *= 2.0f;
             amount *= multiplier;
             if (progress != 1.0f && state)
             {
@@ -112,6 +114,7 @@ namespace SwitchBlocks.Entities
             switch (platform.Animation.curve)
             {
                 case Curve.Stepped:
+                    // TODO: Actual stepped
                     progressActual = progressAdjusted < 0.9f ? 1.0f : 0.0f;
                     break;
                 case Curve.Linear:
