@@ -41,25 +41,33 @@ namespace SwitchBlocks.Entities
 
             int currentTick = AchievementManager.GetTicks();
             int adjustedTick = currentTick - DataAuto.ResetTick;
-            if (IsActiveOnCurrentScreen)
-            {
-                TryWarn(adjustedTick);
-            }
+            TrySound(adjustedTick);
             TrySwitch(adjustedTick);
         }
 
-        private void TryWarn(int adjustedTick)
+        private void TrySound(int adjustedTick)
         {
-            if (ModSounds.AutoWarn == null || DataAuto.WarnCount == ModBlocks.AutoWarnCount)
+            int soundAdjust = (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration;
+            int soundTick = (adjustedTick + soundAdjust) % ModBlocks.AutoDuration;
+            if (soundTick != 0)
             {
                 return;
             }
-            int warnAdjust = (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration;
-            int warnTick = (adjustedTick + warnAdjust) % ModBlocks.AutoDuration;
-            if (warnTick == 0)
+            if (ModBlocks.AutoWarnCount == DataAuto.WarnCount)
             {
+                if (IsActiveOnCurrentScreen)
+                {
+                    ModSounds.AutoFlip?.PlayOneShot();
+                }
+                DataAuto.WarnCount = 0;
+            }
+            else
+            {
+                if (IsActiveOnCurrentScreen)
+                {
+                    ModSounds.AutoWarn?.PlayOneShot();
+                }
                 DataAuto.WarnCount++;
-                ModSounds.AutoWarn.PlayOneShot();
             }
         }
 
@@ -78,10 +86,6 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            if (IsActiveOnCurrentScreen && !DataAuto.SwitchOnceSafe)
-            {
-                ModSounds.AutoFlip?.PlayOneShot();
-            }
 
             if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
             {
@@ -91,7 +95,6 @@ namespace SwitchBlocks.Entities
             {
                 DataAuto.SwitchOnceSafe = true;
             }
-            DataAuto.WarnCount = 0;
         }
     }
 }

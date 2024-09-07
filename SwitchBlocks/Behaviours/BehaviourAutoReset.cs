@@ -41,10 +41,11 @@ namespace SwitchBlocks.Behaviours
             if (IsPlayerOnBlock)
             {
                 DataAuto.ResetTick = AchievementManager.GetTicks();
-                if (!isResetFull)
+                if (isReset && DataAuto.State)
                 {
                     DataAuto.ResetTick -= ModBlocks.AutoDuration;
                 }
+
                 DataAuto.WarnCount = 0;
             }
 
