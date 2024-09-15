@@ -1,6 +1,8 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using JumpKing.MiscEntities.WorldItems;
+using JumpKing.MiscEntities.WorldItems.Inventory;
 using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -9,11 +11,13 @@ using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourCountdownPlatform : IBlockBehaviour
+    public class BehaviourAutoSnow : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
+
+        public static bool IsPlayerOnSnow { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -48,41 +52,42 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownOn>()
-                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>()
-                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
+            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockAutoSnowOn>();
+            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockAutoSnowOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
-            DataCountdown.CanSwitchSafely = true;
+            DataAuto.CanSwitchSafely = true;
             if (!IsPlayerOnBlock)
             {
                 return true;
             }
 
-            if (isPlayerOnBlockOn && !DataCountdown.State)
+            IsPlayerOnSnow = !InventoryManager.HasItemEnabled(Items.SnakeRing)
+                && ((isPlayerOnBlockOn && DataAuto.State) || (isPlayerOnBlockOff && !DataAuto.State));
+
+            if (isPlayerOnBlockOn && !DataAuto.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOn));
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockAutoSnowOn));
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);
                     if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
-                        DataCountdown.CanSwitchSafely = false;
+                        DataAuto.CanSwitchSafely = false;
                         return true;
                     }
                 }
             }
-            if (isPlayerOnBlockOff && DataCountdown.State)
+            if (isPlayerOnBlockOff && DataAuto.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOff));
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockAutoSnowOff));
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);
                     if (collision.Size.X > 0 || collision.Size.Y > 0)
                     {
-                        DataCountdown.CanSwitchSafely = false;
+                        DataAuto.CanSwitchSafely = false;
                         return true;
                     }
                 }

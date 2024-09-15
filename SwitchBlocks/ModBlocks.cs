@@ -40,6 +40,14 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color AUTO_ICE_OFF = new Color(11, 124, 238);
         /// <summary>
+        /// Color that represents the auto snow on block. 
+        /// </summary>
+        public static readonly Color AUTO_SNOW_ON = new Color(238, 124, 12);
+        /// <summary>
+        /// Color that represents the auto snow off block. 
+        /// </summary>
+        public static readonly Color AUTO_SNOW_OFF = new Color(12, 124, 238);
+        /// <summary>
         /// Color that represents the auto reset block. 
         /// </summary>
         public static readonly Color AUTO_RESET = new Color(238, 11, 124);
@@ -88,6 +96,14 @@ namespace SwitchBlocks
         /// Color that represents the basic ice off block. 
         /// </summary>
         public static readonly Color BASIC_ICE_OFF = new Color(21, 124, 238);
+        /// <summary>
+        /// Color that represents the basic snow on block. 
+        /// </summary>
+        public static readonly Color BASIC_SNOW_ON = new Color(238, 124, 22);
+        /// <summary>
+        /// Color that represents the basic snow off block. 
+        /// </summary>
+        public static readonly Color BASIC_SNOW_OFF = new Color(22, 124, 238);
         /// <summary>
         /// Color that represents the basic solid lever block. 
         /// </summary>
@@ -142,6 +158,14 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color COUNTDOWN_ICE_OFF = new Color(31, 124, 238);
         /// <summary>
+        /// Color that represents the countdown snow on block. 
+        /// </summary>
+        public static readonly Color COUNTDOWN_SNOW_ON = new Color(238, 124, 32);
+        /// <summary>
+        /// Color that represents the countdown snow off block. 
+        /// </summary>
+        public static readonly Color COUNTDOWN_SNOW_OFF = new Color(32, 124, 238);
+        /// <summary>
         /// Color that represents the countdown lever block. 
         /// </summary>
         public static readonly Color COUNTDOWN_LEVER = new Color(238, 31, 124);
@@ -194,6 +218,14 @@ namespace SwitchBlocks
         /// Color that represents the jump ice off block. 
         /// </summary>
         public static readonly Color JUMP_ICE_OFF = new Color(95, 96, 95);
+        /// <summary>
+        /// Color that represents the jump snow on block. 
+        /// </summary>
+        public static readonly Color JUMP_SNOW_ON = new Color(31, 33, 31);
+        /// <summary>
+        /// Color that represents the jump snow off block. 
+        /// </summary>
+        public static readonly Color JUMP_SNOW_OFF = new Color(95, 97, 95);
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the jump block type.
         /// </summary>

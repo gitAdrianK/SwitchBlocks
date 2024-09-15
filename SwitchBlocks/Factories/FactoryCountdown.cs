@@ -19,6 +19,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.COUNTDOWN_OFF,
             ModBlocks.COUNTDOWN_ICE_ON,
             ModBlocks.COUNTDOWN_ICE_OFF,
+            ModBlocks.COUNTDOWN_SNOW_ON,
+            ModBlocks.COUNTDOWN_SNOW_OFF,
             ModBlocks.COUNTDOWN_LEVER,
             ModBlocks.COUNTDOWN_LEVER_SOLID,
         };
@@ -36,6 +38,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.COUNTDOWN_OFF:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_ON:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_OFF:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_ON:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_OFF:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
                     return true;
             }
@@ -54,6 +58,10 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownIceOn(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_ICE_OFF:
                     return new BlockCountdownIceOff(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_ON:
+                    return new BlockCountdownSnowOn(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_OFF:
+                    return new BlockCountdownSnowOff(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER:
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:

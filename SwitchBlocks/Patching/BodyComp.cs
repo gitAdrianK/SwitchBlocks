@@ -51,6 +51,14 @@ namespace SwitchBlocks.Patching
                     || BehaviourJumpIceOn.IsPlayerOnIce
                     || BehaviourJumpIceOff.IsPlayerOnIce;
             }
+            if (blockType == typeof(SnowBlock))
+            {
+                __result = __result
+                    || BehaviourAutoSnow.IsPlayerOnSnow
+                    || BehaviourBasicSnow.IsPlayerOnSnow
+                    || BehaviourCountdownSnow.IsPlayerOnSnow
+                    || BehaviourJumpSnow.IsPlayerOnSnow;
+            }
         }
     }
 }

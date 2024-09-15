@@ -19,6 +19,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.BASIC_OFF,
             ModBlocks.BASIC_ICE_ON,
             ModBlocks.BASIC_ICE_OFF,
+            ModBlocks.BASIC_SNOW_ON,
+            ModBlocks.BASIC_SNOW_OFF,
             ModBlocks.BASIC_LEVER,
             ModBlocks.BASIC_LEVER_ON,
             ModBlocks.BASIC_LEVER_OFF,
@@ -40,6 +42,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BASIC_OFF:
                 case var _ when blockCode == ModBlocks.BASIC_ICE_ON:
                 case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
+                case var _ when blockCode == ModBlocks.BASIC_SNOW_ON:
+                case var _ when blockCode == ModBlocks.BASIC_SNOW_OFF:
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID:
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_ON:
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
@@ -60,6 +64,10 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicIceOn(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
                     return new BlockBasicIceOff(blockRect);
+                case var _ when blockCode == ModBlocks.BASIC_SNOW_ON:
+                    return new BlockBasicSnowOn(blockRect);
+                case var _ when blockCode == ModBlocks.BASIC_SNOW_OFF:
+                    return new BlockBasicSnowOff(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_LEVER:
                     return new BlockBasicLever(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_ON:

@@ -48,12 +48,15 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockAutoOn>()
-                || advCollisionInfo.IsCollidingWith<BlockAutoIceOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockAutoOff>()
-                || advCollisionInfo.IsCollidingWith<BlockAutoIceOff>();
+            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockAutoOn>();
+            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockAutoOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
             DataAuto.CanSwitchSafely = true;
+            if (!IsPlayerOnBlock)
+            {
+                return true;
+            }
+
             if (isPlayerOnBlockOn && !DataAuto.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();

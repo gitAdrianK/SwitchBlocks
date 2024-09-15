@@ -181,6 +181,10 @@ namespace SwitchBlocks
             BehaviourAutoIceOff behaviourAutoIceOff = new BehaviourAutoIceOff();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoIceOff);
 
+            BehaviourAutoSnow behaviourAutoSnow = new BehaviourAutoSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOn), behaviourAutoSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOff), behaviourAutoSnow);
+
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
@@ -195,6 +199,10 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIceOn);
             BehaviourBasicIceOff behaviourBasicIceOff = new BehaviourBasicIceOff();
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOff), behaviourBasicIceOff);
+
+            BehaviourBasicSnow behaviourBasicSnow = new BehaviourBasicSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicSnowOn), behaviourBasicSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicSnowOff), behaviourBasicSnow);
 
             BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
@@ -221,6 +229,10 @@ namespace SwitchBlocks
             BehaviourCountdownIceOff behaviourCountdownIceOff = new BehaviourCountdownIceOff();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIceOff);
 
+            BehaviourCountdownSnow behaviourCountdownSnow = new BehaviourCountdownSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOn), behaviourCountdownSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOff), behaviourCountdownSnow);
+
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
@@ -234,6 +246,10 @@ namespace SwitchBlocks
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
             BehaviourJumpIceOff behaviourJumpIceOff = new BehaviourJumpIceOff();
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIceOff);
+
+            BehaviourJumpSnow behaviourJumpSnow = new BehaviourJumpSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOn), behaviourJumpSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOff), behaviourJumpSnow);
 
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
