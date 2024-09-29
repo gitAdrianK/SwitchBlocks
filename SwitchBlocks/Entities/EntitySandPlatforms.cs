@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
-using SwitchBlocks.Util;
+using SwitchBlocks.Platforms;
 using System.Collections.Generic;
 
 namespace SwitchBlocks.Entities

@@ -1,13 +1,14 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace SwitchBlocks.Util
+namespace SwitchBlocks.Platforms
 {
     /// <summary>
     /// Represents a platform with a texture, position, size, and start state.

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace SwitchBlocks.Util
+namespace SwitchBlocks.Platforms
 {
     /// <summary>
     /// Represents a subclass of platform, sandplatform with two more textures, scrolling and foreground. <br />

@@ -142,7 +142,7 @@
     <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Lever.cs" />
-    <Compile Include="Util\Platform.cs" />
+    <Compile Include="Platforms\Platform.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />
     <Compile Include="Factories\FactoryBasic.cs" />
     <Compile Include="Factories\FactoryCountdown.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModSaves.cs" />
     <Compile Include="ModEntry.cs" />
-    <Compile Include="Util\PlatformSand.cs" />
+    <Compile Include="Platforms\PlatformSand.cs" />
     <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
