@@ -134,6 +134,11 @@
     <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />
+    <Compile Include="Setups\SetupCountdown.cs" />
+    <Compile Include="Setups\SetupJump.cs" />
+    <Compile Include="Setups\SetupSand.cs" />
+    <Compile Include="Setups\SetupAuto.cs" />
+    <Compile Include="Setups\SetupBasic.cs" />
     <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Lever.cs" />

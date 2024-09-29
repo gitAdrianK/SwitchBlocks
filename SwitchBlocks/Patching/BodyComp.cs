@@ -11,10 +11,8 @@ namespace SwitchBlocks.Patching
 {
     public class BodyComp
     {
-        public BodyComp()
+        public BodyComp(Harmony harmony)
         {
-            Harmony harmony = ModEntry.Harmony;
-
             MethodInfo isOnBlock = typeof(JK.BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
 
             HarmonyMethod isOnCustomBlock = new HarmonyMethod(typeof(BodyComp).GetMethod(nameof(IsOnCustomBlock)));

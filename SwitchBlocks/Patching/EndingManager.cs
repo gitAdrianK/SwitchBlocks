@@ -8,10 +8,8 @@ namespace SwitchBlocks.Patching
     {
         public static bool HasFinished { get; private set; }
 
-        public EndingManager()
+        public EndingManager(Harmony harmony)
         {
-            Harmony harmony = ModEntry.Harmony;
-
             Type endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
             MethodInfo checkWin = endingManager.GetMethod("CheckWin");
             HarmonyMethod checkWinPatch = new HarmonyMethod(typeof(EndingManager).GetMethod(nameof(CheckWinPostfix)));

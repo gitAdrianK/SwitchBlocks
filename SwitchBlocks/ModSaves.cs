@@ -3,6 +3,8 @@ using SwitchBlocks.Data;
 using System;
 using System.IO;
 
+// TODO: Copy from group branch and remove
+
 #pragma warning disable 0618
 namespace SwitchBlocks
 {
