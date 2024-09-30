@@ -58,13 +58,13 @@ namespace SwitchBlocks.Data
 
         private DataCountdown()
         {
-            state = false;
-            progress = 0.0f;
-            hasSwitched = false;
-            canSwitchSafely = true;
-            switchOnceSafe = false;
-            warnCount = 0;
-            activatedTick = Int32.MinValue;
+            _state = false;
+            _progress = 0.0f;
+            _hasSwitched = false;
+            _canSwitchSafely = true;
+            _switchOnceSafe = false;
+            _warnCount = 0;
+            _activatedTick = Int32.MinValue;
         }
 
         public void SaveToFile()
@@ -89,20 +89,20 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool State
         {
-            get => Instance.state;
-            set => Instance.state = value;
+            get => Instance._state;
+            set => Instance._state = value;
         }
-        private bool state;
+        public bool _state;
 
         /// <summary>
         /// Animation progress.
         /// </summary>
         public static float Progress
         {
-            get => Instance.progress;
-            set => Instance.progress = value;
+            get => Instance._progress;
+            set => Instance._progress = value;
         }
-        private float progress;
+        public float _progress;
 
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
@@ -110,49 +110,49 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool HasSwitched
         {
-            get => Instance.hasSwitched;
-            set => Instance.hasSwitched = value;
+            get => Instance._hasSwitched;
+            set => Instance._hasSwitched = value;
         }
-        private bool hasSwitched;
+        public bool _hasSwitched;
 
         /// <summary>
         /// If the block can switch safely.
         /// </summary>
         public static bool CanSwitchSafely
         {
-            get => Instance.canSwitchSafely;
-            set => Instance.canSwitchSafely = value;
+            get => Instance._canSwitchSafely;
+            set => Instance._canSwitchSafely = value;
         }
-        private bool canSwitchSafely;
+        public bool _canSwitchSafely;
 
         /// <summary>
         /// If the block should switch next opportunity.
         /// </summary>
         public static bool SwitchOnceSafe
         {
-            get => Instance.switchOnceSafe;
-            set => Instance.switchOnceSafe = value;
+            get => Instance._switchOnceSafe;
+            set => Instance._switchOnceSafe = value;
         }
-        private bool switchOnceSafe;
+        public bool _switchOnceSafe;
 
         /// <summary>
         /// The amount of times the warning sound has been played.
         /// </summary>
         public static int WarnCount
         {
-            get => Instance.warnCount;
-            set => Instance.warnCount = value;
+            get => Instance._warnCount;
+            set => Instance._warnCount = value;
         }
-        private int warnCount;
+        public int _warnCount;
 
         /// <summary>
         /// Tick the countdown block has been activated.
         /// </summary>
         public static int ActivatedTick
         {
-            get => Instance.activatedTick;
-            set => Instance.activatedTick = value;
+            get => Instance._activatedTick;
+            set => Instance._activatedTick = value;
         }
-        private int activatedTick;
+        public int _activatedTick;
     }
 }

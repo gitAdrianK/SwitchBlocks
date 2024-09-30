@@ -58,9 +58,9 @@ namespace SwitchBlocks.Data
 
         private DataBasic()
         {
-            state = false;
-            progress = 0.0f;
-            hasSwitched = false;
+            _state = false;
+            _progress = 0.0f;
+            _hasSwitched = false;
         }
 
         public void SaveToFile()
@@ -82,20 +82,20 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool State
         {
-            get => Instance.state;
-            set => Instance.state = value;
+            get => Instance._state;
+            set => Instance._state = value;
         }
-        private bool state;
+        public bool _state;
 
         /// <summary>
         /// Animation progress.
         /// </summary>
         public static float Progress
         {
-            get => Instance.progress;
-            set => Instance.progress = value;
+            get => Instance._progress;
+            set => Instance._progress = value;
         }
-        private float progress;
+        public float _progress;
 
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
@@ -103,9 +103,9 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool HasSwitched
         {
-            get => Instance.hasSwitched;
-            set => Instance.hasSwitched = value;
+            get => Instance._hasSwitched;
+            set => Instance._hasSwitched = value;
         }
-        private bool hasSwitched;
+        public bool _hasSwitched;
     }
 }

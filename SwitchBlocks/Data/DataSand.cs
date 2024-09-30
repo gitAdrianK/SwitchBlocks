@@ -59,9 +59,9 @@ namespace SwitchBlocks.Data
 
         private DataSand()
         {
-            state = false;
-            hasSwitched = false;
-            hasEntered = false;
+            _state = false;
+            _hasSwitched = false;
+            _hasEntered = false;
         }
 
         public void SaveToFile()
@@ -83,10 +83,10 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool State
         {
-            get => Instance.state;
-            set => Instance.state = value;
+            get => Instance._state;
+            set => Instance._state = value;
         }
-        private bool state;
+        public bool _state;
 
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
@@ -94,19 +94,19 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool HasSwitched
         {
-            get => Instance.hasSwitched;
-            set => Instance.hasSwitched = value;
+            get => Instance._hasSwitched;
+            set => Instance._hasSwitched = value;
         }
-        private bool hasSwitched;
+        public bool _hasSwitched;
 
         /// <summary>
         /// Whether the player is currently inside the block.
         /// </summary>
         public static bool HasEntered
         {
-            get => Instance.hasEntered;
-            set => Instance.hasEntered = value;
+            get => Instance._hasEntered;
+            set => Instance._hasEntered = value;
         }
-        private bool hasEntered;
+        public bool _hasEntered;
     }
 }

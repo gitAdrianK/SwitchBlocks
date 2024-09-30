@@ -58,8 +58,8 @@ namespace SwitchBlocks.Data
 
         private DataJump()
         {
-            state = false;
-            progress = 0.0f;
+            _state = false;
+            _progress = 0.0f;
         }
 
         public void SaveToFile()
@@ -81,19 +81,19 @@ namespace SwitchBlocks.Data
         /// </summary>
         public static bool State
         {
-            get => Instance.state;
-            set => Instance.state = value;
+            get => Instance._state;
+            set => Instance._state = value;
         }
-        private bool state;
+        private bool _state;
 
         /// <summary>
         /// Animation progress.
         /// </summary>
         public static float Progress
         {
-            get => Instance.progress;
-            set => Instance.progress = value;
+            get => Instance._progress;
+            set => Instance._progress = value;
         }
-        private float progress;
+        public float _progress;
     }
 }
