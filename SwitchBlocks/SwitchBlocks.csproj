@@ -134,6 +134,7 @@
     <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />
+    <Compile Include="Setups\SetupGroup.cs" />
     <Compile Include="Setups\SetupCountdown.cs" />
     <Compile Include="Setups\SetupJump.cs" />
     <Compile Include="Setups\SetupSand.cs" />
@@ -149,7 +150,6 @@
     <Compile Include="Factories\FactorySand.cs" />
     <Compile Include="ModSounds.cs" />
     <Compile Include="ModBlocks.cs" />
-    <Compile Include="ModSaves.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Platforms\PlatformSand.cs" />
     <Compile Include="Util\Xml.cs" />

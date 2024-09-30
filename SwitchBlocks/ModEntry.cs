@@ -41,16 +41,7 @@ namespace SwitchBlocks
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
-
-            // Level being null means the vanilla map is being started/ended.
-            if (contentManager.level == null)
-            {
-                return;
-            }
-            if (!Directory.Exists(path))
+            if (!IsModUsed())
             {
                 return;
             }
@@ -64,7 +55,6 @@ namespace SwitchBlocks
             }
 
             ModBlocks.LoadProperties();
-            ModSaves.Load();
             ModSounds.Load();
 
             SetupAuto.DoSetup(player);
@@ -82,16 +72,7 @@ namespace SwitchBlocks
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
-
-            // Level being null means the vanilla map is being started/ended.
-            if (contentManager.level == null)
-            {
-                return;
-            }
-            if (!Directory.Exists(path))
+            if (!IsModUsed())
             {
                 return;
             }
@@ -102,8 +83,28 @@ namespace SwitchBlocks
             SetupCountdown.DoCleanup(entityManager);
             SetupJump.DoCleanup(entityManager);
             SetupSand.DoCleanup(entityManager);
+        }
 
-            ModSaves.Save();
+        /// <summary>
+        /// Determines if the stuff used for the mod is present and thus the mod is used.
+        /// </summary>
+        /// <returns>true if the mods supposed to be loaded, false otherwise</returns>
+        private static bool IsModUsed()
+        {
+            JKContentManager contentManager = Game1.instance.contentManager;
+            char sep = Path.DirectorySeparatorChar;
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
+
+            // Level being null means the vanilla map is being started/ended.
+            if (contentManager.level == null)
+            {
+                return false;
+            }
+            if (!Directory.Exists(path))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

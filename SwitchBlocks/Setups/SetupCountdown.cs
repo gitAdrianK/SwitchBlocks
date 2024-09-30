@@ -2,6 +2,7 @@
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
+using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 
 namespace SwitchBlocks.Setups
@@ -14,6 +15,8 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+            _ = DataCountdown.Instance;
+
             _ = EntityCountdownPlatforms.Instance;
             _ = EntityCountdownLevers.Instance;
 
@@ -47,6 +50,9 @@ namespace SwitchBlocks.Setups
             entityManager.RemoveObject(EntityCountdownLevers.Instance);
             EntityCountdownPlatforms.Instance.Reset();
             EntityCountdownLevers.Instance.Reset();
+
+            DataCountdown.Instance.SaveToFile();
+            DataCountdown.Instance.Reset();
         }
     }
 }

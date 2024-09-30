@@ -16,6 +16,8 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+            _ = DataJump.Instance;
+
             _ = EntityJumpPlatforms.Instance;
 
             BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
@@ -40,6 +42,9 @@ namespace SwitchBlocks.Setups
             EntityJumpPlatforms.Instance.Reset();
 
             PlayerEntity.OnJumpCall -= JumpSwitch;
+
+            DataJump.Instance.SaveToFile();
+            DataJump.Instance.Reset();
         }
 
         private static void JumpSwitch()

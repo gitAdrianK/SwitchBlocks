@@ -2,6 +2,7 @@
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
+using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 
 namespace SwitchBlocks.Setups
@@ -14,6 +15,8 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+            _ = DataSand.Instance;
+
             _ = EntitySandPlatforms.Instance;
             _ = EntitySandLevers.Instance;
 
@@ -43,6 +46,9 @@ namespace SwitchBlocks.Setups
             entityManager.RemoveObject(EntitySandLevers.Instance);
             EntitySandPlatforms.Instance.Reset();
             EntitySandLevers.Instance.Reset();
+
+            DataSand.Instance.SaveToFile();
+            DataSand.Instance.Reset();
         }
     }
 }

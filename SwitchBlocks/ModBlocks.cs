@@ -199,6 +199,15 @@ namespace SwitchBlocks
         public static int CountdownWarnDuration { get; private set; } = 60;
 
         /// <summary>
+        /// Whether the group block is inside the blocks.xml and counts as "used/enabled"
+        /// </summary>
+        public static bool IsGroupUsed { get; private set; } = false;
+        /// <summary>
+        /// Multiplier of the deltaTime used in the animation of the group block type.
+        /// </summary>
+        public static float GroupMultiplier { get; private set; } = 1.0f;
+
+        /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
         /// </summary>
         public static bool IsJumpUsed { get; private set; } = false;
@@ -335,6 +344,12 @@ namespace SwitchBlocks
                             CountdownWarnCount = ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
                             CountdownWarnDuration = ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);
                         }
+                        break;
+                    case "Group":
+                        IsGroupUsed = true;
+                        XmlNodeList childrenGroup = block.ChildNodes;
+                        Dictionary<string, int> dictionaryGroup = Xml.MapNames(childrenGroup);
+                        GroupMultiplier = ParseMultiplier(dictionaryGroup, block);
                         break;
                     case "Jump":
                         IsJumpUsed = true;

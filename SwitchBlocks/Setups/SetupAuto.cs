@@ -2,6 +2,7 @@
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
+using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 
 namespace SwitchBlocks.Setups
@@ -14,6 +15,8 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+            _ = DataAuto.Instance;
+
             _ = EntityAutoPlatforms.Instance;
 
             BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
@@ -42,6 +45,9 @@ namespace SwitchBlocks.Setups
             }
             entityManager.RemoveObject(EntityAutoPlatforms.Instance);
             EntityAutoPlatforms.Instance.Reset();
+
+            DataAuto.Instance.SaveToFile();
+            DataAuto.Instance.Reset();
         }
     }
 }
