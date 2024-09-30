@@ -23,8 +23,6 @@ namespace SwitchBlocks.Setups
             BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), behaviourCountdownPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownPlatform);
 
             BehaviourCountdownIceOn behaviourCountdownIceOn = new BehaviourCountdownIceOn();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIceOn);
