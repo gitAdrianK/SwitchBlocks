@@ -26,11 +26,6 @@ namespace SwitchBlocks.Blocks
             return !DataBasic.State ? collider : new Rectangle(0, 0, 0, 0);
         }
 
-        public bool IsSolidBlock(Color blockCode)
-        {
-            return !DataBasic.State;
-        }
-
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
             if (collider.Intersects(hitbox))
