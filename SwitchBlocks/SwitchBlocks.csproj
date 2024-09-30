@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -92,6 +93,14 @@
     <Compile Include="Blocks\BlockCountdownSnowOn.cs" />
     <Compile Include="Blocks\BlockCountdownIceOn.cs" />
     <Compile Include="Blocks\BlockCountdownLever.cs" />
+    <Compile Include="Blocks\BlockGoupResetSolid.cs" />
+    <Compile Include="Blocks\BlockGoupReset.cs" />
+    <Compile Include="Blocks\BlockGroupSnowA.cs" />
+    <Compile Include="Blocks\BlockGroupIceA.cs" />
+    <Compile Include="Blocks\BlockGroupSnowB.cs" />
+    <Compile Include="Blocks\BlockGroupIceB.cs" />
+    <Compile Include="Blocks\BlockGroupB.cs" />
+    <Compile Include="Blocks\BlockGroupA.cs" />
     <Compile Include="Blocks\BlockJumpSnowOff.cs" />
     <Compile Include="Blocks\BlockJumpIceOff.cs" />
     <Compile Include="Blocks\BlockJumpSnowOn.cs" />
@@ -114,9 +123,11 @@
     <Compile Include="Blocks\BlockSandLeverSolid.cs" />
     <Compile Include="Blocks\BlockSandOff.cs" />
     <Compile Include="Blocks\BlockSandOn.cs" />
+    <Compile Include="Blocks\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
     <Compile Include="Data\DataCountdown.cs" />
+    <Compile Include="Data\DataGroup.cs" />
     <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
     <Compile Include="Entities\EntityAutoPlatforms.cs" />
@@ -129,6 +140,7 @@
     <Compile Include="Entities\EntityBasicPlatforms.cs" />
     <Compile Include="Entities\EntityCountdownLevers.cs" />
     <Compile Include="Entities\EntityCountdownPlatforms.cs" />
+    <Compile Include="Factories\FactoryGroup.cs" />
     <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="ModStrings.cs" />
     <Compile Include="Patching\AchievementManager.cs" />
@@ -152,6 +164,7 @@
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Platforms\PlatformSand.cs" />
+    <Compile Include="Util\SerializableDictionary.cs" />
     <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

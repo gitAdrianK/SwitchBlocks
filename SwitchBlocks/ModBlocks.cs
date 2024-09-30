@@ -203,6 +203,38 @@ namespace SwitchBlocks
         /// </summary>
         public static bool IsGroupUsed { get; private set; } = false;
         /// <summary>
+        /// Color that represents the group A block. 
+        /// </summary>
+        public static readonly Color GROUP_A = new Color(238, 124, 50);
+        /// <summary>
+        /// Color that represents the group B block. 
+        /// </summary>
+        public static readonly Color GROUP_B = new Color(50, 124, 238);
+        /// <summary>
+        /// Color that represents the group ice A block. 
+        /// </summary>
+        public static readonly Color GROUP_ICE_A = new Color(238, 124, 51);
+        /// <summary>
+        /// Color that represents the group ice B block. 
+        /// </summary>
+        public static readonly Color GROUP_ICE_B = new Color(51, 124, 238);
+        /// <summary>
+        /// Color that represents the group snow A block. 
+        /// </summary>
+        public static readonly Color GROUP_SNOW_A = new Color(238, 124, 52);
+        /// <summary>
+        /// Color that represents the group snow B block. 
+        /// </summary>
+        public static readonly Color GROUP_SNOW_B = new Color(52, 124, 238);
+        /// <summary>
+        /// Color that represents the group reset block. 
+        /// </summary>
+        public static readonly Color GROUP_RESET = new Color(238, 51, 124);
+        /// <summary>
+        /// Color that represents the countdown solid reset block. 
+        /// </summary>
+        public static readonly Color GROUP_RESET_SOLID = new Color(238, 54, 124);
+        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the group block type.
         /// </summary>
         public static float GroupMultiplier { get; private set; } = 1.0f;
