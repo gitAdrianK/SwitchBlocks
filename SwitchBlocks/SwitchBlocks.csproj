@@ -62,6 +62,12 @@
     <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
     <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourGroupIceB.cs" />
+    <Compile Include="Behaviours\BehaviourGroupIceA.cs" />
+    <Compile Include="Behaviours\BehaviourGroupReset.cs" />
+    <Compile Include="Behaviours\BehaviourGroupSnow.cs" />
+    <Compile Include="Behaviours\BehaviourGroupLeaving.cs" />
+    <Compile Include="Behaviours\BehaviourGroupDuration.cs" />
     <Compile Include="Behaviours\BehaviourJumpSnow.cs" />
     <Compile Include="Behaviours\BehaviourBasicSnow.cs" />
     <Compile Include="Behaviours\BehaviourCountdownIceOff.cs" />
@@ -131,6 +137,7 @@
     <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
     <Compile Include="Entities\EntityAutoPlatforms.cs" />
+    <Compile Include="Entities\EntityGroupPlatform.cs" />
     <Compile Include="Entities\EntityJumpPlatforms.cs" />
     <Compile Include="Entities\EntityLevers.cs" />
     <Compile Include="Entities\EntityPlatforms.cs" />
@@ -146,6 +153,7 @@
     <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />
+    <Compile Include="Platforms\PlatformGroup.cs" />
     <Compile Include="Setups\SetupGroup.cs" />
     <Compile Include="Setups\SetupCountdown.cs" />
     <Compile Include="Setups\SetupJump.cs" />

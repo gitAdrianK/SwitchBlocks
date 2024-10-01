@@ -1,8 +1,11 @@
 ﻿using EntityComponent;
+using JumpKing.API;
 using JumpKing.Player;
 using Microsoft.Xna.Framework;
+using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -31,9 +34,35 @@ namespace SwitchBlocks.Setups
             AssignGroupIds();
             CreateGroupData();
 
-            // TODO: _ = EntityGroupPlatforms.Instance;
+            _ = EntityGroupPlatforms.Instance;
 
-            // TODO: Behaviours
+            IBlockBehaviour behaviourGroupPlatform;
+            if (ModBlocks.GroupDuration == 0)
+            {
+                Debugger.Log(1, "", ">>> No duration set, using touch\n");
+                behaviourGroupPlatform = new BehaviourGroupLeaving();
+            }
+            else
+            {
+                //TODO : Duration behaviour
+                Debugger.Log(1, "", ">>> Duration set, using " + ModBlocks.GroupDuration + " ticks\n");
+                behaviourGroupPlatform = new BehaviourGroupDuration();
+            }
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
+
+            BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
+            BehaviourGroupIceB behaviourGroupIceB = new BehaviourGroupIceB();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceB), behaviourGroupIceB);
+
+            BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
+
+            BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
         }
 
         public static void DoCleanup(EntityManager entityManager)
@@ -45,8 +74,8 @@ namespace SwitchBlocks.Setups
             // TODO: Group Cleanup
             Debugger.Log(1, "", ">>> Cleanup\n");
 
-            // TODO: entityManager.RemoveObject(EntityGroupPlatforms.Instance);
-            // TODO: EntityGroupPlatforms.Instance.Reset();
+            entityManager.RemoveObject(EntityGroupPlatforms.Instance);
+            EntityGroupPlatforms.Instance.Reset();
 
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();

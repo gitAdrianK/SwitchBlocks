@@ -46,6 +46,8 @@ namespace SwitchBlocks.Patching
                     || BehaviourBasicIceOff.IsPlayerOnIce
                     || BehaviourCountdownIceOn.IsPlayerOnIce
                     || BehaviourCountdownIceOff.IsPlayerOnIce
+                    || BehaviourGroupIceA.IsPlayerOnIce
+                    || BehaviourGroupIceB.IsPlayerOnIce
                     || BehaviourJumpIceOn.IsPlayerOnIce
                     || BehaviourJumpIceOff.IsPlayerOnIce;
             }
@@ -55,6 +57,7 @@ namespace SwitchBlocks.Patching
                     || BehaviourAutoSnow.IsPlayerOnSnow
                     || BehaviourBasicSnow.IsPlayerOnSnow
                     || BehaviourCountdownSnow.IsPlayerOnSnow
+                    || BehaviourGroupSnow.IsPlayerOnSnow
                     || BehaviourJumpSnow.IsPlayerOnSnow;
             }
         }

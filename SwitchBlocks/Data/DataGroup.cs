@@ -1,6 +1,7 @@
 ﻿using JumpKing;
 using JumpKing.SaveThread;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
@@ -78,6 +79,8 @@ namespace SwitchBlocks.Data
         private DataGroup()
         {
             _groups = new SerializableDictionary<int, Group>();
+            _hasSwitched = false;
+            _touched = new HashSet<int>();
         }
 
         public void SaveToFile()
@@ -104,6 +107,16 @@ namespace SwitchBlocks.Data
             return Instance._groups[id].State;
         }
 
+        public static void SetState(int id, bool state)
+        {
+            if (!Instance._groups.ContainsKey(id))
+            {
+                Debugger.Log(1, "", ">>> Tried to set state of " + id + " but it didn't exist, creating!\n");
+                Groups.Add(id, new Group());
+            }
+            Instance._groups[id].State = state;
+        }
+
         public static float GetProgress(int id)
         {
             if (!Instance._groups.ContainsKey(id))
@@ -114,6 +127,16 @@ namespace SwitchBlocks.Data
             return Instance._groups[id].Progress;
         }
 
+        public static void SetProgress(int id, float progress)
+        {
+            if (!Instance._groups.ContainsKey(id))
+            {
+                Debugger.Log(1, "", ">>> Tried to set progress of " + id + " but it didn't exist, creating!\n");
+                Groups.Add(id, new Group());
+            }
+            Instance._groups[id].Progress = progress;
+        }
+
         public static int GetTick(int id)
         {
             if (!Instance._groups.ContainsKey(id))
@@ -121,6 +144,15 @@ namespace SwitchBlocks.Data
                 Debugger.Log(1, "", ">>> Tried to get tick of " + id + " but it didn't exist, creating!\n");
             }
             return Instance._groups[id].ActivatedTick;
+        }
+
+        public static void SetTick(int id, int tick)
+        {
+            if (!Instance._groups.ContainsKey(id))
+            {
+                Debugger.Log(1, "", ">>> Tried to set tick of " + id + " but it didn't exist, creating!\n");
+            }
+            Instance._groups[id].ActivatedTick = tick;
         }
 
         /// <summary>
@@ -133,5 +165,23 @@ namespace SwitchBlocks.Data
             set => Instance._groups = value;
         }
         public SerializableDictionary<int, Group> _groups;
+
+        /// <summary>
+        /// Whether the state has switched touching a lever.<br />
+        /// One time touching the lever = one switch
+        /// </summary>
+        public static bool HasSwitched
+        {
+            get => Instance._hasSwitched;
+            set => Instance._hasSwitched = value;
+        }
+        public bool _hasSwitched;
+
+        public static HashSet<int> Touched
+        {
+            get => Instance._touched;
+            set => Instance._touched = value;
+        }
+        public HashSet<int> _touched;
     }
 }

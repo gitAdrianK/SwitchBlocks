@@ -29,6 +29,7 @@
         public const string AUTO = "auto";
         public const string BASIC = "basic";
         public const string COUNTDOWN = "countdown";
+        public const string GROUP = "group";
         public const string JUMP = "jump";
         public const string SAND = "sand";
 

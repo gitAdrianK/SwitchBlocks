@@ -133,7 +133,7 @@ namespace SwitchBlocks
         /// </summary>
         public static float BasicMultiplier { get; private set; } = 1.0f;
         /// <summary>
-        /// Directions the basic lever can be activated from
+        /// Directions the basic lever can be activated from.
         /// </summary>
         public static HashSet<Directions> BasicDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
@@ -182,7 +182,7 @@ namespace SwitchBlocks
         /// </summary>
         public static float CountdownMultiplier { get; private set; } = 1.0f;
         /// <summary>
-        /// Directions the basic lever can be activated from
+        /// Directions the basic lever can be activated from.
         /// </summary>
         public static HashSet<Directions> CountdownDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
         /// <summary>
@@ -235,9 +235,17 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color GROUP_RESET_SOLID = new Color(238, 54, 124);
         /// <summary>
+        /// How long the blocks stay in their state before switching.
+        /// </summary>
+        public static int GroupDuration { get; private set; } = 0;
+        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the group block type.
         /// </summary>
         public static float GroupMultiplier { get; private set; } = 1.0f;
+        /// <summary>
+        /// Directions the group lever can be activated from.
+        /// </summary>
+        public static HashSet<Directions> GroupDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
         /// <summary>
         /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
@@ -313,7 +321,7 @@ namespace SwitchBlocks
         /// </summary>
         public static float SandMultiplier { get; private set; } = 1.0f;
         /// <summary>
-        /// Directions the sand lever can be activated from
+        /// Directions the sand lever can be activated from.
         /// </summary>
         public static HashSet<Directions> SandDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
 
@@ -381,7 +389,9 @@ namespace SwitchBlocks
                         IsGroupUsed = true;
                         XmlNodeList childrenGroup = block.ChildNodes;
                         Dictionary<string, int> dictionaryGroup = Xml.MapNames(childrenGroup);
+                        GroupDuration = ParseDuration(dictionaryGroup, block, 0);
                         GroupMultiplier = ParseMultiplier(dictionaryGroup, block);
+                        GroupDirections = ParseLeverSideDisable(dictionaryGroup, block);
                         break;
                     case "Jump":
                         IsJumpUsed = true;
@@ -401,11 +411,16 @@ namespace SwitchBlocks
             }
         }
 
-        // Looks for a "Duration" node and returns the inside declared float duration in ticks or 3 seconds/180 ticks. Rounded up.
         private static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root)
         {
+            return ParseDuration(dictionary, root, 3);
+        }
+
+        // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
+        private static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
+        {
             XmlNodeList children = root.ChildNodes;
-            float duration = 3.0f;
+            float duration = defaultDuration;
             if (dictionary.ContainsKey("Duration"))
             {
                 duration = float.Parse(children[dictionary["Duration"]].InnerText, CultureInfo.InvariantCulture);
