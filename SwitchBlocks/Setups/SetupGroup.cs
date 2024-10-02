@@ -8,7 +8,6 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 
 namespace SwitchBlocks.Setups
@@ -26,8 +25,6 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
-            // TODO: Group Setup
-            Debugger.Log(1, "", ">>> Setup\n");
 
             _ = DataGroup.Instance;
 
@@ -39,13 +36,11 @@ namespace SwitchBlocks.Setups
             IBlockBehaviour behaviourGroupPlatform;
             if (ModBlocks.GroupDuration == 0)
             {
-                Debugger.Log(1, "", ">>> No duration set, using touch\n");
                 behaviourGroupPlatform = new BehaviourGroupLeaving();
             }
             else
             {
                 //TODO : Duration behaviour
-                Debugger.Log(1, "", ">>> Duration set, using " + ModBlocks.GroupDuration + " ticks\n");
                 behaviourGroupPlatform = new BehaviourGroupDuration();
             }
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
@@ -71,8 +66,6 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
-            // TODO: Group Cleanup
-            Debugger.Log(1, "", ">>> Cleanup\n");
 
             entityManager.RemoveObject(EntityGroupPlatforms.Instance);
             EntityGroupPlatforms.Instance.Reset();
@@ -103,7 +96,6 @@ namespace SwitchBlocks.Setups
             if (DataGroup.Groups.Count() > 0)
             {
                 groupId = DataGroup.Groups.OrderByDescending(kv => kv.Key).First().Key + 1;
-                Debugger.Log(1, "", "Highest key: " + groupId + "\n");
             }
 
             AssignGroupIds(BlocksGroupA);
@@ -176,12 +168,7 @@ namespace SwitchBlocks.Setups
             {
                 if (!DataGroup.Groups.ContainsKey(i))
                 {
-                    Debugger.Log(1, "", ">>> Created new group " + i + "\n");
                     DataGroup.Groups.Add(i, new DataGroup.Group());
-                }
-                else
-                {
-                    Debugger.Log(1, "", ">>> Group " + i + " loaded from file\n");
                 }
             }
         }

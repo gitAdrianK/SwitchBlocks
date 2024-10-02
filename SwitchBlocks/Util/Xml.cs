@@ -177,5 +177,25 @@ namespace SwitchBlocks
             }
             return animation;
         }
+
+        /// <summary>
+        /// Creates a Vector3 from a given xml node should the node contain 3
+        /// children named "Screen", "X", and "Y"
+        /// </summary>
+        /// <param name="root">Xml node to create the vector from.</param>
+        /// <returns>Vector3 or null</returns>
+        public static Vector3? GetVector3(XmlNode root)
+        {
+            XmlNodeList children = root.ChildNodes;
+            Dictionary<string, int> dictionary = MapNamesRequired(children, "Screen", "X", "Y");
+            if (dictionary == null)
+            {
+                return null;
+            }
+            return new Vector3(
+                int.Parse(children[dictionary["X"]].InnerText),
+                int.Parse(children[dictionary["Y"]].InnerText),
+                int.Parse(children[dictionary["Screen"]].InnerText));
+        }
     }
 }

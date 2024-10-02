@@ -25,6 +25,9 @@
         public const string SCROLLING = "Scrolling";
         public const string FOREGROUND = "Foreground";
 
+        // Relevant for group Xml
+        public const string LINK_POSITION = "link";
+
         // Block types
         public const string AUTO = "auto";
         public const string BASIC = "basic";

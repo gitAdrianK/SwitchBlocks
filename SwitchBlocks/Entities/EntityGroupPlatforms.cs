@@ -1,5 +1,6 @@
 ﻿using EntityComponent;
 using JumpKing;
+using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
@@ -38,6 +39,7 @@ namespace SwitchBlocks.Entities
             PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP);
         }
 
+        // TODO: Inherit from EntityPlatforms and cut down on repeated code
         private int currentScreen = -1;
         private int nextScreen;
 
@@ -62,7 +64,11 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            // TODO: Draw platforms
+            SpriteBatch spriteBatch = Game1.spriteBatch;
+            Parallel.ForEach(currentPlatformList, platform =>
+            {
+                EntityPlatforms.DrawPlatform(platform, DataGroup.GetProgress(platform.GroupId), spriteBatch);
+            });
         }
 
         /// <summary>
@@ -125,11 +131,11 @@ namespace SwitchBlocks.Entities
 
         private void TrySwitch(Group group, int tick)
         {
-            // TODO: Maybe switching sounds
             // A platform is solid if the activated tick is larger than the current tick.
             bool newState = group.ActivatedTick > tick;
             if (group.State != newState)
             {
+                ModSounds.GroupFlip?.PlayOneShot();
                 group.State = newState;
             }
         }

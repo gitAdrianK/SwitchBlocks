@@ -14,6 +14,7 @@ namespace SwitchBlocks
     ///     <item>basicFlip.xnb</item>
     ///     <item>countdownFlip.xnb</item>
     ///     <item>countdownWarn.xnb</item>
+    ///     <item>groupFlip.xnb</item>    
     ///     <item>jumpFlip.xnb</item>
     ///     <item>sandFlip.xnb</item>
     /// </list>
@@ -43,6 +44,11 @@ namespace SwitchBlocks
         /// Sound played when the countdown block warns of a certain amount of time passing.
         /// </summary>
         public static JKSound CountdownWarn { get; private set; }
+
+        /// <summary>
+        /// Sound played when the group block flips state.
+        /// </summary>
+        public static JKSound GroupFlip { get; private set; }
 
         /// <summary>
         /// Sound played when the jump block flips state.
@@ -87,6 +93,12 @@ namespace SwitchBlocks
             if (File.Exists($"{path}countdownWarn.xnb"))
             {
                 CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
+            }
+
+            // Group
+            if (File.Exists($"{path}groupFlip.xnb"))
+            {
+                GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
             }
 
             // Jump

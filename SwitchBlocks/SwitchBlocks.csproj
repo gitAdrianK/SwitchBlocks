@@ -137,7 +137,7 @@
     <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
     <Compile Include="Entities\EntityAutoPlatforms.cs" />
-    <Compile Include="Entities\EntityGroupPlatform.cs" />
+    <Compile Include="Entities\EntityGroupPlatforms.cs" />
     <Compile Include="Entities\EntityJumpPlatforms.cs" />
     <Compile Include="Entities\EntityLevers.cs" />
     <Compile Include="Entities\EntityPlatforms.cs" />

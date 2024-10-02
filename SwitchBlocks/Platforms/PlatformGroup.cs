@@ -1,7 +1,10 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Setups;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -60,11 +63,11 @@ namespace SwitchBlocks.Platforms
                     continue;
                 }
 
-                int screenNr = int.Parse(Regex.Replace(xmlFile, @"[^\d]", ""));
+                int screenNr = int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1;
                 List<PlatformGroup> platforms = GetPlatformList(xmlPlatforms, path, sep, screenNr);
                 if (platforms.Count != 0)
                 {
-                    dictionary.Add(screenNr - 1, platforms);
+                    dictionary.Add(screenNr, platforms);
                 }
 
             }
@@ -94,26 +97,16 @@ namespace SwitchBlocks.Platforms
                     continue;
                 }
 
-                string filePath;
-                // Require at least one of the size giving textures to exist (Background or Foregroud)
-                if (!dictionary.ContainsKey(ModStrings.BACKGROUND) && !dictionary.ContainsKey(ModStrings.FOREGROUND))
+                PlatformGroup platform = new PlatformGroup();
+                // Texture
+                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.TEXTURE]].InnerText}";
+                if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
                 }
-
-                PlatformGroup platform = new PlatformGroup();
-                // Background
-                if (dictionary.ContainsKey(ModStrings.BACKGROUND))
-                {
-                    filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.BACKGROUND]].InnerText}";
-                    if (!File.Exists($"{filePath}.xnb"))
-                    {
-                        continue;
-                    }
-                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                    platform.Width = platform.Texture.Width;
-                    platform.Height = platform.Texture.Height;
-                }
+                platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                platform.Width = platform.Texture.Width;
+                platform.Height = platform.Texture.Height;
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
@@ -123,10 +116,47 @@ namespace SwitchBlocks.Platforms
                 }
                 platform.Position = (Vector2)position;
 
-                // TODO: Check if position relates to a group block and the id can be taken from there 
+                // Link
+                Vector3 link = new Vector3(
+                    (int)(platform.Position.X / 8),
+                    (int)(platform.Position.Y / 8),
+                    screenNr);
+                if (dictionary.ContainsKey(ModStrings.LINK_POSITION))
+                {
+                    Vector3? optionalLink = Xml.GetVector3(xmlPlatform[dictionary[ModStrings.LINK_POSITION]]);
+                    if (optionalLink == null)
+                    {
+                        continue;
+                    }
+                    link = (Vector3)optionalLink;
+                }
+                Debugger.Log(1, "", ">>> Link position " + link + "\n");
+                if (SetupGroup.BlocksGroupA.ContainsKey(link))
+                {
+                    platform.GroupId = SetupGroup.BlocksGroupA[link].GroupId;
+                }
+                else if (SetupGroup.BlocksGroupB.ContainsKey(link))
+                {
+                    platform.GroupId = SetupGroup.BlocksGroupB[link].GroupId;
+                }
+                else
+                {
+                    Debugger.Log(1, "", ">>> Found no block at link position\n");
+                    continue;
+                }
+                Debugger.Log(1, "", ">>> Found block, setting Group ID to " + platform.GroupId + "\n");
 
                 // Start state
                 platform.StartState = false;
+
+                // Animation
+                platform.animation.style = Animation.Style.Fade;
+                platform.animation.curve = Animation.Curve.Linear;
+                if (dictionary.ContainsKey(ModStrings.ANIMATION))
+                {
+                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION]];
+                    platform.animation = Xml.GetAnimation(animationNode);
+                }
 
                 // The platform had all elements properly set.
                 list.Add(platform);

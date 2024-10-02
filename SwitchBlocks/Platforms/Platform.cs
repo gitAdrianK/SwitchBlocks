@@ -20,7 +20,7 @@ namespace SwitchBlocks.Platforms
         public int Height { get; protected set; }
         public int Width { get; protected set; }
         public bool StartState { get; protected set; }
-        private Animation animation;
+        protected Animation animation;
 
         public Animation Animation => animation;
 

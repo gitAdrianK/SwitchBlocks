@@ -94,14 +94,13 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
+        public static void DrawPlatform(Platform platform, float progress, SpriteBatch spriteBatch)
         {
-            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
-            if (progressAdjusted == 0.0f)
+            if (progress == 0.0f)
             {
                 return;
             }
-            if (progressAdjusted == 1.0f)
+            if (progress == 1.0f)
             {
                 spriteBatch.Draw(
                     texture: platform.Texture,
@@ -115,19 +114,19 @@ namespace SwitchBlocks.Entities
             {
                 case Curve.Stepped:
                     // TODO: Actual stepped
-                    progressActual = progressAdjusted < 0.9f ? 1.0f : 0.0f;
+                    progressActual = progress < 0.9f ? 1.0f : 0.0f;
                     break;
                 case Curve.Linear:
-                    progressActual = progressAdjusted;
+                    progressActual = progress;
                     break;
                 case Curve.EaseIn:
-                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI - HALF_PI) + 1.0f;
+                    progressActual = (float)Math.Sin(progress * HALF_PI - HALF_PI) + 1.0f;
                     break;
                 case Curve.EaseOut:
-                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI);
+                    progressActual = (float)Math.Sin(progress * HALF_PI);
                     break;
                 case Curve.EaseInOut:
-                    progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
+                    progressActual = (float)(Math.Sin(progress * Math.PI - HALF_PI) + 1.0f) / 2.0f;
                     break;
             }
 
@@ -216,6 +215,12 @@ namespace SwitchBlocks.Entities
                         color: Color.White);
                     break;
             }
+        }
+
+        private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
+        {
+            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
+            DrawPlatform(platform, progressAdjusted, spriteBatch);
         }
     }
 }
