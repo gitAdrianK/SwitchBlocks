@@ -2,7 +2,6 @@
 using JumpKing.SaveThread;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -49,11 +48,9 @@ namespace SwitchBlocks.Data
                         streamReader = new StreamReader($"{path}save_group.sav");
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataGroup));
                         instance = (DataGroup)xmlSerializer.Deserialize(streamReader);
-                        Debugger.Log(1, "", ">>> Successfully loaded data!\n");
                     }
                     catch
                     {
-                        Debugger.Log(1, "", ">>> Error loading data, creating new!\n");
                         instance = new DataGroup();
                     }
                     finally
@@ -64,7 +61,6 @@ namespace SwitchBlocks.Data
                 }
                 else
                 {
-                    Debugger.Log(1, "", ">>> Creating data for new game!\n");
                     instance = new DataGroup();
                 }
                 return instance;
@@ -101,7 +97,6 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to get state of " + id + " but it didn't exist, creating!\n");
                 Groups.Add(id, new Group());
             }
             return Instance._groups[id].State;
@@ -111,7 +106,6 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to set state of " + id + " but it didn't exist, creating!\n");
                 Groups.Add(id, new Group());
             }
             Instance._groups[id].State = state;
@@ -121,7 +115,6 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to get progress of " + id + " but it didn't exist, creating!\n");
                 Groups.Add(id, new Group());
             }
             return Instance._groups[id].Progress;
@@ -131,7 +124,6 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to set progress of " + id + " but it didn't exist, creating!\n");
                 Groups.Add(id, new Group());
             }
             Instance._groups[id].Progress = progress;
@@ -141,7 +133,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to get tick of " + id + " but it didn't exist, creating!\n");
+                Groups.Add(id, new Group());
             }
             return Instance._groups[id].ActivatedTick;
         }
@@ -150,7 +142,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Debugger.Log(1, "", ">>> Tried to set tick of " + id + " but it didn't exist, creating!\n");
+                Groups.Add(id, new Group());
             }
             Instance._groups[id].ActivatedTick = tick;
         }

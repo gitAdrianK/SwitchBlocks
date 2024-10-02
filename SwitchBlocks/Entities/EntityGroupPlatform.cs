@@ -5,6 +5,7 @@ using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static SwitchBlocks.Data.DataGroup;
 
 namespace SwitchBlocks.Entities
 {
@@ -45,10 +46,12 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            Parallel.ForEach(DataGroup.Groups, group =>
+            int tick = AchievementManager.GetTicks();
+            float multiplier = ModBlocks.GroupMultiplier;
+            Parallel.ForEach(DataGroup.Groups.Values, group =>
             {
-                // TODO: Update progress
-                // TODO: Update states
+                UpdateProgress(group, deltaTime, multiplier);
+                TrySwitch(group, tick);
             });
         }
 
@@ -89,6 +92,46 @@ namespace SwitchBlocks.Entities
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Updates the progress of the platform that is used when animating.
+        /// </summary>
+        /// <param name="group">Group with progress and state</param>
+        /// <param name="amount">Amount to be added/subtracted from the progress</param>
+        /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
+        protected void UpdateProgress(Group group, float amount, float multiplier)
+        {
+            // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
+            amount *= 2.0f;
+            amount *= multiplier;
+            if (group.Progress != 1.0f && group.State)
+            {
+                group.Progress += amount;
+                if (group.Progress >= 1.0f)
+                {
+                    group.Progress = 1.0f;
+                }
+            }
+            else if (group.Progress != 0.0f && !group.State)
+            {
+                group.Progress -= amount;
+                if (group.Progress <= 0.0f)
+                {
+                    group.Progress = 0.0f;
+                }
+            }
+        }
+
+        private void TrySwitch(Group group, int tick)
+        {
+            // TODO: Maybe switching sounds
+            // A platform is solid if the activated tick is larger than the current tick.
+            bool newState = group.ActivatedTick > tick;
+            if (group.State != newState)
+            {
+                group.State = newState;
+            }
         }
     }
 }

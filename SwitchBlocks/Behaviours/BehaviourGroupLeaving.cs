@@ -5,7 +5,6 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -63,7 +62,6 @@ namespace SwitchBlocks.Behaviours
             {
                 Parallel.ForEach(DataGroup.Touched, id =>
                 {
-                    Debugger.Log(1, "", ">>> Left all blocks, writing tick to " + id + "\n");
                     DataGroup.SetTick(id, tick);
                 });
                 DataGroup.Touched.Clear();
@@ -84,21 +82,11 @@ namespace SwitchBlocks.Behaviours
                 {
                     continue;
                 }
-                if (!DataGroup.Touched.Contains(groupId))
-                {
-                    Debugger.Log(1, "", ">>> Entered block, adding " + groupId + " to touched\n");
-                }
                 currentlyTouched.Add(groupId);
-            }
-
-            foreach (int id in DataGroup.Touched.Except(currentlyTouched))
-            {
-                Debugger.Log(1, "", ">>> No longer touching " + id + "\n");
             }
 
             Parallel.ForEach(DataGroup.Touched.Except(currentlyTouched), id =>
             {
-                Debugger.Log(1, "", ">>> Left some blocks, writing tick to " + id + "\n");
                 DataGroup.SetTick(id, tick);
             });
 
