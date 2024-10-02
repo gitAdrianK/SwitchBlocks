@@ -18,6 +18,11 @@ Switches its state when touching a lever.
 ## Countdown Blocks
 Switches its state when touching a lever, automatically switches back after a set amount of time.
 
+## Group Blocks
+Switches once a player has left the platform, consists of 4 colours which if next to eachother on the hitbox file group together as long as they are of the same colour. 
+
+[WIP] Allowing the platforms to also switch after a duration has passed.
+
 ## Jump Blocks
 Switches its state when the player jumps.
 
