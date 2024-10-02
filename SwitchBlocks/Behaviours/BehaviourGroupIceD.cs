@@ -53,7 +53,7 @@ namespace SwitchBlocks.Behaviours
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockGroupIceD>();
 
-            if (!IsPlayerOnBlock)
+            if (!IsPlayerOnBlock || BehaviourGroupIceA.IsPlayerOnIce || BehaviourGroupIceB.IsPlayerOnIce || BehaviourGroupIceC.IsPlayerOnIce)
             {
                 IsPlayerOnIce = false;
                 return true;

@@ -17,7 +17,6 @@ namespace SwitchBlocks.Util
 
         public enum Curve
         {
-            Stepped,
             Linear,
             EaseIn,
             EaseOut,

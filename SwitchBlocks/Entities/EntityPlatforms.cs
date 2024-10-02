@@ -113,10 +113,6 @@ namespace SwitchBlocks.Entities
             float progressActual = 1.0f;
             switch (platform.Animation.curve)
             {
-                case Curve.Stepped:
-                    // TODO: Actual stepped
-                    progressActual = progress < 0.9f ? 1.0f : 0.0f;
-                    break;
                 case Curve.Linear:
                     progressActual = progress;
                     break;

@@ -26,7 +26,7 @@
         public const string FOREGROUND = "Foreground";
 
         // Relevant for group Xml
-        public const string LINK_POSITION = "link";
+        public const string LINK_POSITION = "Link";
 
         // Block types
         public const string AUTO = "auto";

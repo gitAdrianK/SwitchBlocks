@@ -155,9 +155,6 @@ namespace SwitchBlocks
             {
                 switch (children[dictionary["Curve"]].InnerText)
                 {
-                    case "stepped":
-                        animation.curve = Animation.Curve.Stepped;
-                        break;
                     case "linear":
                         animation.curve = Animation.Curve.Linear;
                         break;
@@ -193,9 +190,9 @@ namespace SwitchBlocks
                 return null;
             }
             return new Vector3(
-                int.Parse(children[dictionary["X"]].InnerText),
-                int.Parse(children[dictionary["Y"]].InnerText),
-                int.Parse(children[dictionary["Screen"]].InnerText));
+                int.Parse(children[dictionary["X"]].InnerText) / 8,
+                int.Parse(children[dictionary["Y"]].InnerText) / 8,
+                int.Parse(children[dictionary["Screen"]].InnerText) - 1);
         }
     }
 }
