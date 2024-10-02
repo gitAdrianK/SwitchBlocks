@@ -62,6 +62,8 @@
     <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
     <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourGroupIceD.cs" />
+    <Compile Include="Behaviours\BehaviourGroupIceC.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceB.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceA.cs" />
     <Compile Include="Behaviours\BehaviourGroupReset.cs" />
@@ -101,8 +103,14 @@
     <Compile Include="Blocks\BlockCountdownLever.cs" />
     <Compile Include="Blocks\BlockGoupResetSolid.cs" />
     <Compile Include="Blocks\BlockGoupReset.cs" />
+    <Compile Include="Blocks\BlockGroupD.cs" />
+    <Compile Include="Blocks\BlockGroupC.cs" />
+    <Compile Include="Blocks\BlockGroupIceC.cs" />
+    <Compile Include="Blocks\BlockGroupIceD.cs" />
+    <Compile Include="Blocks\BlockGroupSnowC.cs" />
     <Compile Include="Blocks\BlockGroupSnowA.cs" />
     <Compile Include="Blocks\BlockGroupIceA.cs" />
+    <Compile Include="Blocks\BlockGroupSnowD.cs" />
     <Compile Include="Blocks\BlockGroupSnowB.cs" />
     <Compile Include="Blocks\BlockGroupIceB.cs" />
     <Compile Include="Blocks\BlockGroupB.cs" />

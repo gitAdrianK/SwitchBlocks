@@ -211,6 +211,14 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color GROUP_B = new Color(50, 124, 238);
         /// <summary>
+        /// Color that represents the group C block. 
+        /// </summary>
+        public static readonly Color GROUP_C = new Color(124, 238, 50);
+        /// <summary>
+        /// Color that represents the group D block. 
+        /// </summary>
+        public static readonly Color GROUP_D = new Color(50, 238, 124);
+        /// <summary>
         /// Color that represents the group ice A block. 
         /// </summary>
         public static readonly Color GROUP_ICE_A = new Color(238, 124, 51);
@@ -219,6 +227,14 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color GROUP_ICE_B = new Color(51, 124, 238);
         /// <summary>
+        /// Color that represents the group ice C block. 
+        /// </summary>
+        public static readonly Color GROUP_ICE_C = new Color(124, 238, 51);
+        /// <summary>
+        /// Color that represents the group ice D block. 
+        /// </summary>
+        public static readonly Color GROUP_ICE_D = new Color(51, 238, 124);
+        /// <summary>
         /// Color that represents the group snow A block. 
         /// </summary>
         public static readonly Color GROUP_SNOW_A = new Color(238, 124, 52);
@@ -226,6 +242,14 @@ namespace SwitchBlocks
         /// Color that represents the group snow B block. 
         /// </summary>
         public static readonly Color GROUP_SNOW_B = new Color(52, 124, 238);
+        /// <summary>
+        /// Color that represents the group snow C block. 
+        /// </summary>
+        public static readonly Color GROUP_SNOW_C = new Color(124, 238, 52);
+        /// <summary>
+        /// Color that represents the group snow D block. 
+        /// </summary>
+        public static readonly Color GROUP_SNOW_D = new Color(52, 238, 124);
         /// <summary>
         /// Color that represents the group reset block. 
         /// </summary>

@@ -9,6 +9,7 @@ using SwitchBlocks.Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
 {
@@ -18,6 +19,8 @@ namespace SwitchBlocks.Setups
         // clearing would result in the dict being empty on same level reload.
         public static Dictionary<Vector3, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
         public static Dictionary<Vector3, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
+        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
+        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
 
         public static void DoSetup(PlayerEntity player)
         {
@@ -45,15 +48,23 @@ namespace SwitchBlocks.Setups
             }
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
 
             BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
             BehaviourGroupIceB behaviourGroupIceB = new BehaviourGroupIceB();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceB), behaviourGroupIceB);
+            BehaviourGroupIceC behaviourGroupIceC = new BehaviourGroupIceC();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceC), behaviourGroupIceC);
+            BehaviourGroupIceD behaviourGroupIceD = new BehaviourGroupIceD();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceD), behaviourGroupIceD);
 
             BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
 
             BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
@@ -83,16 +94,26 @@ namespace SwitchBlocks.Setups
             // the group ids getting potentially messed up.
             // I kinda do want to do caching at some point but for now
             // keeping it simple, albeit inefficient.
-            BlocksGroupA = BlocksGroupA.OrderBy(kv => kv.Key.Z)
+            Task taskGroupA = Task.Run(() => BlocksGroupA = BlocksGroupA.OrderBy(kv => kv.Key.Z)
                 .ThenBy(kv => kv.Key.X)
                 .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
-            BlocksGroupB = BlocksGroupB.OrderBy(kv => kv.Key.Z)
+                .ToDictionary(kv => kv.Key, kv => kv.Value));
+            Task taskGroupB = Task.Run(() => BlocksGroupB = BlocksGroupB.OrderBy(kv => kv.Key.Z)
                 .ThenBy(kv => kv.Key.X)
                 .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
+                .ToDictionary(kv => kv.Key, kv => kv.Value));
+            Task taskGroupC = Task.Run(() => BlocksGroupC = BlocksGroupC.OrderBy(kv => kv.Key.Z)
+                .ThenBy(kv => kv.Key.X)
+                .ThenBy(kv => kv.Key.Y)
+                .ToDictionary(kv => kv.Key, kv => kv.Value));
+            Task taskGroupD = Task.Run(() => BlocksGroupD = BlocksGroupD.OrderBy(kv => kv.Key.Z)
+                .ThenBy(kv => kv.Key.X)
+                .ThenBy(kv => kv.Key.Y)
+                .ToDictionary(kv => kv.Key, kv => kv.Value));
+            Task.WaitAll(taskGroupA, taskGroupB, taskGroupC, taskGroupD);
 
             groupId = 1;
+            // Find the largest id already assigned from loaded data.
             if (DataGroup.Groups.Count() > 0)
             {
                 groupId = DataGroup.Groups.OrderByDescending(kv => kv.Key).First().Key + 1;
@@ -100,6 +121,8 @@ namespace SwitchBlocks.Setups
 
             AssignGroupIds(BlocksGroupA);
             AssignGroupIds(BlocksGroupB);
+            AssignGroupIds(BlocksGroupC);
+            AssignGroupIds(BlocksGroupD);
         }
 
         /// <summary>

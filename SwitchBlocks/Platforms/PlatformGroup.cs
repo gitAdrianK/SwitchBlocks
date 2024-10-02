@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -69,7 +68,6 @@ namespace SwitchBlocks.Platforms
                 {
                     dictionary.Add(screenNr, platforms);
                 }
-
             }
             return dictionary.Count == 0 ? null : dictionary;
         }
@@ -130,7 +128,6 @@ namespace SwitchBlocks.Platforms
                     }
                     link = (Vector3)optionalLink;
                 }
-                Debugger.Log(1, "", ">>> Link position " + link + "\n");
                 if (SetupGroup.BlocksGroupA.ContainsKey(link))
                 {
                     platform.GroupId = SetupGroup.BlocksGroupA[link].GroupId;
@@ -141,10 +138,8 @@ namespace SwitchBlocks.Platforms
                 }
                 else
                 {
-                    Debugger.Log(1, "", ">>> Found no block at link position\n");
                     continue;
                 }
-                Debugger.Log(1, "", ">>> Found block, setting Group ID to " + platform.GroupId + "\n");
 
                 // Start state
                 platform.StartState = false;

@@ -55,7 +55,13 @@ namespace SwitchBlocks.Behaviours
                 || advCollisionInfo.IsCollidingWith<BlockGroupSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupB>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupIceB>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
             int tick = AchievementManager.GetTicks();
             if (!IsPlayerOnBlock)
@@ -73,7 +79,13 @@ namespace SwitchBlocks.Behaviours
                 || b.GetType() == typeof(BlockGroupSnowA)
                 || b.GetType() == typeof(BlockGroupB)
                 || b.GetType() == typeof(BlockGroupIceB)
-                || b.GetType() == typeof(BlockGroupSnowB));
+                || b.GetType() == typeof(BlockGroupSnowB)
+                || b.GetType() == typeof(BlockGroupC)
+                || b.GetType() == typeof(BlockGroupIceC)
+                || b.GetType() == typeof(BlockGroupSnowC)
+                || b.GetType() == typeof(BlockGroupD)
+                || b.GetType() == typeof(BlockGroupIceD)
+                || b.GetType() == typeof(BlockGroupSnowD));
             HashSet<int> currentlyTouched = new HashSet<int>();
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
