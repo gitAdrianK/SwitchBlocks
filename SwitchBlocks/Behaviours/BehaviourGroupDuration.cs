@@ -2,7 +2,9 @@
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using SwitchBlocks.Blocks;
+using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
+using SwitchBlocks.Settings;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,7 +55,13 @@ namespace SwitchBlocks.Behaviours
                 || advCollisionInfo.IsCollidingWith<BlockGroupSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupB>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupIceB>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
             if (!IsPlayerOnBlock)
             {
@@ -66,10 +74,22 @@ namespace SwitchBlocks.Behaviours
                 || b.GetType() == typeof(BlockGroupSnowA)
                 || b.GetType() == typeof(BlockGroupB)
                 || b.GetType() == typeof(BlockGroupIceB)
-                || b.GetType() == typeof(BlockGroupSnowB));
+                || b.GetType() == typeof(BlockGroupSnowB)
+                || b.GetType() == typeof(BlockGroupC)
+                || b.GetType() == typeof(BlockGroupIceC)
+                || b.GetType() == typeof(BlockGroupSnowC)
+                || b.GetType() == typeof(BlockGroupD)
+                || b.GetType() == typeof(BlockGroupIceD)
+                || b.GetType() == typeof(BlockGroupSnowD));
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
-                //TODO: Set tick on first touch
+                int groupId = block.GroupId;
+                if (!DataGroup.GetState(groupId) || DataGroup.Touched.Contains(groupId))
+                {
+                    continue;
+                }
+                DataGroup.SetTick(groupId, tick + SettingsGroup.Duration);
+                DataGroup.Touched.Add(groupId);
             }
 
             return true;

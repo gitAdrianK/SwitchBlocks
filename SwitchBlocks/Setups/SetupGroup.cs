@@ -44,7 +44,6 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                //TODO : Duration behaviour
                 behaviourGroupPlatform = new BehaviourGroupDuration();
             }
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
