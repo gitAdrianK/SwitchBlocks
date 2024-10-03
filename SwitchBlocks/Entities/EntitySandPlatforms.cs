@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Settings;
 using System.Collections.Generic;
 
 namespace SwitchBlocks.Entities
@@ -48,7 +49,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            offset += deltaTime * ModBlocks.SandMultiplier;
+            offset += deltaTime * SettingsSand.Multiplier;
         }
 
         public override void Draw()

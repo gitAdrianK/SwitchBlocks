@@ -1,6 +1,7 @@
 ﻿using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Settings;
 
 namespace SwitchBlocks.Entities
 {
@@ -37,7 +38,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataCountdown.State, deltaTime, ModBlocks.CountdownMultiplier);
+            UpdateProgress(DataCountdown.State, deltaTime, SettingsCountdown.Multiplier);
 
             if (!DataCountdown.State)
             {
@@ -45,7 +46,7 @@ namespace SwitchBlocks.Entities
             }
 
             int currentTick = AchievementManager.GetTicks();
-            int adjustedTick = ModBlocks.CountdownDuration - (currentTick - DataCountdown.ActivatedTick);
+            int adjustedTick = SettingsCountdown.Duration - (currentTick - DataCountdown.ActivatedTick);
             if (IsActiveOnCurrentScreen)
             {
                 TryWarn(adjustedTick);
@@ -55,11 +56,11 @@ namespace SwitchBlocks.Entities
 
         private void TryWarn(int adjustedTick)
         {
-            if (ModSounds.CountdownWarn == null || DataCountdown.WarnCount == ModBlocks.CountdownWarnCount)
+            if (ModSounds.CountdownWarn == null || DataCountdown.WarnCount == SettingsCountdown.WarnCount)
             {
                 return;
             }
-            int warnAdjust = (ModBlocks.CountdownWarnCount - DataCountdown.WarnCount) * ModBlocks.CountdownWarnDuration;
+            int warnAdjust = (SettingsCountdown.WarnCount - DataCountdown.WarnCount) * SettingsCountdown.WarnDuration;
             if (adjustedTick - warnAdjust == 0)
             {
                 DataCountdown.WarnCount++;
@@ -86,9 +87,9 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            if (DataCountdown.ActivatedTick + ModBlocks.CountdownDuration <= currentTick)
+            if (DataCountdown.ActivatedTick + SettingsCountdown.Duration <= currentTick)
             {
-                if (DataCountdown.CanSwitchSafely || ModBlocks.CountdownForceSwitch)
+                if (DataCountdown.CanSwitchSafely || SettingsCountdown.ForceSwitch)
                 {
                     if (IsActiveOnCurrentScreen)
                     {

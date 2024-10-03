@@ -55,7 +55,7 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModBlocks.LoadProperties();
+            ModSettings.Load();
             ModSounds.Load();
 
             SetupAuto.DoSetup(player);

@@ -4,6 +4,7 @@ using JumpKing.Level;
 using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,7 +127,7 @@ namespace SwitchBlocks.Behaviours
                         || b.GetType() == typeof(BlockSandLeverSolidOff));
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            HashSet<Directions> directions = ModBlocks.SandDirections;
+            HashSet<Directions> directions = SettingsSand.LeverDirections;
             if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && directions.Contains(Directions.Up))
             {
                 return true;

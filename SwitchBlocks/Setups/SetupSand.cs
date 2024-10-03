@@ -4,6 +4,7 @@ using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
+using SwitchBlocks.Settings;
 
 namespace SwitchBlocks.Setups
 {
@@ -11,7 +12,7 @@ namespace SwitchBlocks.Setups
     {
         public static void DoSetup(PlayerEntity player)
         {
-            if (!ModBlocks.IsSandUsed)
+            if (!SettingsSand.IsUsed)
             {
                 return;
             }
@@ -38,7 +39,7 @@ namespace SwitchBlocks.Setups
 
         public static void DoCleanup(EntityManager entityManager)
         {
-            if (!ModBlocks.IsSandUsed)
+            if (!SettingsSand.IsUsed)
             {
                 return;
             }

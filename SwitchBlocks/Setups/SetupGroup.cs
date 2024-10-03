@@ -6,6 +6,7 @@ using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
+using SwitchBlocks.Settings;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace SwitchBlocks.Setups
 
         public static void DoSetup(PlayerEntity player)
         {
-            if (!ModBlocks.IsGroupUsed)
+            if (!SettingsGroup.IsUsed)
             {
                 return;
             }
@@ -37,7 +38,7 @@ namespace SwitchBlocks.Setups
             _ = EntityGroupPlatforms.Instance;
 
             IBlockBehaviour behaviourGroupPlatform;
-            if (ModBlocks.GroupDuration == 0)
+            if (SettingsGroup.Duration == 0)
             {
                 behaviourGroupPlatform = new BehaviourGroupLeaving();
             }
@@ -73,7 +74,7 @@ namespace SwitchBlocks.Setups
 
         public static void DoCleanup(EntityManager entityManager)
         {
-            if (!ModBlocks.IsGroupUsed)
+            if (!SettingsGroup.IsUsed)
             {
                 return;
             }

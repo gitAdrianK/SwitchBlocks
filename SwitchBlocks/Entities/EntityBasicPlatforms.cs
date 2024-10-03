@@ -1,5 +1,6 @@
 ﻿using SwitchBlocks.Data;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Settings;
 
 namespace SwitchBlocks.Entities
 {
@@ -36,7 +37,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataBasic.State, deltaTime, ModBlocks.BasicMultiplier);
+            UpdateProgress(DataBasic.State, deltaTime, SettingsBasic.Multiplier);
         }
     }
 }

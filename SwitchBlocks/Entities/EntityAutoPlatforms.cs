@@ -1,6 +1,7 @@
 ﻿using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Settings;
 
 namespace SwitchBlocks.Entities
 {
@@ -37,7 +38,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataAuto.State, deltaTime, ModBlocks.AutoMultiplier);
+            UpdateProgress(DataAuto.State, deltaTime, SettingsAuto.Multiplier);
 
             int currentTick = AchievementManager.GetTicks();
             int adjustedTick = currentTick - DataAuto.ResetTick;
@@ -47,13 +48,13 @@ namespace SwitchBlocks.Entities
 
         private void TrySound(int adjustedTick)
         {
-            int soundAdjust = (ModBlocks.AutoWarnCount - DataAuto.WarnCount) * ModBlocks.AutoWarnDuration;
-            int soundTick = (adjustedTick + soundAdjust) % ModBlocks.AutoDuration;
+            int soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
+            int soundTick = (adjustedTick + soundAdjust) % SettingsAuto.Duration;
             if (soundTick != 0)
             {
                 return;
             }
-            if (ModBlocks.AutoWarnCount == DataAuto.WarnCount)
+            if (SettingsAuto.WarnCount == DataAuto.WarnCount)
             {
                 if (IsActiveOnCurrentScreen)
                 {
@@ -73,7 +74,7 @@ namespace SwitchBlocks.Entities
 
         private void TrySwitch(int adjustedTick)
         {
-            bool currState = adjustedTick / ModBlocks.AutoDuration % 2 == 0;
+            bool currState = adjustedTick / SettingsAuto.Duration % 2 == 0;
             if (DataAuto.State == currState)
             {
                 return;
@@ -87,7 +88,7 @@ namespace SwitchBlocks.Entities
             }
 
 
-            if (DataAuto.CanSwitchSafely || ModBlocks.AutoForceSwitch)
+            if (DataAuto.CanSwitchSafely || SettingsAuto.ForceSwitch)
             {
                 DataAuto.State = currState;
             }

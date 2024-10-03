@@ -4,6 +4,7 @@ using JumpKing.Level;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
+using SwitchBlocks.Settings;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -43,7 +44,7 @@ namespace SwitchBlocks.Behaviours
                 DataAuto.ResetTick = AchievementManager.GetTicks();
                 if (isReset && DataAuto.State)
                 {
-                    DataAuto.ResetTick -= ModBlocks.AutoDuration;
+                    DataAuto.ResetTick -= SettingsAuto.Duration;
                 }
 
                 DataAuto.WarnCount = 0;

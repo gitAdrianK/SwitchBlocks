@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static SwitchBlocks.Data.DataGroup;
@@ -49,7 +50,7 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             int tick = AchievementManager.GetTicks();
-            float multiplier = ModBlocks.GroupMultiplier;
+            float multiplier = SettingsGroup.Multiplier;
             Parallel.ForEach(DataGroup.Groups.Values, group =>
             {
                 UpdateProgress(group, deltaTime, multiplier);
