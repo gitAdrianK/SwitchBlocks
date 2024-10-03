@@ -3,6 +3,8 @@ using JumpKing;
 using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using JumpKing.MiscEntities.WorldItems;
+using JumpKing.MiscEntities.WorldItems.Inventory;
 using JumpKing.Player;
 using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
@@ -53,7 +55,7 @@ namespace SwitchBlocks.Behaviours
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockAutoIceOn>();
-            IsPlayerOnIce = IsPlayerOnBlock && DataAuto.State;
+            IsPlayerOnIce = IsPlayerOnBlock && DataAuto.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
             if (IsPlayerOnIce)
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;

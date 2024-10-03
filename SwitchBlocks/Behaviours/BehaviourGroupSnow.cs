@@ -1,6 +1,8 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using JumpKing.MiscEntities.WorldItems;
+using JumpKing.MiscEntities.WorldItems.Inventory;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using System.Collections.Generic;
@@ -53,7 +55,7 @@ namespace SwitchBlocks.Behaviours
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
 
-            if (!IsPlayerOnBlock)
+            if (!IsPlayerOnBlock || InventoryManager.HasItemEnabled(Items.SnakeRing))
             {
                 IsPlayerOnSnow = false;
                 return true;
