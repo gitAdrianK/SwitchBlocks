@@ -67,6 +67,8 @@ namespace SwitchBlocks.Factories
             {
                 SetupGroup.BlocksGroupA.Clear();
                 SetupGroup.BlocksGroupB.Clear();
+                SetupGroup.BlocksGroupC.Clear();
+                SetupGroup.BlocksGroupD.Clear();
                 levelId = level.ID;
             }
 
