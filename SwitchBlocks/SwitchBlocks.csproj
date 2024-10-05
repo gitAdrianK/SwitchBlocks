@@ -141,6 +141,7 @@
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
     <Compile Include="Data\DataCountdown.cs" />
+    <Compile Include="Data\CacheGroup.cs" />
     <Compile Include="Data\DataGroup.cs" />
     <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
