@@ -137,7 +137,7 @@
     <Compile Include="Blocks\BlockSandLeverSolid.cs" />
     <Compile Include="Blocks\BlockSandOff.cs" />
     <Compile Include="Blocks\BlockSandOn.cs" />
-    <Compile Include="Blocks\IBlockGroupId.cs" />
+    <Compile Include="Util\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
     <Compile Include="Data\DataCountdown.cs" />
@@ -178,6 +178,7 @@
     <Compile Include="Setups\SetupAuto.cs" />
     <Compile Include="Setups\SetupBasic.cs" />
     <Compile Include="Util\Animation.cs" />
+    <Compile Include="Util\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Platforms\Platform.cs" />

@@ -1,6 +1,6 @@
 ﻿using JumpKing;
 using JumpKing.SaveThread;
-using System;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -12,21 +12,6 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataGroup
     {
-        [Serializable]
-        public class Group
-        {
-            public bool State { get; set; }
-            public float Progress { get; set; }
-            public int ActivatedTick { get; set; }
-
-            public Group()
-            {
-                State = true;
-                Progress = 1.0f;
-                ActivatedTick = Int32.MaxValue;
-            }
-        }
-
         private static DataGroup instance;
         public static DataGroup Instance
         {
@@ -74,7 +59,7 @@ namespace SwitchBlocks.Data
 
         private DataGroup()
         {
-            _groups = new SerializableDictionary<int, Group>();
+            _groups = new SerializableDictionary<int, BlockGroup>();
             _hasSwitched = false;
             _touched = new HashSet<int>();
         }
@@ -97,7 +82,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             return Instance._groups[id].State;
         }
@@ -106,7 +91,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             Instance._groups[id].State = state;
         }
@@ -115,7 +100,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             return Instance._groups[id].Progress;
         }
@@ -124,7 +109,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             Instance._groups[id].Progress = progress;
         }
@@ -133,7 +118,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             return Instance._groups[id].ActivatedTick;
         }
@@ -142,7 +127,7 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.ContainsKey(id))
             {
-                Groups.Add(id, new Group());
+                Groups.Add(id, new BlockGroup(true));
             }
             Instance._groups[id].ActivatedTick = tick;
         }
@@ -151,12 +136,12 @@ namespace SwitchBlocks.Data
         /// Groups belonging to the respective id.
         /// A group has the data related to a platform.
         /// </summary>
-        public static SerializableDictionary<int, Group> Groups
+        public static SerializableDictionary<int, BlockGroup> Groups
         {
             get => Instance._groups;
             set => Instance._groups = value;
         }
-        public SerializableDictionary<int, Group> _groups;
+        public SerializableDictionary<int, BlockGroup> _groups;
 
         /// <summary>
         /// Whether the state has switched touching a lever.<br />

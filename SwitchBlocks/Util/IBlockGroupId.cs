@@ -1,4 +1,4 @@
-﻿namespace SwitchBlocks.Blocks
+﻿namespace SwitchBlocks.Util
 {
     public interface IBlockGroupId
     {

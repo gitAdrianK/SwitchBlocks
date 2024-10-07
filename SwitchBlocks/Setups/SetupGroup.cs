@@ -7,6 +7,7 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Entities;
 using SwitchBlocks.Settings;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -256,7 +257,7 @@ namespace SwitchBlocks.Setups
             {
                 if (!DataGroup.Groups.ContainsKey(i))
                 {
-                    DataGroup.Groups.Add(i, new DataGroup.Group());
+                    DataGroup.Groups.Add(i, new BlockGroup(true));
                 }
             }
         }
