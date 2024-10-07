@@ -5,9 +5,9 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static SwitchBlocks.Data.DataGroup;
 
 namespace SwitchBlocks.Entities
 {
@@ -104,10 +104,10 @@ namespace SwitchBlocks.Entities
         /// <summary>
         /// Updates the progress of the platform that is used when animating.
         /// </summary>
-        /// <param name="group">Group with progress and state</param>
+        /// <param name="group">Blockgroup with progress and state</param>
         /// <param name="amount">Amount to be added/subtracted from the progress</param>
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
-        protected void UpdateProgress(Group group, float amount, float multiplier)
+        protected void UpdateProgress(BlockGroup group, float amount, float multiplier)
         {
             // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
             amount *= 2.0f;
@@ -130,7 +130,7 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        private void TrySwitch(Group group, int tick)
+        private void TrySwitch(BlockGroup group, int tick)
         {
             // A platform is solid if the activated tick is larger than the current tick.
             bool newState = group.ActivatedTick > tick;

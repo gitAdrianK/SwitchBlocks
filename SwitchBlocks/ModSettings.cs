@@ -47,6 +47,9 @@ namespace SwitchBlocks
                     case "Sand":
                         SettingsSand.Parse(block);
                         break;
+                    case "Sequence":
+                        SettingsSequence.Parse(block);
+                        break;
                     default:
                         // Do nothing.
                         break;

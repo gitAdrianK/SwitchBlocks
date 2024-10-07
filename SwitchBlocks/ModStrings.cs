@@ -35,6 +35,7 @@
         public const string GROUP = "group";
         public const string JUMP = "jump";
         public const string SAND = "sand";
+        public const string SEQUENCE = "sequence";
 
         // Blocks, Animation or RGB/XY strings are not here because they are pretty much used in that one class,
         // typos in there are easier to spot

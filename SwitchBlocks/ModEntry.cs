@@ -30,6 +30,7 @@ namespace SwitchBlocks
             LevelManager.RegisterBlockFactory(new FactoryGroup());
             LevelManager.RegisterBlockFactory(new FactoryJump());
             LevelManager.RegisterBlockFactory(new FactorySand());
+            LevelManager.RegisterBlockFactory(new FactorySequence());
 
             harmony = new Harmony(ModStrings.HARMONY);
             new Patching.BodyComp(harmony);
@@ -64,6 +65,7 @@ namespace SwitchBlocks
             SetupGroup.DoSetup(player);
             SetupJump.DoSetup(player);
             SetupSand.DoSetup(player);
+            SetupSequence.DoSetup(player);
 
             EntityManager.instance.MoveToFront(player);
         }
@@ -86,6 +88,7 @@ namespace SwitchBlocks
             SetupGroup.DoCleanup(entityManager);
             SetupJump.DoCleanup(entityManager);
             SetupSand.DoCleanup(entityManager);
+            SetupSequence.DoCleanup(entityManager);
         }
 
         /// <summary>
