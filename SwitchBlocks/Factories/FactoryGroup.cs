@@ -127,7 +127,7 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.GROUP_RESET_SOLID:
                     return new BlockGroupResetSolid(blockRect);
                 default:
-                    throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException($"{typeof(FactoryGroup).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }

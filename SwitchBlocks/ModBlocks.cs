@@ -176,7 +176,7 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color GROUP_RESET = new Color(238, 51, 124);
         /// <summary>
-        /// Color that represents the countdown solid reset block. 
+        /// Color that represents the group solid reset block. 
         /// </summary>
         public static readonly Color GROUP_RESET_SOLID = new Color(238, 54, 124);
 
@@ -237,5 +237,62 @@ namespace SwitchBlocks
         /// Color that represents the sand solid lever block, that can only turn the state off. 
         /// </summary>
         public static readonly Color SAND_LEVER_SOLID_OFF = new Color(238, 46, 124);
+
+        /// <summary>
+        /// Color that represents the sequence A block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_A = new Color(238, 124, 60);
+        /// <summary>
+        /// Color that represents the sequence B block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_B = new Color(60, 124, 238);
+        /// <summary>
+        /// Color that represents the sequence C block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_C = new Color(124, 238, 60);
+        /// <summary>
+        /// Color that represents the sequence D block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_D = new Color(60, 238, 124);
+        /// <summary>
+        /// Color that represents the sequence ice A block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_ICE_A = new Color(238, 124, 61);
+        /// <summary>
+        /// Color that represents the sequence ice B block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_ICE_B = new Color(61, 124, 238);
+        /// <summary>
+        /// Color that represents the sequence ice C block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_ICE_C = new Color(124, 238, 61);
+        /// <summary>
+        /// Color that represents the sequence ice D block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_ICE_D = new Color(61, 238, 124);
+        /// <summary>
+        /// Color that represents the sequence snow A block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_SNOW_A = new Color(238, 124, 62);
+        /// <summary>
+        /// Color that represents the sequence snow B block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_SNOW_B = new Color(62, 124, 238);
+        /// <summary>
+        /// Color that represents the sequence snow C block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_SNOW_C = new Color(124, 238, 62);
+        /// <summary>
+        /// Color that represents the sequence snow D block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_SNOW_D = new Color(62, 238, 124);
+        /// <summary>
+        /// Color that represents the sequence reset block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_RESET = new Color(238, 61, 124);
+        /// <summary>
+        /// Color that represents the sequence solid reset block. 
+        /// </summary>
+        public static readonly Color SEQUENCE_RESET_SOLID = new Color(238, 64, 124);
     }
 }

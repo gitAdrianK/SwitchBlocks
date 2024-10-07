@@ -57,7 +57,7 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.JUMP_SNOW_OFF:
                     return new BlockJumpSnowOff(blockRect);
                 default:
-                    throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException($"{typeof(FactoryJump).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }
