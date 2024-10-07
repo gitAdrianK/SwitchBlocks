@@ -95,10 +95,6 @@ namespace SwitchBlocks.Setups
         {
             AssignGroupIdFromSeed(ref groupId);
 
-            // Sort for consistency, that is that I don't have to worry about
-            // the group ids getting potentially messed up.
-            // I kinda do want to do caching at some point but for now
-            // keeping it simple, albeit inefficient.
             Task taskGroupA = Task.Run(() => BlocksGroupA = BlocksGroupA.OrderBy(kv => kv.Key.Z)
                 .ThenBy(kv => kv.Key.X)
                 .ThenBy(kv => kv.Key.Y)

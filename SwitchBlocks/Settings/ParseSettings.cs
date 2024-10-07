@@ -1,7 +1,7 @@
-﻿using SwitchBlocks.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
+using static SwitchBlocks.Util.Directions;
 
 namespace SwitchBlocks.Settings
 {
@@ -46,10 +46,10 @@ namespace SwitchBlocks.Settings
 
         // Looks for a "LeverSideDisable" node and parses the inside to look for directions
         // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static HashSet<Directions> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        public static HashSet<Direction> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            HashSet<Directions> directions = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+            HashSet<Direction> directions = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
             if (!dictionary.ContainsKey("LeverSideDisable"))
             {
                 return directions;
@@ -65,19 +65,19 @@ namespace SwitchBlocks.Settings
                 string trim = s.Trim();
                 if (trim.Equals("Up"))
                 {
-                    directions.Remove(Directions.Up);
+                    directions.Remove(Direction.Up);
                 }
                 if (trim.Equals("Down"))
                 {
-                    directions.Remove(Directions.Down);
+                    directions.Remove(Direction.Down);
                 }
                 if (trim.Equals("Left"))
                 {
-                    directions.Remove(Directions.Left);
+                    directions.Remove(Direction.Left);
                 }
                 if (trim.Equals("Right"))
                 {
-                    directions.Remove(Directions.Right);
+                    directions.Remove(Direction.Right);
                 }
             }
             return directions;

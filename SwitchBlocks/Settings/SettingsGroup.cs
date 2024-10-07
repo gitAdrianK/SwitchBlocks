@@ -1,6 +1,6 @@
-﻿using SwitchBlocks.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
+using static SwitchBlocks.Util.Directions;
 
 namespace SwitchBlocks.Settings
 {
@@ -21,7 +21,7 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Directions the group lever can be activated from.
         /// </summary>
-        public static HashSet<Directions> LeverDirections { get; private set; } = new HashSet<Directions>() { Directions.Up, Directions.Down, Directions.Left, Directions.Right };
+        public static HashSet<Direction> LeverDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
 
         public static void Parse(XmlNode block)
         {
