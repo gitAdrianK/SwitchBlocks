@@ -101,8 +101,8 @@
     <Compile Include="Blocks\BlockCountdownSnowOn.cs" />
     <Compile Include="Blocks\BlockCountdownIceOn.cs" />
     <Compile Include="Blocks\BlockCountdownLever.cs" />
-    <Compile Include="Blocks\BlockGoupResetSolid.cs" />
-    <Compile Include="Blocks\BlockGoupReset.cs" />
+    <Compile Include="Blocks\BlockGroupResetSolid.cs" />
+    <Compile Include="Blocks\BlockGroupReset.cs" />
     <Compile Include="Blocks\BlockGroupD.cs" />
     <Compile Include="Blocks\BlockGroupC.cs" />
     <Compile Include="Blocks\BlockGroupIceC.cs" />
