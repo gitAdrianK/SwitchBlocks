@@ -62,10 +62,16 @@
     <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
     <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceIceD.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceIceC.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceIceB.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceIceA.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceD.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceC.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceB.cs" />
     <Compile Include="Behaviours\BehaviourGroupIceA.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceSnow.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceReset.cs" />
     <Compile Include="Behaviours\BehaviourGroupReset.cs" />
     <Compile Include="Behaviours\BehaviourGroupSnow.cs" />
     <Compile Include="Behaviours\BehaviourGroupLeaving.cs" />
@@ -153,6 +159,7 @@
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Data\CacheSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
+    <Compile Include="Entities\EntitySequencePlatforms.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />

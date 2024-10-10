@@ -1,7 +1,6 @@
 ﻿using JumpKing;
 using JumpKing.SaveThread;
 using SwitchBlocks.Util;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -61,7 +60,7 @@ namespace SwitchBlocks.Data
         {
             _groups = new SerializableDictionary<int, BlockGroup>();
             _hasSwitched = false;
-            _touched = new HashSet<int>();
+            _touched = 0;
         }
 
         public void SaveToFile()
@@ -74,7 +73,7 @@ namespace SwitchBlocks.Data
                 Directory.CreateDirectory(path);
             }
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataSequence));
-            TextWriter textWriter = new StreamWriter($"{path}save_group.sav");
+            TextWriter textWriter = new StreamWriter($"{path}save_sequence.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
 
@@ -154,11 +153,11 @@ namespace SwitchBlocks.Data
         }
         public bool _hasSwitched;
 
-        public static HashSet<int> Touched
+        public static int Touched
         {
             get => Instance._touched;
             set => Instance._touched = value;
         }
-        public HashSet<int> _touched;
+        public int _touched;
     }
 }

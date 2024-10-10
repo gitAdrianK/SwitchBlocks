@@ -17,6 +17,7 @@ namespace SwitchBlocks
     ///     <item>groupFlip.xnb</item>    
     ///     <item>jumpFlip.xnb</item>
     ///     <item>sandFlip.xnb</item>
+    ///     <item>sequenceFlip.xnb</item>
     /// </list>
     /// A sound can be null, this should be checked for before trying to play it.
     /// </summary>
@@ -59,6 +60,11 @@ namespace SwitchBlocks
         /// Sound played when the sand block flips state.
         /// </summary>
         public static JKSound SandFlip { get; private set; }
+
+        /// <summary>
+        /// Sound played when the sequence block flips state.
+        /// </summary>
+        public static JKSound SequenceFlip { get; private set; }
 
         /// <summary>
         /// Tries to load sounds used in the mod.
@@ -111,6 +117,12 @@ namespace SwitchBlocks
             if (File.Exists($"{path}sandFlip.xnb"))
             {
                 SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
+            }
+
+            // Sequence
+            if (File.Exists($"{path}sequenceFlip.xnb"))
+            {
+                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
             }
         }
     }

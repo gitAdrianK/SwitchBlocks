@@ -37,7 +37,7 @@ namespace SwitchBlocks.Setups
 
             int groupId = 1;
             AssignGroupIds(ref groupId);
-            CreateGroupData(groupId);
+            BlockGroup.CreateGroupData(groupId, DataGroup.Groups, true);
 
             _ = EntityGroupPlatforms.Instance;
 
@@ -94,7 +94,10 @@ namespace SwitchBlocks.Setups
 
         private static void AssignGroupIds(ref int groupId)
         {
-            AssignGroupIdFromSeed(ref groupId);
+            BlockGroup.AssignGroupIdFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
 
             Task taskGroupA = Task.Run(() => BlocksGroupA = BlocksGroupA.OrderBy(kv => kv.Key.Z)
                 .ThenBy(kv => kv.Key.X)
@@ -124,142 +127,10 @@ namespace SwitchBlocks.Setups
                 }
             }
 
-            AssignGroupIdsConsecutively(BlocksGroupA, ref groupId);
-            AssignGroupIdsConsecutively(BlocksGroupB, ref groupId);
-            AssignGroupIdsConsecutively(BlocksGroupC, ref groupId);
-            AssignGroupIdsConsecutively(BlocksGroupD, ref groupId);
-        }
-
-        /// <summary>
-        /// Groups up all blocks next to eachother into a group by assigning them the same ID.
-        /// The ID is choosen consecutively ascending as new groups get created.
-        /// </summary>
-        /// <param name="blocks">The coordinates and blocks that are to be grouped</param>
-        private static void AssignGroupIdsConsecutively(Dictionary<Vector3, IBlockGroupId> blocks, ref int groupId)
-        {
-            foreach (KeyValuePair<Vector3, IBlockGroupId> kv in blocks)
-            {
-                Vector3 position = kv.Key;
-                if (PropagateGroupId(blocks, position, groupId))
-                {
-                    CacheGroup.Seed.Add(position, groupId);
-                    groupId++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Groups up all blocks next to eachother into a group by assigning them the same ID.
-        /// The ID is choosen by the given value belonging to the position in the cache.
-        /// </summary>
-        /// <param name="groupId">Reference to the group ID, which will be larger than the largest ID found when finished</param>
-        private static void AssignGroupIdFromSeed(ref int groupId)
-        {
-            List<Vector3> failedPositions = new List<Vector3>();
-            foreach (KeyValuePair<Vector3, int> kv in CacheGroup.Seed)
-            {
-                Vector3 currentPos = kv.Key;
-                int cacheId = kv.Value;
-                if (groupId <= cacheId)
-                {
-                    groupId = cacheId + 1;
-                }
-                bool result = false;
-                if (BlocksGroupA.ContainsKey(currentPos))
-                {
-                    result = PropagateGroupId(BlocksGroupA, currentPos, cacheId);
-                }
-                else if (BlocksGroupB.ContainsKey(currentPos))
-                {
-                    result = PropagateGroupId(BlocksGroupB, currentPos, cacheId);
-                }
-                else if (BlocksGroupC.ContainsKey(currentPos))
-                {
-                    result = PropagateGroupId(BlocksGroupC, currentPos, cacheId);
-                }
-                else if (BlocksGroupD.ContainsKey(currentPos))
-                {
-                    result = PropagateGroupId(BlocksGroupD, currentPos, cacheId);
-                }
-                if (!result)
-                {
-                    failedPositions.Add(currentPos);
-                }
-            }
-            foreach (Vector3 pos in failedPositions)
-            {
-                CacheGroup.Seed.Remove(pos);
-            }
-        }
-
-        /// <summary>
-        /// Assigns the group ID to the block and looks for neighbors of this block that are contained
-        /// in the blocks dictionary and propagates the group ID to those neighbor blocks.
-        /// </summary>
-        /// <param name="startPosition">The position from which the propagation is supposed to start</param>
-        /// <param name="groupId">The ID that is to be assigned to all blocks of the group</param>
-        private static bool PropagateGroupId(Dictionary<Vector3, IBlockGroupId> blocks, Vector3 startPosition, int groupId)
-        {
-            if (!blocks.ContainsKey(startPosition) || blocks[startPosition].GroupId != 0)
-            {
-                return false;
-            }
-            Queue<Vector3> toVisit = new Queue<Vector3>();
-            toVisit.Enqueue(startPosition);
-            while (toVisit.Count != 0)
-            {
-                Vector3 currentPos = toVisit.Dequeue();
-                blocks[currentPos].GroupId = groupId;
-
-                // Left
-                Vector3 left = currentPos + new Vector3(-1, 0, 0);
-                if (blocks.ContainsKey(left) && blocks[left].GroupId == 0)
-                {
-                    toVisit.Enqueue(left);
-                }
-                // Right
-                Vector3 right = currentPos + new Vector3(1, 0, 0);
-                if (blocks.ContainsKey(right) && blocks[right].GroupId == 0)
-                {
-                    toVisit.Enqueue(right);
-                }
-                // Up
-                Vector3 up = currentPos + new Vector3(0, -1, 0);
-                if (up.Y == -1)
-                {
-                    up = new Vector3(currentPos.X, 44, currentPos.Z + 1);
-                }
-                if (blocks.ContainsKey(up) && blocks[up].GroupId == 0)
-                {
-                    toVisit.Enqueue(up);
-                }
-                // Down
-                Vector3 down = currentPos + new Vector3(0, 1, 0);
-                if (down.Y == 45)
-                {
-                    down = new Vector3(currentPos.X, 0, currentPos.Z - 1);
-                }
-                if (blocks.ContainsKey(down) && blocks[down].GroupId == 0)
-                {
-                    toVisit.Enqueue(down);
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Ensures that there is group data for all IDs up to the given group ID.
-        /// </summary>
-        /// <param name="groupId">The group ID that data is to be created up to for (excluding)</param>
-        private static void CreateGroupData(int groupId)
-        {
-            for (int i = 1; i < groupId; i++)
-            {
-                if (!DataGroup.Groups.ContainsKey(i))
-                {
-                    DataGroup.Groups.Add(i, new BlockGroup(true));
-                }
-            }
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupB, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupC, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, CacheGroup.Seed, ref groupId);
         }
     }
 }
