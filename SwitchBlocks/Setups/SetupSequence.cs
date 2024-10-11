@@ -38,18 +38,15 @@ namespace SwitchBlocks.Setups
             if (DataSequence.Touched == 0)
             {
                 DataSequence.SetTick(1, Int32.MaxValue);
-                DataSequence.Touched = 1;
             }
 
             _ = EntitySequencePlatforms.Instance;
 
-            /*
-            BehaviourSequencePlatform behaviourSequencePlatform= new BehaviourSequencePlatform();
+            BehaviourSequencePlatform behaviourSequencePlatform = new BehaviourSequencePlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), behaviourSequencePlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceB), behaviourSequencePlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceC), behaviourSequencePlatform);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceD), behaviourSequencePlatform);
-            */
 
             BehaviourSequenceIceA behaviourSequenceIceA = new BehaviourSequenceIceA();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), behaviourSequenceIceA);

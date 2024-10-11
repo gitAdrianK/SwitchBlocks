@@ -83,7 +83,7 @@ namespace SwitchBlocks.Behaviours
                     group.ActivatedTick = Int32.MinValue;
                 });
                 DataSequence.SetTick(1, Int32.MaxValue);
-                DataSequence.Touched = 1;
+                DataSequence.Touched = 0;
             }
             else
             {

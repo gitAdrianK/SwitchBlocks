@@ -49,7 +49,11 @@ namespace SwitchBlocks.Patching
                     || BehaviourGroupIceA.IsPlayerOnIce
                     || BehaviourGroupIceB.IsPlayerOnIce
                     || BehaviourJumpIceOn.IsPlayerOnIce
-                    || BehaviourJumpIceOff.IsPlayerOnIce;
+                    || BehaviourJumpIceOff.IsPlayerOnIce
+                    || BehaviourSequenceIceA.IsPlayerOnIce
+                    || BehaviourSequenceIceB.IsPlayerOnIce
+                    || BehaviourSequenceIceC.IsPlayerOnIce
+                    || BehaviourSequenceIceD.IsPlayerOnIce;
             }
             if (blockType == typeof(SnowBlock))
             {
@@ -58,7 +62,8 @@ namespace SwitchBlocks.Patching
                     || BehaviourBasicSnow.IsPlayerOnSnow
                     || BehaviourCountdownSnow.IsPlayerOnSnow
                     || BehaviourGroupSnow.IsPlayerOnSnow
-                    || BehaviourJumpSnow.IsPlayerOnSnow;
+                    || BehaviourJumpSnow.IsPlayerOnSnow
+                    || BehaviourSequenceSnow.IsPlayerOnSnow;
             }
         }
     }

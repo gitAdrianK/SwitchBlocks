@@ -62,6 +62,7 @@
     <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
     <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourSequencePlatform.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIceD.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIceC.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIceB.cs" />

@@ -11,10 +11,6 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static bool IsUsed { get; private set; } = false;
         /// <summary>
-        /// How long the blocks stay in their state before switching.
-        /// </summary>
-        public static int Duration { get; private set; } = 0;
-        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the sequence block type.
         /// </summary>
         public static float Multiplier { get; private set; } = 1.0f;
@@ -28,7 +24,6 @@ namespace SwitchBlocks.Settings
             IsUsed = true;
             XmlNodeList childrenGroup = block.ChildNodes;
             Dictionary<string, int> dictionaryGroup = Xml.MapNames(childrenGroup);
-            Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
         }
