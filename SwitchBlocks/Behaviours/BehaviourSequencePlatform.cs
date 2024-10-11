@@ -3,6 +3,8 @@ using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Patching;
+using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System;
 using System.Collections.Generic;
@@ -87,9 +89,18 @@ namespace SwitchBlocks.Behaviours
                 {
                     continue;
                 }
-                if (groupId != 1)
+
+                if (SettingsSequence.Duration == 0)
                 {
-                    DataSequence.SetTick(groupId - 1, Int32.MinValue);
+                    if (groupId != 1)
+                    {
+                        DataSequence.SetTick(groupId - 1, Int32.MinValue);
+                    }
+                }
+                else
+                {
+                    int tick = AchievementManager.GetTicks();
+                    DataSequence.SetTick(groupId, tick + SettingsSequence.Duration);
                 }
                 DataSequence.SetTick(groupId + 1, Int32.MaxValue);
                 DataSequence.Touched = groupId;
