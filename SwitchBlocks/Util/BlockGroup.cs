@@ -11,6 +11,13 @@ namespace SwitchBlocks.Util
         public float Progress { get; set; }
         public int ActivatedTick { get; set; }
 
+        public BlockGroup()
+        {
+            State = true;
+            Progress = 1.0f;
+            ActivatedTick = Int32.MaxValue;
+        }
+
         public BlockGroup(bool isEnabled)
         {
             State = isEnabled;
