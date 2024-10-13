@@ -26,6 +26,11 @@ namespace SwitchBlocks.Util
         public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity, HashSet<Direction> validDirections, params Type[] validTypes)
         {
             IBlock block = advCollisionInfo.GetCollidedBlocks().ToList().Find(b => validTypes.Contains(b.GetType()));
+            return ResolveCollisionDirection(behaviourContext, advCollisionInfo, prevVelocity, validDirections, block);
+        }
+
+        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity, HashSet<Direction> validDirections, IBlock block)
+        {
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
             if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && validDirections.Contains(Direction.Up))

@@ -44,17 +44,15 @@ namespace SwitchBlocks.Settings
             return multiplier;
         }
 
-        // Looks for a "LeverSideDisable" node and parses the inside to look for directions
-        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static HashSet<Direction> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        private static HashSet<Direction> ParseSideDisable(string tag, Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
             HashSet<Direction> directions = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
-            if (!dictionary.ContainsKey("LeverSideDisable"))
+            if (!dictionary.ContainsKey(tag))
             {
                 return directions;
             }
-            string inside = children[dictionary["LeverSideDisable"]].InnerText.Trim();
+            string inside = children[dictionary[tag]].InnerText.Trim();
             if (inside == string.Empty)
             {
                 return directions;
@@ -81,6 +79,21 @@ namespace SwitchBlocks.Settings
                 }
             }
             return directions;
+
+        }
+
+        // Looks for a "LeverSideDisable" node and parses the inside to look for directions
+        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
+        public static HashSet<Direction> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            return ParseSideDisable("LeverSideDisable", dictionary, root);
+        }
+
+        // Looks for a "PlatformSideDisable" node and parses the inside to look for directions
+        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
+        public static HashSet<Direction> ParsePlatformSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        {
+            return ParseSideDisable("PlatformSideDisable", dictionary, root);
         }
 
         public static bool ParseForceSwitch(Dictionary<string, int> dictionary)

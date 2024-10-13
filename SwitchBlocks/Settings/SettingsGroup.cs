@@ -22,6 +22,10 @@ namespace SwitchBlocks.Settings
         /// Directions the group lever can be activated from.
         /// </summary>
         public static HashSet<Direction> LeverDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+        /// <summary>
+        /// Directions the group platform can be activated from.
+        /// </summary>
+        public static HashSet<Direction> PlatformDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
 
         public static void Parse(XmlNode block)
         {
@@ -31,6 +35,7 @@ namespace SwitchBlocks.Settings
             Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
+            PlatformDirections = ParseSettings.ParsePlatformSideDisable(dictionaryGroup, block);
         }
     }
 }

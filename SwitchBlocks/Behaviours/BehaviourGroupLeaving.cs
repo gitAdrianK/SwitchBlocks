@@ -1,9 +1,11 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
+using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
+using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,8 @@ namespace SwitchBlocks.Behaviours
 
         public bool IsPlayerOnBlock { get; set; }
         public static bool IsPlayerOnIce { get; set; }
+
+        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -72,6 +76,7 @@ namespace SwitchBlocks.Behaviours
                     DataGroup.SetTick(id, tick);
                 });
                 DataGroup.Touched.Clear();
+                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
 
@@ -91,7 +96,12 @@ namespace SwitchBlocks.Behaviours
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
                 int groupId = block.GroupId;
-                if (!DataGroup.GetState(groupId))
+                if (!DataGroup.GetState(groupId)
+                    || !Directions.ResolveCollisionDirection(behaviourContext,
+                    advCollisionInfo,
+                    prevVelocity,
+                    SettingsGroup.PlatformDirections,
+                    (IBlock)block))
                 {
                     continue;
                 }
@@ -105,6 +115,7 @@ namespace SwitchBlocks.Behaviours
 
             DataGroup.Touched = currentlyTouched;
 
+            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }
