@@ -1,5 +1,4 @@
 ﻿using JumpKing;
-using JumpKing.SaveThread;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
@@ -26,12 +25,13 @@ namespace SwitchBlocks.Data
                 JKContentManager contentManager = Game1.instance.contentManager;
                 char sep = Path.DirectorySeparatorChar;
                 string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                if (File.Exists($"{path}cache_group.sav"))
+                string file = $"{path}cache_{ModStrings.GROUP}.sav";
+                if (File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
-                        streamReader = new StreamReader($"{path}cache_group.sav");
+                        streamReader = new StreamReader(file);
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(CacheGroup));
                         instance = (CacheGroup)xmlSerializer.Deserialize(streamReader);
                     }
@@ -83,7 +83,7 @@ namespace SwitchBlocks.Data
                 Directory.CreateDirectory(path);
             }
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(CacheGroup));
-            TextWriter textWriter = new StreamWriter($"{path}cache_group.sav");
+            TextWriter textWriter = new StreamWriter($"{path}cache_{ModStrings.GROUP}.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
 

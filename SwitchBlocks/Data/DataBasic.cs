@@ -23,12 +23,13 @@ namespace SwitchBlocks.Data
                 JKContentManager contentManager = Game1.instance.contentManager;
                 char sep = Path.DirectorySeparatorChar;
                 string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                if (!SaveManager.instance.IsNewGame && File.Exists($"{path}save_basic.sav"))
+                string file = $"{path}save_{ModStrings.BASIC}.sav";
+                if (!SaveManager.instance.IsNewGame && File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
-                        streamReader = new StreamReader($"{path}save_basic.sav");
+                        streamReader = new StreamReader(file);
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataBasic));
                         instance = (DataBasic)xmlSerializer.Deserialize(streamReader);
                     }
@@ -73,7 +74,7 @@ namespace SwitchBlocks.Data
                 Directory.CreateDirectory(path);
             }
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataBasic));
-            TextWriter textWriter = new StreamWriter($"{path}save_basic.sav");
+            TextWriter textWriter = new StreamWriter($"{path}save_{ModStrings.BASIC}.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
 

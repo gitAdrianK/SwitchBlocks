@@ -24,12 +24,13 @@ namespace SwitchBlocks.Data
                 JKContentManager contentManager = Game1.instance.contentManager;
                 char sep = Path.DirectorySeparatorChar;
                 string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                if (!SaveManager.instance.IsNewGame && File.Exists($"{path}save_sequence.sav"))
+                string file = $"{path}save_{ModStrings.SEQUENCE}.sav";
+                if (!SaveManager.instance.IsNewGame && File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
-                        streamReader = new StreamReader($"{path}save_sequence.sav");
+                        streamReader = new StreamReader(file);
                         XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataSequence));
                         instance = (DataSequence)xmlSerializer.Deserialize(streamReader);
                     }
