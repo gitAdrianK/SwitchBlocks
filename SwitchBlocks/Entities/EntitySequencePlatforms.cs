@@ -5,6 +5,7 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
+using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,7 +38,11 @@ namespace SwitchBlocks.Entities
 
         private EntitySequencePlatforms()
         {
-            PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.SEQUENCE);
+            PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.SEQUENCE,
+                SetupSequence.BlocksSequenceA,
+                SetupSequence.BlocksSequenceB,
+                SetupSequence.BlocksSequenceC,
+                SetupSequence.BlocksSequenceD);
         }
 
         private int currentScreen = -1;

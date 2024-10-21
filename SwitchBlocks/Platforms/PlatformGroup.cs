@@ -1,7 +1,6 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +25,11 @@ namespace SwitchBlocks.Platforms
         /// </summary>
         /// <param name="subfolder">The subfolder to look for xml in. The main path is the path to the mod folder.</param>
         /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
-        public static new Dictionary<int, List<PlatformGroup>> GetPlatformsDictonary(string subfolder)
+        public static Dictionary<int, List<PlatformGroup>> GetPlatformsDictonary(string subfolder,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupA,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupB,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupC,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupD)
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -63,7 +66,14 @@ namespace SwitchBlocks.Platforms
                 }
 
                 int screenNr = int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1;
-                List<PlatformGroup> platforms = GetPlatformList(xmlPlatforms, path, sep, screenNr);
+                List<PlatformGroup> platforms = GetPlatformList(xmlPlatforms,
+                    path,
+                    sep,
+                    screenNr,
+                    blocksGroupA,
+                    blocksGroupB,
+                    blocksGroupC,
+                    blocksGroupD);
                 if (platforms.Count != 0)
                 {
                     dictionary.Add(screenNr, platforms);
@@ -79,7 +89,14 @@ namespace SwitchBlocks.Platforms
         /// <param name="path">The path to the file</param>
         /// <param name="sep">Path separator</param>
         /// <returns>A list containing all successfully created platforms</returns>
-        protected static List<PlatformGroup> GetPlatformList(XmlNode xmlPlatforms, string path, char sep, int screenNr)
+        protected static List<PlatformGroup> GetPlatformList(XmlNode xmlPlatforms,
+            string path,
+            char sep,
+            int screenNr,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupA,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupB,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupC,
+            Dictionary<Vector3, IBlockGroupId> blocksGroupD)
         {
             List<PlatformGroup> list = new List<PlatformGroup>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
@@ -128,13 +145,21 @@ namespace SwitchBlocks.Platforms
                     }
                     link = (Vector3)optionalLink;
                 }
-                if (SetupGroup.BlocksGroupA.ContainsKey(link))
+                if (blocksGroupA.ContainsKey(link))
                 {
-                    platform.GroupId = SetupGroup.BlocksGroupA[link].GroupId;
+                    platform.GroupId = blocksGroupA[link].GroupId;
                 }
-                else if (SetupGroup.BlocksGroupB.ContainsKey(link))
+                else if (blocksGroupB.ContainsKey(link))
                 {
-                    platform.GroupId = SetupGroup.BlocksGroupB[link].GroupId;
+                    platform.GroupId = blocksGroupB[link].GroupId;
+                }
+                else if (blocksGroupC.ContainsKey(link))
+                {
+                    platform.GroupId = blocksGroupC[link].GroupId;
+                }
+                else if (blocksGroupD.ContainsKey(link))
+                {
+                    platform.GroupId = blocksGroupD[link].GroupId;
                 }
                 else
                 {

@@ -5,6 +5,7 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
+using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,7 +38,11 @@ namespace SwitchBlocks.Entities
 
         private EntityGroupPlatforms()
         {
-            PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP);
+            PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,
+                SetupGroup.BlocksGroupA,
+                SetupGroup.BlocksGroupB,
+                SetupGroup.BlocksGroupC,
+                SetupGroup.BlocksGroupD);
         }
 
         // TODO: Inherit from EntityPlatforms and cut down on repeated code
