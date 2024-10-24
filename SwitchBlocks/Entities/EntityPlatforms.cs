@@ -96,7 +96,7 @@ namespace SwitchBlocks.Entities
             }
 
             float progressActual = 1.0f;
-            Animation animation = state ? platform.Animation : platform.AnimationOut;
+            Animation animation = platform.StartState == state ? platform.Animation : platform.AnimationOut;
             switch (animation.curve)
             {
                 case Curve.Linear:

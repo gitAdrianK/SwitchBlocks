@@ -141,9 +141,12 @@ namespace SwitchBlocks.Entities
         {
             // A platform is solid if the activated tick is larger than the current tick.
             bool newState = group.ActivatedTick > tick;
-            if (group.State != newState && currentPlatformList != null)
+            if (group.State != newState)
             {
-                ModSounds.SequenceFlip?.PlayOneShot();
+                if (currentPlatformList != null)
+                {
+                    ModSounds.SequenceFlip?.PlayOneShot();
+                }
                 group.State = newState;
             }
         }
