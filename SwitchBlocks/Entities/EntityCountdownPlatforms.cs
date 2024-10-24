@@ -1,7 +1,10 @@
-﻿using SwitchBlocks.Data;
+﻿using JumpKing;
+using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -52,6 +55,20 @@ namespace SwitchBlocks.Entities
                 TryWarn(adjustedTick);
             }
             TrySwitch(currentTick);
+        }
+
+        public override void Draw()
+        {
+            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            {
+                return;
+            }
+
+            SpriteBatch spriteBatch = Game1.spriteBatch;
+            Parallel.ForEach(currentPlatformList, platform =>
+            {
+                DrawPlatform(platform, progress, DataCountdown.State, spriteBatch);
+            });
         }
 
         private void TryWarn(int adjustedTick)

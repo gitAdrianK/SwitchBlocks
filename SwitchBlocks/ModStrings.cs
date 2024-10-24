@@ -19,6 +19,7 @@
         public const string SIZE = "Size";
         public const string START_STATE = "StartState";
         public const string ANIMATION = "Animation";
+        public const string ANIMATION_OUT = "AnimationOut";
 
         // Relevant for sand Xml
         public const string BACKGROUND = "Background";

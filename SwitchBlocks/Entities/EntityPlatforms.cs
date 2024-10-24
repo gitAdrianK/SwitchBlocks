@@ -2,11 +2,10 @@
 using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
+using SwitchBlocks.Util;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using static SwitchBlocks.Util.Animation;
 using Curve = SwitchBlocks.Util.Animation.Curve;
 
@@ -81,21 +80,7 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public override void Draw()
-        {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
-            {
-                return;
-            }
-
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, spriteBatch);
-            });
-        }
-
-        public static void DrawPlatform(Platform platform, float progress, SpriteBatch spriteBatch)
+        public static void DrawPlatform(Platform platform, float progress, bool state, SpriteBatch spriteBatch)
         {
             if (progress == 0.0f)
             {
@@ -111,7 +96,8 @@ namespace SwitchBlocks.Entities
             }
 
             float progressActual = 1.0f;
-            switch (platform.Animation.curve)
+            Animation animation = state ? platform.Animation : platform.AnimationOut;
+            switch (animation.curve)
             {
                 case Curve.Linear:
                     progressActual = progress;
@@ -129,7 +115,7 @@ namespace SwitchBlocks.Entities
 
             int height = platform.Height;
             int width = platform.Width;
-            switch (platform.Animation.style)
+            switch (animation.style)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
@@ -212,12 +198,6 @@ namespace SwitchBlocks.Entities
                         color: Color.White);
                     break;
             }
-        }
-
-        private void DrawPlatform(Platform platform, SpriteBatch spriteBatch)
-        {
-            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
-            DrawPlatform(platform, progressAdjusted, spriteBatch);
         }
     }
 }

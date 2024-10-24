@@ -76,6 +76,8 @@ namespace SwitchBlocks.Platforms
             return dictionary.Count == 0 ? null : dictionary;
         }
 
+        // I really should clean this up, flippin' duplicated mess
+
         /// <summary>
         /// Gets a list containing platforms, this list may be empty.
         /// </summary>
@@ -159,6 +161,13 @@ namespace SwitchBlocks.Platforms
                 {
                     XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION]];
                     platform.animation = Xml.GetAnimation(animationNode);
+                }
+
+                platform.animationOut = platform.animation;
+                if (dictionary.ContainsKey(ModStrings.ANIMATION_OUT))
+                {
+                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION_OUT]];
+                    platform.animationOut = Xml.GetAnimation(animationNode);
                 }
 
                 // The platform had all elements properly set.
