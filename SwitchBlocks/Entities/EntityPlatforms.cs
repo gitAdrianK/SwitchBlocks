@@ -82,11 +82,12 @@ namespace SwitchBlocks.Entities
 
         public static void DrawPlatform(Platform platform, float progress, bool state, SpriteBatch spriteBatch)
         {
-            if (progress == 0.0f)
+            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
+            if (progressAdjusted == 0.0f)
             {
                 return;
             }
-            if (progress == 1.0f)
+            if (progressAdjusted == 1.0f)
             {
                 spriteBatch.Draw(
                     texture: platform.Texture,
@@ -100,16 +101,16 @@ namespace SwitchBlocks.Entities
             switch (animation.curve)
             {
                 case Curve.Linear:
-                    progressActual = progress;
+                    progressActual = progressAdjusted;
                     break;
                 case Curve.EaseIn:
-                    progressActual = (float)Math.Sin(progress * HALF_PI - HALF_PI) + 1.0f;
+                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI - HALF_PI) + 1.0f;
                     break;
                 case Curve.EaseOut:
-                    progressActual = (float)Math.Sin(progress * HALF_PI);
+                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI);
                     break;
                 case Curve.EaseInOut:
-                    progressActual = (float)(Math.Sin(progress * Math.PI - HALF_PI) + 1.0f) / 2.0f;
+                    progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
                     break;
             }
 
