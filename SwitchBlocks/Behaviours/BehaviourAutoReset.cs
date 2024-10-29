@@ -39,15 +39,16 @@ namespace SwitchBlocks.Behaviours
             bool isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
             IsPlayerOnBlock = isReset || isResetFull;
 
-            if (IsPlayerOnBlock)
+            if (!IsPlayerOnBlock)
             {
-                DataAuto.ResetTick = AchievementManager.GetTicks();
-                if (isReset && DataAuto.State)
-                {
-                    DataAuto.ResetTick -= SettingsAuto.Duration;
-                }
+                return true;
+            }
 
-                DataAuto.WarnCount = 0;
+            DataAuto.WarnCount = 0;
+            DataAuto.ResetTick = AchievementManager.GetTicks();
+            if (isReset && !DataAuto.State)
+            {
+                DataAuto.ResetTick += SettingsAuto.DurationOff;
             }
 
             return true;

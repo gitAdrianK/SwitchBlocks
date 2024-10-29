@@ -12,7 +12,16 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static int Duration { get; private set; } = 180;
+        public static int DurationOn { get; private set; } = 180;
+        /// <summary>
+        /// How long the blocks stay in their off state before switching.
+        /// </summary>
+        public static int DurationOff { get; private set; } = 180;
+        /// <summary>
+        /// How long a full on off cycle takes. 
+        /// </summary>
+        public static int DurationCycle { get; private set; } = 360;
+
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the auto block type.
         /// </summary>
@@ -29,13 +38,23 @@ namespace SwitchBlocks.Settings
         /// Duration between auto warn sounds.
         /// </summary>
         public static int WarnDuration { get; private set; } = 60;
+        /// <summary>
+        /// If the warn sound is disabled for the on state.
+        /// </summary>
+        public static bool WarnDisableOn { get; private set; } = false;
+        /// <summary>
+        /// If the warn sound is disabled for the off state.
+        /// </summary>
+        public static bool WarnDisableOff { get; private set; } = false;
 
         public static void Parse(XmlNode block)
         {
             IsUsed = true;
             XmlNodeList childrenAuto = block.ChildNodes;
             Dictionary<string, int> dictionaryAuto = Xml.MapNames(childrenAuto);
-            Duration = ParseSettings.ParseDuration(dictionaryAuto, block);
+            DurationOn = ParseSettings.ParseDuration(dictionaryAuto, block);
+            DurationOff = ParseSettings.ParseDuration("DurationOff", dictionaryAuto, block, DurationOn);
+            DurationCycle = DurationOn + DurationOff;
             Multiplier = ParseSettings.ParseMultiplier(dictionaryAuto, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryAuto);
             if (dictionaryAuto.ContainsKey("Warn"))
@@ -44,6 +63,8 @@ namespace SwitchBlocks.Settings
                 Dictionary<string, int> dictionaryAutoWarn = Xml.MapNames(rootAutoWarn.ChildNodes);
                 WarnCount = ParseSettings.ParseWarnCount(dictionaryAutoWarn, rootAutoWarn);
                 WarnDuration = ParseSettings.ParseWarnDuration(dictionaryAutoWarn, rootAutoWarn);
+                WarnDisableOn = ParseSettings.ParseWarnDisableOn(dictionaryAutoWarn);
+                WarnDisableOff = ParseSettings.ParseWarnDisableOff(dictionaryAutoWarn);
             }
         }
     }

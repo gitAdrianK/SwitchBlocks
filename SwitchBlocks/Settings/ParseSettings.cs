@@ -20,13 +20,24 @@ namespace SwitchBlocks.Settings
         // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
         public static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
         {
+            return ParseDuration("Duration", dictionary, root, defaultDuration);
+        }
+
+        // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
+        public static int ParseDuration(string TagName, Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
+        {
+            return ParseDuration(TagName, dictionary, root, (int)((defaultDuration / deltaTime) + 0.5f));
+        }
+
+        public static int ParseDuration(string TagName, Dictionary<string, int> dictionary, XmlNode root, int defaultDuration)
+        {
             XmlNodeList children = root.ChildNodes;
-            float duration = defaultDuration;
-            if (dictionary.ContainsKey("Duration"))
+            int duration = defaultDuration;
+            if (dictionary.ContainsKey(TagName))
             {
-                duration = float.Parse(children[dictionary["Duration"]].InnerText, CultureInfo.InvariantCulture);
+                duration = (int)((float.Parse(children[dictionary[TagName]].InnerText, CultureInfo.InvariantCulture) / deltaTime) + 0.5f);
             }
-            return (int)((duration / deltaTime) + 0.5f);
+            return duration;
         }
 
         // Looks for a "Multiplier" node and returns the inside declared float multiplier or 1.0f.
@@ -126,6 +137,16 @@ namespace SwitchBlocks.Settings
             dur = dur.Replace(",", ".");
             duration = float.Parse(dur, CultureInfo.InvariantCulture);
             return (int)((duration / deltaTime) + 0.5f);
+        }
+
+        public static bool ParseWarnDisableOn(Dictionary<string, int> dictionary)
+        {
+            return dictionary.ContainsKey("DisableOn");
+        }
+
+        public static bool ParseWarnDisableOff(Dictionary<string, int> dictionary)
+        {
+            return dictionary.ContainsKey("DisableOff");
         }
     }
 }
