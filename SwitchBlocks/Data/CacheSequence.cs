@@ -94,7 +94,7 @@ namespace SwitchBlocks.Data
         public static SerializableDictionary<Vector3, int> Seed
         {
             get => Instance._seed;
-            set => Instance._seed = value;
+            private set => Instance._seed = value;
         }
         public SerializableDictionary<Vector3, int> _seed;
     }

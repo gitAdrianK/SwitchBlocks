@@ -9,9 +9,6 @@ using SwitchBlocks.Entities;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
 {
@@ -94,37 +91,12 @@ namespace SwitchBlocks.Setups
 
         private static void AssignGroupIds(ref int groupId)
         {
-            BlockGroup.AssignGroupIdFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
-
-            Task taskGroupA = Task.Run(() => BlocksGroupA = BlocksGroupA.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskGroupB = Task.Run(() => BlocksGroupB = BlocksGroupB.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskGroupC = Task.Run(() => BlocksGroupC = BlocksGroupC.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskGroupD = Task.Run(() => BlocksGroupD = BlocksGroupD.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task.WaitAll(taskGroupA, taskGroupB, taskGroupC, taskGroupD);
-
-            // Find the largest id already assigned from loaded data.
-            if (DataGroup.Groups.Count() > 0)
+            if (CacheGroup.Seed.Count != 0)
             {
-                int largestDataId = DataGroup.Groups.OrderByDescending(kv => kv.Key).First().Key;
-                if (groupId <= largestDataId)
-                {
-                    groupId = largestDataId + 1;
-                }
+                BlockGroup.AssignGroupIdFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
             }
 
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, CacheGroup.Seed, ref groupId);

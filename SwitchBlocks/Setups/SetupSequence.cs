@@ -9,8 +9,6 @@ using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
 {
@@ -87,37 +85,12 @@ namespace SwitchBlocks.Setups
 
         private static void AssignSequenceIds(ref int sequenceId)
         {
-            BlockGroup.AssignGroupIdFromSeed(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdFromSeed(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
-
-            Task taskSequenceA = Task.Run(() => BlocksSequenceA = BlocksSequenceA.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskSequenceB = Task.Run(() => BlocksSequenceB = BlocksSequenceB.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskSequenceC = Task.Run(() => BlocksSequenceC = BlocksSequenceC.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task taskSequenceD = Task.Run(() => BlocksSequenceD = BlocksSequenceD.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
-                .ToDictionary(kv => kv.Key, kv => kv.Value));
-            Task.WaitAll(taskSequenceA, taskSequenceB, taskSequenceC, taskSequenceD);
-
-            // Find the largest id already assigned from loaded data.
-            if (DataSequence.Groups.Count() > 0)
+            if (CacheSequence.Seed.Count != 0)
             {
-                int largestDataId = DataSequence.Groups.OrderByDescending(kv => kv.Key).First().Key;
-                if (sequenceId <= largestDataId)
-                {
-                    sequenceId = largestDataId + 1;
-                }
+                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
             }
 
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
