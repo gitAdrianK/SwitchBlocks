@@ -9,6 +9,11 @@ namespace SwitchBlocks.Util
     [Serializable]
     public class BlockGroup
     {
+        private static readonly Vector3 localLeft = new Vector3(-1, 0, 0);
+        private static readonly Vector3 localRight = new Vector3(1, 0, 0);
+        private static readonly Vector3 localUp = new Vector3(0, -1, 0);
+        private static readonly Vector3 localDown = new Vector3(0, 1, 0);
+
         public bool State { get; set; }
         public float Progress { get; set; }
         public int ActivatedTick { get; set; }
@@ -44,19 +49,19 @@ namespace SwitchBlocks.Util
                 blocks[currentPos].GroupId = groupId;
 
                 // Left
-                Vector3 left = currentPos + new Vector3(-1, 0, 0);
+                Vector3 left = currentPos + localLeft;
                 if (blocks.ContainsKey(left) && blocks[left].GroupId == 0)
                 {
                     toVisit.Enqueue(left);
                 }
                 // Right
-                Vector3 right = currentPos + new Vector3(1, 0, 0);
+                Vector3 right = currentPos + localRight;
                 if (blocks.ContainsKey(right) && blocks[right].GroupId == 0)
                 {
                     toVisit.Enqueue(right);
                 }
                 // Up
-                Vector3 up = currentPos + new Vector3(0, -1, 0);
+                Vector3 up = currentPos + localUp;
                 if (up.Y == -1)
                 {
                     up = new Vector3(currentPos.X, 44, currentPos.Z + 1);
@@ -66,7 +71,7 @@ namespace SwitchBlocks.Util
                     toVisit.Enqueue(up);
                 }
                 // Down
-                Vector3 down = currentPos + new Vector3(0, 1, 0);
+                Vector3 down = currentPos + localDown;
                 if (down.Y == 45)
                 {
                     down = new Vector3(currentPos.X, 0, currentPos.Z - 1);
