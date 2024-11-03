@@ -94,13 +94,6 @@ namespace SwitchBlocks
             }
 
             EntityManager entityManager = EntityManager.instance;
-            SetupAuto.DoCleanup(entityManager);
-            SetupBasic.DoCleanup(entityManager);
-            SetupCountdown.DoCleanup(entityManager);
-            SetupGroup.DoCleanup(entityManager);
-            SetupJump.DoCleanup(entityManager);
-            SetupSand.DoCleanup(entityManager);
-            SetupSequence.DoCleanup(entityManager);
 
             Task auto = Task.Run(() => SetupAuto.DoCleanup(entityManager));
             Task basic = Task.Run(() => SetupBasic.DoCleanup(entityManager));
