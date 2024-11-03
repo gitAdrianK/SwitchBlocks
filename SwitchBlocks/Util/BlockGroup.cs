@@ -139,7 +139,6 @@ namespace SwitchBlocks.Util
                 tasks.Add(
                     Task.Run(() => PropagateGroupId(blocks, currentPos, cacheId)),
                     currentPos);
-                PropagateGroupId(blocks, currentPos, cacheId);
             }
             Task.WaitAll(tasks.Keys.ToArray());
             foreach (KeyValuePair<Task<bool>, Vector3> kv in tasks)
