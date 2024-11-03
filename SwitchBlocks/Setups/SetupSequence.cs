@@ -26,13 +26,11 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            // Quite frankly I don't need to call them here, but I like it.
-            _ = DataSequence.Instance;
-            _ = CacheSequence.Instance;
+            AssignSequenceIds();
 
-            int sequenceId = 1;
-            AssignSequenceIds(ref sequenceId);
-            BlockGroup.CreateGroupData(sequenceId, DataSequence.Groups, false);
+            CacheSequence.Instance.SaveToFile();
+            CacheSequence.Instance.Reset();
+
             if (DataSequence.Touched == 0)
             {
                 DataSequence.SetTick(1, Int32.MaxValue);
@@ -78,25 +76,26 @@ namespace SwitchBlocks.Setups
 
             DataSequence.Instance.SaveToFile();
             DataSequence.Instance.Reset();
-
-            CacheSequence.Instance.SaveToFile();
-            CacheSequence.Instance.Reset();
         }
 
-        private static void AssignSequenceIds(ref int sequenceId)
+        private static void AssignSequenceIds()
         {
-            if (CacheSequence.Seed.Count != 0)
+            int sequenceId = 1;
+
+            if (CacheSequence.Seed.Count > 0)
             {
-                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
             }
 
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
+
+            BlockGroup.CreateGroupData(sequenceId, DataSequence.Groups, false);
         }
     }
 }

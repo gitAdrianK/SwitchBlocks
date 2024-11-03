@@ -28,13 +28,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            // Quite frankly I don't need to call them here, but I like it.
-            _ = DataGroup.Instance;
-            _ = CacheGroup.Instance;
+            AssignGroupIds();
 
-            int groupId = 1;
-            AssignGroupIds(ref groupId);
-            BlockGroup.CreateGroupData(groupId, DataGroup.Groups, true);
+            CacheGroup.Instance.SaveToFile();
+            CacheGroup.Instance.Reset();
 
             _ = EntityGroupPlatforms.Instance;
 
@@ -84,25 +81,26 @@ namespace SwitchBlocks.Setups
 
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();
-
-            CacheGroup.Instance.SaveToFile();
-            CacheGroup.Instance.Reset();
         }
 
-        private static void AssignGroupIds(ref int groupId)
+        private static void AssignGroupIds()
         {
-            if (CacheGroup.Seed.Count != 0)
+            int groupId = 1;
+
+            if (CacheGroup.Seed.Count > 0)
             {
-                BlockGroup.AssignGroupIdFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
             }
 
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, CacheGroup.Seed, ref groupId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupB, CacheGroup.Seed, ref groupId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupC, CacheGroup.Seed, ref groupId);
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, CacheGroup.Seed, ref groupId);
+
+            BlockGroup.CreateGroupData(groupId, DataGroup.Groups, true);
         }
     }
 }

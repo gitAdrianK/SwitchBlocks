@@ -7,6 +7,7 @@ using JumpKing.Player;
 using SwitchBlocks.Factories;
 using SwitchBlocks.Setups;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks
 {
@@ -56,16 +57,27 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModSettings.Load();
-            ModSounds.Load();
+            Task sound = Task.Run(() => ModSounds.Load());
 
-            SetupAuto.DoSetup(player);
-            SetupBasic.DoSetup(player);
-            SetupCountdown.DoSetup(player);
-            SetupGroup.DoSetup(player);
-            SetupJump.DoSetup(player);
-            SetupSand.DoSetup(player);
-            SetupSequence.DoSetup(player);
+            ModSettings.Load();
+
+            Task auto = Task.Run(() => SetupAuto.DoSetup(player));
+            Task basic = Task.Run(() => SetupBasic.DoSetup(player));
+            Task countdown = Task.Run(() => SetupCountdown.DoSetup(player));
+            Task group = Task.Run(() => SetupGroup.DoSetup(player));
+            Task jump = Task.Run(() => SetupJump.DoSetup(player));
+            Task sand = Task.Run(() => SetupSand.DoSetup(player));
+            Task sequence = Task.Run(() => SetupSequence.DoSetup(player));
+
+            Task.WaitAll(
+                auto,
+                basic,
+                countdown,
+                group,
+                jump,
+                sand,
+                sequence,
+                sound);
 
             EntityManager.instance.MoveToFront(player);
         }
@@ -89,6 +101,23 @@ namespace SwitchBlocks
             SetupJump.DoCleanup(entityManager);
             SetupSand.DoCleanup(entityManager);
             SetupSequence.DoCleanup(entityManager);
+
+            Task auto = Task.Run(() => SetupAuto.DoCleanup(entityManager));
+            Task basic = Task.Run(() => SetupBasic.DoCleanup(entityManager));
+            Task countdown = Task.Run(() => SetupCountdown.DoCleanup(entityManager));
+            Task group = Task.Run(() => SetupGroup.DoCleanup(entityManager));
+            Task jump = Task.Run(() => SetupJump.DoCleanup(entityManager));
+            Task sand = Task.Run(() => SetupSand.DoCleanup(entityManager));
+            Task sequence = Task.Run(() => SetupSequence.DoCleanup(entityManager));
+
+            Task.WaitAll(
+                auto,
+                basic,
+                countdown,
+                group,
+                jump,
+                sand,
+                sequence);
         }
 
         /// <summary>

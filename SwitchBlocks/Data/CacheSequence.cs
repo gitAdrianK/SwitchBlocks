@@ -1,5 +1,6 @@
 ﻿using JumpKing;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains cache relevant for the sequence block.
     /// </summary>
+    [Serializable, XmlRoot("CacheSequence")]
     public class CacheSequence
     {
         private static CacheSequence instance;

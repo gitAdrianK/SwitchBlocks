@@ -1,6 +1,7 @@
 ﻿using JumpKing;
 using JumpKing.SaveThread;
 using SwitchBlocks.Util;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -9,6 +10,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the sequence block.
     /// </summary>
+    [Serializable, XmlRoot("DataSequence")]
     public class DataSequence
     {
         private static DataSequence instance;

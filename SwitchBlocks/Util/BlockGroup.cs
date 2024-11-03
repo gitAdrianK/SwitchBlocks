@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Util
 {
@@ -123,9 +125,9 @@ namespace SwitchBlocks.Util
         /// <param name="blocks">Dictionary containing blocks with their positions as key</param>
         /// <param name="seed">A cache that one position for a created blockgroup is removed from if not found</param>
         /// <param name="groupId">Reference to the group ID, which will be larger than the largest ID found when finished</param>
-        public static void AssignGroupIdFromSeed(Dictionary<Vector3, IBlockGroupId> blocks, SerializableDictionary<Vector3, int> seed, ref int groupId)
+        public static void AssignGroupIdsFromSeed(Dictionary<Vector3, IBlockGroupId> blocks, SerializableDictionary<Vector3, int> seed, ref int groupId)
         {
-            List<Vector3> failedPositions = new List<Vector3>();
+            Dictionary<Task<bool>, Vector3> tasks = new Dictionary<Task<bool>, Vector3>();
             foreach (KeyValuePair<Vector3, int> kv in seed)
             {
                 Vector3 currentPos = kv.Key;
@@ -134,19 +136,18 @@ namespace SwitchBlocks.Util
                 {
                     groupId = cacheId + 1;
                 }
-                bool result = false;
-                if (blocks.ContainsKey(currentPos))
-                {
-                    result = PropagateGroupId(blocks, currentPos, cacheId);
-                }
-                if (!result)
-                {
-                    failedPositions.Add(currentPos);
-                }
+                tasks.Add(
+                    Task.Run(() => PropagateGroupId(blocks, currentPos, cacheId)),
+                    currentPos);
+                PropagateGroupId(blocks, currentPos, cacheId);
             }
-            foreach (Vector3 pos in failedPositions)
+            Task.WaitAll(tasks.Keys.ToArray());
+            foreach (KeyValuePair<Task<bool>, Vector3> kv in tasks)
             {
-                seed.Remove(pos);
+                if (!kv.Key.Result)
+                {
+                    seed.Remove(kv.Value);
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using JumpKing;
 using JumpKing.SaveThread;
 using SwitchBlocks.Util;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -10,6 +11,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the group block.
     /// </summary>
+    [Serializable, XmlRoot("DataGroup")]
     public class DataGroup
     {
         private static DataGroup instance;
