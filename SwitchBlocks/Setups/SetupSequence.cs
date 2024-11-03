@@ -9,6 +9,7 @@ using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
 {
@@ -28,8 +29,11 @@ namespace SwitchBlocks.Setups
 
             AssignSequenceIds();
 
-            CacheSequence.Instance.SaveToFile();
-            CacheSequence.Instance.Reset();
+            Task saving = Task.Run(() =>
+            {
+                CacheSequence.Instance.SaveToFile();
+                CacheSequence.Instance.Reset();
+            });
 
             if (DataSequence.Touched == 0)
             {
@@ -62,6 +66,8 @@ namespace SwitchBlocks.Setups
             BehaviourSequenceReset behaviourSequenceReset = new BehaviourSequenceReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), behaviourSequenceReset);
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceResetSolid), behaviourSequenceReset);
+
+            saving.Wait();
         }
 
         public static void DoCleanup(EntityManager entityManager)

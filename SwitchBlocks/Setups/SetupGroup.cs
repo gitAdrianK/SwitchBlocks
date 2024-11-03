@@ -9,6 +9,7 @@ using SwitchBlocks.Entities;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
 {
@@ -30,8 +31,11 @@ namespace SwitchBlocks.Setups
 
             AssignGroupIds();
 
-            CacheGroup.Instance.SaveToFile();
-            CacheGroup.Instance.Reset();
+            Task saving = Task.Run(() =>
+            {
+                CacheGroup.Instance.SaveToFile();
+                CacheGroup.Instance.Reset();
+            });
 
             _ = EntityGroupPlatforms.Instance;
 
@@ -67,6 +71,8 @@ namespace SwitchBlocks.Setups
             BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
+
+            saving.Wait();
         }
 
         public static void DoCleanup(EntityManager entityManager)
