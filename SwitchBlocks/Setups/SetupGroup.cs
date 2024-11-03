@@ -28,9 +28,38 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
-
+            /* For performance testing purposes
+            const int cycles = 1000;
+            long total = 0;
+            for (int i = 0; i < cycles; i++)
+            {
+                long start = Stopwatch.GetTimestamp();
+            */
             AssignGroupIds();
-
+            /*
+            total += Stopwatch.GetTimestamp() - start;
+                Debugger.Log(1, "", "> " + i + "\n");
+                DataGroup.Instance.Reset();
+                CacheGroup.Instance.Reset();
+                foreach (var item in BlocksGroupA.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupB.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupC.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupD.Values)
+                {
+                    item.GroupId = 0;
+                }
+            }
+            Debugger.Log(1, "", ">>> Avg: " + (total / cycles) + "\n");
+            */
             Task saving = Task.Run(() =>
             {
                 CacheGroup.Instance.SaveToFile();

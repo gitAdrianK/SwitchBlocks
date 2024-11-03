@@ -69,6 +69,8 @@ namespace SwitchBlocks
             Task sand = Task.Run(() => SetupSand.DoSetup(player));
             Task sequence = Task.Run(() => SetupSequence.DoSetup(player));
 
+            EntityManager.instance.MoveToFront(player);
+
             Task.WaitAll(
                 auto,
                 basic,
@@ -78,8 +80,6 @@ namespace SwitchBlocks
                 sand,
                 sequence,
                 sound);
-
-            EntityManager.instance.MoveToFront(player);
         }
 
         /// <summary>
