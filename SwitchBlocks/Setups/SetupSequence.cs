@@ -44,9 +44,9 @@ namespace SwitchBlocks.Setups
 
             BehaviourSequencePlatform behaviourSequencePlatform = new BehaviourSequencePlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceB), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceC), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceD), behaviourSequencePlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceB), behaviourSequencePlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceC), behaviourSequencePlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceD), behaviourSequencePlatform);
 
             BehaviourSequenceIceA behaviourSequenceIceA = new BehaviourSequenceIceA();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), behaviourSequenceIceA);
@@ -59,13 +59,13 @@ namespace SwitchBlocks.Setups
 
             BehaviourSequenceSnow behaviourSequenceSnow = new BehaviourSequenceSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowB), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowC), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowD), behaviourSequenceSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowB), behaviourSequenceSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowC), behaviourSequenceSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowD), behaviourSequenceSnow);
 
             BehaviourSequenceReset behaviourSequenceReset = new BehaviourSequenceReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), behaviourSequenceReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceResetSolid), behaviourSequenceReset);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceResetSolid), behaviourSequenceReset);
 
             saving.Wait();
         }

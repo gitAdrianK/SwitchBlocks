@@ -92,7 +92,6 @@ namespace SwitchBlocks.Behaviours
                 if (!DataSequence.GetState(groupId)
                     || DataSequence.Touched == groupId
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                        advCollisionInfo,
                         prevVelocity,
                         SettingsSequence.PlatformDirections,
                         (IBlock)block))

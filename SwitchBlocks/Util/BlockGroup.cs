@@ -104,11 +104,11 @@ namespace SwitchBlocks.Util
 
         // The caching is maybe too much for one function, but I don't care until I have to
         /// <summary>
-        /// Groups up all blocks next to eachother into a group by assigning them the same ID.
-        /// The ID is choosen consecutively ascending as new groups get created.
+        /// Groups up all blocks next to each other into a group by assigning them the same ID.
+        /// The ID is chosen consecutively ascending as new groups get created.
         /// </summary>
         /// <param name="blocks">The coordinates and blocks that are to be grouped</param>
-        /// <param name="seed">A cache that one position for a created blockgroup is saved to</param>
+        /// <param name="seed">A cache that one position for a created block group is saved to</param>
         /// <param name="groupId">The group ID that is increased as new groups get created</param>
         public static void AssignGroupIdsConsecutively(Dictionary<Vector3, IBlockGroupId> blocks, SerializableDictionary<Vector3, int> seed, ref int groupId)
         {
@@ -124,11 +124,11 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
-        /// Groups up all blocks next to eachother into a group by assigning them the same ID.
-        /// The ID is choosen by the given value belonging to the position in the cache.
+        /// Groups up all blocks next to each other into a group by assigning them the same ID.
+        /// The ID is chosen by the given value belonging to the position in the cache.
         /// </summary>
         /// <param name="blocks">Dictionary containing blocks with their positions as key</param>
-        /// <param name="seed">A cache that one position for a created blockgroup is removed from if not found</param>
+        /// <param name="seed">A cache that one position for a created block group is removed from if not found</param>
         /// <param name="groupId">Reference to the group ID, which will be larger than the largest ID found when finished</param>
         public static void AssignGroupIdsFromSeed(Dictionary<Vector3, IBlockGroupId> blocks, SerializableDictionary<Vector3, int> seed, ref int groupId)
         {

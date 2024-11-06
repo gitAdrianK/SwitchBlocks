@@ -61,25 +61,17 @@ namespace SwitchBlocks
 
             ModSettings.Load();
 
-            Task auto = Task.Run(() => SetupAuto.DoSetup(player));
-            Task basic = Task.Run(() => SetupBasic.DoSetup(player));
-            Task countdown = Task.Run(() => SetupCountdown.DoSetup(player));
-            Task group = Task.Run(() => SetupGroup.DoSetup(player));
-            Task jump = Task.Run(() => SetupJump.DoSetup(player));
-            Task sand = Task.Run(() => SetupSand.DoSetup(player));
-            Task sequence = Task.Run(() => SetupSequence.DoSetup(player));
+            SetupAuto.DoSetup(player);
+            SetupBasic.DoSetup(player);
+            SetupCountdown.DoSetup(player);
+            SetupGroup.DoSetup(player);
+            SetupJump.DoSetup(player);
+            SetupSand.DoSetup(player);
+            SetupSequence.DoSetup(player);
 
             EntityManager.instance.MoveToFront(player);
 
-            Task.WaitAll(
-                auto,
-                basic,
-                countdown,
-                group,
-                jump,
-                sand,
-                sequence,
-                sound);
+            Task.WaitAll(sound);
         }
 
         /// <summary>

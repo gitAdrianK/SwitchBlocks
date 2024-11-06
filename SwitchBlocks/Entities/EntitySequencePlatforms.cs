@@ -70,13 +70,13 @@ namespace SwitchBlocks.Entities
             }
 
             SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
+            foreach (PlatformGroup platform in currentPlatformList)
             {
                 EntityPlatforms.DrawPlatform(platform,
                     DataSequence.GetProgress(platform.GroupId),
                     DataSequence.GetState(platform.GroupId),
                     spriteBatch);
-            });
+            }
         }
 
         /// <summary>

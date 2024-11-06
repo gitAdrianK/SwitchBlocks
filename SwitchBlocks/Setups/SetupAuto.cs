@@ -22,7 +22,7 @@ namespace SwitchBlocks.Setups
 
             BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
 
             BehaviourAutoIceOn behaviourAutoIceOn = new BehaviourAutoIceOn();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoIceOn);
@@ -31,11 +31,11 @@ namespace SwitchBlocks.Setups
 
             BehaviourAutoSnow behaviourAutoSnow = new BehaviourAutoSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOn), behaviourAutoSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOff), behaviourAutoSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOff), behaviourAutoSnow);
 
             BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
         }
 
         public static void DoCleanup(EntityManager entityManager)

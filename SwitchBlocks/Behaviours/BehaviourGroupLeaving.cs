@@ -98,7 +98,6 @@ namespace SwitchBlocks.Behaviours
                 int groupId = block.GroupId;
                 if (!DataGroup.GetState(groupId)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                    advCollisionInfo,
                     prevVelocity,
                     SettingsGroup.PlatformDirections,
                     (IBlock)block))

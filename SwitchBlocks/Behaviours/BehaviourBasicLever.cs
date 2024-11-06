@@ -79,7 +79,6 @@ namespace SwitchBlocks.Behaviours
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
                 {
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        advCollisionInfo,
                         prevVelocity,
                         SettingsBasic.LeverDirections,
                         typeof(BlockBasicLeverSolid),

@@ -64,7 +64,6 @@ namespace SwitchBlocks.Behaviours
                 if (collidingWithLeverSolid)
                 {
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        advCollisionInfo,
                         prevVelocity,
                         SettingsCountdown.LeverDirections,
                         typeof(BlockCountdownLeverSolid)))

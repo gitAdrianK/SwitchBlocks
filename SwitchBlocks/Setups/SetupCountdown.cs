@@ -32,11 +32,11 @@ namespace SwitchBlocks.Setups
 
             BehaviourCountdownSnow behaviourCountdownSnow = new BehaviourCountdownSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOn), behaviourCountdownSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOff), behaviourCountdownSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOff), behaviourCountdownSnow);
 
             BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
         }
 
         public static void DoCleanup(EntityManager entityManager)

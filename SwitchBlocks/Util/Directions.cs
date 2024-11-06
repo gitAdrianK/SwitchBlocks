@@ -18,18 +18,21 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
-        /// Checks direction a collision happened from and checks if the direction is allowed for that direction.
+        /// Checks from with direction the collision took place and if its a valid direction.
         /// </summary>
-        /// <param name="behaviourContext">Behaviour context</param>
-        /// <param name="advCollisionInfo">Advanced collision info</param>
-        /// <returns>True if the collision is allowed, false otherwise</returns>
-        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity, HashSet<Direction> validDirections, params Type[] validTypes)
+        /// <param name="behaviourContext">The behaviour context</param>
+        /// <param name="prevVelocity">The previous velocity before the collision</param>
+        /// <param name="validDirections">Valid directions</param>
+        /// <param name="validTypes">Valid block types</param>
+        /// <returns>true if the direction for the block type is valid, otherwise, false</returns>
+        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, Vector2 prevVelocity, HashSet<Direction> validDirections, params Type[] validTypes)
         {
+            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             IBlock block = advCollisionInfo.GetCollidedBlocks().ToList().Find(b => validTypes.Contains(b.GetType()));
-            return ResolveCollisionDirection(behaviourContext, advCollisionInfo, prevVelocity, validDirections, block);
+            return ResolveCollisionDirection(behaviourContext, prevVelocity, validDirections, block);
         }
 
-        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, AdvCollisionInfo advCollisionInfo, Vector2 prevVelocity, HashSet<Direction> validDirections, IBlock block)
+        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, Vector2 prevVelocity, HashSet<Direction> validDirections, IBlock block)
         {
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();

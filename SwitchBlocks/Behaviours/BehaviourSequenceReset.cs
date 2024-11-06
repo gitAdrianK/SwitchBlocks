@@ -68,7 +68,6 @@ namespace SwitchBlocks.Behaviours
                 if (collidingWithResetSolid)
                 {
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        advCollisionInfo,
                         prevVelocity,
                         SettingsSequence.LeverDirections,
                         typeof(BlockSequenceResetSolid)))

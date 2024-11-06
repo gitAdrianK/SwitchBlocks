@@ -78,9 +78,9 @@ namespace SwitchBlocks.Setups
                 behaviourGroupPlatform = new BehaviourGroupDuration();
             }
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
 
             BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
@@ -93,13 +93,13 @@ namespace SwitchBlocks.Setups
 
             BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
 
             BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
 
             saving.Wait();
         }
