@@ -28,7 +28,7 @@ namespace SwitchBlocks.Setups
 
             BehaviourJumpSnow behaviourJumpSnow = new BehaviourJumpSnow();
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOn), behaviourJumpSnow);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOff), behaviourJumpSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOff), behaviourJumpSnow);
 
             PlayerEntity.OnJumpCall += JumpSwitch;
         }

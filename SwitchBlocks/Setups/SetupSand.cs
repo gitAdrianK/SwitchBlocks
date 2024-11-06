@@ -30,11 +30,11 @@ namespace SwitchBlocks.Setups
 
             BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
-            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
         }
 
         public static void DoCleanup(EntityManager entityManager)
