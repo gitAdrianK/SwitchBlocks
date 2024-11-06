@@ -57,7 +57,7 @@ namespace SwitchBlocks
                 return;
             }
 
-            Task sound = Task.Run(() => ModSounds.Load());
+            ModSounds.Load();
 
             ModSettings.Load();
 
@@ -70,8 +70,6 @@ namespace SwitchBlocks
             SetupSequence.DoSetup(player);
 
             EntityManager.instance.MoveToFront(player);
-
-            Task.WaitAll(sound);
         }
 
         /// <summary>
