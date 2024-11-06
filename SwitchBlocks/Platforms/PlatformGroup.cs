@@ -112,7 +112,10 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
-                platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                lock (ModEntry.threadLock)
+                {
+                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                }
                 platform.Width = platform.Texture.Width;
                 platform.Height = platform.Texture.Height;
 

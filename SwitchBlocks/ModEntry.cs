@@ -14,6 +14,8 @@ namespace SwitchBlocks
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
+        public static object threadLock = new object();
+
         private static Harmony harmony;
 
         /// <summary>
@@ -57,17 +59,27 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModSounds.Load();
-
             ModSettings.Load();
 
-            SetupAuto.DoSetup(player);
-            SetupBasic.DoSetup(player);
-            SetupCountdown.DoSetup(player);
-            SetupGroup.DoSetup(player);
-            SetupJump.DoSetup(player);
-            SetupSand.DoSetup(player);
-            SetupSequence.DoSetup(player);
+            Task sound = Task.Run(() => ModSounds.Load());
+
+            Task auto = Task.Run(() => SetupAuto.DoSetup(player));
+            Task basic = Task.Run(() => SetupBasic.DoSetup(player));
+            Task countdown = Task.Run(() => SetupCountdown.DoSetup(player));
+            Task group = Task.Run(() => SetupGroup.DoSetup(player));
+            Task jump = Task.Run(() => SetupJump.DoSetup(player));
+            Task sand = Task.Run(() => SetupSand.DoSetup(player));
+            Task sequence = Task.Run(() => SetupSequence.DoSetup(player));
+
+            Task.WaitAll(
+                auto,
+                basic,
+                countdown,
+                group,
+                jump,
+                sand,
+                sequence,
+                sound);
 
             EntityManager.instance.MoveToFront(player);
         }
