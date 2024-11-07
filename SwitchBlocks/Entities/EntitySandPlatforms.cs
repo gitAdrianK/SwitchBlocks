@@ -7,6 +7,7 @@ using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -60,10 +61,10 @@ namespace SwitchBlocks.Entities
             }
 
             SpriteBatch spriteBatch = Game1.spriteBatch;
-            foreach (PlatformSand platform in currentPlatformList)
+            Parallel.ForEach(currentPlatformList, platform =>
             {
                 DrawPlatform(platform, spriteBatch);
-            }
+            });
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -64,10 +65,10 @@ namespace SwitchBlocks.Entities
             }
 
             SpriteBatch spriteBatch = Game1.spriteBatch;
-            foreach (Platform platform in currentPlatformList)
+            Parallel.ForEach(currentPlatformList, platform =>
             {
                 DrawPlatform(platform, progress, DataCountdown.State, spriteBatch);
-            }
+            });
         }
 
         private void TryWarn(int adjustedTick)

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Patching;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -50,10 +51,10 @@ namespace SwitchBlocks.Entities
             }
 
             SpriteBatch spriteBatch = Game1.spriteBatch;
-            foreach (Lever lever in currentLeverList)
+            Parallel.ForEach(currentLeverList, lever =>
             {
                 DrawLever(lever, spriteBatch);
-            }
+            });
         }
 
         private void DrawLever(Lever lever, SpriteBatch spriteBatch)
