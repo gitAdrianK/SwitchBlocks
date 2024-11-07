@@ -158,13 +158,13 @@ namespace SwitchBlocks.Util
                     currentPos);
             }
             Task.WaitAll(tasks.Keys.ToArray());
-            foreach (KeyValuePair<Task<bool>, Vector3> kv in tasks)
+            Parallel.ForEach(tasks, kv =>
             {
                 if (!kv.Key.Result)
                 {
                     seed.Remove(kv.Value);
                 }
-            }
+            });
         }
     }
 }
