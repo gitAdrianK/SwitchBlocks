@@ -37,7 +37,7 @@ namespace SwitchBlocks.Setups
             */
             AssignGroupIds();
             /*
-            total += Stopwatch.GetTimestamp() - start;
+                total += Stopwatch.GetTimestamp() - start;
                 Debugger.Log(1, "", "> " + i + "\n");
                 DataGroup.Instance.Reset();
                 CacheGroup.Instance.Reset();
@@ -60,6 +60,7 @@ namespace SwitchBlocks.Setups
             }
             Debugger.Log(1, "", ">>> Avg: " + (total / cycles) + "\n");
             */
+
             Task saving = Task.Run(() =>
             {
                 CacheGroup.Instance.SaveToFile();

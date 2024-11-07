@@ -50,15 +50,21 @@ namespace SwitchBlocks.Util
 
                 // Left
                 Vector3 left = currentPos + localLeft;
-                if (blocks.ContainsKey(left) && blocks[left].GroupId == 0)
+                if (blocks.TryGetValue(left, out IBlockGroupId value))
                 {
-                    toVisit.Enqueue(left);
+                    if (value.GroupId == 0)
+                    {
+                        toVisit.Enqueue(left);
+                    }
                 }
                 // Right
                 Vector3 right = currentPos + localRight;
-                if (blocks.ContainsKey(right) && blocks[right].GroupId == 0)
+                if (blocks.TryGetValue(right, out value))
                 {
-                    toVisit.Enqueue(right);
+                    if (value.GroupId == 0)
+                    {
+                        toVisit.Enqueue(right);
+                    }
                 }
                 // Up
                 Vector3 up = currentPos + localUp;
@@ -66,9 +72,12 @@ namespace SwitchBlocks.Util
                 {
                     up = new Vector3(currentPos.X, 44, currentPos.Z + 1);
                 }
-                if (blocks.ContainsKey(up) && blocks[up].GroupId == 0)
+                if (blocks.TryGetValue(up, out value))
                 {
-                    toVisit.Enqueue(up);
+                    if (value.GroupId == 0)
+                    {
+                        toVisit.Enqueue(up);
+                    }
                 }
                 // Down
                 Vector3 down = currentPos + localDown;
@@ -76,9 +85,12 @@ namespace SwitchBlocks.Util
                 {
                     down = new Vector3(currentPos.X, 0, currentPos.Z - 1);
                 }
-                if (blocks.ContainsKey(down) && blocks[down].GroupId == 0)
+                if (blocks.TryGetValue(down, out value))
                 {
-                    toVisit.Enqueue(down);
+                    if (value.GroupId == 0)
+                    {
+                        toVisit.Enqueue(down);
+                    }
                 }
             }
             return true;
