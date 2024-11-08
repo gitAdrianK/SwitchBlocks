@@ -1,4 +1,5 @@
 ﻿using EntityComponent;
+using JumpKing;
 using JumpKing.API;
 using JumpKing.Player;
 using Microsoft.Xna.Framework;
@@ -63,7 +64,10 @@ namespace SwitchBlocks.Setups
 
             Task saving = Task.Run(() =>
             {
-                CacheGroup.Instance.SaveToFile();
+                if (LevelDebugState.instance != null)
+                {
+                    CacheGroup.Instance.SaveToFile();
+                }
                 CacheGroup.Instance.Reset();
             });
 
