@@ -90,7 +90,7 @@ namespace SwitchBlocks.Behaviours
             {
                 int groupId = block.GroupId;
                 if (!DataSequence.GetState(groupId)
-                    || DataSequence.Touched == groupId
+                    || DataSequence.Touched != (groupId - 1)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                         prevVelocity,
                         SettingsSequence.PlatformDirections,
