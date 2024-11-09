@@ -97,6 +97,8 @@ namespace SwitchBlocks
 
             EntityManager entityManager = EntityManager.instance;
 
+            Task sound = Task.Run(() => ModSounds.Cleanup());
+
             Task auto = Task.Run(() => SetupAuto.DoCleanup(entityManager));
             Task basic = Task.Run(() => SetupBasic.DoCleanup(entityManager));
             Task countdown = Task.Run(() => SetupCountdown.DoCleanup(entityManager));
@@ -112,7 +114,8 @@ namespace SwitchBlocks
                 group,
                 jump,
                 sand,
-                sequence);
+                sequence,
+                sound);
         }
 
         /// <summary>

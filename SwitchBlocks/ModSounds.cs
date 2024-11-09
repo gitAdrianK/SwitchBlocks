@@ -153,5 +153,18 @@ namespace SwitchBlocks
                 }
             }
         }
+
+        public static void Cleanup()
+        {
+            AutoFlip = null;
+            AutoWarn = null;
+            BasicFlip = null;
+            CountdownFlip = null;
+            CountdownWarn = null;
+            GroupFlip = null;
+            JumpFlip = null;
+            SandFlip = null;
+            SandFlip = null;
+        }
     }
 }
