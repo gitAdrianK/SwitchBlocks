@@ -112,7 +112,7 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
-                lock (ModEntry.threadLock)
+                lock (Game1.instance.contentManager)
                 {
                     platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }

@@ -14,8 +14,6 @@ namespace SwitchBlocks
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
-        public static object threadLock = new object();
-
         private static Harmony harmony;
 
         /// <summary>

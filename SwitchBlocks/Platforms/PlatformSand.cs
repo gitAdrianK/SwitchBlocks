@@ -94,6 +94,7 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
+                JKContentManager contentManager = Game1.instance.contentManager;
 
                 string filePath;
                 // Require at least one of the size giving textures to exist (Background or Foregroud)
@@ -111,7 +112,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (ModEntry.threadLock)
+                    lock (contentManager)
                     {
                         platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                     }
@@ -125,7 +126,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (ModEntry.threadLock)
+                    lock (contentManager)
                     {
                         platform.Scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                     }
@@ -139,7 +140,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (ModEntry.threadLock)
+                    lock (contentManager)
                     {
                         platform.Foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                     }

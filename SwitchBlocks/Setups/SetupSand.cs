@@ -16,6 +16,7 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+
             _ = DataSand.Instance;
 
             _ = EntitySandPlatforms.Instance;

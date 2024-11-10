@@ -74,19 +74,19 @@ namespace SwitchBlocks
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
-            string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
 
             // Auto
             if (SettingsAuto.IsUsed && File.Exists($"{path}autoFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
                 }
             }
             if (SettingsAuto.IsUsed && File.Exists($"{path}autoWarn.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
                 }
@@ -95,7 +95,7 @@ namespace SwitchBlocks
             // Basic
             if (SettingsBasic.IsUsed && File.Exists($"{path}basicFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
                 }
@@ -104,14 +104,14 @@ namespace SwitchBlocks
             // Countdown
             if (SettingsCountdown.IsUsed && File.Exists($"{path}countdownFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
                 }
             }
             if (SettingsCountdown.IsUsed && File.Exists($"{path}countdownWarn.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
                 }
@@ -120,7 +120,7 @@ namespace SwitchBlocks
             // Group
             if (SettingsGroup.IsUsed && File.Exists($"{path}groupFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
                 }
@@ -129,7 +129,7 @@ namespace SwitchBlocks
             // Jump
             if (SettingsJump.IsUsed && File.Exists($"{path}jumpFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
                 }
@@ -138,7 +138,7 @@ namespace SwitchBlocks
             // Sand
             if (SettingsSand.IsUsed && File.Exists($"{path}sandFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
                 }
@@ -147,7 +147,7 @@ namespace SwitchBlocks
             // Sequence
             if (SettingsSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
             {
-                lock (ModEntry.threadLock)
+                lock (contentManager)
                 {
                     SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
                 }

@@ -43,38 +43,41 @@ namespace SwitchBlocks.Setups
 
             _ = EntityGroupPlatforms.Instance;
 
-            IBlockBehaviour behaviourGroupPlatform;
-            if (SettingsGroup.Duration == 0)
+            lock (player)
             {
-                behaviourGroupPlatform = new BehaviourGroupLeaving();
+                IBlockBehaviour behaviourGroupPlatform;
+                if (SettingsGroup.Duration == 0)
+                {
+                    behaviourGroupPlatform = new BehaviourGroupLeaving();
+                }
+                else
+                {
+                    behaviourGroupPlatform = new BehaviourGroupDuration();
+                }
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
+
+                BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
+                BehaviourGroupIceB behaviourGroupIceB = new BehaviourGroupIceB();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceB), behaviourGroupIceB);
+                BehaviourGroupIceC behaviourGroupIceC = new BehaviourGroupIceC();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceC), behaviourGroupIceC);
+                BehaviourGroupIceD behaviourGroupIceD = new BehaviourGroupIceD();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceD), behaviourGroupIceD);
+
+                BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
+
+                BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
             }
-            else
-            {
-                behaviourGroupPlatform = new BehaviourGroupDuration();
-            }
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
-
-            BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
-            BehaviourGroupIceB behaviourGroupIceB = new BehaviourGroupIceB();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceB), behaviourGroupIceB);
-            BehaviourGroupIceC behaviourGroupIceC = new BehaviourGroupIceC();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceC), behaviourGroupIceC);
-            BehaviourGroupIceD behaviourGroupIceD = new BehaviourGroupIceD();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceD), behaviourGroupIceD);
-
-            BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
-
-            BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
 
             saving.Wait();
         }
