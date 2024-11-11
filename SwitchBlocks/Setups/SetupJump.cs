@@ -50,6 +50,8 @@ namespace SwitchBlocks.Setups
 
             DataJump.Instance.SaveToFile();
             DataJump.Instance.Reset();
+
+            SettingsJump.IsUsed = false;
         }
 
         private static void JumpSwitch()

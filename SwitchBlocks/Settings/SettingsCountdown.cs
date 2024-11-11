@@ -9,7 +9,7 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Whether the countdown block is inside the blocks.xml and counts as "used/enabled"
         /// </summary>
-        public static bool IsUsed { get; private set; } = false;
+        public static bool IsUsed { get; set; } = false;
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>

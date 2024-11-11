@@ -53,6 +53,8 @@ namespace SwitchBlocks.Setups
 
             DataAuto.Instance.SaveToFile();
             DataAuto.Instance.Reset();
+
+            SettingsAuto.IsUsed = false;
         }
     }
 }

@@ -86,6 +86,8 @@ namespace SwitchBlocks.Setups
 
             DataSequence.Instance.SaveToFile();
             DataSequence.Instance.Reset();
+
+            SettingsSequence.IsUsed = false;
         }
 
         private static void AssignSequenceIds()

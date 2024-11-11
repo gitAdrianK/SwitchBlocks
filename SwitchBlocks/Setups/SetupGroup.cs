@@ -94,6 +94,8 @@ namespace SwitchBlocks.Setups
 
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();
+
+            SettingsGroup.IsUsed = false;
         }
 
         private static void AssignGroupIds()

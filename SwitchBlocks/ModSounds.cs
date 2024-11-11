@@ -77,18 +77,21 @@ namespace SwitchBlocks
             string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
 
             // Auto
-            if (SettingsAuto.IsUsed && File.Exists($"{path}autoFlip.xnb"))
+            if (SettingsAuto.IsUsed)
             {
-                lock (contentManager)
+                if (File.Exists($"{path}autoFlip.xnb"))
                 {
-                    AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+                    lock (contentManager)
+                    {
+                        AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+                    }
                 }
-            }
-            if (SettingsAuto.IsUsed && File.Exists($"{path}autoWarn.xnb"))
-            {
-                lock (contentManager)
+                if (File.Exists($"{path}autoWarn.xnb"))
                 {
-                    AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
+                    lock (contentManager)
+                    {
+                        AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
+                    }
                 }
             }
 
@@ -102,18 +105,21 @@ namespace SwitchBlocks
             }
 
             // Countdown
-            if (SettingsCountdown.IsUsed && File.Exists($"{path}countdownFlip.xnb"))
+            if (SettingsCountdown.IsUsed)
             {
-                lock (contentManager)
+                if (File.Exists($"{path}countdownFlip.xnb"))
                 {
-                    CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+                    lock (contentManager)
+                    {
+                        CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+                    }
                 }
-            }
-            if (SettingsCountdown.IsUsed && File.Exists($"{path}countdownWarn.xnb"))
-            {
-                lock (contentManager)
+                if (File.Exists($"{path}countdownWarn.xnb"))
                 {
-                    CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
+                    lock (contentManager)
+                    {
+                        CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
+                    }
                 }
             }
 

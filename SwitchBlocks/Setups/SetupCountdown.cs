@@ -56,6 +56,8 @@ namespace SwitchBlocks.Setups
 
             DataCountdown.Instance.SaveToFile();
             DataCountdown.Instance.Reset();
+
+            SettingsCountdown.IsUsed = false;
         }
     }
 }

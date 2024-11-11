@@ -56,6 +56,8 @@ namespace SwitchBlocks.Setups
 
             DataBasic.Instance.SaveToFile();
             DataBasic.Instance.Reset();
+
+            SettingsBasic.IsUsed = false;
         }
     }
 }

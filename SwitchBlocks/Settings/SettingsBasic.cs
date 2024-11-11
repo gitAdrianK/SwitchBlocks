@@ -9,7 +9,7 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Whether the basic block is inside the blocks.xml and counts as "used/enabled"
         /// </summary>
-        public static bool IsUsed { get; private set; } = false;
+        public static bool IsUsed { get; set; } = false;
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the basic block type.
         /// </summary>

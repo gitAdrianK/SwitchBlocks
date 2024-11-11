@@ -51,6 +51,8 @@ namespace SwitchBlocks.Setups
 
             DataSand.Instance.SaveToFile();
             DataSand.Instance.Reset();
+
+            SettingsSand.IsUsed = false;
         }
     }
 }
