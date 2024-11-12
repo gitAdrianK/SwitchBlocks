@@ -3,7 +3,7 @@
     public static class ModStrings
     {
         public const string MODNAME = "Zebra.SwitchBlocksMod";
-        public const string HARMONY = "Zebra.SwitchBlocksMod.Harmony";
+        public const string HARMONY = MODNAME + ".Harmony";
 
         // File related
         public const string FOLDER = "switchBlocksMod";
