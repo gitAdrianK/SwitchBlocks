@@ -162,15 +162,24 @@ namespace SwitchBlocks
 
         public static void Cleanup()
         {
+            AutoFlip?.Dispose();
             AutoFlip = null;
+            AutoWarn?.Dispose();
             AutoWarn = null;
+            BasicFlip?.Dispose();
             BasicFlip = null;
+            CountdownFlip?.Dispose();
             CountdownFlip = null;
+            CountdownWarn?.Dispose();
             CountdownWarn = null;
+            GroupFlip?.Dispose();
             GroupFlip = null;
+            JumpFlip?.Dispose();
             JumpFlip = null;
+            SandFlip?.Dispose();
             SandFlip = null;
-            SandFlip = null;
+            SequenceFlip?.Dispose();
+            SequenceFlip = null;
         }
     }
 }
