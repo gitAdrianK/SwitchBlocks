@@ -49,9 +49,11 @@ namespace SwitchBlocks.Behaviours
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownOn>()
-                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
+                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>()
+                || advCollisionInfo.IsCollidingWith<BlockCountdownSnowOn>();
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownOff>()
-                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
+                || advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>()
+                || advCollisionInfo.IsCollidingWith<BlockCountdownSnowOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
             DataCountdown.CanSwitchSafely = true;
             if (!IsPlayerOnBlock)
@@ -62,7 +64,9 @@ namespace SwitchBlocks.Behaviours
             if (isPlayerOnBlockOn && !DataCountdown.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOn));
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOn)
+                || b.GetType() == typeof(BlockCountdownIceOn)
+                || b.GetType() == typeof(BlockCountdownSnowOn));
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);
@@ -76,7 +80,9 @@ namespace SwitchBlocks.Behaviours
             if (isPlayerOnBlockOff && DataCountdown.State)
             {
                 Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOff));
+                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownOff)
+                || b.GetType() == typeof(BlockCountdownIceOff)
+                || b.GetType() == typeof(BlockCountdownSnowOff));
                 foreach (IBlock block in blocks)
                 {
                     block.Intersects(playerRect, out Rectangle collision);

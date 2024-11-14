@@ -3,11 +3,8 @@ using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
 using JumpKing.MiscEntities.WorldItems;
 using JumpKing.MiscEntities.WorldItems.Inventory;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -55,43 +52,15 @@ namespace SwitchBlocks.Behaviours
             bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockAutoSnowOn>();
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockAutoSnowOff>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
-            DataAuto.CanSwitchSafely = true;
+
             if (!IsPlayerOnBlock)
             {
+                IsPlayerOnSnow = false;
                 return true;
             }
 
             IsPlayerOnSnow = !InventoryManager.HasItemEnabled(Items.SnakeRing)
                 && ((isPlayerOnBlockOn && DataAuto.State) || (isPlayerOnBlockOff && !DataAuto.State));
-
-            if (isPlayerOnBlockOn && !DataAuto.State)
-            {
-                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockAutoSnowOn));
-                foreach (IBlock block in blocks)
-                {
-                    block.Intersects(playerRect, out Rectangle collision);
-                    if (collision.Size.X > 0 || collision.Size.Y > 0)
-                    {
-                        DataAuto.CanSwitchSafely = false;
-                        return true;
-                    }
-                }
-            }
-            if (isPlayerOnBlockOff && DataAuto.State)
-            {
-                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockAutoSnowOff));
-                foreach (IBlock block in blocks)
-                {
-                    block.Intersects(playerRect, out Rectangle collision);
-                    if (collision.Size.X > 0 || collision.Size.Y > 0)
-                    {
-                        DataAuto.CanSwitchSafely = false;
-                        return true;
-                    }
-                }
-            }
 
             return true;
         }

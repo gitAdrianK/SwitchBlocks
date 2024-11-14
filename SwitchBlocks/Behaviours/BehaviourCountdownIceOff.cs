@@ -6,11 +6,8 @@ using JumpKing.Level;
 using JumpKing.MiscEntities.WorldItems;
 using JumpKing.MiscEntities.WorldItems.Inventory;
 using JumpKing.Player;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -56,24 +53,11 @@ namespace SwitchBlocks.Behaviours
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
             IsPlayerOnIce = IsPlayerOnBlock && !DataCountdown.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
+
             if (IsPlayerOnIce)
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;
                 bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
-            }
-            if (IsPlayerOnBlock && DataCountdown.State)
-            {
-                Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-                List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockCountdownIceOff));
-                foreach (IBlock block in blocks)
-                {
-                    block.Intersects(playerRect, out Rectangle collision);
-                    if (collision.Size.X > 0 || collision.Size.Y > 0)
-                    {
-                        DataCountdown.CanSwitchSafely = false;
-                        return true;
-                    }
-                }
             }
 
             return true;
