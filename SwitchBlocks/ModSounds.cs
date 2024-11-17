@@ -81,27 +81,18 @@ namespace SwitchBlocks
             {
                 if (File.Exists($"{path}autoFlip.xnb"))
                 {
-                    lock (contentManager)
-                    {
-                        AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
-                    }
+                    AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
                 }
                 if (File.Exists($"{path}autoWarn.xnb"))
                 {
-                    lock (contentManager)
-                    {
-                        AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
-                    }
+                    AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
                 }
             }
 
             // Basic
             if (SettingsBasic.IsUsed && File.Exists($"{path}basicFlip.xnb"))
             {
-                lock (contentManager)
-                {
-                    BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
-                }
+                BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
             }
 
             // Countdown
@@ -109,76 +100,49 @@ namespace SwitchBlocks
             {
                 if (File.Exists($"{path}countdownFlip.xnb"))
                 {
-                    lock (contentManager)
-                    {
-                        CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
-                    }
+                    CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
                 }
                 if (File.Exists($"{path}countdownWarn.xnb"))
                 {
-                    lock (contentManager)
-                    {
-                        CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
-                    }
+                    CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
                 }
             }
 
             // Group
             if (SettingsGroup.IsUsed && File.Exists($"{path}groupFlip.xnb"))
             {
-                lock (contentManager)
-                {
-                    GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
-                }
+                GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
             }
 
             // Jump
             if (SettingsJump.IsUsed && File.Exists($"{path}jumpFlip.xnb"))
             {
-                lock (contentManager)
-                {
-                    JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
-                }
+                JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
             }
 
             // Sand
             if (SettingsSand.IsUsed && File.Exists($"{path}sandFlip.xnb"))
             {
-                lock (contentManager)
-                {
-                    SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
-                }
+                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
 
             // Sequence
             if (SettingsSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
             {
-                lock (contentManager)
-                {
-                    SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
-                }
+                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
             }
         }
 
         public static void Cleanup()
         {
-            AutoFlip?.Dispose();
             AutoFlip = null;
-            AutoWarn?.Dispose();
             AutoWarn = null;
-            BasicFlip?.Dispose();
             BasicFlip = null;
-            CountdownFlip?.Dispose();
             CountdownFlip = null;
-            CountdownWarn?.Dispose();
             CountdownWarn = null;
-            GroupFlip?.Dispose();
             GroupFlip = null;
-            JumpFlip?.Dispose();
             JumpFlip = null;
-            SandFlip?.Dispose();
             SandFlip = null;
-            SequenceFlip?.Dispose();
             SequenceFlip = null;
         }
     }

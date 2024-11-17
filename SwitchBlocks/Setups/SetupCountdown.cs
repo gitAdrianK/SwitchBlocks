@@ -22,25 +22,22 @@ namespace SwitchBlocks.Setups
             _ = EntityCountdownPlatforms.Instance;
             _ = EntityCountdownLevers.Instance;
 
-            lock (player)
-            {
-                BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), behaviourCountdownPlatform);
+            BehaviourCountdownPlatform behaviourCountdownPlatform = new BehaviourCountdownPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), behaviourCountdownPlatform);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), behaviourCountdownPlatform);
 
-                BehaviourCountdownIceOn behaviourCountdownIceOn = new BehaviourCountdownIceOn();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIceOn);
-                BehaviourCountdownIceOff behaviourCountdownIceOff = new BehaviourCountdownIceOff();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIceOff);
+            BehaviourCountdownIceOn behaviourCountdownIceOn = new BehaviourCountdownIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOn), behaviourCountdownIceOn);
+            BehaviourCountdownIceOff behaviourCountdownIceOff = new BehaviourCountdownIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownIceOff), behaviourCountdownIceOff);
 
-                BehaviourCountdownSnow behaviourCountdownSnow = new BehaviourCountdownSnow();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOn), behaviourCountdownSnow);
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOff), behaviourCountdownSnow);
+            BehaviourCountdownSnow behaviourCountdownSnow = new BehaviourCountdownSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOn), behaviourCountdownSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownSnowOff), behaviourCountdownSnow);
 
-                BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
-                player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
-            }
+            BehaviourCountdownLever behaviourCountdownLever = new BehaviourCountdownLever();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourCountdownLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLeverSolid), behaviourCountdownLever);
         }
 
         public static void DoCleanup(EntityManager entityManager)

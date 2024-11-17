@@ -22,17 +22,14 @@ namespace SwitchBlocks.Setups
 
             _ = EntityJumpPlatforms.Instance;
 
-            lock (player)
-            {
-                BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
-                BehaviourJumpIceOff behaviourJumpIceOff = new BehaviourJumpIceOff();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIceOff);
+            BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
+            BehaviourJumpIceOff behaviourJumpIceOff = new BehaviourJumpIceOff();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOff), behaviourJumpIceOff);
 
-                BehaviourJumpSnow behaviourJumpSnow = new BehaviourJumpSnow();
-                player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOn), behaviourJumpSnow);
-                player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOff), behaviourJumpSnow);
-            }
+            BehaviourJumpSnow behaviourJumpSnow = new BehaviourJumpSnow();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOn), behaviourJumpSnow);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpSnowOff), behaviourJumpSnow);
 
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
