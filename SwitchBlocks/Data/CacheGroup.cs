@@ -1,5 +1,4 @@
 ﻿using JumpKing;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,17 +61,15 @@ namespace SwitchBlocks.Data
 
         private CacheGroup()
         {
-            _seed = new SerializableDictionary<Vector3, int>();
+            _seed = new SerializableDictionary<int, int>();
         }
 
         public void SaveToFile()
         {
-            Dictionary<Vector3, int> sorted = _seed.OrderBy(kv => kv.Key.Z)
-                .ThenBy(kv => kv.Key.X)
-                .ThenBy(kv => kv.Key.Y)
+            Dictionary<int, int> sorted = _seed.OrderBy(kv => kv.Key)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
             _seed.Clear();
-            foreach (KeyValuePair<Vector3, int> kv in sorted)
+            foreach (KeyValuePair<int, int> kv in sorted)
             {
                 _seed.Add(kv.Key, kv.Value);
             }
@@ -93,11 +90,11 @@ namespace SwitchBlocks.Data
         /// Groups belonging to the respective id.
         /// A group has the data related to a platform.
         /// </summary>
-        public static SerializableDictionary<Vector3, int> Seed
+        public static SerializableDictionary<int, int> Seed
         {
             get => Instance._seed;
             private set => Instance._seed = value;
         }
-        public SerializableDictionary<Vector3, int> _seed;
+        public SerializableDictionary<int, int> _seed;
     }
 }

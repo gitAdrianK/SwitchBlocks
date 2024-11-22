@@ -2,7 +2,6 @@
 using JumpKing;
 using JumpKing.API;
 using JumpKing.Player;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -10,6 +9,7 @@ using SwitchBlocks.Entities;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
@@ -18,10 +18,10 @@ namespace SwitchBlocks.Setups
     {
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
         // clearing would result in the dict being empty on same level reload.
-        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
 
         public static void DoSetup(PlayerEntity player)
         {
@@ -30,7 +30,36 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            AssignGroupIds();
+            const int cycles = 1000;
+            long total = 0;
+            for (int i = 0; i < cycles; i++)
+            {
+                long start = Stopwatch.GetTimestamp();
+
+                AssignGroupIds();
+
+                total += Stopwatch.GetTimestamp() - start;
+                Debugger.Log(1, "", "> " + i + "\n");
+                DataGroup.Instance.Reset();
+                CacheGroup.Instance.Reset();
+                foreach (var item in BlocksGroupA.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupB.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupC.Values)
+                {
+                    item.GroupId = 0;
+                }
+                foreach (var item in BlocksGroupD.Values)
+                {
+                    item.GroupId = 0;
+                }
+            }
+            Debugger.Log(1, "", ">>> Avg: " + (total / cycles) + "\n");
 
             Task saving = Task.Run(() =>
             {

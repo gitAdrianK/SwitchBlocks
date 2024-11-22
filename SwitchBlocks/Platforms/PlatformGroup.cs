@@ -26,7 +26,7 @@ namespace SwitchBlocks.Platforms
         /// <param name="subfolder">The subfolder to look for xml in. The main path is the path to the mod folder.</param>
         /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
         public static Dictionary<int, List<PlatformGroup>> GetPlatformsDictonary(string subfolder,
-            params Dictionary<Vector3, IBlockGroupId>[] blocksGroups)
+            params Dictionary<int, IBlockGroupId>[] blocksGroups)
         {
             JKContentManager contentManager = Game1.instance.contentManager;
             char sep = Path.DirectorySeparatorChar;
@@ -89,7 +89,7 @@ namespace SwitchBlocks.Platforms
             string path,
             char sep,
             int screenNr,
-            Dictionary<Vector3, IBlockGroupId>[] blocksGroups)
+            Dictionary<int, IBlockGroupId>[] blocksGroups)
         {
             List<PlatformGroup> list = new List<PlatformGroup>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
@@ -128,22 +128,19 @@ namespace SwitchBlocks.Platforms
                 platform.Position = (Vector2)position;
 
                 // Link
-                Vector3 link = new Vector3(
-                    (int)(platform.Position.X / 8),
-                    (int)(platform.Position.Y / 8),
-                    screenNr);
+                int link = screenNr * 10000 + (int)(platform.Position.X / 8) * 100 + (int)(platform.Position.Y / 8);
                 if (dictionary.ContainsKey(ModStrings.LINK_POSITION))
                 {
-                    Vector3? optionalLink = Xml.GetVector3(xmlPlatform[dictionary[ModStrings.LINK_POSITION]]);
+                    int? optionalLink = Xml.GetLink(xmlPlatform[dictionary[ModStrings.LINK_POSITION]]);
                     if (optionalLink == null)
                     {
                         continue;
                     }
-                    link = (Vector3)optionalLink;
+                    link = (int)optionalLink;
                 }
 
 
-                foreach (Dictionary<Vector3, IBlockGroupId> blockGroup in blocksGroups)
+                foreach (Dictionary<int, IBlockGroupId> blockGroup in blocksGroups)
                 {
                     if (blockGroup.ContainsKey(link))
                     {

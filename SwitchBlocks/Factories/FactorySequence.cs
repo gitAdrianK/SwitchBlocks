@@ -76,51 +76,51 @@ namespace SwitchBlocks.Factories
             {
                 case var _ when blockCode == ModBlocks.SEQUENCE_A:
                     BlockSequenceA blockSequenceA = new BlockSequenceA(blockRect);
-                    SetupSequence.BlocksSequenceA[new Vector3(x, y, currentScreen)] = blockSequenceA;
+                    SetupSequence.BlocksSequenceA[currentScreen * 10000 + x * 100 + y] = blockSequenceA;
                     return blockSequenceA;
                 case var _ when blockCode == ModBlocks.SEQUENCE_B:
                     BlockSequenceB blockSequenceB = new BlockSequenceB(blockRect);
-                    SetupSequence.BlocksSequenceB[new Vector3(x, y, currentScreen)] = blockSequenceB;
+                    SetupSequence.BlocksSequenceB[currentScreen * 10000 + x * 100 + y] = blockSequenceB;
                     return blockSequenceB;
                 case var _ when blockCode == ModBlocks.SEQUENCE_C:
                     BlockSequenceC blockSequenceC = new BlockSequenceC(blockRect);
-                    SetupSequence.BlocksSequenceC[new Vector3(x, y, currentScreen)] = blockSequenceC;
+                    SetupSequence.BlocksSequenceC[currentScreen * 10000 + x * 100 + y] = blockSequenceC;
                     return blockSequenceC;
                 case var _ when blockCode == ModBlocks.SEQUENCE_D:
                     BlockSequenceD blockSequenceD = new BlockSequenceD(blockRect);
-                    SetupSequence.BlocksSequenceD[new Vector3(x, y, currentScreen)] = blockSequenceD;
+                    SetupSequence.BlocksSequenceD[currentScreen * 10000 + x * 100 + y] = blockSequenceD;
                     return blockSequenceD;
                 case var _ when blockCode == ModBlocks.SEQUENCE_ICE_A:
                     BlockSequenceIceA blockSequenceIceA = new BlockSequenceIceA(blockRect);
-                    SetupSequence.BlocksSequenceA[new Vector3(x, y, currentScreen)] = blockSequenceIceA;
+                    SetupSequence.BlocksSequenceA[currentScreen * 10000 + x * 100 + y] = blockSequenceIceA;
                     return blockSequenceIceA;
                 case var _ when blockCode == ModBlocks.SEQUENCE_ICE_B:
                     BlockSequenceIceB blockSequenceIceB = new BlockSequenceIceB(blockRect);
-                    SetupSequence.BlocksSequenceB[new Vector3(x, y, currentScreen)] = blockSequenceIceB;
+                    SetupSequence.BlocksSequenceB[currentScreen * 10000 + x * 100 + y] = blockSequenceIceB;
                     return blockSequenceIceB;
                 case var _ when blockCode == ModBlocks.SEQUENCE_ICE_C:
                     BlockSequenceIceC blockSequenceIceC = new BlockSequenceIceC(blockRect);
-                    SetupSequence.BlocksSequenceC[new Vector3(x, y, currentScreen)] = blockSequenceIceC;
+                    SetupSequence.BlocksSequenceC[currentScreen * 10000 + x * 100 + y] = blockSequenceIceC;
                     return blockSequenceIceC;
                 case var _ when blockCode == ModBlocks.SEQUENCE_ICE_D:
                     BlockSequenceIceD blockSequenceIceD = new BlockSequenceIceD(blockRect);
-                    SetupSequence.BlocksSequenceD[new Vector3(x, y, currentScreen)] = blockSequenceIceD;
+                    SetupSequence.BlocksSequenceD[currentScreen * 10000 + x * 100 + y] = blockSequenceIceD;
                     return blockSequenceIceD;
                 case var _ when blockCode == ModBlocks.SEQUENCE_SNOW_A:
                     BlockSequenceSnowA blockSequenceSnowA = new BlockSequenceSnowA(blockRect);
-                    SetupSequence.BlocksSequenceA[new Vector3(x, y, currentScreen)] = blockSequenceSnowA;
+                    SetupSequence.BlocksSequenceA[currentScreen * 10000 + x * 100 + y] = blockSequenceSnowA;
                     return blockSequenceSnowA;
                 case var _ when blockCode == ModBlocks.SEQUENCE_SNOW_B:
                     BlockSequenceSnowB blockSequenceSnowB = new BlockSequenceSnowB(blockRect);
-                    SetupSequence.BlocksSequenceB[new Vector3(x, y, currentScreen)] = blockSequenceSnowB;
+                    SetupSequence.BlocksSequenceB[currentScreen * 10000 + x * 100 + y] = blockSequenceSnowB;
                     return blockSequenceSnowB;
                 case var _ when blockCode == ModBlocks.SEQUENCE_SNOW_C:
                     BlockSequenceSnowC blockSequenceSnowC = new BlockSequenceSnowC(blockRect);
-                    SetupSequence.BlocksSequenceC[new Vector3(x, y, currentScreen)] = blockSequenceSnowC;
+                    SetupSequence.BlocksSequenceC[currentScreen * 10000 + x * 100 + y] = blockSequenceSnowC;
                     return blockSequenceSnowC;
                 case var _ when blockCode == ModBlocks.SEQUENCE_SNOW_D:
                     BlockSequenceSnowD blockSequenceSnowD = new BlockSequenceSnowD(blockRect);
-                    SetupSequence.BlocksSequenceD[new Vector3(x, y, currentScreen)] = blockSequenceSnowD;
+                    SetupSequence.BlocksSequenceD[currentScreen * 10000 + x * 100 + y] = blockSequenceSnowD;
                     return blockSequenceSnowD;
                 case var _ when blockCode == ModBlocks.SEQUENCE_RESET:
                     return new BlockSequenceReset(blockRect);

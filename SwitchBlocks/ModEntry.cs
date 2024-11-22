@@ -6,6 +6,7 @@ using JumpKing.Mods;
 using JumpKing.Player;
 using SwitchBlocks.Factories;
 using SwitchBlocks.Setups;
+using System.Diagnostics;
 using System.IO;
 
 namespace SwitchBlocks
@@ -22,7 +23,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
 
             LevelManager.RegisterBlockFactory(new FactoryAuto());
             LevelManager.RegisterBlockFactory(new FactoryBasic());

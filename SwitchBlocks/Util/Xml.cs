@@ -175,13 +175,7 @@ namespace SwitchBlocks
             return animation;
         }
 
-        /// <summary>
-        /// Creates a Vector3 from a given xml node should the node contain 3
-        /// children named "Screen", "X", and "Y"
-        /// </summary>
-        /// <param name="root">Xml node to create the vector from.</param>
-        /// <returns>Vector3 or null</returns>
-        public static Vector3? GetVector3(XmlNode root)
+        public static int? GetLink(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
             Dictionary<string, int> dictionary = MapNamesRequired(children, "Screen", "X", "Y");
@@ -189,10 +183,10 @@ namespace SwitchBlocks
             {
                 return null;
             }
-            return new Vector3(
-                int.Parse(children[dictionary["X"]].InnerText) / 8,
-                int.Parse(children[dictionary["Y"]].InnerText) / 8,
-                int.Parse(children[dictionary["Screen"]].InnerText) - 1);
+            int screen = int.Parse(children[dictionary["Screen"]].InnerText) - 1;
+            int x = int.Parse(children[dictionary["X"]].InnerText) / 8;
+            int y = int.Parse(children[dictionary["Y"]].InnerText) / 8;
+            return screen * 10000 + x * 100 + y;
         }
     }
 }

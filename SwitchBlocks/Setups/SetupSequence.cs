@@ -1,7 +1,6 @@
 ﻿using EntityComponent;
 using JumpKing;
 using JumpKing.Player;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -16,10 +15,10 @@ namespace SwitchBlocks.Setups
 {
     public static class SetupSequence
     {
-        public static Dictionary<Vector3, IBlockGroupId> BlocksSequenceA { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
-        public static Dictionary<Vector3, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<Vector3, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<int, IBlockGroupId>();
 
         public static void DoSetup(PlayerEntity player)
         {

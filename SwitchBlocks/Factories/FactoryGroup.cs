@@ -76,51 +76,51 @@ namespace SwitchBlocks.Factories
             {
                 case var _ when blockCode == ModBlocks.GROUP_A:
                     BlockGroupA blockGroupA = new BlockGroupA(blockRect);
-                    SetupGroup.BlocksGroupA[new Vector3(x, y, currentScreen)] = blockGroupA;
+                    SetupGroup.BlocksGroupA[currentScreen * 10000 + x * 100 + y] = blockGroupA;
                     return blockGroupA;
                 case var _ when blockCode == ModBlocks.GROUP_B:
                     BlockGroupB blockGroupB = new BlockGroupB(blockRect);
-                    SetupGroup.BlocksGroupB[new Vector3(x, y, currentScreen)] = blockGroupB;
+                    SetupGroup.BlocksGroupB[currentScreen * 10000 + x * 100 + y] = blockGroupB;
                     return blockGroupB;
                 case var _ when blockCode == ModBlocks.GROUP_C:
                     BlockGroupC blockGroupC = new BlockGroupC(blockRect);
-                    SetupGroup.BlocksGroupC[new Vector3(x, y, currentScreen)] = blockGroupC;
+                    SetupGroup.BlocksGroupC[currentScreen * 10000 + x * 100 + y] = blockGroupC;
                     return blockGroupC;
                 case var _ when blockCode == ModBlocks.GROUP_D:
                     BlockGroupD blockGroupD = new BlockGroupD(blockRect);
-                    SetupGroup.BlocksGroupD[new Vector3(x, y, currentScreen)] = blockGroupD;
+                    SetupGroup.BlocksGroupD[currentScreen * 10000 + x * 100 + y] = blockGroupD;
                     return blockGroupD;
                 case var _ when blockCode == ModBlocks.GROUP_ICE_A:
                     BlockGroupIceA blockGroupIceA = new BlockGroupIceA(blockRect);
-                    SetupGroup.BlocksGroupA[new Vector3(x, y, currentScreen)] = blockGroupIceA;
+                    SetupGroup.BlocksGroupA[currentScreen * 10000 + x * 100 + y] = blockGroupIceA;
                     return blockGroupIceA;
                 case var _ when blockCode == ModBlocks.GROUP_ICE_B:
                     BlockGroupIceB blockGroupIceB = new BlockGroupIceB(blockRect);
-                    SetupGroup.BlocksGroupB[new Vector3(x, y, currentScreen)] = blockGroupIceB;
+                    SetupGroup.BlocksGroupB[currentScreen * 10000 + x * 100 + y] = blockGroupIceB;
                     return blockGroupIceB;
                 case var _ when blockCode == ModBlocks.GROUP_ICE_C:
                     BlockGroupIceC blockGroupIceC = new BlockGroupIceC(blockRect);
-                    SetupGroup.BlocksGroupC[new Vector3(x, y, currentScreen)] = blockGroupIceC;
+                    SetupGroup.BlocksGroupC[currentScreen * 10000 + x * 100 + y] = blockGroupIceC;
                     return blockGroupIceC;
                 case var _ when blockCode == ModBlocks.GROUP_ICE_D:
                     BlockGroupIceD blockGroupIceD = new BlockGroupIceD(blockRect);
-                    SetupGroup.BlocksGroupD[new Vector3(x, y, currentScreen)] = blockGroupIceD;
+                    SetupGroup.BlocksGroupD[currentScreen * 10000 + x * 100 + y] = blockGroupIceD;
                     return blockGroupIceD;
                 case var _ when blockCode == ModBlocks.GROUP_SNOW_A:
                     BlockGroupSnowA blockGroupSnowA = new BlockGroupSnowA(blockRect);
-                    SetupGroup.BlocksGroupA[new Vector3(x, y, currentScreen)] = blockGroupSnowA;
+                    SetupGroup.BlocksGroupA[currentScreen * 10000 + x * 100 + y] = blockGroupSnowA;
                     return blockGroupSnowA;
                 case var _ when blockCode == ModBlocks.GROUP_SNOW_B:
                     BlockGroupSnowB blockGroupSnowB = new BlockGroupSnowB(blockRect);
-                    SetupGroup.BlocksGroupB[new Vector3(x, y, currentScreen)] = blockGroupSnowB;
+                    SetupGroup.BlocksGroupB[currentScreen * 10000 + x * 100 + y] = blockGroupSnowB;
                     return blockGroupSnowB;
                 case var _ when blockCode == ModBlocks.GROUP_SNOW_C:
                     BlockGroupSnowC blockGroupSnowC = new BlockGroupSnowC(blockRect);
-                    SetupGroup.BlocksGroupC[new Vector3(x, y, currentScreen)] = blockGroupSnowC;
+                    SetupGroup.BlocksGroupC[currentScreen * 10000 + x * 100 + y] = blockGroupSnowC;
                     return blockGroupSnowC;
                 case var _ when blockCode == ModBlocks.GROUP_SNOW_D:
                     BlockGroupSnowD blockGroupSnowD = new BlockGroupSnowD(blockRect);
-                    SetupGroup.BlocksGroupD[new Vector3(x, y, currentScreen)] = blockGroupSnowD;
+                    SetupGroup.BlocksGroupD[currentScreen * 10000 + x * 100 + y] = blockGroupSnowD;
                     return blockGroupSnowD;
                 case var _ when blockCode == ModBlocks.GROUP_RESET:
                     return new BlockGroupReset(blockRect);
