@@ -48,6 +48,8 @@ namespace SwitchBlocks.Patching
                     || BehaviourCountdownIceOff.IsPlayerOnIce
                     || BehaviourGroupIceA.IsPlayerOnIce
                     || BehaviourGroupIceB.IsPlayerOnIce
+                    || BehaviourGroupIceC.IsPlayerOnIce
+                    || BehaviourGroupIceD.IsPlayerOnIce
                     || BehaviourJumpIceOn.IsPlayerOnIce
                     || BehaviourJumpIceOff.IsPlayerOnIce
                     || BehaviourSequenceIceA.IsPlayerOnIce
