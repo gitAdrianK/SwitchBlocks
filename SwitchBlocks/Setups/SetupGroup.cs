@@ -29,39 +29,6 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            /*
-            const int cycles = 1000;
-            long total = 0;
-            for (int i = 0; i < cycles; i++)
-            {
-                long start = Stopwatch.GetTimestamp();
-
-                AssignGroupIds();
-
-                total += Stopwatch.GetTimestamp() - start;
-                Debugger.Log(1, "", "> " + i + "\n");
-                DataGroup.Instance.Reset();
-                CacheGroup.Instance.Reset();
-                foreach (var item in BlocksGroupA.Values)
-                {
-                    item.GroupId = 0;
-                }
-                foreach (var item in BlocksGroupB.Values)
-                {
-                    item.GroupId = 0;
-                }
-                foreach (var item in BlocksGroupC.Values)
-                {
-                    item.GroupId = 0;
-                }
-                foreach (var item in BlocksGroupD.Values)
-                {
-                    item.GroupId = 0;
-                }
-            }
-            Debugger.Log(1, "", ">>> Avg: " + (total / cycles) + "\n");
-            */
-
             AssignGroupIds();
 
             Task saving = Task.Run(() =>

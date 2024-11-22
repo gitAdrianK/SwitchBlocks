@@ -6,10 +6,9 @@ namespace SwitchBlocks.Util
     [Serializable]
     public class BlockGroup
     {
-        private static readonly int localLeft = -100;
-        private static readonly int localRight = 100;
-        private static readonly int localUp = -1;
-        private static readonly int localDown = 1;
+        private const int VERTICAL = 1;
+        private const int HORIZONTAL = 100;
+        private const int SCREEN = 10044;
 
         public bool State { get; set; }
         public float Progress { get; set; }
@@ -46,7 +45,7 @@ namespace SwitchBlocks.Util
                 blocks[currentPos].GroupId = groupId;
 
                 // Left
-                int left = currentPos + localLeft;
+                int left = currentPos - HORIZONTAL;
                 if (blocks.TryGetValue(left, out IBlockGroupId value))
                 {
                     if (value.GroupId == 0)
@@ -55,7 +54,7 @@ namespace SwitchBlocks.Util
                     }
                 }
                 // Right
-                int right = currentPos + localRight;
+                int right = currentPos + HORIZONTAL;
                 if (blocks.TryGetValue(right, out value))
                 {
                     if (value.GroupId == 0)
@@ -64,11 +63,15 @@ namespace SwitchBlocks.Util
                     }
                 }
                 // Up
-                int up = currentPos + localUp;
-                //if (up.Y == -1)
-                //{
-                //    up = new Vector3(currentPos.X, 44, currentPos.Z + 1);
-                //}
+                int up;
+                if (currentPos % 100 == 0)
+                {
+                    up = currentPos + SCREEN;
+                }
+                else
+                {
+                    up = currentPos - VERTICAL;
+                }
                 if (blocks.TryGetValue(up, out value))
                 {
                     if (value.GroupId == 0)
@@ -77,11 +80,15 @@ namespace SwitchBlocks.Util
                     }
                 }
                 // Down
-                int down = currentPos + localDown;
-                //if (down.Y == 45)
-                //{
-                //    down = new Vector3(currentPos.X, 0, currentPos.Z - 1);
-                //}
+                int down;
+                if (currentPos % 100 == 44)
+                {
+                    down = currentPos - SCREEN;
+                }
+                else
+                {
+                    down = currentPos + VERTICAL;
+                }
                 if (blocks.TryGetValue(down, out value))
                 {
                     if (value.GroupId == 0)
