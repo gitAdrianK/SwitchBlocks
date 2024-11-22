@@ -9,7 +9,6 @@ using SwitchBlocks.Entities;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Setups
@@ -30,6 +29,7 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            /*
             const int cycles = 1000;
             long total = 0;
             for (int i = 0; i < cycles; i++)
@@ -60,6 +60,9 @@ namespace SwitchBlocks.Setups
                 }
             }
             Debugger.Log(1, "", ">>> Avg: " + (total / cycles) + "\n");
+            */
+
+            AssignGroupIds();
 
             Task saving = Task.Run(() =>
             {

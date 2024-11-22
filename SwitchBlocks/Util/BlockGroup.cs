@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SwitchBlocks.Util
 {
@@ -143,7 +141,6 @@ namespace SwitchBlocks.Util
         /// <param name="groupId">Reference to the group ID, which will be larger than the largest ID found when finished</param>
         public static void AssignGroupIdsFromSeed(Dictionary<int, IBlockGroupId> blocks, SerializableDictionary<int, int> seed, ref int groupId)
         {
-            Dictionary<Task<bool>, int> tasks = new Dictionary<Task<bool>, int>();
             foreach (KeyValuePair<int, int> kv in seed)
             {
                 int currentPos = kv.Key;
@@ -152,17 +149,7 @@ namespace SwitchBlocks.Util
                 {
                     groupId = cacheId + 1;
                 }
-                tasks.Add(
-                    Task.Run(() => PropagateGroupId(blocks, currentPos, cacheId)),
-                    currentPos);
-            }
-            Task.WaitAll(tasks.Keys.ToArray());
-            foreach (KeyValuePair<Task<bool>, int> kv in tasks)
-            {
-                if (!kv.Key.Result)
-                {
-                    seed.Remove(kv.Value);
-                }
+                PropagateGroupId(blocks, currentPos, cacheId);
             }
         }
     }
