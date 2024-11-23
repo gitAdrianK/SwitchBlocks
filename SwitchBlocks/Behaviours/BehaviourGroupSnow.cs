@@ -52,9 +52,14 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockGroupSnowA>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
-            IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
+            bool isPlayerOnBlockA = advCollisionInfo.IsCollidingWith<BlockGroupSnowA>();
+            bool isPlayerOnBlockB = advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
+            bool isPlayerOnBlockC = advCollisionInfo.IsCollidingWith<BlockGroupSnowC>();
+            bool isPlayerOnBlockD = advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
+            IsPlayerOnBlock = isPlayerOnBlockA
+                || isPlayerOnBlockB
+                || isPlayerOnBlockC
+                || isPlayerOnBlockD;
 
             if (!IsPlayerOnBlock || InventoryManager.HasItemEnabled(Items.SnakeRing))
             {
@@ -63,7 +68,9 @@ namespace SwitchBlocks.Behaviours
             }
 
             List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockGroupSnowA)
-                || b.GetType() == typeof(BlockGroupSnowB));
+                || b.GetType() == typeof(BlockGroupSnowB)
+                || b.GetType() == typeof(BlockGroupSnowC)
+                || b.GetType() == typeof(BlockGroupSnowD));
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
                 if (DataGroup.GetState(block.GroupId))
