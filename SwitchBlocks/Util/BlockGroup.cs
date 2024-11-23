@@ -6,8 +6,22 @@ namespace SwitchBlocks.Util
     [Serializable]
     public class BlockGroup
     {
+        // Position stored in a single integer.
+        // X and Y can never be a three digit number.
+        // Screen can never be a four digit number.
+        // As such the integers form is 00...00SSSXXYY.
+
+        // Top left is (0, 0)
+        // Bottom right is (59, 44)
+
+        // To move 1 up or down is to change the integer by 1
+        // - is up, + is down
         private const int VERTICAL = 1;
+        // To move 1 left or right is to change the integer by 100
+        // - is left, + is right
         private const int HORIZONTAL = 100;
+        // To move 1 screen is to change the integer by 10044
+        // - is previous, + is next
         private const int SCREEN = 10044;
 
         public bool State { get; set; }

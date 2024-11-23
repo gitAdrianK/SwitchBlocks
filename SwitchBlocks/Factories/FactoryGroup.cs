@@ -74,6 +74,10 @@ namespace SwitchBlocks.Factories
 
             switch (blockCode)
             {
+                // Position stored in a single integer.
+                // X and Y can never be a three digit number.
+                // Screen can never be a four digit number.
+                // As such the integers form is 00...00SSSXXYY.
                 case var _ when blockCode == ModBlocks.GROUP_A:
                     BlockGroupA blockGroupA = new BlockGroupA(blockRect);
                     SetupGroup.BlocksGroupA[currentScreen * 10000 + x * 100 + y] = blockGroupA;
