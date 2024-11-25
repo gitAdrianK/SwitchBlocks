@@ -77,10 +77,16 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                Parallel.ForEach(DataGroup.Groups.Values, group =>
+                Parallel.ForEach(DataGroup.Active, group =>
                 {
-                    group.ActivatedTick = Int32.MaxValue;
+                    DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
                 });
+                Parallel.ForEach(DataGroup.Finished, group =>
+                {
+                    DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
+                    DataGroup.Active.Add(group);
+                });
+                DataGroup.Finished.Clear();
                 DataGroup.Touched.Clear();
             }
             else

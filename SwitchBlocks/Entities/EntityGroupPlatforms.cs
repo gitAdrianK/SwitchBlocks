@@ -56,11 +56,30 @@ namespace SwitchBlocks.Entities
         {
             int tick = AchievementManager.GetTicks();
             float multiplier = SettingsGroup.Multiplier;
-            Parallel.ForEach(DataGroup.Groups.Values, group =>
+            List<int> finished = new List<int>();
+            Parallel.ForEach(DataGroup.Active, group =>
             {
-                UpdateProgress(group, deltaTime, multiplier);
-                TrySwitch(group, tick);
+                BlockGroup blockGroup = DataGroup.Groups[group];
+                UpdateProgress(blockGroup, deltaTime, multiplier);
+                TrySwitch(blockGroup, tick);
+                if ((!blockGroup.State && blockGroup.Progress == 0.0f)
+                    || (blockGroup.State && blockGroup.Progress == 1.0f))
+                {
+                    lock (finished)
+                    {
+                        finished.Add(group);
+                    }
+                }
             });
+            foreach (int i in finished)
+            {
+                BlockGroup blockGroup = DataGroup.Groups[i];
+                if (!blockGroup.State && blockGroup.Progress == 0.0f)
+                {
+                    DataGroup.Finished.Add(i);
+                }
+                DataGroup.Active.Remove(i);
+            }
         }
 
         public override void Draw()

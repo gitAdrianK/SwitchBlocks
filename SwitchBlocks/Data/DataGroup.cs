@@ -65,6 +65,8 @@ namespace SwitchBlocks.Data
             _groups = new SerializableDictionary<int, BlockGroup>();
             _hasSwitched = false;
             _touched = new HashSet<int>();
+            _active = new HashSet<int>();
+            _finished = new List<int>();
         }
 
         public void SaveToFile()
@@ -163,5 +165,19 @@ namespace SwitchBlocks.Data
             set => Instance._touched = value;
         }
         public HashSet<int> _touched;
+
+        public static HashSet<int> Active
+        {
+            get => Instance._active;
+            set => Instance._active = value;
+        }
+        public HashSet<int> _active;
+
+        public static List<int> Finished
+        {
+            get => Instance._finished;
+            set => Instance._finished = value;
+        }
+        public List<int> _finished;
     }
 }

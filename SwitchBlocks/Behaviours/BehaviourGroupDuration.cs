@@ -99,6 +99,7 @@ namespace SwitchBlocks.Behaviours
                     continue;
                 }
                 DataGroup.SetTick(groupId, tick + SettingsGroup.Duration);
+                DataGroup.Active.Add(groupId);
                 DataGroup.Touched.Add(groupId);
             }
 

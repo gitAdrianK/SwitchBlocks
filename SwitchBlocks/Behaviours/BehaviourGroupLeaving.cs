@@ -74,6 +74,7 @@ namespace SwitchBlocks.Behaviours
                 Parallel.ForEach(DataGroup.Touched, id =>
                 {
                     DataGroup.SetTick(id, tick);
+                    DataGroup.Active.Add(id);
                 });
                 DataGroup.Touched.Clear();
                 prevVelocity = behaviourContext.BodyComp.Velocity;
@@ -110,6 +111,7 @@ namespace SwitchBlocks.Behaviours
             Parallel.ForEach(DataGroup.Touched.Except(currentlyTouched), id =>
             {
                 DataGroup.SetTick(id, tick);
+                DataGroup.Active.Add(id);
             });
 
             DataGroup.Touched = currentlyTouched;
