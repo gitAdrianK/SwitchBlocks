@@ -59,25 +59,15 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(bool state, float amount, float multiplier)
         {
+            int stateInt = Convert.ToInt32(state);
+            if (progress == stateInt)
+            {
+                return;
+            }
             // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
-            amount *= 2.0f;
-            amount *= multiplier;
-            if (progress != 1.0f && state)
-            {
-                progress += amount;
-                if (progress >= 1.0f)
-                {
-                    progress = 1.0f;
-                }
-            }
-            else if (progress != 0.0f && !state)
-            {
-                progress -= amount;
-                if (progress <= 0.0f)
-                {
-                    progress = 0.0f;
-                }
-            }
+            amount *= (-1 + (stateInt * 2)) * 2 * multiplier;
+            progress += amount;
+            progress = Math.Min(Math.Max(progress, 0), 1);
         }
 
         public static void DrawPlatform(Platform platform, float progress, bool state, SpriteBatch spriteBatch)

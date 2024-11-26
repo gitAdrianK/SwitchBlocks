@@ -7,6 +7,7 @@ using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -62,8 +63,7 @@ namespace SwitchBlocks.Entities
                 BlockGroup blockGroup = DataGroup.Groups[group];
                 UpdateProgress(blockGroup, deltaTime, multiplier);
                 TrySwitch(blockGroup, tick);
-                if ((!blockGroup.State && blockGroup.Progress == 0.0f)
-                    || (blockGroup.State && blockGroup.Progress == 1.0f))
+                if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
                 {
                     lock (finished)
                     {
@@ -136,25 +136,15 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(BlockGroup group, float amount, float multiplier)
         {
+            int stateInt = Convert.ToInt32(group.State);
+            if (group.Progress == stateInt)
+            {
+                return;
+            }
             // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
-            amount *= 2.0f;
-            amount *= multiplier;
-            if (group.Progress != 1.0f && group.State)
-            {
-                group.Progress += amount;
-                if (group.Progress >= 1.0f)
-                {
-                    group.Progress = 1.0f;
-                }
-            }
-            else if (group.Progress != 0.0f && !group.State)
-            {
-                group.Progress -= amount;
-                if (group.Progress <= 0.0f)
-                {
-                    group.Progress = 0.0f;
-                }
-            }
+            amount *= (-1 + (stateInt * 2)) * 2 * multiplier;
+            group.Progress += amount;
+            group.Progress = Math.Min(Math.Max(group.Progress, 0), 1);
         }
 
         private void TrySwitch(BlockGroup group, int tick)
