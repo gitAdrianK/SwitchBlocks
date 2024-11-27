@@ -54,6 +54,7 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
+            //TODO: Optimize just like Group to not update all groups, but only those considered "active"
             int tick = AchievementManager.GetTicks();
             float multiplier = SettingsSequence.Multiplier;
             Parallel.ForEach(DataSequence.Groups.Values, group =>

@@ -156,6 +156,11 @@ namespace SwitchBlocks.Data
         }
         public bool _hasSwitched;
 
+        /// <summary>
+        /// Id of the currently touched group.
+        /// Since the active groups are always n and n+1 we dont need to keep track of multiple Ids
+        /// like the group type.
+        /// </summary>
         public static int Touched
         {
             get => Instance._touched;

@@ -159,6 +159,9 @@ namespace SwitchBlocks.Data
         }
         public bool _hasSwitched;
 
+        /// <summary>
+        /// GroupIds of block groups that are currently touched by the player.
+        /// </summary>
         public static HashSet<int> Touched
         {
             get => Instance._touched;
@@ -166,6 +169,10 @@ namespace SwitchBlocks.Data
         }
         public HashSet<int> _touched;
 
+        /// <summary>
+        /// GroupIds that are currently in the process of changing state from active to inactive or vice versa.
+        /// They are considered active until the progress has reached 0/1.
+        /// </summary>
         public static HashSet<int> Active
         {
             get => Instance._active;
@@ -173,6 +180,9 @@ namespace SwitchBlocks.Data
         }
         public HashSet<int> _active;
 
+        /// <summary>
+        /// GroupIds that have finished going from their default startstate to the other state.
+        /// </summary>
         public static List<int> Finished
         {
             get => Instance._finished;
