@@ -36,19 +36,10 @@ namespace SwitchBlocks.Entities
             nextScreen = Camera.CurrentScreen;
             if (currentScreen != nextScreen)
             {
-                currentPlatformList = null;
-                if (PlatformDictionary.ContainsKey(nextScreen))
-                {
-                    currentPlatformList = PlatformDictionary[nextScreen];
-                }
+                PlatformDictionary.TryGetValue(nextScreen, out currentPlatformList);
                 currentScreen = nextScreen;
             }
-
-            if (currentPlatformList == null)
-            {
-                return false;
-            }
-            return true;
+            return currentPlatformList != null;
         }
 
         /// <summary>
