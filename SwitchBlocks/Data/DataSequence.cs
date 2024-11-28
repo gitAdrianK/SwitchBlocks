@@ -82,56 +82,62 @@ namespace SwitchBlocks.Data
 
         public static bool GetState(int id)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(false);
+                Groups.Add(id, group);
             }
-            return Instance._groups[id].State;
+            return group.State;
         }
 
         public static void SetState(int id, bool state)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(state);
+                Groups.Add(id, group);
             }
-            Instance._groups[id].State = state;
+            group.State = state;
         }
 
         public static float GetProgress(int id)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(false);
+                Groups.Add(id, group);
             }
-            return Instance._groups[id].Progress;
+            return group.Progress;
         }
 
         public static void SetProgress(int id, float progress)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(false);
+                Groups.Add(id, group);
             }
-            Instance._groups[id].Progress = progress;
+            group.Progress = progress;
         }
 
         public static int GetTick(int id)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(false);
+                Groups.Add(id, group);
             }
-            return Instance._groups[id].ActivatedTick;
+            return group.ActivatedTick;
         }
 
         public static void SetTick(int id, int tick)
         {
-            if (!Instance._groups.ContainsKey(id))
+            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                Groups.Add(id, new BlockGroup(false));
+                group = new BlockGroup(false);
+                Groups.Add(id, group);
             }
-            Instance._groups[id].ActivatedTick = tick;
+            group.ActivatedTick = tick;
         }
 
         /// <summary>
