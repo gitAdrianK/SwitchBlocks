@@ -41,6 +41,7 @@ namespace SwitchBlocks.Setups
             if (DataSequence.Touched == 0)
             {
                 DataSequence.SetTick(1, Int32.MaxValue);
+                DataSequence.Active.Add(1);
             }
 
             _ = EntitySequencePlatforms.Instance;

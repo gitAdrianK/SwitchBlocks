@@ -55,44 +55,45 @@ namespace SwitchBlocks.Behaviours
             bool collidingWithReset = advCollisionInfo.IsCollidingWith<BlockGroupReset>();
             bool collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockGroupResetSolid>();
             IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
-            if (IsPlayerOnBlock)
+            if (!IsPlayerOnBlock)
             {
-                if (DataGroup.HasSwitched)
+                DataGroup.HasSwitched = false;
+                prevVelocity = behaviourContext.BodyComp.Velocity;
+                return true;
+            }
+
+            if (DataGroup.HasSwitched)
+            {
+                prevVelocity = behaviourContext.BodyComp.Velocity;
+                return true;
+            }
+            DataGroup.HasSwitched = true;
+
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (collidingWithResetSolid)
+            {
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                    prevVelocity,
+                    SettingsGroup.LeverDirections,
+                    typeof(BlockGroupResetSolid)))
                 {
                     prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
-                DataGroup.HasSwitched = true;
-
-                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
-                if (collidingWithResetSolid)
-                {
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        prevVelocity,
-                        SettingsGroup.LeverDirections,
-                        typeof(BlockGroupResetSolid)))
-                    {
-                        prevVelocity = behaviourContext.BodyComp.Velocity;
-                        return true;
-                    }
-                }
-
-                Parallel.ForEach(DataGroup.Active, group =>
-                {
-                    DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
-                });
-                Parallel.ForEach(DataGroup.Finished, group =>
-                {
-                    DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
-                    DataGroup.Active.Add(group);
-                });
-                DataGroup.Finished.Clear();
-                DataGroup.Touched.Clear();
             }
-            else
+
+            Parallel.ForEach(DataGroup.Active, group =>
             {
-                DataGroup.HasSwitched = false;
-            }
+                DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
+            });
+            Parallel.ForEach(DataGroup.Finished, group =>
+            {
+                DataGroup.Groups[group].ActivatedTick = Int32.MaxValue;
+                DataGroup.Active.Add(group);
+            });
+            DataGroup.Finished.Clear();
+            DataGroup.Touched.Clear();
+
             prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
