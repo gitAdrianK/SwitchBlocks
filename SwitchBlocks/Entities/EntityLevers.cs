@@ -28,19 +28,10 @@ namespace SwitchBlocks.Entities
             nextScreen = Camera.CurrentScreen;
             if (currentScreen != nextScreen)
             {
-                currentLeverList = null;
-                if (LeverDictionary.ContainsKey(nextScreen))
-                {
-                    currentLeverList = LeverDictionary[nextScreen];
-                }
+                LeverDictionary.TryGetValue(nextScreen, out currentLeverList);
                 currentScreen = nextScreen;
             }
-
-            if (currentLeverList == null)
-            {
-                return false;
-            }
-            return true;
+            return currentLeverList != null;
         }
 
         public override void Draw()
