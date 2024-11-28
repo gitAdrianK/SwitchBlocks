@@ -65,6 +65,8 @@ namespace SwitchBlocks.Entities
                 TrySwitch(blockGroup, tick);
                 if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
                 {
+                    // BUG: Optimization doesnt yet work for duration based switching.
+                    // Basically the switch is still to come but the state and progress are "finished"
                     lock (finished)
                     {
                         finished.Add(group);

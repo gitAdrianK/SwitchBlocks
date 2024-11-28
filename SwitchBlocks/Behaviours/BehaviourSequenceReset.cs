@@ -77,12 +77,18 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                Parallel.ForEach(DataSequence.Groups.Values, group =>
+                Parallel.ForEach(DataSequence.Active, group =>
                 {
-                    group.ActivatedTick = Int32.MinValue;
+                    DataSequence.Groups[group].ActivatedTick = Int32.MinValue;
+                });
+                Parallel.ForEach(DataSequence.Finished, group =>
+                {
+                    DataSequence.Groups[group].ActivatedTick = Int32.MinValue;
+                    DataSequence.Active.Add(group);
                 });
                 DataSequence.SetTick(1, Int32.MaxValue);
                 DataSequence.Touched = 0;
+                DataSequence.Active.Add(1);
             }
             else
             {

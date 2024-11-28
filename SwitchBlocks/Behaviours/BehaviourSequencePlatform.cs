@@ -104,15 +104,18 @@ namespace SwitchBlocks.Behaviours
                     if (groupId != 1)
                     {
                         DataSequence.SetTick(groupId - 1, Int32.MinValue);
+                        DataSequence.Active.Add(groupId - 1);
                     }
                 }
                 else
                 {
                     int tick = AchievementManager.GetTicks();
                     DataSequence.SetTick(groupId, tick + SettingsSequence.Duration);
+                    DataSequence.Active.Add(groupId);
                 }
                 DataSequence.SetTick(groupId + 1, Int32.MaxValue);
                 DataSequence.Touched = groupId;
+                DataSequence.Active.Add(groupId + 1);
                 break;
             }
 

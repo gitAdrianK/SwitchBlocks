@@ -54,14 +54,33 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            //TODO: Optimize just like Group to not update all groups, but only those considered "active"
             int tick = AchievementManager.GetTicks();
             float multiplier = SettingsSequence.Multiplier;
-            Parallel.ForEach(DataSequence.Groups.Values, group =>
+            List<int> finished = new List<int>();
+            Parallel.ForEach(DataSequence.Active, group =>
             {
-                UpdateProgress(group, deltaTime, multiplier);
-                TrySwitch(group, tick);
+                BlockGroup blockGroup = DataSequence.Groups[group];
+                UpdateProgress(blockGroup, deltaTime, multiplier);
+                TrySwitch(blockGroup, tick);
+                if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
+                {
+                    // BUG: Optimization doesnt yet work for duration based switching.
+                    // Basically the switch is still to come but the state and progress are "finished"
+                    lock (finished)
+                    {
+                        finished.Add(group);
+                    }
+                }
             });
+            foreach (int i in finished)
+            {
+                BlockGroup blockGroup = DataSequence.Groups[i];
+                if (blockGroup.State && blockGroup.Progress == 1.0f)
+                {
+                    DataSequence.Finished.Add(i);
+                }
+                DataSequence.Active.Remove(i);
+            }
         }
 
         public override void Draw()

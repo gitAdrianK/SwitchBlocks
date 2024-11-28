@@ -2,6 +2,7 @@
 using JumpKing.SaveThread;
 using SwitchBlocks.Util;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -64,6 +65,8 @@ namespace SwitchBlocks.Data
             _groups = new SerializableDictionary<int, BlockGroup>();
             _hasSwitched = false;
             _touched = 0;
+            _active = new HashSet<int>();
+            _finished = new List<int>();
         }
 
         public void SaveToFile()
@@ -173,5 +176,26 @@ namespace SwitchBlocks.Data
             set => Instance._touched = value;
         }
         public int _touched;
+
+        /// <summary>
+        /// GroupIds that are currently in the process of changing state from active to inactive or vice versa.
+        /// They are considered active until the progress has reached 0/1.
+        /// </summary>
+        public static HashSet<int> Active
+        {
+            get => Instance._active;
+            set => Instance._active = value;
+        }
+        public HashSet<int> _active;
+
+        /// <summary>
+        /// GroupIds that have finished going from their default startstate to the other state.
+        /// </summary>
+        public static List<int> Finished
+        {
+            get => Instance._finished;
+            set => Instance._finished = value;
+        }
+        public List<int> _finished;
     }
 }
