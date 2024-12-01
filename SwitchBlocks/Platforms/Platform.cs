@@ -109,10 +109,7 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
-                lock (Game1.instance.contentManager)
-                {
-                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                }
+                platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 platform.Width = platform.Texture.Width;
                 platform.Height = platform.Texture.Height;
 
@@ -125,7 +122,7 @@ namespace SwitchBlocks.Platforms
                 platform.Position = (Vector2)position;
 
                 // Start state
-                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;
+                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
                 if (stateInnerText == "on")
                 {
                     platform.StartState = true;
@@ -143,17 +140,15 @@ namespace SwitchBlocks.Platforms
                 // Animation
                 platform.animation.style = Animation.Style.Fade;
                 platform.animation.curve = Animation.Curve.Linear;
-                if (dictionary.ContainsKey(ModStrings.ANIMATION))
+                if (dictionary.TryGetValue(ModStrings.ANIMATION, out int value))
                 {
-                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION]];
-                    platform.animation = Xml.GetAnimation(animationNode);
+                    platform.animation = Xml.GetAnimation(xmlPlatform[value]);
                 }
 
                 platform.animationOut = platform.animation;
-                if (dictionary.ContainsKey(ModStrings.ANIMATION_OUT))
+                if (dictionary.TryGetValue(ModStrings.ANIMATION_OUT, out value))
                 {
-                    XmlNode animationNode = xmlPlatform[dictionary[ModStrings.ANIMATION_OUT]];
-                    platform.animationOut = Xml.GetAnimation(animationNode);
+                    platform.animationOut = Xml.GetAnimation(xmlPlatform[value]);
                 }
 
                 // The platform had all elements properly set.

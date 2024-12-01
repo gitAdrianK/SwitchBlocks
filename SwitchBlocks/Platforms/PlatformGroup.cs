@@ -112,10 +112,7 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
-                lock (Game1.instance.contentManager)
-                {
-                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                }
+                platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 platform.Width = platform.Texture.Width;
                 platform.Height = platform.Texture.Height;
 

@@ -112,10 +112,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (contentManager)
-                    {
-                        platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                    }
+                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Scrolling
@@ -126,10 +123,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (contentManager)
-                    {
-                        platform.Scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                    }
+                    platform.Scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Foreground
@@ -140,10 +134,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    lock (contentManager)
-                    {
-                        platform.Foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-                    }
+                    platform.Foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Size

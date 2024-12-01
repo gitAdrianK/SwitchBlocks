@@ -56,7 +56,7 @@ namespace SwitchBlocks
         /// children named "R", "G", and "B"
         /// </summary>
         /// <param name="root">Xml node to create the color from.</param>
-        /// <returns>Color or null</returns>
+        /// <returns>Color or null if a color couldn't be made</returns>
         public static Color? GetColor(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
@@ -76,7 +76,7 @@ namespace SwitchBlocks
         /// children named "X", and "Y"
         /// </summary>
         /// <param name="root">Xml node to create the vector from.</param>
-        /// <returns>Vector2 or null</returns>
+        /// <returns>Vector2 or null if a vector couldn't be made</returns>
         public static Vector2? GetVector2(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
@@ -101,7 +101,7 @@ namespace SwitchBlocks
         /// children named "X", and "Y"
         /// </summary>
         /// <param name="root">Xml node to create the point from.</param>
-        /// <returns>Point or null</returns>
+        /// <returns>Point or null if a point couldn't be made</returns>
         public static Point? GetPoint(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
