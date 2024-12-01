@@ -21,7 +21,7 @@ namespace SwitchBlocks
             XmlDocument document = new XmlDocument();
             document.Load(path);
             XmlNode blocks = document.LastChild;
-            if (blocks.Name != "Blocks")
+            if (blocks == null || blocks.Name != "Blocks")
             {
                 return;
             }

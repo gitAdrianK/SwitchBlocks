@@ -106,10 +106,12 @@ namespace SwitchBlocks
             string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
 
             // Level being null means the vanilla map is being started/ended.
+            // And the vanilla map has no switch blocks.
             if (contentManager.level == null)
             {
                 return false;
             }
+            // If theres no switchBlocksMod folder the mod isn't used.
             if (!Directory.Exists(path))
             {
                 return false;

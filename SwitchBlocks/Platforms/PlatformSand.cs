@@ -94,7 +94,6 @@ namespace SwitchBlocks.Platforms
                 {
                     continue;
                 }
-                JKContentManager contentManager = Game1.instance.contentManager;
 
                 string filePath;
                 // Require at least one of the size giving textures to exist (Background or Foregroud)
@@ -104,6 +103,7 @@ namespace SwitchBlocks.Platforms
                 }
 
                 PlatformSand platform = new PlatformSand();
+                JKContentManager contentManager = Game1.instance.contentManager;
                 // Background
                 if (dictionary.ContainsKey(ModStrings.BACKGROUND))
                 {
@@ -112,7 +112,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    platform.Texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                    platform.Texture = contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Scrolling
@@ -123,7 +123,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    platform.Scrolling = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                    platform.Scrolling = contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Foreground
@@ -134,7 +134,7 @@ namespace SwitchBlocks.Platforms
                     {
                         continue;
                     }
-                    platform.Foreground = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
+                    platform.Foreground = contentManager.Load<Texture2D>($"{filePath}");
                 }
 
                 // Size
@@ -155,11 +155,11 @@ namespace SwitchBlocks.Platforms
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
-                if (position == null)
+                if (!position.HasValue)
                 {
                     continue;
                 }
-                platform.Position = (Vector2)position;
+                platform.Position = position.Value;
 
                 // Start state
                 string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;

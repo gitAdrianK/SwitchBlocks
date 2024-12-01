@@ -33,9 +33,9 @@ namespace SwitchBlocks.Settings
         {
             XmlNodeList children = root.ChildNodes;
             int duration = defaultDuration;
-            if (dictionary.ContainsKey(TagName))
+            if (dictionary.TryGetValue(TagName, out int value))
             {
-                duration = (int)((float.Parse(children[dictionary[TagName]].InnerText, CultureInfo.InvariantCulture) / deltaTime) + 0.5f);
+                duration = (int)((float.Parse(children[value].InnerText, CultureInfo.InvariantCulture) / deltaTime) + 0.5f);
             }
             return duration;
         }
@@ -45,11 +45,12 @@ namespace SwitchBlocks.Settings
         {
             XmlNodeList children = root.ChildNodes;
             float multiplier = 1.0f;
-            if (dictionary.ContainsKey("Multiplier"))
+            if (dictionary.TryGetValue("Multiplier", out int value))
             {
-                string multi = children[dictionary["Multiplier"]].InnerText;
-                multi = multi.Trim();
-                multi = multi.Replace(",", ".");
+                string multi = children[value]
+                    .InnerText
+                    .Trim()
+                    .Replace(",", ".");
                 multiplier = float.Parse(multi, CultureInfo.InvariantCulture);
             }
             return multiplier;
@@ -59,11 +60,13 @@ namespace SwitchBlocks.Settings
         {
             XmlNodeList children = root.ChildNodes;
             HashSet<Direction> directions = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
-            if (!dictionary.ContainsKey(tag))
+            if (!dictionary.TryGetValue(tag, out int value))
             {
                 return directions;
             }
-            string inside = children[dictionary[tag]].InnerText.Trim();
+            string inside = children[value]
+                .InnerText
+                .Trim();
             if (inside == string.Empty)
             {
                 return directions;
@@ -76,15 +79,15 @@ namespace SwitchBlocks.Settings
                 {
                     directions.Remove(Direction.Up);
                 }
-                if (trim.Equals("Down"))
+                else if (trim.Equals("Down"))
                 {
                     directions.Remove(Direction.Down);
                 }
-                if (trim.Equals("Left"))
+                else if (trim.Equals("Left"))
                 {
                     directions.Remove(Direction.Left);
                 }
-                if (trim.Equals("Right"))
+                else if (trim.Equals("Right"))
                 {
                     directions.Remove(Direction.Right);
                 }
@@ -116,11 +119,10 @@ namespace SwitchBlocks.Settings
         {
             XmlNodeList children = root.ChildNodes;
             int count = 2;
-            if (!dictionary.ContainsKey("Count"))
+            if (dictionary.TryGetValue("Count", out int value))
             {
-                return count;
+                count = int.Parse(children[value].InnerText);
             }
-            count = int.Parse(children[dictionary["Count"]].InnerText);
             return count;
         }
 
@@ -128,14 +130,14 @@ namespace SwitchBlocks.Settings
         {
             XmlNodeList children = root.ChildNodes;
             float duration = 1.0f;
-            if (!dictionary.ContainsKey("Duration"))
+            if (dictionary.TryGetValue("Duration", out int value))
             {
-                return (int)((duration / deltaTime) + 0.5f);
+                string dur = children[value]
+                    .InnerText
+                    .Trim()
+                    .Replace(",", ".");
+                duration = float.Parse(dur, CultureInfo.InvariantCulture);
             }
-            string dur = children[dictionary["Duration"]].InnerText;
-            dur = dur.Trim();
-            dur = dur.Replace(",", ".");
-            duration = float.Parse(dur, CultureInfo.InvariantCulture);
             return (int)((duration / deltaTime) + 0.5f);
         }
 

@@ -44,9 +44,9 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(dictionaryCountdown, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryCountdown, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryCountdown);
-            if (dictionaryCountdown.ContainsKey("Warn"))
+            if (dictionaryCountdown.TryGetValue("Warn", out int value))
             {
-                XmlNode rootContdownWarn = childrenCountdown[dictionaryCountdown["Warn"]];
+                XmlNode rootContdownWarn = childrenCountdown[value];
                 Dictionary<string, int> dictionaryCountdownWarn = Xml.MapNames(rootContdownWarn.ChildNodes);
                 WarnCount = ParseSettings.ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
                 WarnDuration = ParseSettings.ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);

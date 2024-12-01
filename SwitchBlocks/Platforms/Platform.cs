@@ -115,11 +115,11 @@ namespace SwitchBlocks.Platforms
 
                 // Position
                 Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
-                if (position == null)
+                if (!position.HasValue)
                 {
                     continue;
                 }
-                platform.Position = (Vector2)position;
+                platform.Position = position.Value;
 
                 // Start state
                 string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
