@@ -38,6 +38,7 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             UpdateProgress(DataJump.State, deltaTime, SettingsJump.Multiplier);
+            TrySwitch();
         }
 
         public override void Draw()
@@ -52,6 +53,15 @@ namespace SwitchBlocks.Entities
             {
                 DrawPlatform(platform, progress, DataJump.State, spriteBatch);
             });
+        }
+
+        private void TrySwitch()
+        {
+            if (DataJump.CanSwitchSafely && DataJump.SwitchOnceSafe)
+            {
+                DataJump.State = !DataJump.State;
+                DataJump.SwitchOnceSafe = false;
+            }
         }
     }
 }

@@ -13,12 +13,17 @@ namespace SwitchBlocks.Settings
         /// Multiplier of the deltaTime used in the animation of the jump block type.
         /// </summary>
         public static float Multiplier { get; private set; } = 1.0f;
+        /// <summary>
+        /// If the jump state switch is supposed to be forced, ignoring the safe switch.
+        /// </summary>
+        public static bool ForceSwitch { get; private set; } = false;
 
         public static void Parse(XmlNode block)
         {
             IsUsed = true;
             Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryJump, block);
+            ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryJump);
         }
     }
 }

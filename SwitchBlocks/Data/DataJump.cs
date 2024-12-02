@@ -61,6 +61,8 @@ namespace SwitchBlocks.Data
         {
             _state = false;
             _progress = 0.0f;
+            _canSwitchSafely = true;
+            _switchOnceSafe = false;
         }
 
         public void SaveToFile()
@@ -96,5 +98,25 @@ namespace SwitchBlocks.Data
             set => Instance._progress = value;
         }
         public float _progress;
+
+        /// <summary>
+        /// If the block can switch safely.
+        /// </summary>
+        public static bool CanSwitchSafely
+        {
+            get => Instance._canSwitchSafely;
+            set => Instance._canSwitchSafely = value;
+        }
+        public bool _canSwitchSafely;
+
+        /// <summary>
+        /// If the block should switch next opportunity.
+        /// </summary>
+        public static bool SwitchOnceSafe
+        {
+            get => Instance._switchOnceSafe;
+            set => Instance._switchOnceSafe = value;
+        }
+        public bool _switchOnceSafe;
     }
 }

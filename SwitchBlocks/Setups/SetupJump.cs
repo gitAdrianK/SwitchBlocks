@@ -1,5 +1,4 @@
 ﻿using EntityComponent;
-using JumpKing;
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
@@ -21,6 +20,9 @@ namespace SwitchBlocks.Setups
             _ = DataJump.Instance;
 
             _ = EntityJumpPlatforms.Instance;
+
+            BehaviourJumpPlatform behaviourJumpPlatform = new BehaviourJumpPlatform();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), behaviourJumpPlatform);
 
             BehaviourJumpIceOn behaviourJumpIceOn = new BehaviourJumpIceOn();
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpIceOn), behaviourJumpIceOn);
@@ -53,12 +55,18 @@ namespace SwitchBlocks.Setups
 
         private static void JumpSwitch()
         {
-            if (EntityJumpPlatforms.Instance.PlatformDictionary != null
-                && EntityJumpPlatforms.Instance.PlatformDictionary.ContainsKey(Camera.CurrentScreen))
+            if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
             {
                 ModSounds.JumpFlip?.PlayOneShot();
             }
-            DataJump.State = !DataJump.State;
+            if (SettingsJump.ForceSwitch)
+            {
+                DataJump.State = !DataJump.State;
+            }
+            else
+            {
+                DataJump.SwitchOnceSafe = true;
+            }
         }
     }
 }
