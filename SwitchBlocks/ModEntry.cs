@@ -13,8 +13,6 @@ namespace SwitchBlocks
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
-        private static Harmony harmony;
-
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -32,7 +30,7 @@ namespace SwitchBlocks
             LevelManager.RegisterBlockFactory(new FactorySand());
             LevelManager.RegisterBlockFactory(new FactorySequence());
 
-            harmony = new Harmony(ModStrings.HARMONY);
+            Harmony harmony = new Harmony(ModStrings.HARMONY);
             new Patching.BodyComp(harmony);
             new Patching.EndingManager(harmony);
         }

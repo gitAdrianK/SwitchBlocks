@@ -24,16 +24,16 @@ namespace SwitchBlocks.Settings
         }
 
         // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
-        public static int ParseDuration(string TagName, Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
+        public static int ParseDuration(string tagName, Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
         {
-            return ParseDuration(TagName, dictionary, root, (int)((defaultDuration / deltaTime) + 0.5f));
+            return ParseDuration(tagName, dictionary, root, (int)((defaultDuration / deltaTime) + 0.5f));
         }
 
-        public static int ParseDuration(string TagName, Dictionary<string, int> dictionary, XmlNode root, int defaultDuration)
+        public static int ParseDuration(string tagName, Dictionary<string, int> dictionary, XmlNode root, int defaultDuration)
         {
             XmlNodeList children = root.ChildNodes;
             int duration = defaultDuration;
-            if (dictionary.TryGetValue(TagName, out int value))
+            if (dictionary.TryGetValue(tagName, out int value))
             {
                 duration = (int)((float.Parse(children[value].InnerText, CultureInfo.InvariantCulture) / deltaTime) + 0.5f);
             }
@@ -71,23 +71,25 @@ namespace SwitchBlocks.Settings
             {
                 return directions;
             }
-            string[] split = inside.Split(',');
-            foreach (string s in split)
+            string[] splits = inside.Split(',');
+            foreach (string split in splits)
             {
-                string trim = s.Trim();
-                if (trim.Equals("Up"))
+                string trim = split
+                    .Trim()
+                    .ToLower();
+                if (trim.Equals("up"))
                 {
                     directions.Remove(Direction.Up);
                 }
-                else if (trim.Equals("Down"))
+                else if (trim.Equals("down"))
                 {
                     directions.Remove(Direction.Down);
                 }
-                else if (trim.Equals("Left"))
+                else if (trim.Equals("left"))
                 {
                     directions.Remove(Direction.Left);
                 }
-                else if (trim.Equals("Right"))
+                else if (trim.Equals("right"))
                 {
                     directions.Remove(Direction.Right);
                 }

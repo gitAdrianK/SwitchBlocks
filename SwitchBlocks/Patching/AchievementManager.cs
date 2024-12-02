@@ -1,26 +1,28 @@
 ﻿using HarmonyLib;
+using System.Reflection;
 
 namespace SwitchBlocks.Patching
 {
     public class AchievementManager
     {
-        private static readonly Traverse AllTimeTicks;
-        private static readonly Traverse SnapshotTicks;
+        public static FieldInfo AchievemementManager;
 
         static AchievementManager()
         {
-            object achievemementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance").GetValue(null);
-            AllTimeTicks = Traverse.Create(achievemementManager)
-                        .Field("m_all_time_stats")
-                        .Field("_ticks");
-            SnapshotTicks = Traverse.Create(achievemementManager)
-                        .Field("m_snapshot")
-                        .Field("_ticks");
+            AchievemementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance");
         }
 
         public static int GetTicks()
         {
-            return AllTimeTicks.GetValue<int>() - SnapshotTicks.GetValue<int>();
+            int allTimeTicks = Traverse.Create(AchievemementManager.GetValue(null))
+                        .Field("m_all_time_stats")
+                        .Field("_ticks")
+                        .GetValue<int>();
+            int snapshotTicks = Traverse.Create(AchievemementManager.GetValue(null))
+                        .Field("m_snapshot")
+                        .Field("_ticks")
+                        .GetValue<int>();
+            return allTimeTicks - snapshotTicks;
         }
     }
 }

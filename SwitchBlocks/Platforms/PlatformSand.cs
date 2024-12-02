@@ -162,7 +162,7 @@ namespace SwitchBlocks.Platforms
                 platform.Position = position.Value;
 
                 // Start state
-                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText;
+                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
                 if (stateInnerText == "on")
                 {
                     platform.StartState = true;
