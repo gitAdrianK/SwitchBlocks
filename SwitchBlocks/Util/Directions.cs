@@ -36,19 +36,19 @@ namespace SwitchBlocks.Util
         {
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             Rectangle blockRect = block.GetRect();
-            if (playerRect.Bottom - blockRect.Top == 0.0f && prevVelocity.Y > 0.0f && validDirections.Contains(Direction.Up))
+            if (playerRect.Bottom - blockRect.Top == 0 && prevVelocity.Y > 0.0f && validDirections.Contains(Direction.Up))
             {
                 return true;
             }
-            else if (blockRect.Bottom - playerRect.Top == 0.0f && prevVelocity.Y < 0.0f && validDirections.Contains(Direction.Down))
+            else if (blockRect.Bottom - playerRect.Top == 0 && prevVelocity.Y < 0.0f && validDirections.Contains(Direction.Down))
             {
                 return true;
             }
-            else if (playerRect.Right - blockRect.Left == 0.0f && prevVelocity.X > 0.0f && validDirections.Contains(Direction.Left))
+            else if (playerRect.Right - blockRect.Left == 0 && prevVelocity.X > 0.0f && validDirections.Contains(Direction.Left))
             {
                 return true;
             }
-            else if (blockRect.Right - playerRect.Left == 0.0f && prevVelocity.X < 0.0f && validDirections.Contains(Direction.Right))
+            else if (blockRect.Right - playerRect.Left == 0 && prevVelocity.X < 0.0f && validDirections.Contains(Direction.Right))
             {
                 return true;
             }

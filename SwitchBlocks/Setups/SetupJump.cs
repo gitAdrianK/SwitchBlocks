@@ -55,12 +55,12 @@ namespace SwitchBlocks.Setups
 
         private static void JumpSwitch()
         {
-            if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
-            {
-                ModSounds.JumpFlip?.PlayOneShot();
-            }
             if (SettingsJump.ForceSwitch)
             {
+                if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
+                {
+                    ModSounds.JumpFlip?.PlayOneShot();
+                }
                 DataJump.State = !DataJump.State;
             }
             else

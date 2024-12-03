@@ -47,7 +47,7 @@ namespace SwitchBlocks.Util
         /// <param name="groupId">The ID that is to be assigned to all blocks of the group</param>
         public static bool PropagateGroupId(Dictionary<int, IBlockGroupId> blocks, int startPosition, int groupId)
         {
-            if (!blocks.ContainsKey(startPosition) || blocks[startPosition].GroupId != 0)
+            if (!blocks.TryGetValue(startPosition, out IBlockGroupId value) || value.GroupId != 0)
             {
                 return false;
             }
@@ -60,21 +60,15 @@ namespace SwitchBlocks.Util
 
                 // Left
                 int left = currentPos - HORIZONTAL;
-                if (blocks.TryGetValue(left, out IBlockGroupId value))
+                if (blocks.TryGetValue(left, out value) && value.GroupId == 0)
                 {
-                    if (value.GroupId == 0)
-                    {
-                        toVisit.Enqueue(left);
-                    }
+                    toVisit.Enqueue(left);
                 }
                 // Right
                 int right = currentPos + HORIZONTAL;
-                if (blocks.TryGetValue(right, out value))
+                if (blocks.TryGetValue(right, out value) && value.GroupId == 0)
                 {
-                    if (value.GroupId == 0)
-                    {
-                        toVisit.Enqueue(right);
-                    }
+                    toVisit.Enqueue(right);
                 }
                 // Up
                 int up;
@@ -86,12 +80,9 @@ namespace SwitchBlocks.Util
                 {
                     up = currentPos - VERTICAL;
                 }
-                if (blocks.TryGetValue(up, out value))
+                if (blocks.TryGetValue(up, out value) && value.GroupId == 0)
                 {
-                    if (value.GroupId == 0)
-                    {
-                        toVisit.Enqueue(up);
-                    }
+                    toVisit.Enqueue(up);
                 }
                 // Down
                 int down;
@@ -103,12 +94,9 @@ namespace SwitchBlocks.Util
                 {
                     down = currentPos + VERTICAL;
                 }
-                if (blocks.TryGetValue(down, out value))
+                if (blocks.TryGetValue(down, out value) && value.GroupId == 0)
                 {
-                    if (value.GroupId == 0)
-                    {
-                        toVisit.Enqueue(down);
-                    }
+                    toVisit.Enqueue(down);
                 }
             }
             return true;

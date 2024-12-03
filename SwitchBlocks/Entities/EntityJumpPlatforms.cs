@@ -59,6 +59,10 @@ namespace SwitchBlocks.Entities
         {
             if (DataJump.CanSwitchSafely && DataJump.SwitchOnceSafe)
             {
+                if (IsActiveOnCurrentScreen)
+                {
+                    ModSounds.JumpFlip?.PlayOneShot();
+                }
                 DataJump.State = !DataJump.State;
                 DataJump.SwitchOnceSafe = false;
             }
