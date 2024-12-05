@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using JumpKing.Level;
 using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using System;
 using System.Reflection;
@@ -31,27 +30,15 @@ namespace SwitchBlocks.Patching
         {
             if (blockType == typeof(SandBlock))
             {
-                __result = __result || DataSand.HasEntered;
-            }
-            if (blockType == typeof(BlockSandOn) || blockType == typeof(BlockSandOn))
-            {
-                __result = false;
+                __result |= DataSand.HasEntered;
             }
             if (blockType == typeof(IceBlock))
             {
-                __result = __result
-                    || BehaviourAutoIceOn.IsPlayerOnIce
-                    || BehaviourAutoIceOff.IsPlayerOnIce
-                    || BehaviourBasicIceOn.IsPlayerOnIce
-                    || BehaviourBasicIceOff.IsPlayerOnIce
-                    || BehaviourCountdownIceOn.IsPlayerOnIce
-                    || BehaviourCountdownIceOff.IsPlayerOnIce
+                __result |= BehaviourPost.IsPlayerOnIce
                     || BehaviourGroupIceA.IsPlayerOnIce
                     || BehaviourGroupIceB.IsPlayerOnIce
                     || BehaviourGroupIceC.IsPlayerOnIce
                     || BehaviourGroupIceD.IsPlayerOnIce
-                    || BehaviourJumpIceOn.IsPlayerOnIce
-                    || BehaviourJumpIceOff.IsPlayerOnIce
                     || BehaviourSequenceIceA.IsPlayerOnIce
                     || BehaviourSequenceIceB.IsPlayerOnIce
                     || BehaviourSequenceIceC.IsPlayerOnIce
@@ -59,12 +46,8 @@ namespace SwitchBlocks.Patching
             }
             if (blockType == typeof(SnowBlock))
             {
-                __result = __result
-                    || BehaviourAutoSnow.IsPlayerOnSnow
-                    || BehaviourBasicSnow.IsPlayerOnSnow
-                    || BehaviourCountdownSnow.IsPlayerOnSnow
+                __result |= BehaviourPost.IsPlayerOnSnow
                     || BehaviourGroupSnow.IsPlayerOnSnow
-                    || BehaviourJumpSnow.IsPlayerOnSnow
                     || BehaviourSequenceSnow.IsPlayerOnSnow;
             }
         }

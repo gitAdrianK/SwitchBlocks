@@ -21,22 +21,9 @@ namespace SwitchBlocks.Setups
 
             _ = EntityAutoPlatforms.Instance;
 
-            BehaviourAutoPlatform behaviourAutoPlatform = new BehaviourAutoPlatform();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), behaviourAutoPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), behaviourAutoPlatform);
-
-            BehaviourAutoIceOn behaviourAutoIceOn = new BehaviourAutoIceOn();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOn), behaviourAutoIceOn);
-            BehaviourAutoIceOff behaviourAutoIceOff = new BehaviourAutoIceOff();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoIceOff), behaviourAutoIceOff);
-
-            BehaviourAutoSnow behaviourAutoSnow = new BehaviourAutoSnow();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOn), behaviourAutoSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoSnowOff), behaviourAutoSnow);
-
-            BehaviourAutoReset behaviourAutoReset = new BehaviourAutoReset();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourAutoReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoResetFull), behaviourAutoReset);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
         }
 
         public static void DoCleanup(EntityManager entityManager)

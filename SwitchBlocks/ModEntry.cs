@@ -4,8 +4,11 @@ using JumpKing;
 using JumpKing.Level;
 using JumpKing.Mods;
 using JumpKing.Player;
+using SwitchBlocks.Behaviours;
+using SwitchBlocks.Blocks;
 using SwitchBlocks.Factories;
 using SwitchBlocks.Setups;
+using System.Diagnostics;
 using System.IO;
 
 namespace SwitchBlocks
@@ -20,7 +23,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            Debugger.Launch();
 
             LevelManager.RegisterBlockFactory(new FactoryAuto());
             LevelManager.RegisterBlockFactory(new FactoryBasic());
@@ -57,6 +60,12 @@ namespace SwitchBlocks
             ModSettings.Load();
 
             ModSounds.Load();
+
+            // These behaviours are used as a way to create pre and post behaviour points
+            // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
+            // want to run the sliding function multiple times.
+            player.m_body.RegisterBlockBehaviour<BlockPre>(new BehaviourPre());
+            player.m_body.RegisterBlockBehaviour<BlockPost>(new BehaviourPost());
 
             SetupAuto.DoSetup(player);
             SetupBasic.DoSetup(player);

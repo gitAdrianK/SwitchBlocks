@@ -22,22 +22,9 @@ namespace SwitchBlocks.Setups
             _ = EntityBasicPlatforms.Instance;
             _ = EntityBasicLevers.Instance;
 
-            BehaviourBasicIceOn behaviourBasicIceOn = new BehaviourBasicIceOn();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOn), behaviourBasicIceOn);
-            BehaviourBasicIceOff behaviourBasicIceOff = new BehaviourBasicIceOff();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicIceOff), behaviourBasicIceOff);
-
-            BehaviourBasicSnow behaviourBasicSnow = new BehaviourBasicSnow();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicSnowOn), behaviourBasicSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicSnowOff), behaviourBasicSnow);
-
-            BehaviourBasicLever behaviourBasicLever = new BehaviourBasicLever();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOn), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverOff), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolid), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOn), behaviourBasicLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLeverSolidOff), behaviourBasicLever);
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever());
         }
 
         public static void DoCleanup(EntityManager entityManager)

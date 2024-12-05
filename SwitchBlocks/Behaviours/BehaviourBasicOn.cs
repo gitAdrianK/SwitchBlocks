@@ -1,22 +1,16 @@
-﻿using ErikMaths;
-using JumpKing;
-using JumpKing.API;
+﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
-using JumpKing.Player;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourAutoIceOff : IBlockBehaviour
+    public class BehaviourBasicOn : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-        public static bool IsPlayerOnIce { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -51,13 +45,26 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockAutoIceOff>();
-            IsPlayerOnIce = IsPlayerOnBlock && !DataAuto.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
-
-            if (IsPlayerOnIce)
+            bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockBasicOn>();
+            bool isOnIce = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
+            bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockBasicSnowOn>();
+            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            if (!IsPlayerOnBlock)
             {
-                BodyComp bodyComp = behaviourContext.BodyComp;
-                bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
+                return true;
+            }
+
+            if (DataBasic.State)
+            {
+                if (isOnIce)
+                {
+                    BehaviourPost.IsPlayerOnIce = true;
+                }
+
+                if (isOnSnow)
+                {
+                    BehaviourPost.IsPlayerOnSnow = true;
+                }
             }
 
             return true;

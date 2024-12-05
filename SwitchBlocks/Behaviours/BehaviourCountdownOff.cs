@@ -1,20 +1,17 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourCountdownSnow : IBlockBehaviour
+    public class BehaviourCountdownOff : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        public static bool IsPlayerOnSnow { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -49,18 +46,38 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockCountdownSnowOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockCountdownSnowOff>();
-            IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
-
+            bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockCountdownOff>();
+            bool isOnIce = advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
+            bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockCountdownSnowOff>();
+            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
             if (!IsPlayerOnBlock)
             {
-                IsPlayerOnSnow = false;
                 return true;
             }
 
-            IsPlayerOnSnow = !InventoryManager.HasItemEnabled(Items.SnakeRing)
-                && ((isPlayerOnBlockOn && DataCountdown.State) || (isPlayerOnBlockOff && !DataCountdown.State));
+            if (!DataCountdown.State)
+            {
+                if (isOnIce)
+                {
+                    BehaviourPost.IsPlayerOnIce = true;
+                }
+
+                if (isOnSnow)
+                {
+                    BehaviourPost.IsPlayerOnSnow = true;
+                }
+            }
+            else
+            {
+                if (DataCountdown.CanSwitchSafely)
+                {
+                    DataCountdown.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                        behaviourContext,
+                        typeof(BlockCountdownOff),
+                        typeof(BlockCountdownIceOff),
+                        typeof(BlockCountdownSnowOff));
+                }
+            }
 
             return true;
         }

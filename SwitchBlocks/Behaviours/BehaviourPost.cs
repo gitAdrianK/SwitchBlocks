@@ -6,17 +6,18 @@ using JumpKing.Level;
 using JumpKing.MiscEntities.WorldItems;
 using JumpKing.MiscEntities.WorldItems.Inventory;
 using JumpKing.Player;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourJumpIceOn : IBlockBehaviour
+    public class BehaviourPost : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
+        // Documentation is false, higher numbers are run first!
+        public float BlockPriority => 1.0f;
 
         public bool IsPlayerOnBlock { get; set; }
+
         public static bool IsPlayerOnIce { get; set; }
+        public static bool IsPlayerOnSnow { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -50,10 +51,14 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
+            // TODO: Without testing, but pretty sure its that way, both vanilla ice and this slide apply
+            // resulting in the player slowing down twice as fast.
+            // Figure out a way to make them play nice.
+            // -> Test if advCI.Ice works
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockJumpIceOn>();
-            IsPlayerOnIce = IsPlayerOnBlock && DataJump.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
-            if (IsPlayerOnIce)
+            if (IsPlayerOnIce
+                && !advCollisionInfo.Ice
+                && !InventoryManager.HasItemEnabled(Items.SnakeRing))
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;
                 bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);

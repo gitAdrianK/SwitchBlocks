@@ -1,20 +1,16 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourJumpSnow : IBlockBehaviour
+    public class BehaviourBasicOff : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        public static bool IsPlayerOnSnow { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -49,12 +45,27 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockJumpSnowOn>();
-            bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockJumpSnowOff>();
-            IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
+            bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockBasicOff>();
+            bool isOnIce = advCollisionInfo.IsCollidingWith<BlockBasicIceOff>();
+            bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockBasicSnowOff>();
+            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            if (!IsPlayerOnBlock)
+            {
+                return true;
+            }
 
-            IsPlayerOnSnow = !InventoryManager.HasItemEnabled(Items.SnakeRing)
-                && ((isPlayerOnBlockOn && DataJump.State) || (isPlayerOnBlockOff && !DataJump.State));
+            if (!DataBasic.State)
+            {
+                if (isOnIce)
+                {
+                    BehaviourPost.IsPlayerOnIce = true;
+                }
+
+                if (isOnSnow)
+                {
+                    BehaviourPost.IsPlayerOnSnow = true;
+                }
+            }
 
             return true;
         }

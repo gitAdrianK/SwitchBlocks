@@ -55,15 +55,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\BehaviourAutoIceOff.cs" />
-    <Compile Include="Behaviours\BehaviourAutoIceOn.cs" />
-    <Compile Include="Behaviours\BehaviourAutoPlatform.cs" />
+    <Compile Include="Behaviours\BehaviourJumpOff.cs" />
+    <Compile Include="Behaviours\BehaviourJumpOn.cs" />
+    <Compile Include="Behaviours\BehaviourCountdownOn.cs" />
+    <Compile Include="Behaviours\BehaviourCountdownOff.cs" />
+    <Compile Include="Behaviours\BehaviourAutoOff.cs" />
+    <Compile Include="Behaviours\BehaviourAutoOn.cs" />
+    <Compile Include="Behaviours\BehaviourBasicOn.cs" />
+    <Compile Include="Behaviours\BehaviourBasicOff.cs" />
+    <Compile Include="Behaviours\BehaviourPost.cs" />
+    <Compile Include="Behaviours\BehaviourPre.cs" />
     <Compile Include="Behaviours\BehaviourAutoReset.cs" />
-    <Compile Include="Behaviours\BehaviourAutoSnow.cs" />
-    <Compile Include="Behaviours\BehaviourBasicIceOff.cs" />
-    <Compile Include="Behaviours\BehaviourBasicIceOn.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
-    <Compile Include="Behaviours\BehaviourJumpPlatform.cs" />
     <Compile Include="Behaviours\BehaviourSequencePlatform.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIceD.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIceC.cs" />
@@ -79,17 +82,11 @@
     <Compile Include="Behaviours\BehaviourGroupSnow.cs" />
     <Compile Include="Behaviours\BehaviourGroupLeaving.cs" />
     <Compile Include="Behaviours\BehaviourGroupDuration.cs" />
-    <Compile Include="Behaviours\BehaviourJumpSnow.cs" />
-    <Compile Include="Behaviours\BehaviourBasicSnow.cs" />
-    <Compile Include="Behaviours\BehaviourCountdownIceOff.cs" />
-    <Compile Include="Behaviours\BehaviourCountdownIceOn.cs" />
     <Compile Include="Behaviours\BehaviourCountdownLever.cs" />
-    <Compile Include="Behaviours\BehaviourCountdownPlatform.cs" />
-    <Compile Include="Behaviours\BehaviourCountdownSnow.cs" />
-    <Compile Include="Behaviours\BehaviourJumpIceOff.cs" />
-    <Compile Include="Behaviours\BehaviourJumpIceOn.cs" />
     <Compile Include="Behaviours\BehaviourSandPlatform.cs" />
     <Compile Include="Behaviours\BehaviourSandLever.cs" />
+    <Compile Include="Blocks\BlockPost.cs" />
+    <Compile Include="Blocks\BlockPre.cs" />
     <Compile Include="Blocks\BlockAutoSnowOff.cs" />
     <Compile Include="Blocks\BlockAutoIceOff.cs" />
     <Compile Include="Blocks\BlockAutoSnowOn.cs" />
@@ -209,6 +206,7 @@
     <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
+    <Compile Include="Util\Intersecting.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Platforms\Platform.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />

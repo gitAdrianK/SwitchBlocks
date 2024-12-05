@@ -1,22 +1,16 @@
-﻿using ErikMaths;
-using JumpKing;
-using JumpKing.API;
+﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
-using JumpKing.Player;
-using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourBasicIceOff : IBlockBehaviour
+    public class BehaviourPre : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
+        // Documentation is false, higher numbers are run first!
+        public float BlockPriority => 3.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-        public static bool IsPlayerOnIce { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -45,19 +39,12 @@ namespace SwitchBlocks.Behaviours
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
-            {
-                return true;
-            }
+            DataAuto.CanSwitchSafely = true;
+            DataCountdown.CanSwitchSafely = true;
+            DataJump.CanSwitchSafely = true;
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockBasicIceOff>();
-            IsPlayerOnIce = IsPlayerOnBlock && !DataBasic.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
-            if (IsPlayerOnIce)
-            {
-                BodyComp bodyComp = behaviourContext.BodyComp;
-                bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
-            }
+            BehaviourPost.IsPlayerOnIce = false;
+            BehaviourPost.IsPlayerOnSnow = false;
 
             return true;
         }

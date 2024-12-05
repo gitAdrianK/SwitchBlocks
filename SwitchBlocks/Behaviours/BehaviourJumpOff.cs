@@ -1,22 +1,17 @@
-﻿using ErikMaths;
-using JumpKing;
-using JumpKing.API;
+﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
-using JumpKing.Player;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
+using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourCountdownIceOff : IBlockBehaviour
+    public class BehaviourJumpOff : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-        public static bool IsPlayerOnIce { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -51,13 +46,37 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockCountdownIceOff>();
-            IsPlayerOnIce = IsPlayerOnBlock && !DataCountdown.State && !InventoryManager.HasItemEnabled(Items.SnakeRing);
-
-            if (IsPlayerOnIce)
+            bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockJumpOff>();
+            bool isOnIce = advCollisionInfo.IsCollidingWith<BlockJumpIceOff>();
+            bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockJumpSnowOff>();
+            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            if (!IsPlayerOnBlock)
             {
-                BodyComp bodyComp = behaviourContext.BodyComp;
-                bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
+                return true;
+            }
+
+            if (!DataJump.State)
+            {
+                if (isOnIce)
+                {
+                    BehaviourPost.IsPlayerOnIce = true;
+                }
+
+                if (isOnSnow)
+                {
+                    BehaviourPost.IsPlayerOnSnow = true;
+                }
+            }
+            else
+            {
+                if (DataJump.CanSwitchSafely)
+                {
+                    DataJump.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                        behaviourContext,
+                        typeof(BlockJumpOff),
+                        typeof(BlockJumpIceOff),
+                        typeof(BlockJumpSnowOff));
+                }
             }
 
             return true;
