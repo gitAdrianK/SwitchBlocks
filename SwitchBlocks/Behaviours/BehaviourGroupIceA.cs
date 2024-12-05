@@ -1,11 +1,6 @@
-﻿using ErikMaths;
-using JumpKing;
-using JumpKing.API;
+﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
-using JumpKing.Player;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Util;
@@ -19,7 +14,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-        public static bool IsPlayerOnIce { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -56,9 +50,8 @@ namespace SwitchBlocks.Behaviours
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockGroupIceA>();
 
-            if (!IsPlayerOnBlock || InventoryManager.HasItemEnabled(Items.SnakeRing))
+            if (!IsPlayerOnBlock)
             {
-                IsPlayerOnIce = false;
                 return true;
             }
 
@@ -67,15 +60,9 @@ namespace SwitchBlocks.Behaviours
             {
                 if (DataGroup.GetState(block.GroupId))
                 {
-                    IsPlayerOnIce = true;
+                    BehaviourPost.IsPlayerOnIce = true;
                     break;
                 }
-            }
-
-            if (IsPlayerOnIce)
-            {
-                BodyComp bodyComp = behaviourContext.BodyComp;
-                bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
             }
 
             return true;

@@ -1,8 +1,6 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Util;
@@ -16,8 +14,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        public static bool IsPlayerOnSnow { get; set; }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -56,9 +52,8 @@ namespace SwitchBlocks.Behaviours
             bool isPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSequenceSnowB>();
             IsPlayerOnBlock = isPlayerOnBlockOn || isPlayerOnBlockOff;
 
-            if (!IsPlayerOnBlock || InventoryManager.HasItemEnabled(Items.SnakeRing))
+            if (!IsPlayerOnBlock)
             {
-                IsPlayerOnSnow = false;
                 return true;
             }
 
@@ -68,7 +63,7 @@ namespace SwitchBlocks.Behaviours
             {
                 if (DataSequence.GetState(block.GroupId))
                 {
-                    IsPlayerOnSnow = true;
+                    BehaviourPost.IsPlayerOnSnow = true;
                     break;
                 }
             }

@@ -34,21 +34,11 @@ namespace SwitchBlocks.Patching
             }
             if (blockType == typeof(IceBlock))
             {
-                __result |= BehaviourPost.IsPlayerOnIce
-                    || BehaviourGroupIceA.IsPlayerOnIce
-                    || BehaviourGroupIceB.IsPlayerOnIce
-                    || BehaviourGroupIceC.IsPlayerOnIce
-                    || BehaviourGroupIceD.IsPlayerOnIce
-                    || BehaviourSequenceIceA.IsPlayerOnIce
-                    || BehaviourSequenceIceB.IsPlayerOnIce
-                    || BehaviourSequenceIceC.IsPlayerOnIce
-                    || BehaviourSequenceIceD.IsPlayerOnIce;
+                __result |= BehaviourPost.IsPlayerOnIce;
             }
             if (blockType == typeof(SnowBlock))
             {
-                __result |= BehaviourPost.IsPlayerOnSnow
-                    || BehaviourGroupSnow.IsPlayerOnSnow
-                    || BehaviourSequenceSnow.IsPlayerOnSnow;
+                __result |= BehaviourPost.IsPlayerOnSnow;
             }
         }
     }

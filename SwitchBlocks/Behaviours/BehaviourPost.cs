@@ -56,12 +56,18 @@ namespace SwitchBlocks.Behaviours
             // Figure out a way to make them play nice.
             // -> Test if advCI.Ice works
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            bool isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
             if (IsPlayerOnIce
                 && !advCollisionInfo.Ice
-                && !InventoryManager.HasItemEnabled(Items.SnakeRing))
+                && !isSnakeringEnabled)
             {
                 BodyComp bodyComp = behaviourContext.BodyComp;
                 bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
+            }
+
+            if (isSnakeringEnabled)
+            {
+                IsPlayerOnSnow = false;
             }
 
             return true;
