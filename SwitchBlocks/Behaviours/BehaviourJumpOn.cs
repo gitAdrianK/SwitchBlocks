@@ -49,7 +49,7 @@ namespace SwitchBlocks.Behaviours
             bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockJumpOn>();
             bool isOnIce = advCollisionInfo.IsCollidingWith<BlockJumpIceOn>();
             bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockJumpSnowOn>();
-            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            IsPlayerOnBlock = DataJump.State && (isOnBasic || isOnIce || isOnSnow);
             if (!IsPlayerOnBlock)
             {
                 return true;

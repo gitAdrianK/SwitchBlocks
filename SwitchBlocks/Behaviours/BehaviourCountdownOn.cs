@@ -49,7 +49,7 @@ namespace SwitchBlocks.Behaviours
             bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockCountdownOn>();
             bool isOnIce = advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
             bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockCountdownSnowOn>();
-            IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            IsPlayerOnBlock = DataCountdown.State && (isOnBasic || isOnIce || isOnSnow);
             if (!IsPlayerOnBlock)
             {
                 return true;
