@@ -122,6 +122,12 @@ namespace SwitchBlocks
             {
                 return false;
             }
+            // If there is no blocks.xml, no block can be activated.
+            path = $"{path}blocks.xml";
+            if (!File.Exists(path))
+            {
+                return false;
+            }
             return true;
         }
     }

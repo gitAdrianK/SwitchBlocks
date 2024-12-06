@@ -123,9 +123,11 @@ namespace SwitchBlocks
         public static Animation GetAnimation(XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            Animation animation;
-            animation.style = Animation.Style.Fade;
-            animation.curve = Animation.Curve.Linear;
+            Animation animation = new Animation
+            {
+                style = Animation.Style.Fade,
+                curve = Animation.Curve.Linear
+            };
             Dictionary<string, int> dictionary = MapNames(children);
             if (dictionary.ContainsKey("Style"))
             {

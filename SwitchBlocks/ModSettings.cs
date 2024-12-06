@@ -12,13 +12,9 @@ namespace SwitchBlocks
         /// </summary>
         public static void Load()
         {
+            XmlDocument document = new XmlDocument();
             char sep = Path.DirectorySeparatorChar;
             string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
-            if (!File.Exists(path))
-            {
-                return;
-            }
-            XmlDocument document = new XmlDocument();
             document.Load(path);
             XmlNode blocks = document.LastChild;
             if (blocks == null || blocks.Name != "Blocks")
