@@ -1,11 +1,12 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
+using System;
+using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -17,8 +18,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -70,7 +69,6 @@ namespace SwitchBlocks.Behaviours
             {
                 if (DataBasic.HasSwitched)
                 {
-                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
                 DataBasic.HasSwitched = true;
@@ -78,14 +76,17 @@ namespace SwitchBlocks.Behaviours
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
                 {
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        prevVelocity,
-                        SettingsBasic.LeverDirections,
-                        typeof(BlockBasicLeverSolid),
-                        typeof(BlockBasicLeverSolidOn),
-                        typeof(BlockBasicLeverSolidOff)))
+                    IBlock block = advCollisionInfo.GetCollidedBlocks().First(b =>
                     {
-                        prevVelocity = behaviourContext.BodyComp.Velocity;
+                        Type type = b.GetType();
+                        return type == typeof(BlockBasicLeverSolid)
+                        || type == typeof(BlockBasicLeverSolidOn)
+                        || type == typeof(BlockBasicLeverSolidOff);
+                    });
+                    if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        SettingsBasic.LeverDirections,
+                        block))
+                    {
                         return true;
                     }
                 }
@@ -113,7 +114,6 @@ namespace SwitchBlocks.Behaviours
             {
                 DataBasic.HasSwitched = false;
             }
-            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }

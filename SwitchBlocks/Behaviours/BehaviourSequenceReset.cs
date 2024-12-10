@@ -1,12 +1,12 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Behaviours
@@ -16,8 +16,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -58,13 +56,11 @@ namespace SwitchBlocks.Behaviours
             if (!IsPlayerOnBlock)
             {
                 DataSequence.HasSwitched = false;
-                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
 
             if (DataSequence.HasSwitched)
             {
-                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
             DataSequence.HasSwitched = true;
@@ -72,12 +68,11 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
+                IBlock block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockSequenceResetSolid));
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                    prevVelocity,
                     SettingsSequence.LeverDirections,
-                    typeof(BlockSequenceResetSolid)))
+                    block))
                 {
-                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
             }
@@ -96,7 +91,6 @@ namespace SwitchBlocks.Behaviours
             DataSequence.Active.Add(1);
             DataSequence.Finished.Clear();
 
-            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }

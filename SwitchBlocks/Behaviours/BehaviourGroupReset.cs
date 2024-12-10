@@ -1,12 +1,12 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Behaviours
@@ -16,8 +16,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -58,13 +56,11 @@ namespace SwitchBlocks.Behaviours
             if (!IsPlayerOnBlock)
             {
                 DataGroup.HasSwitched = false;
-                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
 
             if (DataGroup.HasSwitched)
             {
-                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
             DataGroup.HasSwitched = true;
@@ -72,12 +68,11 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
+                IBlock block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockGroupResetSolid));
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                    prevVelocity,
                     SettingsGroup.LeverDirections,
-                    typeof(BlockGroupResetSolid)))
+                    block))
                 {
-                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
             }
@@ -94,7 +89,6 @@ namespace SwitchBlocks.Behaviours
             DataGroup.Finished.Clear();
             DataGroup.Touched.Clear();
 
-            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }

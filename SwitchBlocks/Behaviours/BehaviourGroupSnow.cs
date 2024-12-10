@@ -4,6 +4,7 @@ using JumpKing.Level;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,24 +50,24 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isPlayerOnBlockA = advCollisionInfo.IsCollidingWith<BlockGroupSnowA>();
-            bool isPlayerOnBlockB = advCollisionInfo.IsCollidingWith<BlockGroupSnowB>();
-            bool isPlayerOnBlockC = advCollisionInfo.IsCollidingWith<BlockGroupSnowC>();
-            bool isPlayerOnBlockD = advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
-            IsPlayerOnBlock = isPlayerOnBlockA
-                || isPlayerOnBlockB
-                || isPlayerOnBlockC
-                || isPlayerOnBlockD;
+            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockGroupSnowA>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
-            if (!IsPlayerOnBlock)
+            if (!IsPlayerOnBlock || BehaviourPost.IsPlayerOnSnow)
             {
                 return true;
             }
 
-            List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockGroupSnowA)
-                || b.GetType() == typeof(BlockGroupSnowB)
-                || b.GetType() == typeof(BlockGroupSnowC)
-                || b.GetType() == typeof(BlockGroupSnowD));
+            IEnumerable<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            {
+                Type type = b.GetType();
+                return type == typeof(BlockGroupSnowA)
+                || type == typeof(BlockGroupSnowB)
+                || type == typeof(BlockGroupSnowC)
+                || type == typeof(BlockGroupSnowD);
+            });
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
                 if (DataGroup.GetState(block.GroupId))

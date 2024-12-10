@@ -8,13 +8,17 @@ using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Factories;
 using SwitchBlocks.Setups;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks
 {
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
+        public static List<Task> tasks = new List<Task>();
+
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -99,6 +103,9 @@ namespace SwitchBlocks
             SetupJump.DoCleanup(entityManager);
             SetupSand.DoCleanup(entityManager);
             SetupSequence.DoCleanup(entityManager);
+
+            tasks.ForEach(task => { task.Wait(); });
+            tasks.Clear();
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using EntityComponent;
 using JumpKing;
-using JumpKing.API;
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
@@ -31,51 +30,28 @@ namespace SwitchBlocks.Setups
 
             AssignGroupIds();
 
-            Task saving = Task.Run(() =>
+            ModEntry.tasks.Add(Task.Run(() =>
             {
                 if (LevelDebugState.instance != null)
                 {
                     CacheGroup.Instance.SaveToFile();
                 }
                 CacheGroup.Instance.Reset();
-            });
+            }));
 
             _ = EntityGroupPlatforms.Instance;
 
-            IBlockBehaviour behaviourGroupPlatform;
             if (SettingsGroup.Duration == 0)
             {
-                behaviourGroupPlatform = new BehaviourGroupLeaving();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving());
             }
             else
             {
-                behaviourGroupPlatform = new BehaviourGroupDuration();
+                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
             }
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupB), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupC), behaviourGroupPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupD), behaviourGroupPlatform);
-
-            BehaviourGroupIceA behaviourGroupIceA = new BehaviourGroupIceA();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), behaviourGroupIceA);
-            BehaviourGroupIceB behaviourGroupIceB = new BehaviourGroupIceB();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceB), behaviourGroupIceB);
-            BehaviourGroupIceC behaviourGroupIceC = new BehaviourGroupIceC();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceC), behaviourGroupIceC);
-            BehaviourGroupIceD behaviourGroupIceD = new BehaviourGroupIceD();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceD), behaviourGroupIceD);
-
-            BehaviourGroupSnow behaviourGroupSnow = new BehaviourGroupSnow();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowB), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowC), behaviourGroupSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowD), behaviourGroupSnow);
-
-            BehaviourGroupReset behaviourGroupReset = new BehaviourGroupReset();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourGroupReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupResetSolid), behaviourGroupReset);
-
-            saving.Wait();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
         public static void DoCleanup(EntityManager entityManager)

@@ -19,7 +19,7 @@ namespace SwitchBlocks.Util
         {
             Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            List<IBlock> filtered = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => blocks.Contains(b.GetType()));
+            IEnumerable<IBlock> filtered = advCollisionInfo.GetCollidedBlocks().Where(b => blocks.Contains(b.GetType()));
             foreach (IBlock block in filtered)
             {
                 block.Intersects(playerRect, out Rectangle collision);

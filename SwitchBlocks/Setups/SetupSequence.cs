@@ -29,14 +29,14 @@ namespace SwitchBlocks.Setups
 
             AssignSequenceIds();
 
-            Task saving = Task.Run(() =>
+            ModEntry.tasks.Add(Task.Run(() =>
             {
                 if (LevelDebugState.instance != null)
                 {
                     CacheSequence.Instance.SaveToFile();
                 }
                 CacheSequence.Instance.Reset();
-            });
+            }));
 
             if (DataSequence.Touched == 0)
             {
@@ -46,32 +46,10 @@ namespace SwitchBlocks.Setups
 
             _ = EntitySequencePlatforms.Instance;
 
-            BehaviourSequencePlatform behaviourSequencePlatform = new BehaviourSequencePlatform();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceB), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceC), behaviourSequencePlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceD), behaviourSequencePlatform);
-
-            BehaviourSequenceIceA behaviourSequenceIceA = new BehaviourSequenceIceA();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), behaviourSequenceIceA);
-            BehaviourSequenceIceB behaviourSequenceIceB = new BehaviourSequenceIceB();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceB), behaviourSequenceIceB);
-            BehaviourSequenceIceC behaviourSequenceIceC = new BehaviourSequenceIceC();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceC), behaviourSequenceIceC);
-            BehaviourSequenceIceD behaviourSequenceIceD = new BehaviourSequenceIceD();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceD), behaviourSequenceIceD);
-
-            BehaviourSequenceSnow behaviourSequenceSnow = new BehaviourSequenceSnow();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowB), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowC), behaviourSequenceSnow);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowD), behaviourSequenceSnow);
-
-            BehaviourSequenceReset behaviourSequenceReset = new BehaviourSequenceReset();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), behaviourSequenceReset);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceResetSolid), behaviourSequenceReset);
-
-            saving.Wait();
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
+            player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
         }
 
         public static void DoCleanup(EntityManager entityManager)

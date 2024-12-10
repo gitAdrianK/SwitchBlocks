@@ -1,7 +1,6 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
@@ -19,8 +18,6 @@ namespace SwitchBlocks.Behaviours
 
         public bool IsPlayerOnBlock { get; set; }
         public static bool IsPlayerOnIce { get; set; }
-
-        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -70,29 +67,31 @@ namespace SwitchBlocks.Behaviours
 
             if (!IsPlayerOnBlock)
             {
-                prevVelocity = behaviourContext.BodyComp.Velocity;
                 return true;
             }
 
-            List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockSequenceA)
-                || b.GetType() == typeof(BlockSequenceIceA)
-                || b.GetType() == typeof(BlockSequenceSnowA)
-                || b.GetType() == typeof(BlockSequenceB)
-                || b.GetType() == typeof(BlockSequenceIceB)
-                || b.GetType() == typeof(BlockSequenceSnowB)
-                || b.GetType() == typeof(BlockSequenceC)
-                || b.GetType() == typeof(BlockSequenceIceC)
-                || b.GetType() == typeof(BlockSequenceSnowC)
-                || b.GetType() == typeof(BlockSequenceD)
-                || b.GetType() == typeof(BlockSequenceIceD)
-                || b.GetType() == typeof(BlockSequenceSnowD));
+            IEnumerable<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            {
+                Type type = b.GetType();
+                return type == typeof(BlockSequenceA)
+                || type == typeof(BlockSequenceIceA)
+                || type == typeof(BlockSequenceSnowA)
+                || type == typeof(BlockSequenceB)
+                || type == typeof(BlockSequenceIceB)
+                || type == typeof(BlockSequenceSnowB)
+                || type == typeof(BlockSequenceC)
+                || type == typeof(BlockSequenceIceC)
+                || type == typeof(BlockSequenceSnowC)
+                || type == typeof(BlockSequenceD)
+                || type == typeof(BlockSequenceIceD)
+                || type == typeof(BlockSequenceSnowD);
+            });
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
                 int groupId = block.GroupId;
                 if (!DataSequence.GetState(groupId)
                     || DataSequence.Touched != (groupId - 1)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                        prevVelocity,
                         SettingsSequence.PlatformDirections,
                         (IBlock)block))
                 {
@@ -119,7 +118,6 @@ namespace SwitchBlocks.Behaviours
                 break;
             }
 
-            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }

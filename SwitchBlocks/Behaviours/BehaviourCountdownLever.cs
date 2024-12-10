@@ -1,12 +1,12 @@
 ﻿using JumpKing.API;
 using JumpKing.BodyCompBehaviours;
 using JumpKing.Level;
-using Microsoft.Xna.Framework;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Settings;
 using SwitchBlocks.Util;
+using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -18,8 +18,6 @@ namespace SwitchBlocks.Behaviours
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
-
-        private Vector2 prevVelocity = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -63,12 +61,11 @@ namespace SwitchBlocks.Behaviours
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid)
                 {
+                    IBlock block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockCountdownLeverSolid));
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        prevVelocity,
                         SettingsCountdown.LeverDirections,
-                        typeof(BlockCountdownLeverSolid)))
+                        block))
                     {
-                        prevVelocity = behaviourContext.BodyComp.Velocity;
                         return true;
                     }
                 }
@@ -77,7 +74,6 @@ namespace SwitchBlocks.Behaviours
 
                 if (DataCountdown.HasSwitched)
                 {
-                    prevVelocity = behaviourContext.BodyComp.Velocity;
                     return true;
                 }
 
@@ -93,7 +89,6 @@ namespace SwitchBlocks.Behaviours
             {
                 DataCountdown.HasSwitched = false;
             }
-            prevVelocity = behaviourContext.BodyComp.Velocity;
             return true;
         }
     }

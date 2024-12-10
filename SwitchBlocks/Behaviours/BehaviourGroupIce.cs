@@ -4,12 +4,13 @@ using JumpKing.Level;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SwitchBlocks.Behaviours
 {
-    public class BehaviourSequenceIceA : IBlockBehaviour
+    public class BehaviourGroupIce : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
@@ -48,17 +49,27 @@ namespace SwitchBlocks.Behaviours
             }
 
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceIceA>();
+            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockGroupIceA>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceC>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceD>();
 
-            if (!IsPlayerOnBlock)
+            if (!IsPlayerOnBlock || BehaviourPost.IsPlayerOnIce)
             {
                 return true;
             }
 
-            List<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().ToList().FindAll(b => b.GetType() == typeof(BlockSequenceIceA));
+            IEnumerable<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            {
+                Type type = b.GetType();
+                return type == typeof(BlockGroupIceA)
+                || type == typeof(BlockGroupIceB)
+                || type == typeof(BlockGroupIceC)
+                || type == typeof(BlockGroupIceD);
+            });
             foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
             {
-                if (DataSequence.GetState(block.GroupId))
+                if (DataGroup.GetState(block.GroupId))
                 {
                     BehaviourPost.IsPlayerOnIce = true;
                     break;

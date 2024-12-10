@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\BehaviourGroupIce.cs" />
     <Compile Include="Behaviours\BehaviourJumpOff.cs" />
     <Compile Include="Behaviours\BehaviourJumpOn.cs" />
     <Compile Include="Behaviours\BehaviourCountdownOn.cs" />
@@ -67,15 +68,8 @@
     <Compile Include="Behaviours\BehaviourPre.cs" />
     <Compile Include="Behaviours\BehaviourAutoReset.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourSequenceIce.cs" />
     <Compile Include="Behaviours\BehaviourSequencePlatform.cs" />
-    <Compile Include="Behaviours\BehaviourSequenceIceD.cs" />
-    <Compile Include="Behaviours\BehaviourSequenceIceC.cs" />
-    <Compile Include="Behaviours\BehaviourSequenceIceB.cs" />
-    <Compile Include="Behaviours\BehaviourSequenceIceA.cs" />
-    <Compile Include="Behaviours\BehaviourGroupIceD.cs" />
-    <Compile Include="Behaviours\BehaviourGroupIceC.cs" />
-    <Compile Include="Behaviours\BehaviourGroupIceB.cs" />
-    <Compile Include="Behaviours\BehaviourGroupIceA.cs" />
     <Compile Include="Behaviours\BehaviourSequenceSnow.cs" />
     <Compile Include="Behaviours\BehaviourSequenceReset.cs" />
     <Compile Include="Behaviours\BehaviourGroupReset.cs" />

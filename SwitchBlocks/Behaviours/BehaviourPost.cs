@@ -6,6 +6,7 @@ using JumpKing.Level;
 using JumpKing.MiscEntities.WorldItems;
 using JumpKing.MiscEntities.WorldItems.Inventory;
 using JumpKing.Player;
+using Microsoft.Xna.Framework;
 
 namespace SwitchBlocks.Behaviours
 {
@@ -18,6 +19,7 @@ namespace SwitchBlocks.Behaviours
 
         public static bool IsPlayerOnIce { get; set; }
         public static bool IsPlayerOnSnow { get; set; }
+        public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -69,6 +71,8 @@ namespace SwitchBlocks.Behaviours
             {
                 IsPlayerOnSnow = false;
             }
+
+            PrevVelocity = behaviourContext.BodyComp.Velocity;
 
             return true;
         }
