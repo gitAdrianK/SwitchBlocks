@@ -69,6 +69,10 @@ namespace SwitchBlocks.Behaviours
             }
             else
             {
+                if (behaviourContext.BodyComp.IsOnGround)
+                {
+                    DataJump.SwitchOnceSafe = false;
+                }
                 if (DataJump.CanSwitchSafely)
                 {
                     DataJump.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
