@@ -53,10 +53,6 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            // TODO: Without testing, but pretty sure its that way, both vanilla ice and this slide apply
-            // resulting in the player slowing down twice as fast.
-            // Figure out a way to make them play nice.
-            // -> Test if advCI.Ice works
             AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             bool isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
             if (IsPlayerOnIce
