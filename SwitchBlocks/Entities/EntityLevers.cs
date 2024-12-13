@@ -3,6 +3,7 @@ using JumpKing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Patching;
+using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

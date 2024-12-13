@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SwitchBlocks.Util;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace SwitchBlocks.Settings

@@ -1,75 +1,78 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-/// <summary>
-/// Serializable dictionary taken from Pault Welter's Weblog
-/// https://asp-blogs.azurewebsites.net/pwelter34/444961
-/// </summary>
-[XmlRoot("dictionary")]
-public class SerializableDictionary<TKey, TValue>
-    : Dictionary<TKey, TValue>, IXmlSerializable
+namespace SwitchBlocks.Util
 {
-    #region IXmlSerializable Members
-    public System.Xml.Schema.XmlSchema GetSchema()
+    /// <summary>
+    /// Serializable dictionary taken from Pault Welter's Weblog
+    /// https://asp-blogs.azurewebsites.net/pwelter34/444961
+    /// </summary>
+    [XmlRoot("dictionary")]
+    public class SerializableDictionary<TKey, TValue>
+    : Dictionary<TKey, TValue>, IXmlSerializable
     {
-        return null;
-    }
-
-    public void ReadXml(System.Xml.XmlReader reader)
-    {
-        XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
-        XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
-
-        bool wasEmpty = reader.IsEmptyElement;
-        reader.Read();
-        if (wasEmpty)
+        #region IXmlSerializable Members
+        public System.Xml.Schema.XmlSchema GetSchema()
         {
-            return;
+            return null;
         }
-        while (reader.NodeType != System.Xml.XmlNodeType.EndElement)
+
+        public void ReadXml(System.Xml.XmlReader reader)
         {
-            reader.ReadStartElement("item");
-            reader.ReadStartElement("key");
+            XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
+            XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
 
-            TKey key = (TKey)keySerializer.Deserialize(reader);
+            bool wasEmpty = reader.IsEmptyElement;
+            reader.Read();
+            if (wasEmpty)
+            {
+                return;
+            }
+            while (reader.NodeType != System.Xml.XmlNodeType.EndElement)
+            {
+                reader.ReadStartElement("item");
+                reader.ReadStartElement("key");
 
+                TKey key = (TKey)keySerializer.Deserialize(reader);
+
+                reader.ReadEndElement();
+                reader.ReadStartElement("value");
+
+                TValue value = (TValue)valueSerializer.Deserialize(reader);
+
+                reader.ReadEndElement();
+
+                Add(key, value);
+
+                reader.ReadEndElement();
+                reader.MoveToContent();
+            }
             reader.ReadEndElement();
-            reader.ReadStartElement("value");
-
-            TValue value = (TValue)valueSerializer.Deserialize(reader);
-
-            reader.ReadEndElement();
-
-            Add(key, value);
-
-            reader.ReadEndElement();
-            reader.MoveToContent();
         }
-        reader.ReadEndElement();
-    }
 
-    public void WriteXml(System.Xml.XmlWriter writer)
-    {
-        XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
-        XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
-
-        foreach (TKey key in this.Keys)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
-            writer.WriteStartElement("item");
-            writer.WriteStartElement("key");
+            XmlSerializer keySerializer = new XmlSerializer(typeof(TKey));
+            XmlSerializer valueSerializer = new XmlSerializer(typeof(TValue));
 
-            keySerializer.Serialize(writer, key);
+            foreach (TKey key in this.Keys)
+            {
+                writer.WriteStartElement("item");
+                writer.WriteStartElement("key");
 
-            writer.WriteEndElement();
-            writer.WriteStartElement("value");
+                keySerializer.Serialize(writer, key);
 
-            TValue value = this[key];
+                writer.WriteEndElement();
+                writer.WriteStartElement("value");
 
-            valueSerializer.Serialize(writer, value);
+                TValue value = this[key];
 
-            writer.WriteEndElement();
-            writer.WriteEndElement();
+                valueSerializer.Serialize(writer, value);
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+            }
         }
+        #endregion
     }
-    #endregion
 }

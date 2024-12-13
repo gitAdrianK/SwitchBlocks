@@ -1,4 +1,5 @@
 ﻿using SwitchBlocks.Data;
+using SwitchBlocks.Util;
 
 namespace SwitchBlocks.Entities
 {

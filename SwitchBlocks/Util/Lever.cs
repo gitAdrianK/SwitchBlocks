@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace SwitchBlocks.Entities
+namespace SwitchBlocks.Util
 {
     /// <summary>
     /// Represent a lever with a texture, and position.<br />

@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using SwitchBlocks.Util;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
-namespace SwitchBlocks
+namespace SwitchBlocks.Util
 {
     /// <summary>
     /// Contains various functions related to working with xml nodes.
