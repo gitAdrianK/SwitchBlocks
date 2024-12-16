@@ -21,7 +21,6 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            IsUsed = true;
             Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryJump, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryJump);

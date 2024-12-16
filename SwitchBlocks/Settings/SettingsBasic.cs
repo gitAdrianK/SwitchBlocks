@@ -1,5 +1,6 @@
 ﻿using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Xml;
 using static SwitchBlocks.Util.Directions;
 
@@ -18,11 +19,10 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Directions the basic lever can be activated from.
         /// </summary>
-        public static HashSet<Direction> LeverDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+        public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
 
         public static void Parse(XmlNode block)
         {
-            IsUsed = true;
             Dictionary<string, int> dictionaryBasic = Xml.MapNames(block.ChildNodes);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryBasic, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryBasic, block);

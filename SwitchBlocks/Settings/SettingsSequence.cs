@@ -1,5 +1,6 @@
 ﻿using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Xml;
 using static SwitchBlocks.Util.Directions;
 
@@ -22,15 +23,14 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Directions the sequence lever can be activated from.
         /// </summary>
-        public static HashSet<Direction> LeverDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+        public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
         /// <summary>
         /// Directions the sequence platform can be activated from.
         /// </summary>
-        public static HashSet<Direction> PlatformDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+        public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
 
         public static void Parse(XmlNode block)
         {
-            IsUsed = true;
             XmlNodeList childrenGroup = block.ChildNodes;
             Dictionary<string, int> dictionaryGroup = Xml.MapNames(childrenGroup);
             Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);

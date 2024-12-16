@@ -7,9 +7,9 @@ using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Factories;
+using SwitchBlocks.Settings;
 using SwitchBlocks.Setups;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks
@@ -47,7 +47,28 @@ namespace SwitchBlocks
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            if (!IsModUsed())
+            JKContentManager contentManager = Game1.instance.contentManager;
+            if (contentManager.level == null)
+            {
+                return;
+            }
+
+            ulong levelID = contentManager.level.ID;
+            SettingsAuto.IsUsed = levelID == FactoryAuto.LastUsedMapId;
+            SettingsBasic.IsUsed = levelID == FactoryBasic.LastUsedMapId;
+            SettingsCountdown.IsUsed = levelID == FactoryCountdown.LastUsedMapId;
+            SettingsGroup.IsUsed = levelID == FactoryGroup.LastUsedMapId;
+            SettingsJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
+            SettingsSand.IsUsed = levelID == FactorySand.LastUsedMapId;
+            SettingsSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
+
+            if (!SettingsAuto.IsUsed
+                && !SettingsBasic.IsUsed
+                && !SettingsCountdown.IsUsed
+                && !SettingsGroup.IsUsed
+                && !SettingsJump.IsUsed
+                && !SettingsSand.IsUsed
+                && !SettingsSequence.IsUsed)
             {
                 return;
             }
@@ -87,7 +108,8 @@ namespace SwitchBlocks
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
-            if (!IsModUsed())
+            JKContentManager contentManager = Game1.instance.contentManager;
+            if (contentManager.level == null)
             {
                 return;
             }
@@ -106,36 +128,6 @@ namespace SwitchBlocks
 
             tasks.ForEach(task => { task.Wait(); });
             tasks.Clear();
-        }
-
-        /// <summary>
-        /// Determines if the stuff used for the mod is present and thus the mod is used.
-        /// </summary>
-        /// <returns>true if the mods supposed to be loaded, false otherwise</returns>
-        private static bool IsModUsed()
-        {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}";
-
-            // Level being null means the vanilla map is being started/ended.
-            // And the vanilla map has no switch blocks.
-            if (contentManager.level == null)
-            {
-                return false;
-            }
-            // If theres no switchBlocksMod folder the mod isn't used.
-            if (!Directory.Exists(path))
-            {
-                return false;
-            }
-            // If there is no blocks.xml, no block can be activated.
-            path = $"{path}blocks.xml";
-            if (!File.Exists(path))
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

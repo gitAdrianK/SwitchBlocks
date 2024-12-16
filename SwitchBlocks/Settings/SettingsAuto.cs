@@ -50,7 +50,6 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            IsUsed = true;
             XmlNodeList childrenAuto = block.ChildNodes;
             Dictionary<string, int> dictionaryAuto = Xml.MapNames(childrenAuto);
             DurationOn = ParseSettings.ParseDuration(dictionaryAuto, block);

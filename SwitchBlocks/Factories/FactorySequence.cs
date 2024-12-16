@@ -15,6 +15,7 @@ namespace SwitchBlocks.Factories
     /// </summary>
     public class FactorySequence : IBlockFactory
     {
+        public static ulong LastUsedMapId { get; set; } = ulong.MaxValue;
         private ulong levelId = ulong.MaxValue;
 
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
@@ -63,6 +64,10 @@ namespace SwitchBlocks.Factories
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
         {
+            if (LastUsedMapId != level.ID && supportedBlockCodes.Contains(blockCode))
+            {
+                LastUsedMapId = level.ID;
+            }
             if (level.ID != levelId)
             {
                 SetupSequence.BlocksSequenceA.Clear();

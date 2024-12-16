@@ -1,5 +1,6 @@
 ﻿using SwitchBlocks.Util;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Xml;
 using static SwitchBlocks.Util.Directions;
 
@@ -22,7 +23,7 @@ namespace SwitchBlocks.Settings
         /// <summary>
         /// Directions the basic lever can be activated from.
         /// </summary>
-        public static HashSet<Direction> LeverDirections { get; private set; } = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+        public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
         /// <summary>
         /// If the countdown state switch is supposed to be forced, ignoring the safe switch.
         /// </summary>
@@ -38,7 +39,6 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            IsUsed = true;
             XmlNodeList childrenCountdown = block.ChildNodes;
             Dictionary<string, int> dictionaryCountdown = Xml.MapNames(childrenCountdown);
             Duration = ParseSettings.ParseDuration(dictionaryCountdown, block);

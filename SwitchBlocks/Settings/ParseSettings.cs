@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Xml;
 using static SwitchBlocks.Util.Directions;
@@ -56,10 +57,10 @@ namespace SwitchBlocks.Settings
             return multiplier;
         }
 
-        private static HashSet<Direction> ParseSideDisable(string tag, Dictionary<string, int> dictionary, XmlNode root)
+        private static BitVector32 ParseSideDisable(string tag, Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            HashSet<Direction> directions = new HashSet<Direction>() { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+            BitVector32 directions = new BitVector32(0b1111);
             if (!dictionary.TryGetValue(tag, out int value))
             {
                 return directions;
@@ -79,19 +80,19 @@ namespace SwitchBlocks.Settings
                     .ToLower();
                 if (trim.Equals("up"))
                 {
-                    directions.Remove(Direction.Up);
+                    directions[(int)Direction.Up] = false;
                 }
                 else if (trim.Equals("down"))
                 {
-                    directions.Remove(Direction.Down);
+                    directions[(int)Direction.Down] = false;
                 }
                 else if (trim.Equals("left"))
                 {
-                    directions.Remove(Direction.Left);
+                    directions[(int)Direction.Left] = false;
                 }
                 else if (trim.Equals("right"))
                 {
-                    directions.Remove(Direction.Right);
+                    directions[(int)Direction.Right] = false;
                 }
             }
             return directions;
@@ -100,14 +101,14 @@ namespace SwitchBlocks.Settings
 
         // Looks for a "LeverSideDisable" node and parses the inside to look for directions
         // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static HashSet<Direction> ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        public static BitVector32 ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
         {
             return ParseSideDisable("LeverSideDisable", dictionary, root);
         }
 
         // Looks for a "PlatformSideDisable" node and parses the inside to look for directions
         // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static HashSet<Direction> ParsePlatformSideDisable(Dictionary<string, int> dictionary, XmlNode root)
+        public static BitVector32 ParsePlatformSideDisable(Dictionary<string, int> dictionary, XmlNode root)
         {
             return ParseSideDisable("PlatformSideDisable", dictionary, root);
         }

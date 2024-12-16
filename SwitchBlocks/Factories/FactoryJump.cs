@@ -11,6 +11,8 @@ namespace SwitchBlocks.Factories
 {
     public class FactoryJump : IBlockFactory
     {
+        public static ulong LastUsedMapId { get; set; } = ulong.MaxValue;
+
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.JUMP_ON,
             ModBlocks.JUMP_OFF,
@@ -42,6 +44,10 @@ namespace SwitchBlocks.Factories
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
         {
+            if (LastUsedMapId != level.ID && supportedBlockCodes.Contains(blockCode))
+            {
+                LastUsedMapId = level.ID;
+            }
             switch (blockCode)
             {
                 case var _ when blockCode == ModBlocks.JUMP_ON:
