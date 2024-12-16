@@ -14,7 +14,7 @@ namespace SwitchBlocks.Factories
     /// </summary>
     public class FactoryBasic : IBlockFactory
     {
-        public static ulong LastUsedMapId { get; set; } = ulong.MaxValue;
+        public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.BASIC_ON,

@@ -15,8 +15,7 @@ namespace SwitchBlocks.Factories
     /// </summary>
     public class FactoryGroup : IBlockFactory
     {
-        public static ulong LastUsedMapId { get; set; } = ulong.MaxValue;
-        private ulong levelId = ulong.MaxValue;
+        public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
             ModBlocks.GROUP_A,
@@ -66,15 +65,11 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && supportedBlockCodes.Contains(blockCode))
             {
-                LastUsedMapId = level.ID;
-            }
-            if (level.ID != levelId)
-            {
                 SetupGroup.BlocksGroupA.Clear();
                 SetupGroup.BlocksGroupB.Clear();
                 SetupGroup.BlocksGroupC.Clear();
                 SetupGroup.BlocksGroupD.Clear();
-                levelId = level.ID;
+                LastUsedMapId = level.ID;
             }
 
             switch (blockCode)
