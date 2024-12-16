@@ -60,7 +60,7 @@ namespace SwitchBlocks.Settings
         private static BitVector32 ParseSideDisable(string tag, Dictionary<string, int> dictionary, XmlNode root)
         {
             XmlNodeList children = root.ChildNodes;
-            BitVector32 directions = new BitVector32(0b1111);
+            BitVector32 directions = new BitVector32((int)Direction.All);
             if (!dictionary.TryGetValue(tag, out int value))
             {
                 return directions;
