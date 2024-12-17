@@ -1,5 +1,7 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
+﻿using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Data;
+using SwitchBlocks.Entities.Drawables;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -7,7 +9,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering countdown levers in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntityCountdownLevers : EntityLevers
+    public class EntityCountdownLevers : EntityDrawables<Lever>
     {
         private static EntityCountdownLevers instance;
         public static EntityCountdownLevers Instance
@@ -22,22 +24,28 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntityCountdownLevers()
         {
+            // TODO:
+            //LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntityCountdownLevers()
+        protected override void EntityUpdate(float p_delta)
         {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.COUNTDOWN);
         }
 
-        protected override void Update(float deltaTime)
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            if (UpdateCurrentScreen())
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                state = DataCountdown.State;
-            }
+                drawable.Draw(spriteBatch, DataCountdown.State, DataCountdown.Progress);
+            });
         }
     }
 }

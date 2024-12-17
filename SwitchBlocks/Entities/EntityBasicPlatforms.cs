@@ -1,8 +1,6 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
+using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Settings;
 using System.Threading.Tasks;
 
@@ -12,7 +10,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering basic platforms in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntityBasicPlatforms : EntityPlatforms
+    public class EntityBasicPlatforms : EntityDrawables<PlatformInOut>
     {
         private static EntityBasicPlatforms instance;
         public static EntityBasicPlatforms Instance
@@ -27,34 +25,32 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntityBasicPlatforms()
         {
-            DataBasic.Progress = progress;
+            // TODO:
+            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntityBasicPlatforms()
+        protected override void EntityUpdate(float p_delta)
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
-            progress = DataBasic.Progress;
+            DataBasic.Progress = UpdateProgressClamped(
+                DataBasic.State,
+                DataBasic.Progress,
+                p_delta,
+                SettingsBasic.Multiplier);
         }
 
-        protected override void Update(float deltaTime)
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            UpdateProgress(DataBasic.State, deltaTime, SettingsBasic.Multiplier);
-        }
-
-        public override void Draw()
-        {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                return;
-            }
-
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataBasic.State, spriteBatch);
+                drawable.Draw(spriteBatch, DataBasic.State, DataBasic.Progress);
             });
         }
     }

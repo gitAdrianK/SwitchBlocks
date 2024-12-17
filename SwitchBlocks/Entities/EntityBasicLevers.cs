@@ -1,5 +1,7 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
+﻿using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Data;
+using SwitchBlocks.Entities.Drawables;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -7,7 +9,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering basic levers in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntityBasicLevers : EntityLevers
+    public class EntityBasicLevers : EntityDrawables<Lever>
     {
         private static EntityBasicLevers instance;
         public static EntityBasicLevers Instance
@@ -22,22 +24,29 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntityBasicLevers()
         {
+            // TODO:
+            //LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
+            // TODO: The Platforms and levers might be able to go into one entity
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntityBasicLevers()
+        protected override void EntityUpdate(float p_delta)
         {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
         }
 
-        protected override void Update(float deltaTime)
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            if (UpdateCurrentScreen())
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                state = DataBasic.State;
-            }
+                drawable.Draw(spriteBatch, DataBasic.State, DataBasic.Progress);
+            });
         }
     }
 }

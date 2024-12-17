@@ -1,5 +1,7 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
+﻿using Microsoft.Xna.Framework.Graphics;
+using SwitchBlocks.Data;
+using SwitchBlocks.Entities.Drawables;
+using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
@@ -7,7 +9,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering sand levers in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntitySandLevers : EntityLevers
+    public class EntitySandLevers : EntityDrawables<Lever>
     {
         private static EntitySandLevers instance;
         public static EntitySandLevers Instance
@@ -22,22 +24,29 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntitySandLevers()
         {
+            // TODO:
+            //LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntitySandLevers()
+        protected override void EntityUpdate(float p_delta)
         {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
         }
 
-        protected override void Update(float deltaTime)
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            if (UpdateCurrentScreen())
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                state = DataSand.State;
-            }
+                // Levers don't care about progress, and sand doesn't track it.
+                drawable.Draw(spriteBatch, DataSand.State, 0);
+            });
         }
     }
 }

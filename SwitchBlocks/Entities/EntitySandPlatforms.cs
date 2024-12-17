@@ -1,12 +1,7 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
+using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Settings;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
@@ -15,7 +10,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering sand platforms in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntitySandPlatforms : Entity
+    public class EntitySandPlatforms : EntityDrawables<PlatformSand>
     {
         private static EntitySandPlatforms instance;
         public static EntitySandPlatforms Instance
@@ -30,175 +25,34 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
-
         private EntitySandPlatforms()
         {
-            PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
+            // TODO:
+            //PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
         }
 
         private float offset;
 
-        private int currentScreen = -1;
-        private int nextScreen;
-
-        public Dictionary<int, List<PlatformSand>> PlatformDictionary { get; protected set; }
-        private List<PlatformSand> currentPlatformList;
-
-        protected override void Update(float deltaTime)
+        public override void Reset()
         {
-            offset += deltaTime * SettingsSand.Multiplier;
+            instance.Destroy();
+            instance = null;
         }
 
-        public override void Draw()
+        protected override void EntityUpdate(float p_delta)
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
-            {
-                return;
-            }
+            offset += p_delta * SettingsSand.Multiplier;
+        }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
+        public override void EntityDraw(SpriteBatch spriteBatch)
+        {
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                DrawPlatform(platform, spriteBatch);
+                drawable.Draw(
+                    spriteBatch,
+                    DataSand.State,
+                    offset);
             });
-        }
-
-        /// <summary>
-        /// Updates what screen is currently active and gets the platforms from the platform dictionary
-        /// </summary>
-        /// <returns>false if no platforms are to be drawn, true otherwise</returns>
-        protected bool UpdateCurrentScreen()
-        {
-            if (PlatformDictionary == null)
-            {
-                return false;
-            }
-
-            nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
-            {
-                PlatformDictionary.TryGetValue(nextScreen, out currentPlatformList);
-                currentScreen = nextScreen;
-            }
-            return currentPlatformList != null;
-        }
-
-        private void DrawPlatform(PlatformSand platform, SpriteBatch spriteBatch)
-        {
-            if (platform.Texture != null)
-            {
-                DrawBackground(platform, spriteBatch);
-            }
-
-            if (platform.Scrolling != null)
-            {
-                DrawScrolling(platform, spriteBatch);
-            }
-
-            if (platform.Foreground != null)
-            {
-                DrawForeground(platform, spriteBatch);
-            }
-        }
-
-        private void DrawBackground(PlatformSand platform, SpriteBatch spriteBatch)
-        {
-            Rectangle sourceRectangle;
-            if (platform.StartState == DataSand.State)
-            {
-                sourceRectangle = new Rectangle(
-                    0,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
-            else
-            {
-                sourceRectangle = new Rectangle(
-                    platform.Width,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
-
-            spriteBatch.Draw(
-                texture: platform.Texture,
-                position: platform.Position,
-                sourceRectangle: sourceRectangle,
-                color: Color.White);
-        }
-
-        private void DrawScrolling(PlatformSand platform, SpriteBatch spriteBatch)
-        {
-            int actualOffset = (int)(offset % platform.Scrolling.Height);
-            actualOffset = platform.StartState == DataSand.State ? actualOffset : platform.Scrolling.Height - actualOffset;
-
-            // Depending on if the offset would make it so we go past the texture.
-            if (actualOffset + platform.Height > platform.Scrolling.Height)
-            {
-                int diff = platform.Scrolling.Height - actualOffset;
-                spriteBatch.Draw(
-                texture: platform.Scrolling,
-                position: platform.Position,
-                sourceRectangle: new Rectangle(
-                    0,
-                    actualOffset,
-                    platform.Width,
-                    diff),
-                color: Color.White);
-
-                spriteBatch.Draw(
-                texture: platform.Scrolling,
-                position: new Vector2(
-                    platform.Position.X,
-                    platform.Position.Y + diff),
-                sourceRectangle: new Rectangle(
-                    0,
-                    0,
-                    platform.Width,
-                    platform.Height - diff),
-                color: Color.White);
-                return;
-            }
-            spriteBatch.Draw(
-                texture: platform.Scrolling,
-                position: platform.Position,
-                sourceRectangle: new Rectangle(
-                    0,
-                    actualOffset,
-                    platform.Width,
-                    platform.Height),
-                color: Color.White);
-        }
-
-        private void DrawForeground(PlatformSand platform, SpriteBatch spriteBatch)
-        {
-            Rectangle sourceRectangle;
-            if (platform.StartState == DataSand.State)
-            {
-                sourceRectangle = new Rectangle(
-                    0,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
-            else
-            {
-                sourceRectangle = new Rectangle(
-                    platform.Width,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
-            spriteBatch.Draw(
-                texture: platform.Foreground,
-                position: platform.Position,
-                sourceRectangle: sourceRectangle,
-                color: Color.White);
         }
     }
 }

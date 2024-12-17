@@ -1,8 +1,7 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
+using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
 using SwitchBlocks.Settings;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace SwitchBlocks.Entities
     /// Entity responsible for rendering auto platforms in the level.<br />
     /// Singleton.
     /// </summary>
-    public class EntityAutoPlatforms : EntityPlatforms
+    public class EntityAutoPlatforms : EntityDrawables<PlatformInOut>
     {
         private static EntityAutoPlatforms instance;
         public static EntityAutoPlatforms Instance
@@ -27,39 +26,37 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntityAutoPlatforms()
         {
-            DataAuto.Progress = progress;
+            // TODO: Generate dictionary, same for all other entites
+            DrawblesDict = null;
+            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntityAutoPlatforms()
+        protected override void EntityUpdate(float p_delta)
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
-            progress = DataAuto.Progress;
-        }
-
-        protected override void Update(float deltaTime)
-        {
-            UpdateProgress(DataAuto.State, deltaTime, SettingsAuto.Multiplier);
-
+            DataAuto.Progress = UpdateProgressClamped(
+                DataAuto.State,
+                DataAuto.Progress,
+                p_delta,
+                SettingsAuto.Multiplier);
             int currentTick = AchievementManager.GetTicks();
             int adjustedTick = ((currentTick + SettingsAuto.DurationCycle) - DataAuto.ResetTick) % SettingsAuto.DurationCycle;
             TrySound(adjustedTick);
             TrySwitch(adjustedTick);
         }
 
-        public override void Draw()
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                return;
-            }
-
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataAuto.State, spriteBatch);
+                drawable.Draw(spriteBatch, DataAuto.State, DataAuto.Progress);
             });
         }
 

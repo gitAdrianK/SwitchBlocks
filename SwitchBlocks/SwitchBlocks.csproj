@@ -31,6 +31,7 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>5</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -153,6 +154,13 @@
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Data\CacheSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
+    <Compile Include="Entities\Drawables\IDrawable.cs" />
+    <Compile Include="Entities\Drawables\Lever.cs" />
+    <Compile Include="Entities\Drawables\Drawable.cs" />
+    <Compile Include="Entities\Drawables\PlatformInOut.cs" />
+    <Compile Include="Entities\Drawables\PlatformInOutGroup.cs" />
+    <Compile Include="Entities\Drawables\PlatformSand.cs" />
+    <Compile Include="Entities\EntityDrawables.cs" />
     <Compile Include="Entities\EntitySequencePlatforms.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
@@ -166,8 +174,6 @@
     <Compile Include="Entities\EntityAutoPlatforms.cs" />
     <Compile Include="Entities\EntityGroupPlatforms.cs" />
     <Compile Include="Entities\EntityJumpPlatforms.cs" />
-    <Compile Include="Entities\EntityLevers.cs" />
-    <Compile Include="Entities\EntityPlatforms.cs" />
     <Compile Include="Entities\EntitySandPlatforms.cs" />
     <Compile Include="Entities\EntitySandLevers.cs" />
     <Compile Include="Entities\EntityBasicLevers.cs" />
@@ -181,7 +187,6 @@
     <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />
-    <Compile Include="Platforms\PlatformGroup.cs" />
     <Compile Include="Settings\SettingsSequence.cs" />
     <Compile Include="Settings\SettingsSand.cs" />
     <Compile Include="Settings\SettingsGroup.cs" />
@@ -201,8 +206,6 @@
     <Compile Include="Util\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Intersecting.cs" />
-    <Compile Include="Util\Lever.cs" />
-    <Compile Include="Platforms\Platform.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />
     <Compile Include="Factories\FactoryBasic.cs" />
     <Compile Include="Factories\FactoryCountdown.cs" />
@@ -210,7 +213,6 @@
     <Compile Include="ModSounds.cs" />
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModEntry.cs" />
-    <Compile Include="Platforms\PlatformSand.cs" />
     <Compile Include="Util\SerializableDictionary.cs" />
     <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

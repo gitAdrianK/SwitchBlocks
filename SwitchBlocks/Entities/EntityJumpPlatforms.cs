@@ -1,14 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
+using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Settings;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
-    public class EntityJumpPlatforms : EntityPlatforms
+    public class EntityJumpPlatforms : EntityDrawables<PlatformInOut>
     {
         private static EntityJumpPlatforms instance;
         public static EntityJumpPlatforms Instance
@@ -23,35 +21,36 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
+        private EntityJumpPlatforms()
         {
-            DataJump.Progress = progress;
+            // TODO:
+            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
+        }
+
+        public override void Reset()
+        {
+            instance.Destroy();
             instance = null;
         }
 
-        private EntityJumpPlatforms()
+        protected override void EntityUpdate(float p_delta)
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
-            progress = DataJump.Progress;
-        }
-
-        protected override void Update(float deltaTime)
-        {
-            UpdateProgress(DataJump.State, deltaTime, SettingsJump.Multiplier);
+            DataJump.Progress = UpdateProgressClamped(
+                DataJump.State,
+                DataJump.Progress,
+                p_delta,
+                SettingsJump.Multiplier);
             TrySwitch();
         }
 
-        public override void Draw()
+        public override void EntityDraw(SpriteBatch spriteBatch)
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            Parallel.ForEach(currentDrawables, drawable =>
             {
-                return;
-            }
-
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataJump.State, spriteBatch);
+                drawable.Draw(
+                    spriteBatch,
+                    DataJump.State,
+                    DataJump.Progress);
             });
         }
 
