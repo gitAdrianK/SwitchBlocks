@@ -14,9 +14,12 @@ using System.Threading.Tasks;
 
 namespace SwitchBlocks
 {
-    [JumpKingMod(ModStrings.MODNAME)]
+    [JumpKingMod(MODNAME)]
     public static class ModEntry
     {
+        private const string MODNAME = "Zebra.SwitchBlocksMod";
+        private const string HARMONY = MODNAME + ".Harmony";
+
         public static List<Task> tasks = new List<Task>();
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace SwitchBlocks
             LevelManager.RegisterBlockFactory(new FactorySand());
             LevelManager.RegisterBlockFactory(new FactorySequence());
 
-            Harmony harmony = new Harmony(ModStrings.HARMONY);
+            Harmony harmony = new Harmony(HARMONY);
             new Patching.BodyComp(harmony);
             new Patching.EndingManager(harmony);
         }

@@ -13,7 +13,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityAutoPlatforms : EntityDrawables<PlatformInOut>
     {
-        public EntityAutoPlatforms() : base(ModStrings.PLATFORMS, ModStrings.AUTO) { }
+        public EntityAutoPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.AUTO) { }
 
         protected override void EntityUpdate(float p_delta)
         {

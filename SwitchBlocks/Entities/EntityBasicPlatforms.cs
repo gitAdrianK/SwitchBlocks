@@ -11,7 +11,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityBasicPlatforms : EntityDrawables<PlatformInOut>
     {
-        public EntityBasicPlatforms() : base(ModStrings.PLATFORMS, ModStrings.BASIC) { }
+        public EntityBasicPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.BASIC) { }
 
         protected override void EntityUpdate(float p_delta)
         {

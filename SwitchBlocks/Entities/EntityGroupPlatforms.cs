@@ -15,7 +15,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityGroupPlatforms : EntityDrawables<PlatformInOutGroup>
     {
-        public EntityGroupPlatforms() : base(ModStrings.PLATFORMS, ModStrings.GROUP)
+        public EntityGroupPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.GROUP)
         {
             // TODO: Find link
             //PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,

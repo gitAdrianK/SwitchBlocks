@@ -10,7 +10,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityCountdownLevers : EntityDrawables<Lever>
     {
-        public EntityCountdownLevers() : base(ModStrings.LEVERS, ModStrings.COUNTDOWN) { }
+        public EntityCountdownLevers() : base(ModStrings.XML_LEVERS, ModStrings.COUNTDOWN) { }
 
         protected override void EntityUpdate(float p_delta) { }
 

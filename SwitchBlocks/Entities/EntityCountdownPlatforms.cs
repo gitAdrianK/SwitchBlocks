@@ -12,7 +12,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityCountdownPlatforms : EntityDrawables<PlatformInOut>
     {
-        public EntityCountdownPlatforms() : base(ModStrings.PLATFORMS, ModStrings.COUNTDOWN) { }
+        public EntityCountdownPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.COUNTDOWN) { }
 
         private void TryWarn(int adjustedTick)
         {

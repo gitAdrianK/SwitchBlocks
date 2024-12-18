@@ -5,6 +5,10 @@ using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Patching;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace SwitchBlocks.Entities
 {
@@ -12,17 +16,70 @@ namespace SwitchBlocks.Entities
     {
         int currentScreen = -1;
 
-        private readonly Dictionary<int, T[]> drawablesDict;
-        protected T[] currentDrawables;
+        private readonly Dictionary<int, List<T>> drawablesDict;
+        protected List<T> currentDrawables;
         public bool IsActiveOnCurrentScreen => currentDrawables != null;
 
         protected abstract void EntityUpdate(float p_delta);
         public abstract void EntityDraw(SpriteBatch spriteBatch);
 
-        protected EntityDrawables(string subfolder, string blocktype)
+        protected EntityDrawables(string xmlRootTag, string blocktype)
         {
-            // TODO: Make dictionary
-            drawablesDict = null;
+            JKContentManager contentManager = Game1.instance.contentManager;
+
+            // The root tag is with a capital and plural, the folder is all lower case,
+            // the individual tag is singular.
+            // e.g. folder: platforms, root tag: Platforms, individual tag: Platform
+            string subfolder = xmlRootTag.ToLower();
+
+            char sep = Path.DirectorySeparatorChar;
+            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{subfolder}{sep}{blocktype}{sep}";
+
+            if (!Directory.Exists(path))
+            {
+                return;
+            }
+
+            string[] files = Directory.GetFiles(path);
+            if (files.Length == 0)
+            {
+                return;
+            }
+
+            Dictionary<int, List<T>> dictionary = new Dictionary<int, List<T>>();
+            // Screens go from 1 to 169
+            Regex regex = new Regex($@"^{subfolder}(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            foreach (string xmlFilePath in files)
+            {
+                string xmlFile = Path.GetFileName(xmlFilePath);
+                if (!regex.IsMatch(xmlFile))
+                {
+                    continue;
+                }
+
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                XmlDocument document = new XmlDocument();
+                document.Load(xmlFilePath);
+
+                List<T> drawables = new List<T>();
+                foreach (XmlNode node in document.SelectNodes($"//{xmlRootTag}/{xmlRootTag.Remove(xmlRootTag.Length - 1)}/"))
+                {
+                    XmlNodeReader xmlNodeReader = new XmlNodeReader(node);
+                    T drawable = (T)xmlSerializer.Deserialize(xmlNodeReader);
+                    // TODO: Cannot deserialize like this yet, fields like start state and texture need manual adjustment
+                    //drawables.Add(drawable);
+                }
+
+                if (drawables.Count != 0)
+                {
+                    dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, drawables);
+                }
+            }
+
+            if (dictionary.Count > 0)
+            {
+                drawablesDict = dictionary;
+            }
         }
 
         protected override void Update(float p_delta)

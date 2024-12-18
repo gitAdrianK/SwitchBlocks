@@ -10,7 +10,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntitySandLevers : EntityDrawables<Lever>
     {
-        public EntitySandLevers() : base(ModStrings.LEVERS, ModStrings.SAND) { }
+        public EntitySandLevers() : base(ModStrings.XML_LEVERS, ModStrings.SAND) { }
 
         protected override void EntityUpdate(float p_delta) { }
 
