@@ -1,5 +1,4 @@
-﻿using EntityComponent;
-using JumpKing;
+﻿using JumpKing;
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
@@ -21,6 +20,8 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
 
+        private static EntityGroupPlatforms entityGroupPlatforms;
+
         public static void DoSetup(PlayerEntity player)
         {
             if (!SettingsGroup.IsUsed)
@@ -39,7 +40,7 @@ namespace SwitchBlocks.Setups
                 CacheGroup.Instance.Reset();
             }));
 
-            _ = EntityGroupPlatforms.Instance;
+            entityGroupPlatforms = new EntityGroupPlatforms();
 
             if (SettingsGroup.Duration == 0)
             {
@@ -54,15 +55,15 @@ namespace SwitchBlocks.Setups
             player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void DoCleanup()
         {
             if (!SettingsGroup.IsUsed)
             {
                 return;
             }
 
-            entityManager.RemoveObject(EntityGroupPlatforms.Instance);
-            EntityGroupPlatforms.Instance.Reset();
+            entityGroupPlatforms.Destroy();
+            entityGroupPlatforms = null;
 
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();

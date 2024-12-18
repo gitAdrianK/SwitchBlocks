@@ -6,39 +6,13 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering sand levers in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering sand levers in the level.
     /// </summary>
     public class EntitySandLevers : EntityDrawables<Lever>
     {
-        private static EntitySandLevers instance;
-        public static EntitySandLevers Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntitySandLevers();
-                }
-                return instance;
-            }
-        }
+        public EntitySandLevers() : base(ModStrings.LEVERS, ModStrings.SAND) { }
 
-        private EntitySandLevers()
-        {
-            // TODO:
-            //LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
-
-        protected override void EntityUpdate(float p_delta)
-        {
-        }
+        protected override void EntityUpdate(float p_delta) { }
 
         public override void EntityDraw(SpriteBatch spriteBatch)
         {

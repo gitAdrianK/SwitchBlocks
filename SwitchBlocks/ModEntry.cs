@@ -114,17 +114,15 @@ namespace SwitchBlocks
                 return;
             }
 
-            EntityManager entityManager = EntityManager.instance;
-
             ModSounds.Cleanup();
 
-            SetupAuto.DoCleanup(entityManager);
-            SetupBasic.DoCleanup(entityManager);
-            SetupCountdown.DoCleanup(entityManager);
-            SetupGroup.DoCleanup(entityManager);
-            SetupJump.DoCleanup(entityManager);
-            SetupSand.DoCleanup(entityManager);
-            SetupSequence.DoCleanup(entityManager);
+            SetupAuto.DoCleanup();
+            SetupBasic.DoCleanup();
+            SetupCountdown.DoCleanup();
+            SetupGroup.DoCleanup();
+            SetupJump.DoCleanup();
+            SetupSand.DoCleanup();
+            SetupSequence.DoCleanup();
 
             tasks.ForEach(task => { task.Wait(); });
             tasks.Clear();

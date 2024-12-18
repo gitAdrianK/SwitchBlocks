@@ -1,5 +1,4 @@
-﻿using EntityComponent;
-using JumpKing.Player;
+﻿using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -10,6 +9,9 @@ namespace SwitchBlocks.Setups
 {
     public static class SetupBasic
     {
+        private static EntityBasicLevers entityBasicLevers;
+        private static EntityBasicPlatforms entityBasicPlatforms;
+
         public static void DoSetup(PlayerEntity player)
         {
             if (!SettingsBasic.IsUsed)
@@ -19,24 +21,25 @@ namespace SwitchBlocks.Setups
 
             _ = DataBasic.Instance;
 
-            _ = EntityBasicPlatforms.Instance;
-            _ = EntityBasicLevers.Instance;
+            entityBasicLevers = new EntityBasicLevers();
+            entityBasicPlatforms = new EntityBasicPlatforms();
 
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
             player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void DoCleanup()
         {
             if (!SettingsBasic.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntityBasicPlatforms.Instance);
-            entityManager.RemoveObject(EntityBasicLevers.Instance);
-            EntityBasicPlatforms.Instance.Reset();
-            EntityBasicLevers.Instance.Reset();
+
+            entityBasicLevers.Destroy();
+            entityBasicPlatforms.Destroy();
+            entityBasicLevers = null;
+            entityBasicPlatforms = null;
 
             DataBasic.Instance.SaveToFile();
             DataBasic.Instance.Reset();

@@ -1,5 +1,4 @@
-﻿using EntityComponent;
-using JumpKing.Player;
+﻿using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -10,6 +9,8 @@ namespace SwitchBlocks.Setups
 {
     public static class SetupJump
     {
+        private static EntityJumpPlatforms entityJumpPlatforms;
+
         public static void DoSetup(PlayerEntity player)
         {
             if (!SettingsJump.IsUsed)
@@ -19,7 +20,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataJump.Instance;
 
-            _ = EntityJumpPlatforms.Instance;
+            entityJumpPlatforms = new EntityJumpPlatforms();
 
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
@@ -27,14 +28,15 @@ namespace SwitchBlocks.Setups
             PlayerEntity.OnJumpCall += JumpSwitch;
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void DoCleanup()
         {
             if (!SettingsJump.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntityJumpPlatforms.Instance);
-            EntityJumpPlatforms.Instance.Reset();
+
+            entityJumpPlatforms.Destroy();
+            entityJumpPlatforms = null;
 
             PlayerEntity.OnJumpCall -= JumpSwitch;
 
@@ -48,7 +50,7 @@ namespace SwitchBlocks.Setups
         {
             if (SettingsJump.ForceSwitch)
             {
-                if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
+                if (entityJumpPlatforms != null && entityJumpPlatforms.IsActiveOnCurrentScreen)
                 {
                     ModSounds.JumpFlip?.PlayOneShot();
                 }

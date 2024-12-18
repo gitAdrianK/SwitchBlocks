@@ -11,38 +11,18 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering sequence platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering sequence platforms in the level.
     /// </summary>
     public class EntitySequencePlatforms : EntityDrawables<PlatformInOutGroup>
     {
-        private static EntitySequencePlatforms instance;
-        public static EntitySequencePlatforms Instance
+        public EntitySequencePlatforms() : base(ModStrings.PLATFORMS, ModStrings.SEQUENCE)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntitySequencePlatforms();
-                }
-                return instance;
-            }
-        }
-
-        private EntitySequencePlatforms()
-        {
-            // TODO:
+            // TODO: Find link
             //PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.SEQUENCE,
             //    SetupSequence.BlocksSequenceA,
             //    SetupSequence.BlocksSequenceB,
             //    SetupSequence.BlocksSequenceC,
             //    SetupSequence.BlocksSequenceD);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
         }
 
         protected override void EntityUpdate(float p_delta)
@@ -100,7 +80,7 @@ namespace SwitchBlocks.Entities
             bool newState = group.ActivatedTick > tick;
             if (group.State != newState)
             {
-                if (currentDrawables != null)
+                if (IsActiveOnCurrentScreen)
                 {
                     ModSounds.SequenceFlip?.PlayOneShot();
                 }

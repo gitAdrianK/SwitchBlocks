@@ -11,15 +11,19 @@ namespace SwitchBlocks.Entities
     public abstract class EntityDrawables<T> : Entity where T : IDrawable
     {
         int currentScreen = -1;
-        int nextScreen;
 
-        public Dictionary<int, T[]> DrawblesDict { get; protected set; }
+        private readonly Dictionary<int, T[]> drawablesDict;
         protected T[] currentDrawables;
         public bool IsActiveOnCurrentScreen => currentDrawables != null;
 
-        public abstract void Reset();
         protected abstract void EntityUpdate(float p_delta);
         public abstract void EntityDraw(SpriteBatch spriteBatch);
+
+        protected EntityDrawables(string subfolder, string blocktype)
+        {
+            // TODO: Make dictionary
+            drawablesDict = null;
+        }
 
         protected override void Update(float p_delta)
         {
@@ -41,15 +45,10 @@ namespace SwitchBlocks.Entities
         /// <returns>If no platforms are to be drawn false, true otherwise</returns>
         private bool UpdateCurrentScreen()
         {
-            if (DrawblesDict == null)
-            {
-                return false;
-            }
-
-            nextScreen = Camera.CurrentScreen;
+            int nextScreen = Camera.CurrentScreen;
             if (currentScreen != nextScreen)
             {
-                DrawblesDict.TryGetValue(nextScreen, out currentDrawables);
+                drawablesDict?.TryGetValue(nextScreen, out currentDrawables);
                 currentScreen = nextScreen;
             }
             return currentDrawables != null;

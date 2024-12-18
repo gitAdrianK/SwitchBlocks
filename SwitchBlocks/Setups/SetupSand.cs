@@ -1,5 +1,4 @@
-﻿using EntityComponent;
-using JumpKing.Player;
+﻿using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
@@ -10,6 +9,9 @@ namespace SwitchBlocks.Setups
 {
     public static class SetupSand
     {
+        private static EntitySandLevers entitySandLevers;
+        private static EntitySandPlatforms entitySandPlatforms;
+
         public static void DoSetup(PlayerEntity player)
         {
             if (!SettingsSand.IsUsed)
@@ -19,8 +21,8 @@ namespace SwitchBlocks.Setups
 
             _ = DataSand.Instance;
 
-            _ = EntitySandPlatforms.Instance;
-            _ = EntitySandLevers.Instance;
+            entitySandLevers = new EntitySandLevers();
+            entitySandPlatforms = new EntitySandPlatforms();
 
             // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
             // velocity or position! This technically needs updating, but I have to consider
@@ -38,16 +40,17 @@ namespace SwitchBlocks.Setups
             player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void DoCleanup()
         {
             if (!SettingsSand.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntitySandPlatforms.Instance);
-            entityManager.RemoveObject(EntitySandLevers.Instance);
-            EntitySandPlatforms.Instance.Reset();
-            EntitySandLevers.Instance.Reset();
+
+            entitySandLevers.Destroy();
+            entitySandPlatforms.Destroy();
+            entitySandLevers = null;
+            entitySandPlatforms = null;
 
             DataSand.Instance.SaveToFile();
             DataSand.Instance.Reset();

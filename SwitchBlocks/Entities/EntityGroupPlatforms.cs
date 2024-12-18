@@ -11,33 +11,13 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering group platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering group platforms in the level.
     /// </summary>
     public class EntityGroupPlatforms : EntityDrawables<PlatformInOutGroup>
     {
-        private static EntityGroupPlatforms instance;
-        public static EntityGroupPlatforms Instance
+        public EntityGroupPlatforms() : base(ModStrings.PLATFORMS, ModStrings.GROUP)
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityGroupPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
-
-        private EntityGroupPlatforms()
-        {
-            // TODO:
+            // TODO: Find link
             //PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,
             //    SetupGroup.BlocksGroupA,
             //    SetupGroup.BlocksGroupB,
@@ -100,7 +80,7 @@ namespace SwitchBlocks.Entities
             bool newState = group.ActivatedTick > tick;
             if (group.State != newState)
             {
-                if (currentDrawables != null)
+                if (IsActiveOnCurrentScreen)
                 {
                     ModSounds.GroupFlip?.PlayOneShot();
                 }

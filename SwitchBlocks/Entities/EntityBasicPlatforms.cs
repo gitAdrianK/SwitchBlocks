@@ -7,35 +7,11 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering basic platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering basic platforms in the level.
     /// </summary>
     public class EntityBasicPlatforms : EntityDrawables<PlatformInOut>
     {
-        private static EntityBasicPlatforms instance;
-        public static EntityBasicPlatforms Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityBasicPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        private EntityBasicPlatforms()
-        {
-            // TODO:
-            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
+        public EntityBasicPlatforms() : base(ModStrings.PLATFORMS, ModStrings.BASIC) { }
 
         protected override void EntityUpdate(float p_delta)
         {

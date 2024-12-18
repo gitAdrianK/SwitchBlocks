@@ -1,5 +1,4 @@
-﻿using EntityComponent;
-using JumpKing;
+﻿using JumpKing;
 using JumpKing.Player;
 using SwitchBlocks.Behaviours;
 using SwitchBlocks.Blocks;
@@ -19,6 +18,8 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<int, IBlockGroupId>();
+
+        private static EntitySequencePlatforms entitySequencePlatforms;
 
         public static void DoSetup(PlayerEntity player)
         {
@@ -44,7 +45,7 @@ namespace SwitchBlocks.Setups
                 DataSequence.Active.Add(1);
             }
 
-            _ = EntitySequencePlatforms.Instance;
+            entitySequencePlatforms = new EntitySequencePlatforms();
 
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
@@ -52,15 +53,15 @@ namespace SwitchBlocks.Setups
             player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void DoCleanup()
         {
             if (!SettingsSequence.IsUsed)
             {
                 return;
             }
 
-            entityManager.RemoveObject(EntitySequencePlatforms.Instance);
-            EntitySequencePlatforms.Instance.Reset();
+            entitySequencePlatforms.Destroy();
+            entitySequencePlatforms = null;
 
             DataSequence.Instance.SaveToFile();
             DataSequence.Instance.Reset();

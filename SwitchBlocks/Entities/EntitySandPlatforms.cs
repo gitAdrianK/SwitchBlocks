@@ -7,37 +7,13 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering sand platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering sand platforms in the level.
     /// </summary>
     public class EntitySandPlatforms : EntityDrawables<PlatformSand>
     {
-        private static EntitySandPlatforms instance;
-        public static EntitySandPlatforms Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntitySandPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        private EntitySandPlatforms()
-        {
-            // TODO:
-            //PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
-        }
-
         private float offset;
 
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
+        public EntitySandPlatforms() : base(ModStrings.PLATFORMS, ModStrings.SAND) { }
 
         protected override void EntityUpdate(float p_delta)
         {

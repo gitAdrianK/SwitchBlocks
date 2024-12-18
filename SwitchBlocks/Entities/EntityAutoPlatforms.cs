@@ -3,41 +3,17 @@ using SwitchBlocks.Data;
 using SwitchBlocks.Entities.Drawables;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Settings;
+using System;
 using System.Threading.Tasks;
 
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering auto platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering auto platforms in the level.
     /// </summary>
     public class EntityAutoPlatforms : EntityDrawables<PlatformInOut>
     {
-        private static EntityAutoPlatforms instance;
-        public static EntityAutoPlatforms Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityAutoPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        private EntityAutoPlatforms()
-        {
-            // TODO: Generate dictionary, same for all other entites
-            DrawblesDict = null;
-            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
+        public EntityAutoPlatforms() : base(ModStrings.PLATFORMS, ModStrings.AUTO) { }
 
         protected override void EntityUpdate(float p_delta)
         {
@@ -62,10 +38,7 @@ namespace SwitchBlocks.Entities
 
         private void TrySound(int adjustedTick)
         {
-            if (DataAuto.State)
-            {
-                adjustedTick += SettingsAuto.DurationOff;
-            }
+            adjustedTick += SettingsAuto.DurationOff * Convert.ToInt32(DataAuto.State);
             int soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
             int soundTick = (adjustedTick + soundAdjust) % SettingsAuto.DurationCycle;
             // Its not yet time to make a sound
@@ -112,11 +85,10 @@ namespace SwitchBlocks.Entities
         private void DoFlipSound()
         {
             DataAuto.WarnCount = 0;
-            if (!IsActiveOnCurrentScreen)
+            if (IsActiveOnCurrentScreen)
             {
-                return;
+                ModSounds.AutoFlip?.PlayOneShot();
             }
-            ModSounds.AutoFlip?.PlayOneShot();
         }
 
         private void TrySwitch(int adjustedTick)
@@ -134,7 +106,6 @@ namespace SwitchBlocks.Entities
                 DataAuto.SwitchOnceSafe = false;
                 return;
             }
-
 
             if (DataAuto.CanSwitchSafely || SettingsAuto.ForceSwitch)
             {

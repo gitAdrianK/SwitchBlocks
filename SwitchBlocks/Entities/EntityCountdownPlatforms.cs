@@ -8,35 +8,11 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering countdown platforms in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering countdown platforms in the level.
     /// </summary>
     public class EntityCountdownPlatforms : EntityDrawables<PlatformInOut>
     {
-        private static EntityCountdownPlatforms instance;
-        public static EntityCountdownPlatforms Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityCountdownPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
-
-        private EntityCountdownPlatforms()
-        {
-            // TODO
-            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.COUNTDOWN);
-        }
+        public EntityCountdownPlatforms() : base(ModStrings.PLATFORMS, ModStrings.COUNTDOWN) { }
 
         private void TryWarn(int adjustedTick)
         {

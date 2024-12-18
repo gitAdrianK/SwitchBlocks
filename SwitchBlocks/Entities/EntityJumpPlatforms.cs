@@ -8,30 +8,7 @@ namespace SwitchBlocks.Entities
 {
     public class EntityJumpPlatforms : EntityDrawables<PlatformInOut>
     {
-        private static EntityJumpPlatforms instance;
-        public static EntityJumpPlatforms Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityJumpPlatforms();
-                }
-                return instance;
-            }
-        }
-
-        private EntityJumpPlatforms()
-        {
-            // TODO:
-            //PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
+        public EntityJumpPlatforms() : base(ModStrings.PLATFORMS, ModStrings.JUMP) { }
 
         protected override void EntityUpdate(float p_delta)
         {

@@ -6,39 +6,13 @@ using System.Threading.Tasks;
 namespace SwitchBlocks.Entities
 {
     /// <summary>
-    /// Entity responsible for rendering countdown levers in the level.<br />
-    /// Singleton.
+    /// Entity responsible for rendering countdown levers in the level.
     /// </summary>
     public class EntityCountdownLevers : EntityDrawables<Lever>
     {
-        private static EntityCountdownLevers instance;
-        public static EntityCountdownLevers Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EntityCountdownLevers();
-                }
-                return instance;
-            }
-        }
+        public EntityCountdownLevers() : base(ModStrings.LEVERS, ModStrings.COUNTDOWN) { }
 
-        private EntityCountdownLevers()
-        {
-            // TODO:
-            //LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
-        }
-
-        public override void Reset()
-        {
-            instance.Destroy();
-            instance = null;
-        }
-
-        protected override void EntityUpdate(float p_delta)
-        {
-        }
+        protected override void EntityUpdate(float p_delta) { }
 
         public override void EntityDraw(SpriteBatch spriteBatch)
         {
