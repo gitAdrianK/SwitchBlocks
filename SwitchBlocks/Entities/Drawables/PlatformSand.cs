@@ -1,15 +1,26 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JumpKing;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace SwitchBlocks.Entities.Drawables
 {
-    public class PlatformSand : Drawable
+    public class PlatformSand : Platform
     {
-        public Texture2D Scrolling { get; private set; }
-        public Texture2D Foreground { get; private set; }
-        public int Height { get; private set; }
-        public int Width { get; private set; }
+        // This roundabout way with string paths seems weird, but I haven't found
+        // a different way to deserialize on StackOverflow yet, skill issue.
+        private Texture2D Scrolling { get; set; }
+        [XmlAttribute("Scrolling")]
+        public string ScrollingAsString { get; set; }
+
+        private Texture2D Foreground { get; set; }
+        [XmlAttribute("Foreground")]
+        public string ForegroundAsString { get; set; }
+
+        private int Height { get; set; }
+        private int Width { get; set; }
 
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
         {
@@ -27,6 +38,41 @@ namespace SwitchBlocks.Entities.Drawables
             {
                 DrawForeground(spriteBatch, state);
             }
+        }
+
+        public new bool InitializeTextures(JKContentManager contentManager, string path)
+        {
+            if (File.Exists($"{path}{TextureAsString}.xnb"))
+            {
+                Texture = contentManager.Load<Texture2D>($"{path}");
+            }
+            if (File.Exists($"{path}{ScrollingAsString}.xnb"))
+            {
+                Scrolling = contentManager.Load<Texture2D>($"{path}");
+            }
+            if (File.Exists($"{path}{ForegroundAsString}.xnb"))
+            {
+                Foreground = contentManager.Load<Texture2D>($"{path}");
+            }
+
+            return Texture != null || Foreground != null;
+        }
+
+        public new bool InitializeOthers()
+        {
+            if (Texture != null)
+            {
+                Width = Texture.Width;
+                Height = Texture.Height;
+                return true;
+            }
+            if (Foreground != null)
+            {
+                Width = Foreground.Width;
+                Height = Foreground.Height;
+                return true;
+            }
+            return false;
         }
 
         private void DrawBackground(SpriteBatch spriteBatch, bool state)

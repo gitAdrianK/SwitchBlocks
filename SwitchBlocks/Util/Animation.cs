@@ -1,29 +1,40 @@
-﻿using System;
+﻿using System.Xml.Serialization;
 
 namespace SwitchBlocks.Util
 {
+    public enum Style
+    {
+        [XmlEnum(Name = "")]
+        None = 0,
+        [XmlEnum(Name = "Fade")]
+        Fade,
+        [XmlEnum(Name = "Top")]
+        Top,
+        [XmlEnum(Name = "Bottom")]
+        Bottom,
+        [XmlEnum(Name = "Left")]
+        Left,
+        [XmlEnum(Name = "Right")]
+        Right,
+    }
+
+    public enum Curve
+    {
+        [XmlEnum(Name = "")]
+        None = 0,
+        [XmlEnum(Name = "Linear")]
+        Linear,
+        [XmlEnum(Name = "EaseIn")]
+        EaseIn,
+        [XmlEnum(Name = "EaseOut")]
+        EaseOut,
+        [XmlEnum(Name = "EaseInOut")]
+        EaseInOut,
+    }
+
     public struct Animation
     {
-        public const double HALF_PI = Math.PI / 2.0d;
-
-        public enum Style
-        {
-            Fade,
-            Top,
-            Bottom,
-            Left,
-            Right,
-        }
-
-        public enum Curve
-        {
-            Linear,
-            EaseIn,
-            EaseOut,
-            EaseInOut,
-        }
-
-        public Style style;
-        public Curve curve;
+        public Style Style;
+        public Curve Curve;
     }
 }

@@ -28,9 +28,8 @@ namespace SwitchBlocks.Util
         public float Progress { get; set; }
         public int ActivatedTick { get; set; }
 
-        public BlockGroup() : this(true)
-        {
-        }
+        // Required for serialization purposes
+        public BlockGroup() : this(true) { }
 
         public BlockGroup(bool isEnabled)
         {

@@ -1,14 +1,34 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JumpKing;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace SwitchBlocks.Entities.Drawables
 {
     public abstract class Drawable : IDrawable
     {
-        public Texture2D Texture { get; protected set; }
-        public Vector2 Position { get; protected set; }
-        public bool StartState { get; protected set; }
+        protected Texture2D Texture { get; set; }
+        [XmlAttribute("Texture")]
+        public string TextureAsString { get; set; }
+
+        public Vector2 Position { get; set; }
 
         public abstract void Draw(SpriteBatch spriteBatch, bool state, float progress);
+
+        public bool InitializeTextures(JKContentManager contentManager, string path)
+        {
+            if (!File.Exists($"{path}{TextureAsString}.xnb"))
+            {
+                return false;
+            }
+            Texture = contentManager.Load<Texture2D>($"{path}");
+            return true;
+        }
+
+        public bool InitializeOthers()
+        {
+            return true;
+        }
     }
 }

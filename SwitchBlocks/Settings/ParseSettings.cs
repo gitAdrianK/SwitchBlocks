@@ -13,6 +13,22 @@ namespace SwitchBlocks.Settings
         /// </summary>
         private const float deltaTime = 0.01666667f;
 
+        /// <summary>
+        /// Maps names to their position in an xml node list.
+        /// </summary>
+        /// <param name="nodeList">The xml node list to check.</param>
+        /// <returns>A dictionary mapping the names to its position in the node list.</returns>
+        public static Dictionary<string, int> MapNames(XmlNodeList nodeList)
+        {
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
+            for (int i = 0; i < nodeList.Count; i++)
+            {
+                XmlNode node = nodeList[i];
+                dictionary[node.Name] = i;
+            }
+            return dictionary;
+        }
+
         public static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root)
         {
             return ParseDuration(dictionary, root, 3);

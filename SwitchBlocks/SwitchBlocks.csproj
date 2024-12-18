@@ -157,6 +157,7 @@
     <Compile Include="Entities\Drawables\IDrawable.cs" />
     <Compile Include="Entities\Drawables\Lever.cs" />
     <Compile Include="Entities\Drawables\Drawable.cs" />
+    <Compile Include="Entities\Drawables\Platform.cs" />
     <Compile Include="Entities\Drawables\PlatformInOut.cs" />
     <Compile Include="Entities\Drawables\PlatformInOutGroup.cs" />
     <Compile Include="Entities\Drawables\PlatformSand.cs" />
@@ -214,7 +215,6 @@
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Util\SerializableDictionary.cs" />
-    <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

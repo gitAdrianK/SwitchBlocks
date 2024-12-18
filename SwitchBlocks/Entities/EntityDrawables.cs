@@ -12,12 +12,12 @@ using System.Xml.Serialization;
 
 namespace SwitchBlocks.Entities
 {
-    public abstract class EntityDrawables<T> : Entity where T : IDrawable
+    public abstract class EntityDrawables<TDrawable> : Entity where TDrawable : IDrawable
     {
         int currentScreen = -1;
 
-        private readonly Dictionary<int, List<T>> drawablesDict;
-        protected List<T> currentDrawables;
+        private readonly Dictionary<int, List<TDrawable>> drawablesDict;
+        protected List<TDrawable> currentDrawables;
         public bool IsActiveOnCurrentScreen => currentDrawables != null;
 
         protected abstract void EntityUpdate(float p_delta);
@@ -46,7 +46,7 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            Dictionary<int, List<T>> dictionary = new Dictionary<int, List<T>>();
+            Dictionary<int, List<TDrawable>> dictionary = new Dictionary<int, List<TDrawable>>();
             // Screens go from 1 to 169
             Regex regex = new Regex($@"^{subfolder}(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
             foreach (string xmlFilePath in files)
@@ -57,17 +57,20 @@ namespace SwitchBlocks.Entities
                     continue;
                 }
 
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(TDrawable));
                 XmlDocument document = new XmlDocument();
                 document.Load(xmlFilePath);
 
-                List<T> drawables = new List<T>();
+                List<TDrawable> drawables = new List<TDrawable>();
                 foreach (XmlNode node in document.SelectNodes($"//{xmlRootTag}/{xmlRootTag.Remove(xmlRootTag.Length - 1)}/"))
                 {
                     XmlNodeReader xmlNodeReader = new XmlNodeReader(node);
-                    T drawable = (T)xmlSerializer.Deserialize(xmlNodeReader);
-                    // TODO: Cannot deserialize like this yet, fields like start state and texture need manual adjustment
-                    //drawables.Add(drawable);
+                    TDrawable drawable = (TDrawable)xmlSerializer.Deserialize(xmlNodeReader);
+                    if (drawable.InitializeTextures(contentManager, $"{path}textures{sep}")
+                        && drawable.InitializeOthers())
+                    {
+                        drawables.Add(drawable);
+                    }
                 }
 
                 if (drawables.Count != 0)

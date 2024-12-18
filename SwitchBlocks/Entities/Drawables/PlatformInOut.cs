@@ -2,15 +2,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using SwitchBlocks.Util;
 using System;
-using static SwitchBlocks.Util.Animation;
-using Curve = SwitchBlocks.Util.Animation.Curve;
+using Curve = SwitchBlocks.Util.Curve;
 
 namespace SwitchBlocks.Entities.Drawables
 {
-    public class PlatformInOut : Drawable
+    public class PlatformInOut : Platform
     {
-        public Animation Animation;
-        public Animation AnimationOut;
+        private const double HALF_PI = Math.PI / 2.0d;
+
+        public Animation Animation { get; set; }
+        public Animation AnimationOut { get; set; }
 
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
         {
@@ -30,7 +31,7 @@ namespace SwitchBlocks.Entities.Drawables
 
             Animation animation = StartState == state ? Animation : AnimationOut;
             float progressActual;
-            switch (animation.curve)
+            switch (animation.Curve)
             {
                 case Curve.Linear:
                     progressActual = progressAdjusted;
@@ -50,7 +51,7 @@ namespace SwitchBlocks.Entities.Drawables
 
             int height = Texture.Height;
             int width = Texture.Width;
-            switch (animation.style)
+            switch (animation.Style)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
@@ -131,6 +132,20 @@ namespace SwitchBlocks.Entities.Drawables
                         color: Color.White);
                     break;
             }
+        }
+
+        public new bool InitializeOthers()
+        {
+            Style animStyle = Animation.Style != Style.None ? Animation.Style : Style.Fade;
+            Curve animCurve = Animation.Curve != Curve.None ? Animation.Curve : Curve.Linear;
+
+            Style animOutStyle = AnimationOut.Style != Style.None ? AnimationOut.Style : animStyle;
+            Curve animOutCurve = AnimationOut.Curve != Curve.None ? AnimationOut.Curve : animCurve;
+
+            Animation = new Animation { Style = animStyle, Curve = animCurve };
+            AnimationOut = new Animation { Style = animOutStyle, Curve = animOutCurve };
+
+            return true;
         }
     }
 }
