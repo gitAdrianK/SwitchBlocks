@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+
     /// <summary>
     /// Entity responsible for rendering countdown levers in the level.
     /// </summary>
@@ -14,15 +14,10 @@ namespace SwitchBlocks.Entities
 
         protected override void EntityUpdate(float p_delta) { }
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataCountdown.State,
-                    DataCountdown.Progress);
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => _ = Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataCountdown.State,
+                DataCountdown.Progress));
     }
 }

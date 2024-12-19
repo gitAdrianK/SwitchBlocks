@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering sand platforms in the level.
     /// </summary>
@@ -15,20 +15,12 @@ namespace SwitchBlocks.Entities
 
         public EntitySandPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.SAND) { }
 
-        protected override void EntityUpdate(float p_delta)
-        {
-            offset += p_delta * SettingsSand.Multiplier;
-        }
+        protected override void EntityUpdate(float p_delta) => this.offset += p_delta * SettingsSand.Multiplier;
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataSand.State,
-                    offset);
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataSand.State,
+                this.offset));
     }
 }

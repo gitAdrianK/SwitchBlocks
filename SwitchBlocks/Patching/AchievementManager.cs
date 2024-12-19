@@ -1,26 +1,25 @@
-﻿using HarmonyLib;
-using JumpKing.MiscSystems.Achievements;
-using System.Reflection;
-
 namespace SwitchBlocks.Patching
 {
+    using HarmonyLib;
+    using JumpKing.MiscSystems.Achievements;
+
     public class AchievementManager
     {
-        private static readonly Traverse traverseAM;
+        private static readonly Traverse TraverseAM;
 
         static AchievementManager()
         {
-            FieldInfo achievemementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance");
-            traverseAM = Traverse.Create(achievemementManager.GetValue(null));
+            var achievemementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance");
+            TraverseAM = Traverse.Create(achievemementManager.GetValue(null));
         }
 
         public static int GetTicks()
         {
-            int allTimeTicks = traverseAM
+            var allTimeTicks = TraverseAM
                         .Field("m_all_time_stats")
                         .GetValue<PlayerStats>()
                         ._ticks;
-            int snapshotTicks = traverseAM
+            var snapshotTicks = TraverseAM
                         .Field("m_snapshot")
                         .GetValue<PlayerStats>()
                         ._ticks;

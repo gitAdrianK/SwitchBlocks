@@ -1,45 +1,24 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Util;
+
     public class BehaviourSequenceSnow : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
-
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
-
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
-
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
-
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -48,26 +27,26 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowB>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowD>();
 
-            if (!IsPlayerOnBlock || BehaviourPost.IsPlayerOnSnow)
+            if (!this.IsPlayerOnBlock || BehaviourPost.IsPlayerOnSnow)
             {
                 return true;
             }
 
-            IEnumerable<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
             {
-                Type type = b.GetType();
+                var type = b.GetType();
                 return type == typeof(BlockSequenceSnowA)
                 || type == typeof(BlockSequenceSnowB)
                 || type == typeof(BlockSequenceSnowC)
                 || type == typeof(BlockSequenceSnowD);
             });
-            foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
+            foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 if (DataSequence.GetState(block.GroupId))
                 {

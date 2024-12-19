@@ -1,8 +1,8 @@
-﻿using JumpKing.Level;
-using Microsoft.Xna.Framework;
-
 namespace SwitchBlocks.Blocks
 {
+    using JumpKing.Level;
+    using Microsoft.Xna.Framework;
+
     /// <summary>
     /// The basic lever block, capable of only turning the state off.
     /// </summary>
@@ -10,26 +10,17 @@ namespace SwitchBlocks.Blocks
     {
         private readonly Rectangle collider;
 
-        public BlockBasicLeverOff(Rectangle collider)
-        {
-            this.collider = collider;
-        }
+        public BlockBasicLeverOff(Rectangle collider) => this.collider = collider;
 
-        public Color DebugColor
-        {
-            get { return ModBlocks.BASIC_LEVER_OFF; }
-        }
+        public Color DebugColor => ModBlocks.BASIC_LEVER_OFF;
 
-        public Rectangle GetRect()
-        {
-            return collider;
-        }
+        public Rectangle GetRect() => this.collider;
 
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (collider.Intersects(hitbox))
+            if (this.collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, collider);
+                intersection = Rectangle.Intersect(hitbox, this.collider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

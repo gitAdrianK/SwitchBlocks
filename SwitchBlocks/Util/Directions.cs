@@ -1,11 +1,10 @@
-﻿using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using Microsoft.Xna.Framework;
-using SwitchBlocks.Behaviours;
-using System.Collections.Specialized;
-
 namespace SwitchBlocks.Util
 {
+    using System.Collections.Specialized;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Behaviours;
+
     public static class Directions
     {
         public enum Direction
@@ -26,9 +25,9 @@ namespace SwitchBlocks.Util
         /// <returns>true if the direction for the block type is valid, otherwise, false</returns>
         public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, BitVector32 validDirections, IBlock block)
         {
-            Vector2 prevVelocity = BehaviourPost.PrevVelocity;
-            Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-            Rectangle blockRect = block.GetRect();
+            var prevVelocity = BehaviourPost.PrevVelocity;
+            var playerRect = behaviourContext.BodyComp.GetHitbox();
+            var blockRect = block.GetRect();
             if (playerRect.Bottom - blockRect.Top == 0 && prevVelocity.Y > 0.0f && validDirections[(int)Direction.Up])
             {
                 return true;

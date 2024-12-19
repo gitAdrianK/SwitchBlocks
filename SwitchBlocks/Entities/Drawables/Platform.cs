@@ -1,7 +1,7 @@
-﻿using System.Xml.Serialization;
-
 namespace SwitchBlocks.Entities.Drawables
 {
+    using System.Xml.Serialization;
+
     public abstract class Platform : Drawable
     {
         [XmlIgnore]
@@ -9,14 +9,8 @@ namespace SwitchBlocks.Entities.Drawables
         [XmlElement("StartState")]
         public string StartStateAsString
         {
-            get
-            {
-                return StartState.ToString();
-            }
-            set
-            {
-                StartState = value.ToLower().Equals("on");
-            }
+            get => this.StartState.ToString();
+            set => this.StartState = value.ToLower().Equals("on");
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Xml;
-using static SwitchBlocks.Util.Directions;
-
 namespace SwitchBlocks.Settings
 {
+    using System.Collections.Specialized;
+    using System.Xml;
+    using static SwitchBlocks.Util.Directions;
+
     public static class SettingsCountdown
     {
         /// <summary>
@@ -38,16 +37,16 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            XmlNodeList childrenCountdown = block.ChildNodes;
-            Dictionary<string, int> dictionaryCountdown = ParseSettings.MapNames(childrenCountdown);
+            var childrenCountdown = block.ChildNodes;
+            var dictionaryCountdown = ParseSettings.MapNames(childrenCountdown);
             Duration = ParseSettings.ParseDuration(dictionaryCountdown, block);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryCountdown, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryCountdown, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryCountdown);
-            if (dictionaryCountdown.TryGetValue("Warn", out int value))
+            if (dictionaryCountdown.TryGetValue("Warn", out var value))
             {
-                XmlNode rootContdownWarn = childrenCountdown[value];
-                Dictionary<string, int> dictionaryCountdownWarn = ParseSettings.MapNames(rootContdownWarn.ChildNodes);
+                var rootContdownWarn = childrenCountdown[value];
+                var dictionaryCountdownWarn = ParseSettings.MapNames(rootContdownWarn.ChildNodes);
                 WarnCount = ParseSettings.ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
                 WarnDuration = ParseSettings.ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);
             }

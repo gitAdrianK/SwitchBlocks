@@ -1,13 +1,13 @@
-﻿using JumpKing;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
-
 namespace SwitchBlocks.Data
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Serialization;
+    using JumpKing;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Contains cache relevant for the sequence block.
     /// </summary>
@@ -24,17 +24,17 @@ namespace SwitchBlocks.Data
                     return instance;
                 }
 
-                JKContentManager contentManager = Game1.instance.contentManager;
-                char sep = Path.DirectorySeparatorChar;
-                string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                string file = $"{path}cache_{ModStrings.SEQUENCE}.sav";
+                var contentManager = Game1.instance.contentManager;
+                var sep = Path.DirectorySeparatorChar;
+                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+                var file = $"{path}cache_{ModStrings.SEQUENCE}.sav";
                 if (File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
                         streamReader = new StreamReader(file);
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(CacheSequence));
+                        var xmlSerializer = new XmlSerializer(typeof(CacheSequence));
                         instance = (CacheSequence)xmlSerializer.Deserialize(streamReader);
                     }
                     catch
@@ -55,34 +55,28 @@ namespace SwitchBlocks.Data
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
-        private CacheSequence()
-        {
-            _seed = new SerializableDictionary<int, int>();
-        }
+        private CacheSequence() => this._seed = new SerializableDictionary<int, int>();
 
         public void SaveToFile()
         {
-            Dictionary<int, int> sorted = _seed.OrderBy(kv => kv.Key)
+            var sorted = this._seed.OrderBy(kv => kv.Key)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
-            _seed.Clear();
-            foreach (KeyValuePair<int, int> kv in sorted)
+            this._seed.Clear();
+            foreach (var kv in sorted)
             {
-                _seed.Add(kv.Key, kv.Value);
+                this._seed.Add(kv.Key, kv.Value);
             }
 
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(path);
+                _ = Directory.CreateDirectory(path);
             }
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CacheSequence));
+            var xmlSerializer = new XmlSerializer(typeof(CacheSequence));
             TextWriter textWriter = new StreamWriter($"{path}cache_{ModStrings.SEQUENCE}.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
@@ -96,6 +90,7 @@ namespace SwitchBlocks.Data
             get => Instance._seed;
             private set => Instance._seed = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, int> _seed;
     }
 }

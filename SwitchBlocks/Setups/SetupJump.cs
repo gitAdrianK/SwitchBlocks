@@ -1,12 +1,12 @@
-﻿using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupJump
     {
         private static EntityJumpPlatforms entityJumpPlatforms;
@@ -22,8 +22,8 @@ namespace SwitchBlocks.Setups
 
             entityJumpPlatforms = new EntityJumpPlatforms();
 
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
 
             PlayerEntity.OnJumpCall += JumpSwitch;
         }

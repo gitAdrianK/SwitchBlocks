@@ -1,15 +1,15 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Entity responsible for rendering sequence platforms in the level.
     /// </summary>
@@ -27,18 +27,18 @@ namespace SwitchBlocks.Entities
 
         protected override void EntityUpdate(float p_delta)
         {
-            int tick = AchievementManager.GetTicks();
-            float multiplier = SettingsSequence.Multiplier;
-            List<int> finished = new List<int>();
-            Parallel.ForEach(DataSequence.Active, group =>
+            var tick = AchievementManager.GetTicks();
+            var multiplier = SettingsSequence.Multiplier;
+            var finished = new List<int>();
+            _ = Parallel.ForEach(DataSequence.Active, group =>
             {
-                BlockGroup blockGroup = DataSequence.Groups[group];
-                blockGroup.Progress = UpdateProgressClamped(
+                var blockGroup = DataSequence.Groups[group];
+                blockGroup.Progress = this.UpdateProgressClamped(
                     blockGroup.State,
                     blockGroup.Progress,
                     p_delta,
                     multiplier);
-                TrySwitch(blockGroup, tick);
+                this.TrySwitch(blockGroup, tick);
                 if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
                 {
                     // if the group is "finished", but the switch is planned in the near future,
@@ -52,35 +52,30 @@ namespace SwitchBlocks.Entities
                     }
                 }
             });
-            foreach (int i in finished)
+            foreach (var i in finished)
             {
-                BlockGroup blockGroup = DataSequence.Groups[i];
+                var blockGroup = DataSequence.Groups[i];
                 if (blockGroup.State && blockGroup.Progress == 1.0f)
                 {
                     DataSequence.Finished.Add(i);
                 }
-                DataSequence.Active.Remove(i);
+                _ = DataSequence.Active.Remove(i);
             }
         }
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataSequence.GetState(drawable.GroupId),
-                    DataSequence.GetProgress(drawable.GroupId));
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataSequence.GetState(drawable.GroupId),
+                DataSequence.GetProgress(drawable.GroupId)));
 
         private void TrySwitch(BlockGroup group, int tick)
         {
             // A platform is solid if the activated tick is larger than the current tick.
-            bool newState = group.ActivatedTick > tick;
+            var newState = group.ActivatedTick > tick;
             if (group.State != newState)
             {
-                if (IsActiveOnCurrentScreen)
+                if (this.IsActiveOnCurrentScreen)
                 {
                     ModSounds.SequenceFlip?.PlayOneShot();
                 }

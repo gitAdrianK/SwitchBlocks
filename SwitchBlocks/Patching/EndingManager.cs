@@ -1,26 +1,23 @@
-﻿using HarmonyLib;
-using System;
-using System.Reflection;
-
 namespace SwitchBlocks.Patching
 {
+    using System.Diagnostics.CodeAnalysis;
+    using HarmonyLib;
+
     public class EndingManager
     {
         public static bool HasFinished { get; private set; }
 
         public EndingManager(Harmony harmony)
         {
-            Type endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
-            MethodInfo checkWin = endingManager.GetMethod("CheckWin");
-            HarmonyMethod checkWinPatch = new HarmonyMethod(typeof(EndingManager).GetMethod(nameof(CheckWinPostfix)));
-            harmony.Patch(
+            var endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
+            var checkWin = endingManager.GetMethod("CheckWin");
+            var checkWinPatch = new HarmonyMethod(typeof(EndingManager).GetMethod(nameof(CheckWinPostfix)));
+            _ = harmony.Patch(
                 checkWin,
                 postfix: checkWinPatch);
         }
 
-        public static void CheckWinPostfix(bool __result)
-        {
-            HasFinished = __result;
-        }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
+        public static void CheckWinPostfix(bool __result) => HasFinished = __result;
     }
 }

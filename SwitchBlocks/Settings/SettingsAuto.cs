@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-
 namespace SwitchBlocks.Settings
 {
+    using System.Xml;
+
     public static class SettingsAuto
     {
         /// <summary>
@@ -49,17 +48,17 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            XmlNodeList childrenAuto = block.ChildNodes;
-            Dictionary<string, int> dictionaryAuto = ParseSettings.MapNames(childrenAuto);
+            var childrenAuto = block.ChildNodes;
+            var dictionaryAuto = ParseSettings.MapNames(childrenAuto);
             DurationOn = ParseSettings.ParseDuration(dictionaryAuto, block);
             DurationOff = ParseSettings.ParseDuration("DurationOff", dictionaryAuto, block, DurationOn);
             DurationCycle = DurationOn + DurationOff;
             Multiplier = ParseSettings.ParseMultiplier(dictionaryAuto, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryAuto);
-            if (dictionaryAuto.TryGetValue("Warn", out int value))
+            if (dictionaryAuto.TryGetValue("Warn", out var value))
             {
-                XmlNode rootAutoWarn = childrenAuto[value];
-                Dictionary<string, int> dictionaryAutoWarn = ParseSettings.MapNames(rootAutoWarn.ChildNodes);
+                var rootAutoWarn = childrenAuto[value];
+                var dictionaryAutoWarn = ParseSettings.MapNames(rootAutoWarn.ChildNodes);
                 WarnCount = ParseSettings.ParseWarnCount(dictionaryAutoWarn, rootAutoWarn);
                 WarnDuration = ParseSettings.ParseWarnDuration(dictionaryAutoWarn, rootAutoWarn);
                 WarnDisableOn = ParseSettings.ParseWarnDisableOn(dictionaryAutoWarn);

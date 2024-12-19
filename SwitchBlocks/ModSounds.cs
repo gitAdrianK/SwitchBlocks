@@ -1,11 +1,11 @@
-﻿using JumpKing;
-using JumpKing.XnaWrappers;
-using Microsoft.Xna.Framework.Audio;
-using SwitchBlocks.Settings;
-using System.IO;
-
 namespace SwitchBlocks
 {
+    using System.IO;
+    using JumpKing;
+    using JumpKing.XnaWrappers;
+    using Microsoft.Xna.Framework.Audio;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Contains sounds used in this mod for its blocks.<br />
     /// Initializes the blocks sounds from "Steam Workshop Path\1061090\MAP ID\switchBlocksMod\audio\"<br />
@@ -72,9 +72,9 @@ namespace SwitchBlocks
         /// </summary>
         public static void Load()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
 
             // Auto
             if (SettingsAuto.IsUsed)

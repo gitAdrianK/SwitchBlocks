@@ -1,17 +1,15 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     public class BehaviourSequencePlatform : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
@@ -19,30 +17,11 @@ namespace SwitchBlocks.Behaviours
         public bool IsPlayerOnBlock { get; set; }
         public static bool IsPlayerOnIce { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
-
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
-
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
-
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
-
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -51,8 +30,8 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceA>()
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceIceA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceB>()
@@ -65,14 +44,14 @@ namespace SwitchBlocks.Behaviours
                 || advCollisionInfo.IsCollidingWith<BlockSequenceIceD>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowD>();
 
-            if (!IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
-            IEnumerable<IBlock> blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
             {
-                Type type = b.GetType();
+                var type = b.GetType();
                 return type == typeof(BlockSequenceA)
                 || type == typeof(BlockSequenceIceA)
                 || type == typeof(BlockSequenceSnowA)
@@ -86,9 +65,9 @@ namespace SwitchBlocks.Behaviours
                 || type == typeof(BlockSequenceIceD)
                 || type == typeof(BlockSequenceSnowD);
             });
-            foreach (IBlockGroupId block in blocks.Cast<IBlockGroupId>())
+            foreach (var block in blocks.Cast<IBlockGroupId>())
             {
-                int groupId = block.GroupId;
+                var groupId = block.GroupId;
                 if (!DataSequence.GetState(groupId)
                     || DataSequence.Touched != (groupId - 1)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
@@ -102,19 +81,19 @@ namespace SwitchBlocks.Behaviours
                 {
                     if (groupId != 1)
                     {
-                        DataSequence.SetTick(groupId - 1, Int32.MinValue);
-                        DataSequence.Active.Add(groupId - 1);
+                        DataSequence.SetTick(groupId - 1, int.MinValue);
+                        _ = DataSequence.Active.Add(groupId - 1);
                     }
                 }
                 else
                 {
-                    int tick = AchievementManager.GetTicks();
+                    var tick = AchievementManager.GetTicks();
                     DataSequence.SetTick(groupId, tick + SettingsSequence.Duration);
-                    DataSequence.Active.Add(groupId);
+                    _ = DataSequence.Active.Add(groupId);
                 }
-                DataSequence.SetTick(groupId + 1, Int32.MaxValue);
+                DataSequence.SetTick(groupId + 1, int.MaxValue);
                 DataSequence.Touched = groupId;
-                DataSequence.Active.Add(groupId + 1);
+                _ = DataSequence.Active.Add(groupId + 1);
                 break;
             }
 

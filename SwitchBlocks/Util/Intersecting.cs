@@ -1,12 +1,9 @@
-﻿using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace SwitchBlocks.Util
 {
+    using System;
+    using System.Linq;
+    using JumpKing.BodyCompBehaviours;
+
     public class Intersecting
     {
         /// <summary>
@@ -17,12 +14,12 @@ namespace SwitchBlocks.Util
         /// <returns>True if the player is intersecting one of the blocks, false otherwise</returns>
         public static bool IsIntersectingBlocks(BehaviourContext behaviourContext, params Type[] blocks)
         {
-            Rectangle playerRect = behaviourContext.BodyComp.GetHitbox();
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            IEnumerable<IBlock> filtered = advCollisionInfo.GetCollidedBlocks().Where(b => blocks.Contains(b.GetType()));
-            foreach (IBlock block in filtered)
+            var playerRect = behaviourContext.BodyComp.GetHitbox();
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var filtered = advCollisionInfo.GetCollidedBlocks().Where(b => blocks.Contains(b.GetType()));
+            foreach (var block in filtered)
             {
-                block.Intersects(playerRect, out Rectangle collision);
+                _ = block.Intersects(playerRect, out var collision);
                 if (collision.Size.X > 0 || collision.Size.Y > 0)
                 {
                     return true;

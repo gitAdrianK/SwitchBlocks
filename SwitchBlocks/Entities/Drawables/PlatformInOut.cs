@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Util;
-using System;
-using Curve = SwitchBlocks.Util.Curve;
-
 namespace SwitchBlocks.Entities.Drawables
 {
+    using System;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Util;
+    using Curve = Util.Curve;
+
     public class PlatformInOut : Platform
     {
         private const double HALF_PI = Math.PI / 2.0d;
@@ -15,7 +15,7 @@ namespace SwitchBlocks.Entities.Drawables
 
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
         {
-            float progressAdjusted = StartState ? 1.0f - progress : progress;
+            var progressAdjusted = this.StartState ? 1.0f - progress : progress;
             if (progressAdjusted == 0.0f)
             {
                 return;
@@ -23,13 +23,13 @@ namespace SwitchBlocks.Entities.Drawables
             if (progressAdjusted == 1.0f)
             {
                 spriteBatch.Draw(
-                    texture: Texture,
-                    position: Position,
+                    texture: this.Texture,
+                    position: this.Position,
                     color: Color.White);
                 return;
             }
 
-            Animation animation = StartState == state ? Animation : AnimationOut;
+            var animation = this.StartState == state ? this.Animation : this.AnimationOut;
             float progressActual;
             switch (animation.Curve)
             {
@@ -37,26 +37,28 @@ namespace SwitchBlocks.Entities.Drawables
                     progressActual = progressAdjusted;
                     break;
                 case Curve.EaseIn:
-                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI - HALF_PI) + 1.0f;
+                    progressActual = (float)Math.Sin((progressAdjusted * HALF_PI) - HALF_PI) + 1.0f;
                     break;
                 case Curve.EaseOut:
                     progressActual = (float)Math.Sin(progressAdjusted * HALF_PI);
                     break;
                 case Curve.EaseInOut:
-                    progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
+                    progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
                     break;
-                default:
+                case Curve.None:
                     throw new InvalidOperationException("Animation curve was none");
+                default:
+                    throw new InvalidOperationException("Animation curve was unknown");
             }
 
-            int height = Texture.Height;
-            int width = Texture.Width;
+            var height = this.Texture.Height;
+            var width = this.Texture.Width;
             switch (animation.Style)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
-                        texture: Texture,
-                        position: Position,
+                        texture: this.Texture,
+                        position: this.Position,
                         color: new Color(
                             progressActual,
                             progressActual,
@@ -64,88 +66,90 @@ namespace SwitchBlocks.Entities.Drawables
                             progressActual));
                     break;
                 case Style.Top:
-                    int heightTop = (int)(height * progressActual);
+                    var heightTop = (int)(height * progressActual);
 
-                    Rectangle rectangleTop = new Rectangle(
+                    var rectangleTop = new Rectangle(
                         0,
                         height - heightTop,
                         width,
                         heightTop);
 
                     spriteBatch.Draw(
-                        texture: Texture,
-                        position: Position,
+                        texture: this.Texture,
+                        position: this.Position,
                         sourceRectangle: rectangleTop,
                         color: Color.White);
                     break;
                 case Style.Bottom:
-                    int heightBottom = (int)(height * progressActual);
+                    var heightBottom = (int)(height * progressActual);
 
-                    Vector2 vectorBottom = new Vector2(
-                        Position.X,
-                        Position.Y + height - heightBottom);
+                    var vectorBottom = new Vector2(
+                        this.Position.X,
+                        this.Position.Y + height - heightBottom);
 
-                    Rectangle rectangleBottom = new Rectangle(
+                    var rectangleBottom = new Rectangle(
                         0,
                         0,
                         width,
                         heightBottom);
 
                     spriteBatch.Draw(
-                        texture: Texture,
+                        texture: this.Texture,
                         position: vectorBottom,
                         sourceRectangle: rectangleBottom,
                         color: Color.White);
                     break;
                 case Style.Left:
-                    int widthLeft = (int)(width * progressActual);
+                    var widthLeft = (int)(width * progressActual);
 
-                    Rectangle rectangleLeft = new Rectangle(
+                    var rectangleLeft = new Rectangle(
                         width - widthLeft,
                         0,
                         widthLeft,
                         height);
 
                     spriteBatch.Draw(
-                        texture: Texture,
-                        position: Position,
+                        texture: this.Texture,
+                        position: this.Position,
                         sourceRectangle: rectangleLeft,
                         color: Color.White);
                     break;
                 case Style.Right:
-                    int widthRight = (int)(width * progressActual);
+                    var widthRight = (int)(width * progressActual);
 
-                    Vector2 vectorRight = new Vector2(
-                        Position.X + width - widthRight,
-                        Position.Y);
+                    var vectorRight = new Vector2(
+                        this.Position.X + width - widthRight,
+                        this.Position.Y);
 
-                    Rectangle rectangleRight = new Rectangle(
+                    var rectangleRight = new Rectangle(
                         0,
                         0,
                         widthRight,
                         height);
 
                     spriteBatch.Draw(
-                        texture: Texture,
+                        texture: this.Texture,
                         position: vectorRight,
                         sourceRectangle: rectangleRight,
                         color: Color.White);
                     break;
-                default:
+                case Style.None:
                     throw new InvalidOperationException("Animation style was none");
+                default:
+                    throw new InvalidOperationException("Animation style was unknown");
             }
         }
 
         public override bool InitializeOthers()
         {
-            Style animStyle = Animation.Style != Style.None ? Animation.Style : Style.Fade;
-            Curve animCurve = Animation.Curve != Curve.None ? Animation.Curve : Curve.Linear;
+            var animStyle = this.Animation.Style != Style.None ? this.Animation.Style : Style.Fade;
+            var animCurve = this.Animation.Curve != Curve.None ? this.Animation.Curve : Curve.Linear;
 
-            Style animOutStyle = AnimationOut.Style != Style.None ? AnimationOut.Style : animStyle;
-            Curve animOutCurve = AnimationOut.Curve != Curve.None ? AnimationOut.Curve : animCurve;
+            var animOutStyle = this.AnimationOut.Style != Style.None ? this.AnimationOut.Style : animStyle;
+            var animOutCurve = this.AnimationOut.Curve != Curve.None ? this.AnimationOut.Curve : animCurve;
 
-            Animation = new Animation { Style = animStyle, Curve = animCurve };
-            AnimationOut = new Animation { Style = animOutStyle, Curve = animOutCurve };
+            this.Animation = new Animation { Style = animStyle, Curve = animCurve };
+            this.AnimationOut = new Animation { Style = animOutStyle, Curve = animOutCurve };
 
             return true;
         }

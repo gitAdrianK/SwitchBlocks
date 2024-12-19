@@ -1,8 +1,8 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace SwitchBlocks.Entities.Drawables
 {
+    using JumpKing;
+    using Microsoft.Xna.Framework.Graphics;
+
     public interface IDrawable
     {
         /// <summary>

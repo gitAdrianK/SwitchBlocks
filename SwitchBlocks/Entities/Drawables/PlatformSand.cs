@@ -1,12 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-using System.Xml.Serialization;
-
 namespace SwitchBlocks.Entities.Drawables
 {
+    using System;
+    using System.IO;
+    using System.Xml.Serialization;
+    using JumpKing;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+
     public class PlatformSand : Platform
     {
         // This roundabout way with string paths seems weird, but I haven't found
@@ -24,123 +24,117 @@ namespace SwitchBlocks.Entities.Drawables
 
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
         {
-            if (Texture != null)
+            if (this.Texture != null)
             {
-                DrawBackground(spriteBatch, state);
+                this.DrawBackground(spriteBatch, state);
             }
 
-            if (Scrolling != null)
+            if (this.Scrolling != null)
             {
-                DrawScrolling(spriteBatch, state, progress);
+                this.DrawScrolling(spriteBatch, state, progress);
             }
 
-            if (Foreground != null)
+            if (this.Foreground != null)
             {
-                DrawForeground(spriteBatch, state);
+                this.DrawForeground(spriteBatch, state);
             }
         }
 
         public new bool InitializeTextures(JKContentManager contentManager, string path)
         {
-            if (File.Exists($"{path}{TextureAsString}.xnb"))
+            if (File.Exists($"{path}{this.TextureAsString}.xnb"))
             {
-                Texture = contentManager.Load<Texture2D>($"{path}{TextureAsString}");
+                this.Texture = contentManager.Load<Texture2D>($"{path}{this.TextureAsString}");
             }
-            if (File.Exists($"{path}{ScrollingAsString}.xnb"))
+            if (File.Exists($"{path}{this.ScrollingAsString}.xnb"))
             {
-                Scrolling = contentManager.Load<Texture2D>($"{path}{ScrollingAsString}");
+                this.Scrolling = contentManager.Load<Texture2D>($"{path}{this.ScrollingAsString}");
             }
-            if (File.Exists($"{path}{ForegroundAsString}.xnb"))
+            if (File.Exists($"{path}{this.ForegroundAsString}.xnb"))
             {
-                Foreground = contentManager.Load<Texture2D>($"{path}{ForegroundAsString}");
+                this.Foreground = contentManager.Load<Texture2D>($"{path}{this.ForegroundAsString}");
             }
 
-            return Texture != null || Foreground != null;
+            return this.Texture != null || this.Foreground != null;
         }
 
         public override bool InitializeOthers()
         {
-            if (Texture != null)
+            if (this.Texture != null)
             {
-                Width = Texture.Width;
-                Height = Texture.Height;
+                this.Width = this.Texture.Width;
+                this.Height = this.Texture.Height;
                 return true;
             }
-            if (Foreground != null)
+            if (this.Foreground != null)
             {
-                Width = Foreground.Width;
-                Height = Foreground.Height;
+                this.Width = this.Foreground.Width;
+                this.Height = this.Foreground.Height;
                 return true;
             }
             return false;
         }
 
-        private void DrawBackground(SpriteBatch spriteBatch, bool state)
-        {
-            DrawTexture(spriteBatch, state, Texture);
-        }
+        private void DrawBackground(SpriteBatch spriteBatch, bool state) => this.DrawTexture(spriteBatch, state, this.Texture);
 
-        private void DrawForeground(SpriteBatch spriteBatch, bool state)
-        {
-            DrawTexture(spriteBatch, state, Foreground);
-        }
+        private void DrawForeground(SpriteBatch spriteBatch, bool state) => this.DrawTexture(spriteBatch, state, this.Foreground);
 
         private void DrawTexture(SpriteBatch spriteBatch, bool state, Texture2D texture)
         {
-            Rectangle sourceRectangle = new Rectangle(
-                    Width * (1 - Convert.ToInt32(StartState == state)),
+            var sourceRectangle = new Rectangle(
+                    this.Width * (1 - Convert.ToInt32(this.StartState == state)),
                     0,
-                    Width,
-                    Height);
+                    this.Width,
+                    this.Height);
 
             spriteBatch.Draw(
                 texture: texture,
-                position: Position,
+                position: this.Position,
                 sourceRectangle: sourceRectangle,
                 color: Color.White);
         }
 
         private void DrawScrolling(SpriteBatch spriteBatch, bool state, float progress)
         {
-            int actualOffset = (int)(progress % Scrolling.Height);
-            actualOffset = StartState == state ? actualOffset : Scrolling.Height - actualOffset;
+            var actualOffset = (int)(progress % this.Scrolling.Height);
+            actualOffset = this.StartState == state ? actualOffset : this.Scrolling.Height - actualOffset;
 
             // Depending on if the offset would make it so we go past the texture.
-            if (actualOffset + Height > Scrolling.Height)
+            if (actualOffset + this.Height > this.Scrolling.Height)
             {
-                int diff = Scrolling.Height - actualOffset;
+                var diff = this.Scrolling.Height - actualOffset;
 
                 spriteBatch.Draw(
-                texture: Scrolling,
-                position: Position,
+                texture: this.Scrolling,
+                position: this.Position,
                 sourceRectangle: new Rectangle(
                     0,
                     actualOffset,
-                    Width,
+                    this.Width,
                     diff),
                 color: Color.White);
 
                 spriteBatch.Draw(
-                texture: Scrolling,
+                texture: this.Scrolling,
                 position: new Vector2(
-                    Position.X,
-                    Position.Y + diff),
+                    this.Position.X,
+                    this.Position.Y + diff),
                 sourceRectangle: new Rectangle(
                     0,
                     0,
-                    Width,
-                    Height - diff),
+                    this.Width,
+                    this.Height - diff),
                 color: Color.White);
                 return;
             }
             spriteBatch.Draw(
-                texture: Scrolling,
-                position: Position,
+                texture: this.Scrolling,
+                position: this.Position,
                 sourceRectangle: new Rectangle(
                     0,
                     actualOffset,
-                    Width,
-                    Height),
+                    this.Width,
+                    this.Height),
                 color: Color.White);
         }
     }

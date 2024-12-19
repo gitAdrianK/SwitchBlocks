@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering countdown platforms in the level.
     /// </summary>
@@ -20,7 +20,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            int warnAdjust = (SettingsCountdown.WarnCount - DataCountdown.WarnCount) * SettingsCountdown.WarnDuration;
+            var warnAdjust = (SettingsCountdown.WarnCount - DataCountdown.WarnCount) * SettingsCountdown.WarnDuration;
             if (adjustedTick - warnAdjust == 0)
             {
                 DataCountdown.WarnCount++;
@@ -30,7 +30,7 @@ namespace SwitchBlocks.Entities
 
         protected override void EntityUpdate(float p_delta)
         {
-            DataCountdown.Progress = UpdateProgressClamped(
+            DataCountdown.Progress = this.UpdateProgressClamped(
                 DataCountdown.State,
                 DataCountdown.Progress,
                 p_delta,
@@ -41,25 +41,20 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            int currentTick = AchievementManager.GetTicks();
-            int adjustedTick = SettingsCountdown.Duration - (currentTick - DataCountdown.ActivatedTick);
-            if (IsActiveOnCurrentScreen)
+            var currentTick = AchievementManager.GetTicks();
+            var adjustedTick = SettingsCountdown.Duration - (currentTick - DataCountdown.ActivatedTick);
+            if (this.IsActiveOnCurrentScreen)
             {
-                TryWarn(adjustedTick);
+                this.TryWarn(adjustedTick);
             }
-            TrySwitch(currentTick);
+            this.TrySwitch(currentTick);
         }
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataCountdown.State,
-                    DataCountdown.Progress);
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => _ = Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataCountdown.State,
+                DataCountdown.Progress));
 
         private void TrySwitch(int currentTick)
         {
@@ -70,7 +65,7 @@ namespace SwitchBlocks.Entities
 
             if (DataCountdown.CanSwitchSafely && DataCountdown.SwitchOnceSafe)
             {
-                if (IsActiveOnCurrentScreen)
+                if (this.IsActiveOnCurrentScreen)
                 {
                     ModSounds.CountdownFlip?.PlayOneShot();
                 }
@@ -84,7 +79,7 @@ namespace SwitchBlocks.Entities
             {
                 if (DataCountdown.CanSwitchSafely || SettingsCountdown.ForceSwitch)
                 {
-                    if (IsActiveOnCurrentScreen)
+                    if (this.IsActiveOnCurrentScreen)
                     {
                         ModSounds.CountdownFlip?.PlayOneShot();
                     }

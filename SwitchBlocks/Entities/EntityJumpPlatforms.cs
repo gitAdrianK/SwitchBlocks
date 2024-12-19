@@ -1,41 +1,36 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Settings;
+
     public class EntityJumpPlatforms : EntityDrawables<PlatformInOut>
     {
         public EntityJumpPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.JUMP) { }
 
         protected override void EntityUpdate(float p_delta)
         {
-            DataJump.Progress = UpdateProgressClamped(
+            DataJump.Progress = this.UpdateProgressClamped(
                 DataJump.State,
                 DataJump.Progress,
                 p_delta,
                 SettingsJump.Multiplier);
-            TrySwitch();
+            this.TrySwitch();
         }
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataJump.State,
-                    DataJump.Progress);
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataJump.State,
+                DataJump.Progress));
 
         private void TrySwitch()
         {
             if (DataJump.CanSwitchSafely && DataJump.SwitchOnceSafe)
             {
-                if (IsActiveOnCurrentScreen)
+                if (this.IsActiveOnCurrentScreen)
                 {
                     ModSounds.JumpFlip?.PlayOneShot();
                 }

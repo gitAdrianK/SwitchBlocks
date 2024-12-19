@@ -1,12 +1,12 @@
-﻿using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupAuto
     {
         private static EntityAutoPlatforms entityAutoPlatforms;
@@ -22,9 +22,9 @@ namespace SwitchBlocks.Setups
 
             entityAutoPlatforms = new EntityAutoPlatforms();
 
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
         }
 
         public static void DoCleanup()

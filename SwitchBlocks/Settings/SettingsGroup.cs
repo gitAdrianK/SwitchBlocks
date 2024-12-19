@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Xml;
-using static SwitchBlocks.Util.Directions;
-
 namespace SwitchBlocks.Settings
 {
+    using System.Collections.Specialized;
+    using System.Xml;
+    using static SwitchBlocks.Util.Directions;
+
     public static class SettingsGroup
     {
         /// <summary>
@@ -30,8 +29,8 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            XmlNodeList childrenGroup = block.ChildNodes;
-            Dictionary<string, int> dictionaryGroup = ParseSettings.MapNames(childrenGroup);
+            var childrenGroup = block.ChildNodes;
+            var dictionaryGroup = ParseSettings.MapNames(childrenGroup);
             Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);

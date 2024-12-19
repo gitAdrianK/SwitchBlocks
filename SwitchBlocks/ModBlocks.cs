@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
 namespace SwitchBlocks
 {
+    using Microsoft.Xna.Framework;
+
     /// <summary>
     /// Contains colors used in this mod for its blocks as well as various other properties
     /// that can be set for the types of blocks, like durations and animation speed multiplier.

@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Settings;
-using System;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Threading.Tasks;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering auto platforms in the level.
     /// </summary>
@@ -17,33 +17,28 @@ namespace SwitchBlocks.Entities
 
         protected override void EntityUpdate(float p_delta)
         {
-            DataAuto.Progress = UpdateProgressClamped(
+            DataAuto.Progress = this.UpdateProgressClamped(
                 DataAuto.State,
                 DataAuto.Progress,
                 p_delta,
                 SettingsAuto.Multiplier);
-            int currentTick = AchievementManager.GetTicks();
-            int adjustedTick = ((currentTick + SettingsAuto.DurationCycle) - DataAuto.ResetTick) % SettingsAuto.DurationCycle;
-            TrySound(adjustedTick);
-            TrySwitch(adjustedTick);
+            var currentTick = AchievementManager.GetTicks();
+            var adjustedTick = (currentTick + SettingsAuto.DurationCycle - DataAuto.ResetTick) % SettingsAuto.DurationCycle;
+            this.TrySound(adjustedTick);
+            this.TrySwitch(adjustedTick);
         }
 
-        public override void EntityDraw(SpriteBatch spriteBatch)
-        {
-            Parallel.ForEach(currentDrawables, drawable =>
-            {
-                drawable.Draw(
-                    spriteBatch,
-                    DataAuto.State,
-                    DataAuto.Progress);
-            });
-        }
+        public override void EntityDraw(SpriteBatch spriteBatch) => Parallel.ForEach(this.CurrentDrawables, drawable
+            => drawable.Draw(
+                spriteBatch,
+                DataAuto.State,
+                DataAuto.Progress));
 
         private void TrySound(int adjustedTick)
         {
             adjustedTick += SettingsAuto.DurationOff * Convert.ToInt32(DataAuto.State);
-            int soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
-            int soundTick = (adjustedTick + soundAdjust) % SettingsAuto.DurationCycle;
+            var soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
+            var soundTick = (adjustedTick + soundAdjust) % SettingsAuto.DurationCycle;
             // Its not yet time to make a sound
             if (soundTick != 0)
             {
@@ -52,18 +47,18 @@ namespace SwitchBlocks.Entities
             // Check which sound is to be played
             if (SettingsAuto.WarnCount == DataAuto.WarnCount)
             {
-                DoFlipSound();
+                this.DoFlipSound();
             }
             else
             {
-                DoWarnSound();
+                this.DoWarnSound();
             }
         }
 
         private void DoWarnSound()
         {
             DataAuto.WarnCount++;
-            if (!IsActiveOnCurrentScreen)
+            if (!this.IsActiveOnCurrentScreen)
             {
                 return;
             }
@@ -88,7 +83,7 @@ namespace SwitchBlocks.Entities
         private void DoFlipSound()
         {
             DataAuto.WarnCount = 0;
-            if (IsActiveOnCurrentScreen)
+            if (this.IsActiveOnCurrentScreen)
             {
                 ModSounds.AutoFlip?.PlayOneShot();
             }
@@ -97,7 +92,7 @@ namespace SwitchBlocks.Entities
         private void TrySwitch(int adjustedTick)
         {
             // I think its < but it could be <=
-            bool currState = adjustedTick - SettingsAuto.DurationOn < 0;
+            var currState = adjustedTick - SettingsAuto.DurationOn < 0;
             if (DataAuto.State == currState)
             {
                 return;

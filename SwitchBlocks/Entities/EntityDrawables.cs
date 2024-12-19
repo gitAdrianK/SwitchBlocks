@@ -1,76 +1,76 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Entities.Drawables;
-using SwitchBlocks.Patching;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Serialization;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using System.Xml.Serialization;
+    using EntityComponent;
+    using JumpKing;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Entities.Drawables;
+    using SwitchBlocks.Patching;
+
     public abstract class EntityDrawables<TDrawable> : Entity where TDrawable : IDrawable
     {
-        int currentScreen = -1;
+        private int currentScreen = -1;
 
         private readonly Dictionary<int, List<TDrawable>> drawablesDict;
-        protected List<TDrawable> currentDrawables;
-        public bool IsActiveOnCurrentScreen => currentDrawables != null;
+        protected List<TDrawable> CurrentDrawables { get; set; }
+        public bool IsActiveOnCurrentScreen => this.CurrentDrawables != null;
 
         protected abstract void EntityUpdate(float p_delta);
         public abstract void EntityDraw(SpriteBatch spriteBatch);
 
         protected EntityDrawables(string xmlRootTag, string blocktype)
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
+            var contentManager = Game1.instance.contentManager;
 
             // The root tag is with a capital and plural, the folder is all lower case,
             // the individual tag is singular.
             // e.g. folder: platforms, root tag: Platforms, individual tag: Platform
-            string subfolder = xmlRootTag.ToLower();
+            var subfolder = xmlRootTag.ToLower();
 
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{subfolder}{sep}{blocktype}{sep}";
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{subfolder}{sep}{blocktype}{sep}";
 
             if (!Directory.Exists(path))
             {
                 return;
             }
 
-            string[] files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
             if (files.Length == 0)
             {
                 return;
             }
 
-            Dictionary<int, List<TDrawable>> dictionary = new Dictionary<int, List<TDrawable>>();
+            var dictionary = new Dictionary<int, List<TDrawable>>();
             // Screens go from 1 to 169
-            Regex regex = new Regex($@"^{subfolder}(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-            foreach (string xmlFilePath in files)
+            var regex = new Regex($@"^{subfolder}(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            foreach (var xmlFilePath in files)
             {
-                string xmlFile = Path.GetFileName(xmlFilePath);
+                var xmlFile = Path.GetFileName(xmlFilePath);
                 if (!regex.IsMatch(xmlFile))
                 {
                     continue;
                 }
 
-                XmlRootAttribute xmlRootAttribute = new XmlRootAttribute
+                var xmlRootAttribute = new XmlRootAttribute
                 {
                     ElementName = xmlRootTag.Remove(xmlRootTag.Length - 1),
                     IsNullable = true
                 };
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(TDrawable), xmlRootAttribute);
-                XmlDocument document = new XmlDocument();
+                var xmlSerializer = new XmlSerializer(typeof(TDrawable), xmlRootAttribute);
+                var document = new XmlDocument();
                 document.Load(xmlFilePath);
 
-                List<TDrawable> drawables = new List<TDrawable>();
+                var drawables = new List<TDrawable>();
                 foreach (XmlNode node in document.SelectNodes($"{xmlRootTag}/{xmlRootTag.Remove(xmlRootTag.Length - 1)}"))
                 {
-                    XmlNodeReader xmlNodeReader = new XmlNodeReader(node);
-                    TDrawable drawable = (TDrawable)xmlSerializer.Deserialize(xmlNodeReader);
+                    var xmlNodeReader = new XmlNodeReader(node);
+                    var drawable = (TDrawable)xmlSerializer.Deserialize(xmlNodeReader);
                     if (drawable.InitializeTextures(contentManager, $"{path}textures{sep}")
                         && drawable.InitializeOthers())
                     {
@@ -86,21 +86,18 @@ namespace SwitchBlocks.Entities
 
             if (dictionary.Count > 0)
             {
-                drawablesDict = dictionary;
+                this.drawablesDict = dictionary;
             }
         }
 
-        protected override void Update(float p_delta)
-        {
-            EntityUpdate(p_delta);
-        }
+        protected override void Update(float p_delta) => this.EntityUpdate(p_delta);
 
         public override void Draw()
         {
-            if (UpdateCurrentScreen() && !EndingManager.HasFinished)
+            if (this.UpdateCurrentScreen() && !EndingManager.HasFinished)
             {
-                SpriteBatch spriteBatch = Game1.spriteBatch;
-                EntityDraw(spriteBatch);
+                var spriteBatch = Game1.spriteBatch;
+                this.EntityDraw(spriteBatch);
             }
         }
 
@@ -110,13 +107,16 @@ namespace SwitchBlocks.Entities
         /// <returns>If no platforms are to be drawn false, true otherwise</returns>
         private bool UpdateCurrentScreen()
         {
-            int nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
+            var nextScreen = Camera.CurrentScreen;
+            if (this.currentScreen != nextScreen)
             {
-                drawablesDict?.TryGetValue(nextScreen, out currentDrawables);
-                currentScreen = nextScreen;
+                if (this.drawablesDict != null && this.drawablesDict.TryGetValue(nextScreen, out var currentDrawables))
+                {
+                    this.CurrentDrawables = currentDrawables;
+                }
+                this.currentScreen = nextScreen;
             }
-            return currentDrawables != null;
+            return this.CurrentDrawables != null;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace SwitchBlocks.Entities
         /// <returns>The new progress after updating</returns>
         protected float UpdateProgressClamped(bool state, float progress, float amount, float multiplier)
         {
-            int stateInt = Convert.ToInt32(state);
+            var stateInt = Convert.ToInt32(state);
             if (progress == stateInt)
             {
                 return progress;
