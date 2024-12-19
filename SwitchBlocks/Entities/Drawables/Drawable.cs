@@ -16,7 +16,7 @@ namespace SwitchBlocks.Entities.Drawables
 
         public abstract void Draw(SpriteBatch spriteBatch, bool state, float progress);
 
-        public bool InitializeTextures(JKContentManager contentManager, string path)
+        public virtual bool InitializeTextures(JKContentManager contentManager, string path)
         {
             if (!File.Exists($"{path}{TextureAsString}.xnb"))
             {
@@ -26,6 +26,9 @@ namespace SwitchBlocks.Entities.Drawables
             return true;
         }
 
-        public abstract bool InitializeOthers();
+        public virtual bool InitializeOthers()
+        {
+            return true;
+        }
     }
 }

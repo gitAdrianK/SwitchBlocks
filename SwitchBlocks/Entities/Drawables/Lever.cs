@@ -9,20 +9,15 @@ namespace SwitchBlocks.Entities.Drawables
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
         {
             Rectangle rectangle = new Rectangle(
-                    Texture.Width * (1 - Convert.ToInt32(state)) * (1 / 2),
+                    Texture.Width / 2 * (1 - Convert.ToInt32(state)),
                     0,
-                    Texture.Width * (1 / 2),
+                    Texture.Width / 2,
                     Texture.Height);
             spriteBatch.Draw(
                 texture: Texture,
                 position: Position,
                 sourceRectangle: rectangle,
                 color: Color.White);
-        }
-
-        public override bool InitializeOthers()
-        {
-            return true;
         }
     }
 }

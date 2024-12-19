@@ -4,7 +4,7 @@
     {
         public int GroupId { get; set; }
 
-        public new bool InitializeOthers()
+        public override bool InitializeOthers()
         {
             if (!base.InitializeOthers())
             {
