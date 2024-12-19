@@ -12,11 +12,11 @@ namespace SwitchBlocks.Entities.Drawables
         // This roundabout way with string paths seems weird, but I haven't found
         // a different way to deserialize on StackOverflow yet, skill issue.
         private Texture2D Scrolling { get; set; }
-        [XmlAttribute("Scrolling")]
+        [XmlElement("Scrolling")]
         public string ScrollingAsString { get; set; }
 
         private Texture2D Foreground { get; set; }
-        [XmlAttribute("Foreground")]
+        [XmlElement("Foreground")]
         public string ForegroundAsString { get; set; }
 
         private int Height { get; set; }
@@ -44,15 +44,15 @@ namespace SwitchBlocks.Entities.Drawables
         {
             if (File.Exists($"{path}{TextureAsString}.xnb"))
             {
-                Texture = contentManager.Load<Texture2D>($"{path}");
+                Texture = contentManager.Load<Texture2D>($"{path}{TextureAsString}");
             }
             if (File.Exists($"{path}{ScrollingAsString}.xnb"))
             {
-                Scrolling = contentManager.Load<Texture2D>($"{path}");
+                Scrolling = contentManager.Load<Texture2D>($"{path}{ScrollingAsString}");
             }
             if (File.Exists($"{path}{ForegroundAsString}.xnb"))
             {
-                Foreground = contentManager.Load<Texture2D>($"{path}");
+                Foreground = contentManager.Load<Texture2D>($"{path}{ForegroundAsString}");
             }
 
             return Texture != null || Foreground != null;

@@ -57,12 +57,17 @@ namespace SwitchBlocks.Entities
                     continue;
                 }
 
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(TDrawable));
+                XmlRootAttribute xmlRootAttribute = new XmlRootAttribute
+                {
+                    ElementName = xmlRootTag.Remove(xmlRootTag.Length - 1),
+                    IsNullable = true
+                };
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(TDrawable), xmlRootAttribute);
                 XmlDocument document = new XmlDocument();
                 document.Load(xmlFilePath);
 
                 List<TDrawable> drawables = new List<TDrawable>();
-                foreach (XmlNode node in document.SelectNodes($"//{xmlRootTag}/{xmlRootTag.Remove(xmlRootTag.Length - 1)}/"))
+                foreach (XmlNode node in document.SelectNodes($"{xmlRootTag}/{xmlRootTag.Remove(xmlRootTag.Length - 1)}"))
                 {
                     XmlNodeReader xmlNodeReader = new XmlNodeReader(node);
                     TDrawable drawable = (TDrawable)xmlSerializer.Deserialize(xmlNodeReader);
@@ -73,7 +78,7 @@ namespace SwitchBlocks.Entities
                     }
                 }
 
-                if (drawables.Count != 0)
+                if (drawables.Count > 0)
                 {
                     dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, drawables);
                 }

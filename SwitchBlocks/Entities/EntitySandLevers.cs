@@ -19,7 +19,10 @@ namespace SwitchBlocks.Entities
             Parallel.ForEach(currentDrawables, drawable =>
             {
                 // Levers don't care about progress, and sand doesn't track it.
-                drawable.Draw(spriteBatch, DataSand.State, 0);
+                drawable.Draw(
+                    spriteBatch,
+                    DataSand.State,
+                    0);
             });
         }
     }

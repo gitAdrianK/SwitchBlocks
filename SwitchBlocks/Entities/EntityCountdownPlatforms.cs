@@ -54,7 +54,10 @@ namespace SwitchBlocks.Entities
         {
             Parallel.ForEach(currentDrawables, drawable =>
             {
-                drawable.Draw(spriteBatch, DataCountdown.State, DataCountdown.Progress);
+                drawable.Draw(
+                    spriteBatch,
+                    DataCountdown.State,
+                    DataCountdown.Progress);
             });
         }
 

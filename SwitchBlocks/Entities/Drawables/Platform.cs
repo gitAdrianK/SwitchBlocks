@@ -6,7 +6,7 @@ namespace SwitchBlocks.Entities.Drawables
     {
         [XmlIgnore]
         protected bool StartState { get; set; }
-        [XmlAttribute("StartState")]
+        [XmlElement("StartState")]
         public string StartStateAsString
         {
             get
