@@ -19,5 +19,10 @@ namespace SwitchBlocks.Entities.Drawables
                 sourceRectangle: rectangle,
                 color: Color.White);
         }
+
+        public override bool InitializeOthers()
+        {
+            return true;
+        }
     }
 }

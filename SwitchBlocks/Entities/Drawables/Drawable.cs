@@ -26,9 +26,6 @@ namespace SwitchBlocks.Entities.Drawables
             return true;
         }
 
-        public bool InitializeOthers()
-        {
-            return true;
-        }
+        public abstract bool InitializeOthers();
     }
 }

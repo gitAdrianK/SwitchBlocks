@@ -46,7 +46,7 @@ namespace SwitchBlocks.Entities.Drawables
                     progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
                     break;
                 default:
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Animation curve was none");
             }
 
             int height = Texture.Height;
@@ -131,10 +131,12 @@ namespace SwitchBlocks.Entities.Drawables
                         sourceRectangle: rectangleRight,
                         color: Color.White);
                     break;
+                default:
+                    throw new InvalidOperationException("Animation style was none");
             }
         }
 
-        public new bool InitializeOthers()
+        public override bool InitializeOthers()
         {
             Style animStyle = Animation.Style != Style.None ? Animation.Style : Style.Fade;
             Curve animCurve = Animation.Curve != Curve.None ? Animation.Curve : Curve.Linear;

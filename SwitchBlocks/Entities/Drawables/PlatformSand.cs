@@ -58,7 +58,7 @@ namespace SwitchBlocks.Entities.Drawables
             return Texture != null || Foreground != null;
         }
 
-        public new bool InitializeOthers()
+        public override bool InitializeOthers()
         {
             if (Texture != null)
             {
