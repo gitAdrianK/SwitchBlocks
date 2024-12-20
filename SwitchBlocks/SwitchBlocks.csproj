@@ -164,6 +164,7 @@
     <Compile Include="Entities\EntityDrawables.cs" />
     <Compile Include="Entities\EntitySequencePlatforms.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
+    <Compile Include="Util\Animations.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
@@ -203,7 +204,6 @@
     <Compile Include="Setups\SetupSand.cs" />
     <Compile Include="Setups\SetupAuto.cs" />
     <Compile Include="Setups\SetupBasic.cs" />
-    <Compile Include="Util\Animation.cs" />
     <Compile Include="Util\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Intersecting.cs" />
