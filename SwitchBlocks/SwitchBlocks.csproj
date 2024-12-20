@@ -164,7 +164,6 @@
     <Compile Include="Entities\EntityDrawables.cs" />
     <Compile Include="Entities\EntitySequencePlatforms.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
-    <Compile Include="Util\Animations.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />

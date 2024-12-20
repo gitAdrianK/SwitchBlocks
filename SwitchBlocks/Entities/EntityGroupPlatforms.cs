@@ -8,6 +8,7 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Entities.Drawables;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
 
     /// <summary>
@@ -17,12 +18,53 @@ namespace SwitchBlocks.Entities
     {
         public EntityGroupPlatforms() : base(ModConsts.XML_PLATFORMS, ModConsts.GROUP)
         {
-            // TODO: Find link
-            //PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,
-            //    SetupGroup.BlocksGroupA,
-            //    SetupGroup.BlocksGroupB,
-            //    SetupGroup.BlocksGroupC,
-            //    SetupGroup.BlocksGroupD);
+            // XXX: This is mega scuffed. I really want to link during the creation of the platform
+            foreach (var kv in this.DrawablesDict)
+            {
+                foreach (var drawable in kv.Value)
+                {
+                    if (SetupGroup.BlocksGroupA.TryGetValue(drawable.FormatLink, out var value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupB.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupC.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupD.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupA.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupB.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupC.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupGroup.BlocksGroupD.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                }
+            }
         }
 
         protected override void EntityUpdate(float p_delta)

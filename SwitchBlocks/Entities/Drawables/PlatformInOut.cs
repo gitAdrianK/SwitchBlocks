@@ -1,16 +1,52 @@
 namespace SwitchBlocks.Entities.Drawables
 {
     using System;
+    using System.Xml.Serialization;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using SwitchBlocks.Util;
-    using Curve = Util.Curve;
 
     public class PlatformInOut : Platform
     {
         private const double HALF_PI = Math.PI / 2.0d;
 
-        public Animation Animation { get; set; }
+        public enum Style
+        {
+            [XmlEnum("")]
+            None = 0,
+            [XmlEnum("fade")]
+            Fade,
+            [XmlEnum("top")]
+            Top,
+            [XmlEnum("bottom")]
+            Bottom,
+            [XmlEnum("left")]
+            Left,
+            [XmlEnum("right")]
+            Right,
+        }
+
+        public enum Curve
+        {
+            [XmlEnum("")]
+            None = 0,
+            [XmlEnum("linear")]
+            Linear,
+            [XmlEnum("easeIn")]
+            EaseIn,
+            [XmlEnum("easeOut")]
+            EaseOut,
+            [XmlEnum("easeInOut")]
+            EaseInOut,
+        }
+
+        public struct Animation
+        {
+            public Style Style { get; set; }
+            public Curve Curve { get; set; }
+        }
+
+        [XmlElement("Animation")]
+        public Animation AnimationIn { get; set; }
         public Animation AnimationOut { get; set; }
 
         public override void Draw(SpriteBatch spriteBatch, bool state, float progress)
@@ -29,7 +65,7 @@ namespace SwitchBlocks.Entities.Drawables
                 return;
             }
 
-            var animation = this.StartState == state ? this.Animation : this.AnimationOut;
+            var animation = this.StartState == state ? this.AnimationIn : this.AnimationOut;
             float progressActual;
             switch (animation.Curve)
             {
@@ -142,13 +178,13 @@ namespace SwitchBlocks.Entities.Drawables
 
         public override bool InitializeOthers()
         {
-            var animStyle = this.Animation.Style != Style.None ? this.Animation.Style : Style.Fade;
-            var animCurve = this.Animation.Curve != Curve.None ? this.Animation.Curve : Curve.Linear;
+            var animInStyle = this.AnimationIn.Style != Style.None ? this.AnimationIn.Style : Style.Fade;
+            var animInCurve = this.AnimationIn.Curve != Curve.None ? this.AnimationIn.Curve : Curve.Linear;
 
-            var animOutStyle = this.AnimationOut.Style != Style.None ? this.AnimationOut.Style : animStyle;
-            var animOutCurve = this.AnimationOut.Curve != Curve.None ? this.AnimationOut.Curve : animCurve;
+            var animOutStyle = this.AnimationOut.Style != Style.None ? this.AnimationOut.Style : animInStyle;
+            var animOutCurve = this.AnimationOut.Curve != Curve.None ? this.AnimationOut.Curve : animInCurve;
 
-            this.Animation = new Animation { Style = animStyle, Curve = animCurve };
+            this.AnimationIn = new Animation { Style = animInStyle, Curve = animInCurve };
             this.AnimationOut = new Animation { Style = animOutStyle, Curve = animOutCurve };
 
             return true;

@@ -16,7 +16,7 @@ namespace SwitchBlocks.Entities
     {
         private int currentScreen = -1;
 
-        private readonly Dictionary<int, List<TDrawable>> drawablesDict;
+        protected Dictionary<int, List<TDrawable>> DrawablesDict { get; set; }
         protected List<TDrawable> CurrentDrawables { get; set; }
         public bool IsActiveOnCurrentScreen => this.CurrentDrawables != null;
 
@@ -80,13 +80,13 @@ namespace SwitchBlocks.Entities
 
                 if (drawables.Count > 0)
                 {
-                    dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, drawables);
+                    dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")), drawables);
                 }
             }
 
             if (dictionary.Count > 0)
             {
-                this.drawablesDict = dictionary;
+                this.DrawablesDict = dictionary;
             }
         }
 
@@ -107,13 +107,15 @@ namespace SwitchBlocks.Entities
         /// <returns>If no platforms are to be drawn false, true otherwise</returns>
         private bool UpdateCurrentScreen()
         {
-            var nextScreen = Camera.CurrentScreen;
+            if (this.DrawablesDict == null)
+            {
+                return false;
+            }
+            var nextScreen = Camera.CurrentScreenIndex1;
             if (this.currentScreen != nextScreen)
             {
-                if (this.drawablesDict != null && this.drawablesDict.TryGetValue(nextScreen, out var currentDrawables))
-                {
-                    this.CurrentDrawables = currentDrawables;
-                }
+                _ = this.DrawablesDict.TryGetValue(nextScreen, out var newDrawables);
+                this.CurrentDrawables = newDrawables;
                 this.currentScreen = nextScreen;
             }
             return this.CurrentDrawables != null;

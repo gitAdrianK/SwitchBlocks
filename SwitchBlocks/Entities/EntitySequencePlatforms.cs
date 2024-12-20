@@ -8,6 +8,7 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Entities.Drawables;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
 
     /// <summary>
@@ -17,16 +18,58 @@ namespace SwitchBlocks.Entities
     {
         public EntitySequencePlatforms() : base(ModConsts.XML_PLATFORMS, ModConsts.SEQUENCE)
         {
-            // TODO: Find link
-            //PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.SEQUENCE,
-            //    SetupSequence.BlocksSequenceA,
-            //    SetupSequence.BlocksSequenceB,
-            //    SetupSequence.BlocksSequenceC,
-            //    SetupSequence.BlocksSequenceD);
+            // XXX: This is mega scuffed. I really want to link during the creation of the platform
+            foreach (var kv in this.DrawablesDict)
+            {
+                foreach (var drawable in kv.Value)
+                {
+                    if (SetupSequence.BlocksSequenceA.TryGetValue(drawable.FormatLink, out var value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceB.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceC.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceD.TryGetValue(drawable.FormatLink, out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceA.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceB.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceC.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                    if (SetupSequence.BlocksSequenceD.TryGetValue(drawable.FormatPosition(kv.Key), out value))
+                    {
+                        drawable.GroupId = value.GroupId;
+                        continue;
+                    }
+                }
+            }
         }
 
         protected override void EntityUpdate(float p_delta)
         {
+            // FIXME: Platform render state wrong way around, on <-> off
             var tick = AchievementManager.GetTicks();
             var multiplier = SettingsSequence.Multiplier;
             var finished = new List<int>();
