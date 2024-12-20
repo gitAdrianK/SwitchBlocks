@@ -74,7 +74,7 @@ namespace SwitchBlocks
         {
             var contentManager = Game1.instance.contentManager;
             var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
+            var path = $"{contentManager.root}{sep}{ModConsts.FOLDER}{sep}audio{sep}";
 
             // Auto
             if (SettingsAuto.IsUsed)

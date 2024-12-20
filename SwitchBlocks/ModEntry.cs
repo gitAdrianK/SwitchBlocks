@@ -1,4 +1,4 @@
-﻿namespace SwitchBlocks
+namespace SwitchBlocks
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -29,7 +29,7 @@
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            //_ = Debugger.Launch();
 
             _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
             _ = LevelManager.RegisterBlockFactory(new FactoryBasic());

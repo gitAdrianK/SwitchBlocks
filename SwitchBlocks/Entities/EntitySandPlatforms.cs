@@ -13,7 +13,7 @@ namespace SwitchBlocks.Entities
     {
         private float offset;
 
-        public EntitySandPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.SAND) { }
+        public EntitySandPlatforms() : base(ModConsts.XML_PLATFORMS, ModConsts.SAND) { }
 
         protected override void EntityUpdate(float p_delta) => this.offset += p_delta * SettingsSand.Multiplier;
 

@@ -7,34 +7,57 @@ namespace SwitchBlocks.Settings
     public static class SettingsGroup
     {
         /// <summary>
-        /// Whether the group block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the group block appears inside the hitbox file and counts as used.
         /// </summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
+
         /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
-        public static int Duration { get; private set; } = 0;
+        public static int Duration { get; private set; } = ModConsts.DEFAULT_NO_DURATION;
+
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the group block type.
         /// </summary>
-        public static float Multiplier { get; private set; } = 1.0f;
+        public static float Multiplier { get; private set; } = ModConsts.DEFAULT_MULTIPLIER;
+
         /// <summary>
         /// Directions the group lever can be activated from.
         /// </summary>
         public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
+
         /// <summary>
         /// Directions the group platform can be activated from.
         /// </summary>
         public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XmlElement block)
         {
-            var childrenGroup = block.ChildNodes;
-            var dictionaryGroup = ParseSettings.MapNames(childrenGroup);
-            Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
-            LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
-            PlatformDirections = ParseSettings.ParsePlatformSideDisable(dictionaryGroup, block);
+            Duration = ModConsts.DEFAULT_NO_DURATION;
+            Multiplier = ModConsts.DEFAULT_MULTIPLIER;
+            LeverDirections = new BitVector32((int)Direction.All);
+            PlatformDirections = new BitVector32((int)Direction.All);
+
+            foreach (XmlElement element in block)
+            {
+                switch (element.Name)
+                {
+                    case ModConsts.DURATION:
+                        Duration = ParseSettings.ParseDuration(element);
+                        break;
+                    case ModConsts.MULTIPLIER:
+                        Multiplier = ParseSettings.ParseMultiplier(element);
+                        break;
+                    case ModConsts.LEVER_SIDE_DISABLE:
+                        LeverDirections = ParseSettings.ParseSideDisable(element);
+                        break;
+                    case ModConsts.PLATFORM_SIDE_DISABLE:
+                        PlatformDirections = ParseSettings.ParseSideDisable(element);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

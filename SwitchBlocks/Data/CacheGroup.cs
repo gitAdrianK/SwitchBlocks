@@ -26,8 +26,8 @@ namespace SwitchBlocks.Data
 
                 var contentManager = Game1.instance.contentManager;
                 var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}cache_{ModStrings.GROUP}.sav";
+                var path = $"{contentManager.root}{sep}{ModConsts.FOLDER}{sep}saves{sep}";
+                var file = $"{path}cache_{ModConsts.GROUP}.sav";
                 if (File.Exists(file))
                 {
                     StreamReader streamReader = null;
@@ -71,13 +71,13 @@ namespace SwitchBlocks.Data
 
             var contentManager = Game1.instance.contentManager;
             var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var path = $"{contentManager.root}{sep}{ModConsts.FOLDER}{sep}saves{sep}";
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
             }
             var xmlSerializer = new XmlSerializer(typeof(CacheGroup));
-            TextWriter textWriter = new StreamWriter($"{path}cache_{ModStrings.GROUP}.sav");
+            TextWriter textWriter = new StreamWriter($"{path}cache_{ModConsts.GROUP}.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
 

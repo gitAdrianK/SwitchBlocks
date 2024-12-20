@@ -12,7 +12,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityCountdownPlatforms : EntityDrawables<PlatformInOut>
     {
-        public EntityCountdownPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.COUNTDOWN) { }
+        public EntityCountdownPlatforms() : base(ModConsts.XML_PLATFORMS, ModConsts.COUNTDOWN) { }
 
         private void TryWarn(int adjustedTick)
         {
@@ -24,6 +24,21 @@ namespace SwitchBlocks.Entities
             if (adjustedTick - warnAdjust == 0)
             {
                 DataCountdown.WarnCount++;
+                // The sound was disabled
+                if (DataCountdown.State)
+                {
+                    if (SettingsCountdown.WarnDisableOn)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (SettingsCountdown.WarnDisableOff)
+                    {
+                        return;
+                    }
+                }
                 ModSounds.CountdownWarn.PlayOneShot();
             }
         }

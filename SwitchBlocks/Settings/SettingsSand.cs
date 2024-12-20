@@ -7,23 +7,37 @@ namespace SwitchBlocks.Settings
     public static class SettingsSand
     {
         /// <summary>
-        /// Whether the sand block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the sand block appears inside the hitbox file and counts as used.
         /// </summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
         /// <summary>
         /// Multiplier of the deltaTime used in the animation of the sand block type.
         /// </summary>
-        public static float Multiplier { get; private set; } = 1.0f;
+        public static float Multiplier { get; private set; } = ModConsts.DEFAULT_MULTIPLIER;
         /// <summary>
         /// Directions the sand lever can be activated from.
         /// </summary>
         public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XmlElement block)
         {
-            var dictionarySand = ParseSettings.MapNames(block.ChildNodes);
-            Multiplier = ParseSettings.ParseMultiplier(dictionarySand, block);
-            LeverDirections = ParseSettings.ParseLeverSideDisable(dictionarySand, block);
+            Multiplier = ModConsts.DEFAULT_MULTIPLIER;
+            LeverDirections = new BitVector32((int)Direction.All);
+
+            foreach (XmlElement element in block)
+            {
+                switch (element.Name)
+                {
+                    case ModConsts.MULTIPLIER:
+                        Multiplier = ParseSettings.ParseMultiplier(element);
+                        break;
+                    case ModConsts.LEVER_SIDE_DISABLE:
+                        LeverDirections = ParseSettings.ParseSideDisable(element);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

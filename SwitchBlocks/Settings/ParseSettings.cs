@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Globalization;
     using System.Xml;
@@ -14,70 +13,38 @@ namespace SwitchBlocks.Settings
         private const float DeltaTime = 0.01666667f;
 
         /// <summary>
-        /// Maps names to their position in an xml node list.
+        /// Parses a Duration element number in seconds and return the rounded up integer value of
+        /// the specified durationin Jump King ticks.
         /// </summary>
-        /// <param name="nodeList">The xml node list to check.</param>
-        /// <returns>A dictionary mapping the names to its position in the node list.</returns>
-        public static Dictionary<string, int> MapNames(XmlNodeList nodeList)
-        {
-            var dictionary = new Dictionary<string, int>();
-            for (var i = 0; i < nodeList.Count; i++)
-            {
-                var node = nodeList[i];
-                dictionary[node.Name] = i;
-            }
-            return dictionary;
-        }
-
-        public static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root)
-            => ParseDuration(dictionary, root, 3);
-
-        // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
-        public static int ParseDuration(Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
-            => ParseDuration("Duration", dictionary, root, defaultDuration);
-
-        // Looks for a "Duration" node and returns the inside declared float duration in ticks or default duration. Rounded up.
-        public static int ParseDuration(string tagName, Dictionary<string, int> dictionary, XmlNode root, float defaultDuration)
-            => ParseDuration(tagName, dictionary, root, (int)((defaultDuration / DeltaTime) + 0.5f));
-
-        public static int ParseDuration(string tagName, Dictionary<string, int> dictionary, XmlNode root, int defaultDuration)
-        {
-            var children = root.ChildNodes;
-            var duration = defaultDuration;
-            if (dictionary.TryGetValue(tagName, out var value))
-            {
-                duration = (int)((float.Parse(children[value].InnerText, CultureInfo.InvariantCulture) / DeltaTime) + 0.5f);
-            }
-            return duration;
-        }
-
-        // Looks for a "Multiplier" node and returns the inside declared float multiplier or 1.0f.
-        public static float ParseMultiplier(Dictionary<string, int> dictionary, XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var multiplier = 1.0f;
-            if (dictionary.TryGetValue("Multiplier", out var value))
-            {
-                var multi = children[value]
-                    .InnerText
-                    .Trim()
-                    .Replace(",", ".");
-                multiplier = float.Parse(multi, CultureInfo.InvariantCulture);
-            }
-            return multiplier;
-        }
-
-        private static BitVector32 ParseSideDisable(string tag, Dictionary<string, int> dictionary, XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var directions = new BitVector32((int)Direction.All);
-            if (!dictionary.TryGetValue(tag, out var value))
-            {
-                return directions;
-            }
-            var inside = children[value]
+        /// <param name="xmlElement">Duration element</param>
+        /// <returns>The duration inside the element in ticks</returns>
+        public static int ParseDuration(XmlElement xmlElement)
+            => (int)((float.Parse(xmlElement
                 .InnerText
-                .Trim();
+                .Replace(",", "."),
+                CultureInfo.InvariantCulture) / DeltaTime) + 0.5f);
+
+        /// <summary>
+        /// Parses the Multiplier element.
+        /// </summary>
+        /// <param name="xmlElement">Multiplier element</param>
+        /// <returns>The multiplier if found or 1.0f</returns>
+        public static float ParseMultiplier(XmlElement xmlElement)
+            => float.Parse(xmlElement
+                .InnerText
+                .Replace(",", "."),
+                CultureInfo.InvariantCulture);
+
+        /// <summary>
+        /// Looks for a "LeverSideDisable" element and parses the inside to look for directions
+        /// "Up", "Down", "Left", "Right" and removes those from the bitvector of possible directions.
+        /// </summary>
+        /// <param name="xmlElement">Side disable element</param>
+        /// <returns>The bitvector with specified sides disabled</returns>
+        public static BitVector32 ParseSideDisable(XmlElement xmlElement)
+        {
+            var inside = xmlElement.InnerText.Trim();
+            var directions = new BitVector32((int)Direction.All);
             if (inside == string.Empty)
             {
                 return directions;
@@ -85,73 +52,45 @@ namespace SwitchBlocks.Settings
             var splits = inside.Split(',');
             foreach (var split in splits)
             {
-                var trim = split
-                    .Trim()
-                    .ToLower();
-                if (trim.Equals("up"))
+                switch (split.Trim().ToLower())
                 {
-                    directions[(int)Direction.Up] = false;
-                }
-                else if (trim.Equals("down"))
-                {
-                    directions[(int)Direction.Down] = false;
-                }
-                else if (trim.Equals("left"))
-                {
-                    directions[(int)Direction.Left] = false;
-                }
-                else if (trim.Equals("right"))
-                {
-                    directions[(int)Direction.Right] = false;
+                    case "up":
+                        directions[(int)Direction.Up] = false;
+                        break;
+                    case "down":
+                        directions[(int)Direction.Down] = false;
+                        break;
+                    case "left":
+                        directions[(int)Direction.Left] = false;
+                        break;
+                    case "right":
+                        directions[(int)Direction.Right] = false;
+                        break;
+                    default:
+                        break;
                 }
             }
             return directions;
-
         }
 
-        // Looks for a "LeverSideDisable" node and parses the inside to look for directions
-        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static BitVector32 ParseLeverSideDisable(Dictionary<string, int> dictionary, XmlNode root)
-            => ParseSideDisable("LeverSideDisable", dictionary, root);
+        /// <summary>
+        /// Parses a Count element number and returns it as integer.
+        /// </summary>
+        /// <param name="xmlElement">Warn count element</param>
+        /// <returns>The count inside the element</returns>
+        public static int ParseWarnCount(XmlElement xmlElement)
+            => int.Parse(xmlElement.InnerText);
 
-        // Looks for a "PlatformSideDisable" node and parses the inside to look for directions
-        // "Up", "Down", "Left", "Right" and removes those from the hash set of possible directions.
-        public static BitVector32 ParsePlatformSideDisable(Dictionary<string, int> dictionary, XmlNode root)
-            => ParseSideDisable("PlatformSideDisable", dictionary, root);
+        /// <summary>
+        /// Parses a Duration element number in seconds and returns the rounded up integer value of
+        /// the specified duration in Jump King ticks.
+        /// </summary>
+        /// <param name="xmlElement">Warn duration element</param>
+        /// <returns>The duration inside the element in ticks</returns>
+        public static int ParseWarnDuration(XmlElement xmlElement)
+            => (int)((float.Parse(xmlElement.InnerText
+                .Replace(",", "."),
+                CultureInfo.InvariantCulture) / DeltaTime) + 0.5f);
 
-        public static bool ParseForceSwitch(Dictionary<string, int> dictionary)
-            => dictionary.ContainsKey("ForceStateSwitch");
-
-        public static int ParseWarnCount(Dictionary<string, int> dictionary, XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var count = 2;
-            if (dictionary.TryGetValue("Count", out var value))
-            {
-                count = int.Parse(children[value].InnerText);
-            }
-            return count;
-        }
-
-        public static int ParseWarnDuration(Dictionary<string, int> dictionary, XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var duration = 1.0f;
-            if (dictionary.TryGetValue("Duration", out var value))
-            {
-                var dur = children[value]
-                    .InnerText
-                    .Trim()
-                    .Replace(",", ".");
-                duration = float.Parse(dur, CultureInfo.InvariantCulture);
-            }
-            return (int)((duration / DeltaTime) + 0.5f);
-        }
-
-        public static bool ParseWarnDisableOn(Dictionary<string, int> dictionary)
-            => dictionary.ContainsKey("DisableOn");
-
-        public static bool ParseWarnDisableOff(Dictionary<string, int> dictionary)
-            => dictionary.ContainsKey("DisableOff");
     }
 }

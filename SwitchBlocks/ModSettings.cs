@@ -14,37 +14,39 @@ namespace SwitchBlocks
         {
             var document = new XmlDocument();
             var sep = Path.DirectorySeparatorChar;
-            var path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
+            var path = $"{Game1.instance.contentManager.root}{sep}{ModConsts.FOLDER}{sep}blocks.xml";
             document.Load(path);
-            var blocks = document.LastChild;
-            if (blocks == null || blocks.Name != "Blocks")
+            var blocks = document.SelectSingleNode("Blocks");
+            if (blocks == null)
             {
                 return;
             }
-            foreach (XmlNode block in blocks)
+            // I'd imagine SelectSingleNode does not find the node in constant time but goes over all nodes
+            // and returns the node if found. So we sweep over all nodes once instead.
+            foreach (XmlElement element in blocks)
             {
-                switch (block.Name)
+                switch (element.Name)
                 {
                     case "Auto":
-                        SettingsAuto.Parse(block);
+                        SettingsAuto.Parse(element);
                         break;
                     case "Basic":
-                        SettingsBasic.Parse(block);
+                        SettingsBasic.Parse(element);
                         break;
                     case "Countdown":
-                        SettingsCountdown.Parse(block);
+                        SettingsCountdown.Parse(element);
                         break;
                     case "Group":
-                        SettingsGroup.Parse(block);
+                        SettingsGroup.Parse(element);
                         break;
                     case "Jump":
-                        SettingsJump.Parse(block);
+                        SettingsJump.Parse(element);
                         break;
                     case "Sand":
-                        SettingsSand.Parse(block);
+                        SettingsSand.Parse(element);
                         break;
                     case "Sequence":
-                        SettingsSequence.Parse(block);
+                        SettingsSequence.Parse(element);
                         break;
                     default:
                         // Do nothing.

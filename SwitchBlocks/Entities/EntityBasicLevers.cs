@@ -10,7 +10,7 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityBasicLevers : EntityDrawables<Lever>
     {
-        public EntityBasicLevers() : base(ModStrings.XML_LEVERS, ModStrings.BASIC) { }
+        public EntityBasicLevers() : base(ModConsts.XML_LEVERS, ModConsts.BASIC) { }
 
         protected override void EntityUpdate(float p_delta) { }
 

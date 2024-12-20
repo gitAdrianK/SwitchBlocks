@@ -33,7 +33,7 @@ namespace SwitchBlocks.Entities
             var subfolder = xmlRootTag.ToLower();
 
             var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{subfolder}{sep}{blocktype}{sep}";
+            var path = $"{contentManager.root}{sep}{ModConsts.FOLDER}{sep}{subfolder}{sep}{blocktype}{sep}";
 
             if (!Directory.Exists(path))
             {

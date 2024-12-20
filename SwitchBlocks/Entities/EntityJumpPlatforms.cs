@@ -8,7 +8,7 @@ namespace SwitchBlocks.Entities
 
     public class EntityJumpPlatforms : EntityDrawables<PlatformInOut>
     {
-        public EntityJumpPlatforms() : base(ModStrings.XML_PLATFORMS, ModStrings.JUMP) { }
+        public EntityJumpPlatforms() : base(ModConsts.XML_PLATFORMS, ModConsts.JUMP) { }
 
         protected override void EntityUpdate(float p_delta)
         {
