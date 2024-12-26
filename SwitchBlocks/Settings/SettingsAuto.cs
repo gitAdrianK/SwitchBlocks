@@ -7,7 +7,7 @@ namespace SwitchBlocks.Settings
     public static class SettingsAuto
     {
         /// <summary>
-        /// Whether the auto block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the auto block appears inside the hitbox file and counts as used.
         /// </summary>
         public static bool IsUsed { get; set; } = false;
         /// <summary>

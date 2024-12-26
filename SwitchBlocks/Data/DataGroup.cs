@@ -87,8 +87,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(true);
-                Groups.Add(id, group);
+                return false;
+                //throw new Exception($"Could not get state data for group nr {id}! Did not exist!");
             }
             return group.State;
         }
@@ -97,8 +97,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(state);
-                Groups.Add(id, group);
+                return;
+                //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
             }
             group.State = state;
         }
@@ -107,8 +107,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(true);
-                Groups.Add(id, group);
+                return 0.0f;
+                //throw new Exception($"Could not get tick data for group nr {id}! Did not exist!");
             }
             return group.Progress;
         }
@@ -117,8 +117,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(true);
-                Groups.Add(id, group);
+                return;
+                //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
             }
             group.Progress = progress;
         }
@@ -127,8 +127,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(true);
-                Groups.Add(id, group);
+                return 0;
+                //throw new Exception($"Could not get tick data for group nr {id}! Did not exist!");
             }
             return group.ActivatedTick;
         }
@@ -137,8 +137,8 @@ namespace SwitchBlocks.Data
         {
             if (!Instance._groups.TryGetValue(id, out BlockGroup group))
             {
-                group = new BlockGroup(true);
-                Groups.Add(id, group);
+                return;
+                //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
             }
             group.ActivatedTick = tick;
         }

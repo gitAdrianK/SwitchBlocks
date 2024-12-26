@@ -7,7 +7,7 @@ namespace SwitchBlocks.Settings
     public static class SettingsJump
     {
         /// <summary>
-        /// Whether the jump block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the jump block appears inside the hitbox file and counts as used.
         /// </summary>
         public static bool IsUsed { get; set; } = false;
         /// <summary>

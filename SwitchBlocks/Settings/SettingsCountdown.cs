@@ -9,7 +9,7 @@ namespace SwitchBlocks.Settings
     public static class SettingsCountdown
     {
         /// <summary>
-        /// Whether the countdown block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the countdown block appears inside the hitbox file and counts as used.
         /// </summary>
         public static bool IsUsed { get; set; } = false;
         /// <summary>

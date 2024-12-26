@@ -20,6 +20,8 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<int, IBlockGroupId>();
 
+        public static int SequenceCount { get; private set; }
+
         public static void DoSetup(PlayerEntity player)
         {
             if (!SettingsSequence.IsUsed)
@@ -86,6 +88,8 @@ namespace SwitchBlocks.Setups
             BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
 
             BlockGroup.CreateGroupData(sequenceId, DataSequence.Groups, false);
+
+            SequenceCount = sequenceId - 1;
         }
     }
 }

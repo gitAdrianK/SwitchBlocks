@@ -5,6 +5,7 @@ using SwitchBlocks.Blocks;
 using SwitchBlocks.Data;
 using SwitchBlocks.Patching;
 using SwitchBlocks.Settings;
+using SwitchBlocks.Setups;
 using SwitchBlocks.Util;
 using System;
 using System.Collections.Generic;
@@ -100,7 +101,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (SettingsSequence.Duration == 0)
                 {
-                    if (groupId != 1)
+                    if (groupId > 1)
                     {
                         DataSequence.SetTick(groupId - 1, Int32.MinValue);
                         DataSequence.Active.Add(groupId - 1);
@@ -112,7 +113,11 @@ namespace SwitchBlocks.Behaviours
                     DataSequence.SetTick(groupId, tick + SettingsSequence.Duration);
                     DataSequence.Active.Add(groupId);
                 }
-                DataSequence.SetTick(groupId + 1, Int32.MaxValue);
+                if (groupId < SetupSequence.SequenceCount)
+                {
+                    DataSequence.SetTick(groupId + 1, int.MaxValue);
+                    DataSequence.Active.Add(groupId + 1);
+                }
                 DataSequence.Touched = groupId;
                 DataSequence.Active.Add(groupId + 1);
                 break;

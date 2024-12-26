@@ -129,7 +129,7 @@ namespace SwitchBlocks
             // Sequence
             if (SettingsSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
             {
-                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
+                SequenceFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
             }
         }
 

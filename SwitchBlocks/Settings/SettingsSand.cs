@@ -9,7 +9,7 @@ namespace SwitchBlocks.Settings
     public static class SettingsSand
     {
         /// <summary>
-        /// Whether the sand block is inside the blocks.xml and counts as "used/enabled"
+        /// Whether the sand block appears inside the hitbox file and counts as used.
         /// </summary>
         public static bool IsUsed { get; set; } = false;
         /// <summary>
