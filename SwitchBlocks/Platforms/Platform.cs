@@ -1,15 +1,15 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Util;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
-
 namespace SwitchBlocks.Platforms
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using JumpKing;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Represents a platform with a texture, position, size, and start state.
     /// </summary>
@@ -20,11 +20,8 @@ namespace SwitchBlocks.Platforms
         public int Height { get; protected set; }
         public int Width { get; protected set; }
         public bool StartState { get; protected set; }
-        protected Animation animation;
-        protected Animation animationOut;
-
-        public Animation Animation => animation;
-        public Animation AnimationOut => animationOut;
+        public Animation Animation { get; protected set; }
+        public Animation AnimationOut { get; protected set; }
 
         /// <summary>
         /// Creates a dictionary containing the screen as key and a list of platforms as value.<br />
@@ -34,41 +31,41 @@ namespace SwitchBlocks.Platforms
         /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
         public static Dictionary<int, List<Platform>> GetPlatformsDictonary(string subfolder)
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
 
             if (!Directory.Exists(path))
             {
                 return null;
             }
-            string[] files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
             if (files.Length == 0)
             {
                 return null;
             }
 
-            Dictionary<int, List<Platform>> dictionary = new Dictionary<int, List<Platform>>();
-            Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-            foreach (string xmlFilePath in files)
+            var dictionary = new Dictionary<int, List<Platform>>();
+            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            foreach (var xmlFilePath in files)
             {
-                string xmlFile = xmlFilePath.Split(sep).Last();
+                var xmlFile = xmlFilePath.Split(sep).Last();
 
                 if (!regex.IsMatch(xmlFile))
                 {
                     continue;
                 }
 
-                XmlDocument document = new XmlDocument();
+                var document = new XmlDocument();
                 document.Load(xmlFilePath);
-                XmlNode xmlPlatforms = document.LastChild;
+                var xmlPlatforms = document.LastChild;
 
                 if (xmlPlatforms.Name != ModStrings.XML_PLATFORMS)
                 {
                     continue;
                 }
 
-                List<Platform> platforms = GetPlatformList(xmlPlatforms, path, sep);
+                var platforms = GetPlatformList(xmlPlatforms, path, sep);
                 if (platforms.Count != 0)
                 {
                     dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, platforms);
@@ -87,10 +84,10 @@ namespace SwitchBlocks.Platforms
         /// <returns>A list containing all successfully created platforms</returns>
         protected static List<Platform> GetPlatformList(XmlNode xmlPlatforms, string path, char sep)
         {
-            List<Platform> list = new List<Platform>();
+            var list = new List<Platform>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
             {
-                XmlNodeList xmlPlatform = xmlElement.ChildNodes;
+                var xmlPlatform = xmlElement.ChildNodes;
                 Dictionary<string, int> dictionary;
                 dictionary = Xml.MapNamesRequired(xmlPlatform,
                     ModStrings.TEXTURE,
@@ -102,9 +99,9 @@ namespace SwitchBlocks.Platforms
                     continue;
                 }
 
-                Platform platform = new Platform();
+                var platform = new Platform();
                 // Texture
-                string filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.TEXTURE]].InnerText}";
+                var filePath = $"{path}{ModStrings.TEXTURES}{sep}{xmlPlatform[dictionary[ModStrings.TEXTURE]].InnerText}";
                 if (!File.Exists($"{filePath}.xnb"))
                 {
                     continue;
@@ -114,7 +111,7 @@ namespace SwitchBlocks.Platforms
                 platform.Height = platform.Texture.Height;
 
                 // Position
-                Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
+                var position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
                 if (!position.HasValue)
                 {
                     continue;
@@ -122,7 +119,7 @@ namespace SwitchBlocks.Platforms
                 platform.Position = position.Value;
 
                 // Start state
-                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
+                var stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
                 if (stateInnerText == "on")
                 {
                     platform.StartState = true;
@@ -138,17 +135,20 @@ namespace SwitchBlocks.Platforms
                 }
 
                 // Animation
-                platform.animation.style = Animation.Style.Fade;
-                platform.animation.curve = Animation.Curve.Linear;
-                if (dictionary.TryGetValue(ModStrings.ANIMATION, out int value))
+                platform.Animation = new Animation
                 {
-                    platform.animation = Xml.GetAnimation(xmlPlatform[value]);
+                    AnimStyle = Animation.Style.Fade,
+                    AnimCurve = Animation.Curve.Linear
+                };
+                if (dictionary.TryGetValue(ModStrings.ANIMATION, out var value))
+                {
+                    platform.Animation = Xml.GetAnimation(xmlPlatform[value]);
                 }
 
-                platform.animationOut = platform.animation;
+                platform.AnimationOut = platform.Animation;
                 if (dictionary.TryGetValue(ModStrings.ANIMATION_OUT, out value))
                 {
-                    platform.animationOut = Xml.GetAnimation(xmlPlatform[value]);
+                    platform.AnimationOut = Xml.GetAnimation(xmlPlatform[value]);
                 }
 
                 // The platform had all elements properly set.

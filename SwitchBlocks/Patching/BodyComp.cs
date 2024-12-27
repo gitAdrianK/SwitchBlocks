@@ -1,21 +1,21 @@
-﻿using HarmonyLib;
-using JumpKing.Level;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Data;
-using System;
-using System.Reflection;
-using JK = JumpKing.Player;
-
 namespace SwitchBlocks.Patching
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using HarmonyLib;
+    using JumpKing.Level;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Data;
+    using JK = JumpKing.Player;
+
     public class BodyComp
     {
         public BodyComp(Harmony harmony)
         {
-            MethodInfo isOnBlock = typeof(JK.BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
+            var isOnBlock = typeof(JK.BodyComp).GetMethod("IsOnBlock", new Type[] { typeof(Type) });
 
-            HarmonyMethod isOnCustomBlock = new HarmonyMethod(typeof(BodyComp).GetMethod(nameof(IsOnCustomBlock)));
-            harmony.Patch(
+            var isOnCustomBlock = new HarmonyMethod(typeof(BodyComp).GetMethod(nameof(IsOnCustomBlock)));
+            _ = harmony.Patch(
                 isOnBlock,
                 postfix: isOnCustomBlock);
         }
@@ -26,6 +26,7 @@ namespace SwitchBlocks.Patching
         /// </summary>
         /// <param name="__result">Result of the original function, returning true if the player is on a custom block</param>
         /// <param name="blockType">Original object the function is called with</param>
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         public static void IsOnCustomBlock(ref bool __result, Type blockType)
         {
             if (blockType == typeof(SandBlock))

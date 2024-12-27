@@ -1,9 +1,9 @@
-﻿using JumpKing.Level;
-using Microsoft.Xna.Framework;
-using SwitchBlocks.Data;
-
 namespace SwitchBlocks.Blocks
 {
+    using JumpKing.Level;
+    using Microsoft.Xna.Framework;
+    using SwitchBlocks.Data;
+
     /// <summary>
     /// The basic on block.
     /// </summary>
@@ -11,26 +11,17 @@ namespace SwitchBlocks.Blocks
     {
         private readonly Rectangle collider;
 
-        public BlockBasicOn(Rectangle collider)
-        {
-            this.collider = collider;
-        }
+        public BlockBasicOn(Rectangle collider) => this.collider = collider;
 
-        public Color DebugColor
-        {
-            get { return ModBlocks.BASIC_ON; }
-        }
+        public Color DebugColor => ModBlocks.BASIC_ON;
 
-        public Rectangle GetRect()
-        {
-            return DataBasic.State ? collider : new Rectangle(0, 0, 0, 0);
-        }
+        public Rectangle GetRect() => DataBasic.State ? this.collider : Rectangle.Empty;
 
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (collider.Intersects(hitbox))
+            if (this.collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, collider);
+                intersection = Rectangle.Intersect(hitbox, this.collider);
                 if (DataBasic.State)
                 {
                     return BlockCollisionType.Collision_Blocking;

@@ -1,8 +1,8 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
-
 namespace SwitchBlocks.Entities
 {
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Entity responsible for rendering basic levers in the level.<br />
     /// Singleton.
@@ -22,21 +22,15 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
-        private EntityBasicLevers()
-        {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
-        }
+        private EntityBasicLevers() => this.LeverDictionary = Lever.GetLeversDictonary(ModStrings.BASIC);
 
         protected override void Update(float deltaTime)
         {
-            if (UpdateCurrentScreen())
+            if (this.UpdateCurrentScreen())
             {
-                state = DataBasic.State;
+                this.State = DataBasic.State;
             }
         }
     }

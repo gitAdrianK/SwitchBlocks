@@ -1,18 +1,17 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Setups;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using EntityComponent;
+    using JumpKing;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Entity responsible for rendering group platforms in the level.<br />
     /// Singleton.
@@ -32,19 +31,14 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
         private EntityGroupPlatforms()
-        {
-            PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,
+            => this.PlatformDictionary = PlatformGroup.GetPlatformsDictonary(ModStrings.GROUP,
                 SetupGroup.BlocksGroupA,
                 SetupGroup.BlocksGroupB,
                 SetupGroup.BlocksGroupC,
                 SetupGroup.BlocksGroupD);
-        }
 
         // TODO: Inherit from EntityPlatforms and cut down on repeated code
         private int currentScreen = -1;
@@ -55,14 +49,14 @@ namespace SwitchBlocks.Entities
 
         protected override void Update(float deltaTime)
         {
-            int tick = AchievementManager.GetTicks();
-            float multiplier = SettingsGroup.Multiplier;
-            List<int> finished = new List<int>();
-            Parallel.ForEach(DataGroup.Active, group =>
+            var tick = AchievementManager.GetTicks();
+            var multiplier = SettingsGroup.Multiplier;
+            var finished = new List<int>();
+            _ = Parallel.ForEach(DataGroup.Active, group =>
             {
-                BlockGroup blockGroup = DataGroup.Groups[group];
-                UpdateProgress(blockGroup, deltaTime, multiplier);
-                TrySwitch(blockGroup, tick);
+                var blockGroup = DataGroup.Groups[group];
+                this.UpdateProgress(blockGroup, deltaTime, multiplier);
+                this.TrySwitch(blockGroup, tick);
                 if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
                 {
                     // if the group is "finished", but the switch is planned in the near future,
@@ -76,32 +70,30 @@ namespace SwitchBlocks.Entities
                     }
                 }
             });
-            foreach (int i in finished)
+            foreach (var i in finished)
             {
-                BlockGroup blockGroup = DataGroup.Groups[i];
+                var blockGroup = DataGroup.Groups[i];
                 if (!blockGroup.State && blockGroup.Progress == 0.0f)
                 {
                     DataGroup.Finished.Add(i);
                 }
-                DataGroup.Active.Remove(i);
+                _ = DataGroup.Active.Remove(i);
             }
         }
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                EntityPlatforms.DrawPlatform(platform,
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.currentPlatformList, platform
+                => EntityPlatforms.DrawPlatform(platform,
                     DataGroup.GetProgress(platform.GroupId),
                     DataGroup.GetState(platform.GroupId),
-                    spriteBatch);
-            });
+                    spriteBatch));
         }
 
         /// <summary>
@@ -110,18 +102,18 @@ namespace SwitchBlocks.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            if (PlatformDictionary == null)
+            if (this.PlatformDictionary == null)
             {
                 return false;
             }
 
-            nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
+            this.nextScreen = Camera.CurrentScreen;
+            if (this.currentScreen != this.nextScreen)
             {
-                PlatformDictionary.TryGetValue(nextScreen, out currentPlatformList);
-                currentScreen = nextScreen;
+                _ = this.PlatformDictionary.TryGetValue(this.nextScreen, out this.currentPlatformList);
+                this.currentScreen = this.nextScreen;
             }
-            return currentPlatformList != null;
+            return this.currentPlatformList != null;
         }
 
         /// <summary>
@@ -132,7 +124,7 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(BlockGroup group, float amount, float multiplier)
         {
-            int stateInt = Convert.ToInt32(group.State);
+            var stateInt = Convert.ToInt32(group.State);
             if (group.Progress == stateInt)
             {
                 return;
@@ -146,10 +138,10 @@ namespace SwitchBlocks.Entities
         private void TrySwitch(BlockGroup group, int tick)
         {
             // A platform is solid if the activated tick is larger than the current tick.
-            bool newState = group.ActivatedTick > tick;
+            var newState = group.ActivatedTick > tick;
             if (group.State != newState)
             {
-                if (currentPlatformList != null)
+                if (this.currentPlatformList != null)
                 {
                     ModSounds.GroupFlip?.PlayOneShot();
                 }

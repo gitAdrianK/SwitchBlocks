@@ -1,14 +1,14 @@
-﻿using JumpKing.API;
-using JumpKing.Level;
-using JumpKing.Level.Sampler;
-using JumpKing.Workshop;
-using Microsoft.Xna.Framework;
-using SwitchBlocks.Blocks;
-using System;
-using System.Collections.Generic;
-
 namespace SwitchBlocks.Factories
 {
+    using System;
+    using System.Collections.Generic;
+    using JumpKing.API;
+    using JumpKing.Level;
+    using JumpKing.Level.Sampler;
+    using JumpKing.Workshop;
+    using Microsoft.Xna.Framework;
+    using SwitchBlocks.Blocks;
+
     /// <summary>
     /// Factory for basic blocks.
     /// </summary>
@@ -16,7 +16,7 @@ namespace SwitchBlocks.Factories
     {
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
-        private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
+        private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color> {
             ModBlocks.BASIC_ON,
             ModBlocks.BASIC_OFF,
             ModBlocks.BASIC_ICE_ON,
@@ -31,10 +31,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.BASIC_LEVER_SOLID_OFF,
         };
 
-        public bool CanMakeBlock(Color blockCode, Level level)
-        {
-            return supportedBlockCodes.Contains(blockCode);
-        }
+        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
         public bool IsSolidBlock(Color blockCode)
         {
@@ -50,13 +47,15 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_ON:
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
                     return true;
+                default:
+                    break;
             }
             return false;
         }
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
         {
-            if (LastUsedMapId != level.ID && supportedBlockCodes.Contains(blockCode))
+            if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
                 LastUsedMapId = level.ID;
             }
@@ -87,7 +86,7 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
                     return new BlockBasicLeverSolidOff(blockRect);
                 default:
-                    throw new InvalidOperationException($"{typeof(FactoryBasic).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException($"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }

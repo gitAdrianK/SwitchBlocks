@@ -1,41 +1,26 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-
 namespace SwitchBlocks.Behaviours
 {
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+
     public class BehaviourBasicOn : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -44,12 +29,12 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isOnBasic = advCollisionInfo.IsCollidingWith<BlockBasicOn>();
-            bool isOnIce = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
-            bool isOnSnow = advCollisionInfo.IsCollidingWith<BlockBasicSnowOn>();
-            IsPlayerOnBlock = DataBasic.State && (isOnBasic || isOnIce || isOnSnow);
-            if (!IsPlayerOnBlock)
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var isOnBasic = advCollisionInfo.IsCollidingWith<BlockBasicOn>();
+            var isOnIce = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
+            var isOnSnow = advCollisionInfo.IsCollidingWith<BlockBasicSnowOn>();
+            this.IsPlayerOnBlock = DataBasic.State && (isOnBasic || isOnIce || isOnSnow);
+            if (!this.IsPlayerOnBlock)
             {
                 return true;
             }

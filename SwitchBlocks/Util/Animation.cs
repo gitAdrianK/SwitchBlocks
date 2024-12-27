@@ -1,12 +1,12 @@
-﻿using System;
-
 namespace SwitchBlocks.Util
 {
+    using System;
+
     public struct Animation
     {
         public const double HALF_PI = Math.PI / 2.0d;
 
-        public enum Style
+        public enum Style : byte
         {
             Fade,
             Top,
@@ -15,7 +15,7 @@ namespace SwitchBlocks.Util
             Right,
         }
 
-        public enum Curve
+        public enum Curve : byte
         {
             Linear,
             EaseIn,
@@ -23,7 +23,7 @@ namespace SwitchBlocks.Util
             EaseInOut,
         }
 
-        public Style style;
-        public Curve curve;
+        public Style AnimStyle { get; set; }
+        public Curve AnimCurve { get; set; }
     }
 }

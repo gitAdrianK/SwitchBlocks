@@ -1,14 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Xml;
-
 namespace SwitchBlocks.Util
 {
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Xml;
+    using Microsoft.Xna.Framework;
+
     /// <summary>
     /// Contains various functions related to working with xml nodes.
     /// </summary>
-    static class Xml
+    public static class Xml
     {
         /// <summary>
         /// Maps names to their position in an xml node list.
@@ -17,10 +17,10 @@ namespace SwitchBlocks.Util
         /// <returns>A dictionary mapping the names to its position in the node list.</returns>
         public static Dictionary<string, int> MapNames(XmlNodeList nodeList)
         {
-            Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            for (int i = 0; i < nodeList.Count; i++)
+            var dictionary = new Dictionary<string, int>();
+            for (var i = 0; i < nodeList.Count; i++)
             {
-                XmlNode node = nodeList[i];
+                var node = nodeList[i];
                 dictionary[node.Name] = i;
             }
             return dictionary;
@@ -39,8 +39,8 @@ namespace SwitchBlocks.Util
             {
                 return null;
             }
-            Dictionary<string, int> dictionary = MapNames(nodeList);
-            foreach (string name in names)
+            var dictionary = MapNames(nodeList);
+            foreach (var name in names)
             {
                 if (!dictionary.ContainsKey(name))
                 {
@@ -58,8 +58,8 @@ namespace SwitchBlocks.Util
         /// <returns>Color or null if a color couldn't be made</returns>
         public static Color? GetColor(XmlNode root)
         {
-            XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesRequired(children, "R", "G", "B");
+            var children = root.ChildNodes;
+            var dictionary = MapNamesRequired(children, "R", "G", "B");
             if (dictionary == null)
             {
                 return null;
@@ -78,16 +78,16 @@ namespace SwitchBlocks.Util
         /// <returns>Vector2 or null if a vector couldn't be made</returns>
         public static Vector2? GetVector2(XmlNode root)
         {
-            XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesRequired(children, "X", "Y");
+            var children = root.ChildNodes;
+            var dictionary = MapNamesRequired(children, "X", "Y");
             if (dictionary == null)
             {
                 return null;
             }
-            string xString = children[dictionary["X"]].InnerText;
+            var xString = children[dictionary["X"]].InnerText;
             xString = xString.Trim();
             xString = xString.Replace(",", ".");
-            string yString = children[dictionary["Y"]].InnerText;
+            var yString = children[dictionary["Y"]].InnerText;
             yString = yString.Trim();
             yString = yString.Replace(",", ".");
             return new Vector2(
@@ -103,8 +103,8 @@ namespace SwitchBlocks.Util
         /// <returns>Point or null if a point couldn't be made</returns>
         public static Point? GetPoint(XmlNode root)
         {
-            XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesRequired(children, "X", "Y");
+            var children = root.ChildNodes;
+            var dictionary = MapNamesRequired(children, "X", "Y");
             if (dictionary == null)
             {
                 return null;
@@ -121,34 +121,34 @@ namespace SwitchBlocks.Util
         /// <returns>Animation</returns>
         public static Animation GetAnimation(XmlNode root)
         {
-            XmlNodeList children = root.ChildNodes;
-            Animation animation = new Animation
+            var children = root.ChildNodes;
+            var animation = new Animation
             {
-                style = Animation.Style.Fade,
-                curve = Animation.Curve.Linear
+                AnimStyle = Animation.Style.Fade,
+                AnimCurve = Animation.Curve.Linear
             };
-            Dictionary<string, int> dictionary = MapNames(children);
+            var dictionary = MapNames(children);
             if (dictionary.ContainsKey("Style"))
             {
                 switch (children[dictionary["Style"]].InnerText)
                 {
                     case "fade":
-                        animation.style = Animation.Style.Fade;
+                        animation.AnimStyle = Animation.Style.Fade;
                         break;
                     case "top":
-                        animation.style = Animation.Style.Top;
+                        animation.AnimStyle = Animation.Style.Top;
                         break;
                     case "bottom":
-                        animation.style = Animation.Style.Bottom;
+                        animation.AnimStyle = Animation.Style.Bottom;
                         break;
                     case "left":
-                        animation.style = Animation.Style.Left;
+                        animation.AnimStyle = Animation.Style.Left;
                         break;
                     case "right":
-                        animation.style = Animation.Style.Right;
+                        animation.AnimStyle = Animation.Style.Right;
                         break;
                     default:
-                        animation.style = Animation.Style.Fade;
+                        animation.AnimStyle = Animation.Style.Fade;
                         break;
                 }
             }
@@ -157,19 +157,19 @@ namespace SwitchBlocks.Util
                 switch (children[dictionary["Curve"]].InnerText)
                 {
                     case "linear":
-                        animation.curve = Animation.Curve.Linear;
+                        animation.AnimCurve = Animation.Curve.Linear;
                         break;
                     case "easeIn":
-                        animation.curve = Animation.Curve.EaseIn;
+                        animation.AnimCurve = Animation.Curve.EaseIn;
                         break;
                     case "easeOut":
-                        animation.curve = Animation.Curve.EaseOut;
+                        animation.AnimCurve = Animation.Curve.EaseOut;
                         break;
                     case "easeInOut":
-                        animation.curve = Animation.Curve.EaseInOut;
+                        animation.AnimCurve = Animation.Curve.EaseInOut;
                         break;
                     default:
-                        animation.curve = Animation.Curve.Linear;
+                        animation.AnimCurve = Animation.Curve.Linear;
                         break;
                 }
             }
@@ -178,16 +178,16 @@ namespace SwitchBlocks.Util
 
         public static int? GetLink(XmlNode root)
         {
-            XmlNodeList children = root.ChildNodes;
-            Dictionary<string, int> dictionary = MapNamesRequired(children, "Screen", "X", "Y");
+            var children = root.ChildNodes;
+            var dictionary = MapNamesRequired(children, "Screen", "X", "Y");
             if (dictionary == null)
             {
                 return null;
             }
-            int screen = int.Parse(children[dictionary["Screen"]].InnerText) - 1;
-            int x = int.Parse(children[dictionary["X"]].InnerText) / 8;
-            int y = int.Parse(children[dictionary["Y"]].InnerText) / 8;
-            return screen * 10000 + x * 100 + y;
+            var screen = int.Parse(children[dictionary["Screen"]].InnerText) - 1;
+            var x = int.Parse(children[dictionary["X"]].InnerText) / 8;
+            var y = int.Parse(children[dictionary["Y"]].InnerText) / 8;
+            return (screen * 10000) + (x * 100) + y;
         }
     }
 }

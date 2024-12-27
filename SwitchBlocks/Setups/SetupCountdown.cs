@@ -1,13 +1,13 @@
-﻿using EntityComponent;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using EntityComponent;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupCountdown
     {
         public static void DoSetup(PlayerEntity player)
@@ -22,9 +22,9 @@ namespace SwitchBlocks.Setups
             _ = EntityCountdownPlatforms.Instance;
             _ = EntityCountdownLevers.Instance;
 
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), new BehaviourCountdownLever());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), new BehaviourCountdownLever());
         }
 
         public static void DoCleanup(EntityManager entityManager)

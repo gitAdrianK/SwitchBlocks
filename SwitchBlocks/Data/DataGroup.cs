@@ -1,13 +1,14 @@
-﻿using JumpKing;
-using JumpKing.SaveThread;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
-
 namespace SwitchBlocks.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Xml.Serialization;
+    using JumpKing;
+    using JumpKing.SaveThread;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Contains data relevant for the group block.
     /// </summary>
@@ -24,17 +25,17 @@ namespace SwitchBlocks.Data
                     return instance;
                 }
 
-                JKContentManager contentManager = Game1.instance.contentManager;
-                char sep = Path.DirectorySeparatorChar;
-                string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                string file = $"{path}save_{ModStrings.GROUP}.sav";
+                var contentManager = Game1.instance.contentManager;
+                var sep = Path.DirectorySeparatorChar;
+                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+                var file = $"{path}save_{ModStrings.GROUP}.sav";
                 if (!SaveManager.instance.IsNewGame && File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
                         streamReader = new StreamReader(file);
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataGroup));
+                        var xmlSerializer = new XmlSerializer(typeof(DataGroup));
                         instance = (DataGroup)xmlSerializer.Deserialize(streamReader);
                     }
                     catch
@@ -55,37 +56,34 @@ namespace SwitchBlocks.Data
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
         private DataGroup()
         {
-            _groups = new SerializableDictionary<int, BlockGroup>();
-            _hasSwitched = false;
-            _touched = new HashSet<int>();
-            _active = new HashSet<int>();
-            _finished = new List<int>();
+            this._groups = new SerializableDictionary<int, BlockGroup>();
+            this._hasSwitched = false;
+            this._touched = new HashSet<int>();
+            this._active = new HashSet<int>();
+            this._finished = new List<int>();
         }
 
         public void SaveToFile()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(path);
+                _ = Directory.CreateDirectory(path);
             }
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataGroup));
+            var xmlSerializer = new XmlSerializer(typeof(DataGroup));
             TextWriter textWriter = new StreamWriter($"{path}save_group.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
 
         public static bool GetState(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return false;
                 //throw new Exception($"Could not get state data for group nr {id}! Did not exist!");
@@ -95,7 +93,7 @@ namespace SwitchBlocks.Data
 
         public static void SetState(int id, bool state)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
@@ -105,7 +103,7 @@ namespace SwitchBlocks.Data
 
         public static float GetProgress(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return 0.0f;
                 //throw new Exception($"Could not get tick data for group nr {id}! Did not exist!");
@@ -115,7 +113,7 @@ namespace SwitchBlocks.Data
 
         public static void SetProgress(int id, float progress)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
@@ -125,7 +123,7 @@ namespace SwitchBlocks.Data
 
         public static int GetTick(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return 0;
                 //throw new Exception($"Could not get tick data for group nr {id}! Did not exist!");
@@ -135,7 +133,7 @@ namespace SwitchBlocks.Data
 
         public static void SetTick(int id, int tick)
         {
-            if (!Instance._groups.TryGetValue(id, out BlockGroup group))
+            if (!Instance._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
@@ -152,6 +150,7 @@ namespace SwitchBlocks.Data
             get => Instance._groups;
             set => Instance._groups = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, BlockGroup> _groups;
 
         /// <summary>
@@ -163,6 +162,7 @@ namespace SwitchBlocks.Data
             get => Instance._hasSwitched;
             set => Instance._hasSwitched = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasSwitched;
 
         /// <summary>
@@ -173,6 +173,7 @@ namespace SwitchBlocks.Data
             get => Instance._touched;
             set => Instance._touched = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public HashSet<int> _touched;
 
         /// <summary>
@@ -184,6 +185,7 @@ namespace SwitchBlocks.Data
             get => Instance._active;
             set => Instance._active = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public HashSet<int> _active;
 
         /// <summary>
@@ -194,6 +196,7 @@ namespace SwitchBlocks.Data
             get => Instance._finished;
             set => Instance._finished = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public List<int> _finished;
     }
 }

@@ -1,13 +1,13 @@
-﻿using EntityComponent;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using EntityComponent;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupAuto
     {
         public static void DoSetup(PlayerEntity player)
@@ -21,9 +21,9 @@ namespace SwitchBlocks.Setups
 
             _ = EntityAutoPlatforms.Instance;
 
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
         }
 
         public static void DoCleanup(EntityManager entityManager)

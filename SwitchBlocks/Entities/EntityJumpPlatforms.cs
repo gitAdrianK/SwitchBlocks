@@ -1,13 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using JumpKing;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+
     public class EntityJumpPlatforms : EntityPlatforms
     {
         private static EntityJumpPlatforms instance;
@@ -25,41 +24,39 @@ namespace SwitchBlocks.Entities
 
         public void Reset()
         {
-            DataJump.Progress = progress;
+            DataJump.Progress = this.Progress;
             instance = null;
         }
 
         private EntityJumpPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
-            progress = DataJump.Progress;
+            this.PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.JUMP);
+            this.Progress = DataJump.Progress;
         }
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataJump.State, deltaTime, SettingsJump.Multiplier);
-            TrySwitch();
+            this.UpdateProgress(DataJump.State, deltaTime, SettingsJump.Multiplier);
+            this.TrySwitch();
         }
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataJump.State, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.CurrentPlatformList, platform
+                => DrawPlatform(platform, this.Progress, DataJump.State, spriteBatch));
         }
 
         private void TrySwitch()
         {
             if (DataJump.CanSwitchSafely && DataJump.SwitchOnceSafe)
             {
-                if (IsActiveOnCurrentScreen)
+                if (this.IsActiveOnCurrentScreen)
                 {
                     ModSounds.JumpFlip?.PlayOneShot();
                 }

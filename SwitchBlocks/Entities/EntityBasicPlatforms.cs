@@ -1,13 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using JumpKing;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering basic platforms in the level.<br />
     /// Singleton.
@@ -29,33 +28,29 @@ namespace SwitchBlocks.Entities
 
         public void Reset()
         {
-            DataBasic.Progress = progress;
+            DataBasic.Progress = this.Progress;
             instance = null;
         }
 
         private EntityBasicPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
-            progress = DataBasic.Progress;
+            this.PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.BASIC);
+            this.Progress = DataBasic.Progress;
         }
 
         protected override void Update(float deltaTime)
-        {
-            UpdateProgress(DataBasic.State, deltaTime, SettingsBasic.Multiplier);
-        }
+            => this.UpdateProgress(DataBasic.State, deltaTime, SettingsBasic.Multiplier);
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataBasic.State, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.CurrentPlatformList, platform
+                => DrawPlatform(platform, this.Progress, DataBasic.State, spriteBatch));
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace SwitchBlocks.Util
 {
+    using System;
+    using System.Collections.Generic;
+
     [Serializable]
     public class BlockGroup
     {
@@ -34,9 +34,9 @@ namespace SwitchBlocks.Util
 
         public BlockGroup(bool isEnabled)
         {
-            State = isEnabled;
-            Progress = isEnabled ? 1.0f : 0.0f;
-            ActivatedTick = isEnabled ? Int32.MaxValue : Int32.MinValue;
+            this.State = isEnabled;
+            this.Progress = isEnabled ? 1.0f : 0.0f;
+            this.ActivatedTick = isEnabled ? int.MaxValue : int.MinValue;
         }
 
         /// <summary>
@@ -47,53 +47,37 @@ namespace SwitchBlocks.Util
         /// <param name="groupId">The ID that is to be assigned to all blocks of the group</param>
         public static bool PropagateGroupId(Dictionary<int, IBlockGroupId> blocks, int startPosition, int groupId)
         {
-            if (!blocks.TryGetValue(startPosition, out IBlockGroupId value) || value.GroupId != 0)
+            if (!blocks.TryGetValue(startPosition, out var value) || value.GroupId != 0)
             {
                 return false;
             }
-            Queue<int> toVisit = new Queue<int>();
+            var toVisit = new Queue<int>();
             toVisit.Enqueue(startPosition);
             while (toVisit.Count != 0)
             {
-                int currentPos = toVisit.Dequeue();
+                var currentPos = toVisit.Dequeue();
                 blocks[currentPos].GroupId = groupId;
 
                 // Left
-                int left = currentPos - HORIZONTAL;
+                var left = currentPos - HORIZONTAL;
                 if (blocks.TryGetValue(left, out value) && value.GroupId == 0)
                 {
                     toVisit.Enqueue(left);
                 }
                 // Right
-                int right = currentPos + HORIZONTAL;
+                var right = currentPos + HORIZONTAL;
                 if (blocks.TryGetValue(right, out value) && value.GroupId == 0)
                 {
                     toVisit.Enqueue(right);
                 }
                 // Up
-                int up;
-                if (currentPos % 100 == 0)
-                {
-                    up = currentPos + SCREEN;
-                }
-                else
-                {
-                    up = currentPos - VERTICAL;
-                }
+                var up = currentPos % 100 == 0 ? currentPos + SCREEN : currentPos - VERTICAL;
                 if (blocks.TryGetValue(up, out value) && value.GroupId == 0)
                 {
                     toVisit.Enqueue(up);
                 }
                 // Down
-                int down;
-                if (currentPos % 100 == 44)
-                {
-                    down = currentPos - SCREEN;
-                }
-                else
-                {
-                    down = currentPos + VERTICAL;
-                }
+                var down = currentPos % 100 == 44 ? currentPos - SCREEN : currentPos + VERTICAL;
                 if (blocks.TryGetValue(down, out value) && value.GroupId == 0)
                 {
                     toVisit.Enqueue(down);
@@ -111,7 +95,7 @@ namespace SwitchBlocks.Util
         /// <param name="startState">The start state of the added platforms</param>
         public static void CreateGroupData(int groupId, SerializableDictionary<int, BlockGroup> groups, bool startState)
         {
-            for (int i = 1; i < groupId; i++)
+            for (var i = 1; i < groupId; i++)
             {
                 if (!groups.ContainsKey(i))
                 {
@@ -130,9 +114,9 @@ namespace SwitchBlocks.Util
         /// <param name="groupId">The group ID that is increased as new groups get created</param>
         public static void AssignGroupIdsConsecutively(Dictionary<int, IBlockGroupId> blocks, SerializableDictionary<int, int> seed, ref int groupId)
         {
-            foreach (KeyValuePair<int, IBlockGroupId> kv in blocks)
+            foreach (var kv in blocks)
             {
-                int position = kv.Key;
+                var position = kv.Key;
                 if (PropagateGroupId(blocks, position, groupId))
                 {
                     seed.Add(position, groupId);
@@ -150,15 +134,15 @@ namespace SwitchBlocks.Util
         /// <param name="groupId">Reference to the group ID, which will be larger than the largest ID found when finished</param>
         public static void AssignGroupIdsFromSeed(Dictionary<int, IBlockGroupId> blocks, SerializableDictionary<int, int> seed, ref int groupId)
         {
-            foreach (KeyValuePair<int, int> kv in seed)
+            foreach (var kv in seed)
             {
-                int currentPos = kv.Key;
-                int cacheId = kv.Value;
+                var currentPos = kv.Key;
+                var cacheId = kv.Value;
                 if (groupId <= cacheId)
                 {
                     groupId = cacheId + 1;
                 }
-                PropagateGroupId(blocks, currentPos, cacheId);
+                _ = PropagateGroupId(blocks, currentPos, cacheId);
             }
         }
     }

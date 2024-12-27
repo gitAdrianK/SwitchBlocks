@@ -1,13 +1,13 @@
-﻿using EntityComponent;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using EntityComponent;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupJump
     {
         public static void DoSetup(PlayerEntity player)
@@ -21,10 +21,17 @@ namespace SwitchBlocks.Setups
 
             _ = EntityJumpPlatforms.Instance;
 
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
 
-            PlayerEntity.OnJumpCall += JumpSwitch;
+            if (SettingsJump.ForceSwitch)
+            {
+                PlayerEntity.OnJumpCall += JumpSwitchUnsafe;
+            }
+            else
+            {
+                PlayerEntity.OnJumpCall += JumpSwitchSafe;
+            }
         }
 
         public static void DoCleanup(EntityManager entityManager)
@@ -36,7 +43,14 @@ namespace SwitchBlocks.Setups
             entityManager.RemoveObject(EntityJumpPlatforms.Instance);
             EntityJumpPlatforms.Instance.Reset();
 
-            PlayerEntity.OnJumpCall -= JumpSwitch;
+            if (SettingsJump.ForceSwitch)
+            {
+                PlayerEntity.OnJumpCall -= JumpSwitchUnsafe;
+            }
+            else
+            {
+                PlayerEntity.OnJumpCall -= JumpSwitchSafe;
+            }
 
             DataJump.Instance.SaveToFile();
             DataJump.Instance.Reset();
@@ -44,20 +58,15 @@ namespace SwitchBlocks.Setups
             SettingsJump.IsUsed = false;
         }
 
-        private static void JumpSwitch()
+        private static void JumpSwitchUnsafe()
         {
-            if (SettingsJump.ForceSwitch)
+            if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
             {
-                if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
-                {
-                    ModSounds.JumpFlip?.PlayOneShot();
-                }
-                DataJump.State = !DataJump.State;
+                ModSounds.JumpFlip?.PlayOneShot();
             }
-            else
-            {
-                DataJump.SwitchOnceSafe = true;
-            }
+            DataJump.State = !DataJump.State;
         }
+
+        private static void JumpSwitchSafe() => DataJump.SwitchOnceSafe = true;
     }
 }

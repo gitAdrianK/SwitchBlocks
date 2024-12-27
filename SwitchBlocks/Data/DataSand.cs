@@ -1,16 +1,16 @@
-﻿using JumpKing;
-using JumpKing.SaveThread;
-using System.IO;
-using System.Xml.Serialization;
-
 namespace SwitchBlocks.Data
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.IO;
+    using System.Xml.Serialization;
+    using JumpKing;
+    using JumpKing.SaveThread;
+
     /// <summary>
     /// Contains data relevant for the sand block.
     /// </summary>
     public class DataSand
     {
-
 
         private static DataSand instance;
         public static DataSand Instance
@@ -22,17 +22,17 @@ namespace SwitchBlocks.Data
                     return instance;
                 }
 
-                JKContentManager contentManager = Game1.instance.contentManager;
-                char sep = Path.DirectorySeparatorChar;
-                string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                string file = $"{path}save_{ModStrings.SAND}.sav";
+                var contentManager = Game1.instance.contentManager;
+                var sep = Path.DirectorySeparatorChar;
+                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+                var file = $"{path}save_{ModStrings.SAND}.sav";
                 if (!SaveManager.instance.IsNewGame && File.Exists(file))
                 {
                     StreamReader streamReader = null;
                     try
                     {
                         streamReader = new StreamReader(file);
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataSand));
+                        var xmlSerializer = new XmlSerializer(typeof(DataSand));
                         instance = (DataSand)xmlSerializer.Deserialize(streamReader);
                     }
                     catch
@@ -53,28 +53,25 @@ namespace SwitchBlocks.Data
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
         private DataSand()
         {
-            _state = false;
-            _hasSwitched = false;
-            _hasEntered = false;
+            this._state = false;
+            this._hasSwitched = false;
+            this._hasEntered = false;
         }
 
         public void SaveToFile()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(path);
+                _ = Directory.CreateDirectory(path);
             }
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataSand));
+            var xmlSerializer = new XmlSerializer(typeof(DataSand));
             TextWriter textWriter = new StreamWriter($"{path}save_sand.sav");
             xmlSerializer.Serialize(textWriter, Instance);
         }
@@ -87,6 +84,7 @@ namespace SwitchBlocks.Data
             get => Instance._state;
             set => Instance._state = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _state;
 
         /// <summary>
@@ -98,6 +96,7 @@ namespace SwitchBlocks.Data
             get => Instance._hasSwitched;
             set => Instance._hasSwitched = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasSwitched;
 
         /// <summary>
@@ -108,6 +107,7 @@ namespace SwitchBlocks.Data
             get => Instance._hasEntered;
             set => Instance._hasEntered = value;
         }
+        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasEntered;
     }
 }

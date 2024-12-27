@@ -1,15 +1,14 @@
-﻿using HarmonyLib;
-using JumpKing;
-using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using JumpKing.Player;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using System;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System;
+    using HarmonyLib;
+    using JumpKing;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+
     /// <summary>
     /// Behaviour related to sand platforms.
     /// </summary>
@@ -24,7 +23,7 @@ namespace SwitchBlocks.Behaviours
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            float num = (DataSand.HasEntered ? 0.5f : 1.0f);
+            var num = DataSand.HasEntered ? 0.5f : 1.0f;
             return inputXVelocity * num;
         }
 
@@ -35,21 +34,23 @@ namespace SwitchBlocks.Behaviours
             {
                 return inputYVelocity;
             }
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             if (!(advCollisionInfo.IsCollidingWith<BlockSandOn>() || advCollisionInfo.IsCollidingWith<BlockSandOff>()))
             {
                 return inputYVelocity;
             }
 
-            BodyComp bodyComp = behaviourContext.BodyComp;
-            float num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
-            float result = inputYVelocity * num;
+            var bodyComp = behaviourContext.BodyComp;
+            var num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
+            var result = inputYVelocity * num;
             if (!DataSand.HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
             {
                 bodyComp.Position.Y += 1.0f;
             }
             return result;
         }
+
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
@@ -59,7 +60,7 @@ namespace SwitchBlocks.Behaviours
             }
             if (info.IsCollidingWith<BlockSandOn>() || info.IsCollidingWith<BlockSandOff>())
             {
-                return !IsPlayerOnBlock;
+                return !this.IsPlayerOnBlock;
             }
             return false;
         }
@@ -94,34 +95,29 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            BodyComp bodyComp = behaviourContext.BodyComp;
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var bodyComp = behaviourContext.BodyComp;
 
-            IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();
-            IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
-            IsPlayerOnBlock = IsPlayerOnBlockOn || IsPlayerOnBlockOff;
+            this.IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();
+            this.IsPlayerOnBlockOff = advCollisionInfo.IsCollidingWith<BlockSandOff>();
+            this.IsPlayerOnBlock = this.IsPlayerOnBlockOn || this.IsPlayerOnBlockOff;
 
-            if (!IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
                 DataSand.HasEntered = false;
             }
 
             if (DataSand.HasEntered)
             {
-                if ((IsPlayerOnBlockOn && DataSand.State) || (IsPlayerOnBlockOff && !DataSand.State))
+                if ((this.IsPlayerOnBlockOn && DataSand.State) || (this.IsPlayerOnBlockOff && !DataSand.State))
                 {
                     bodyComp.Position.Y -= 0.75f;
                 }
-                Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+                _ = Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
                 Camera.UpdateCamera(bodyComp.GetHitbox().Center);
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
             return true;
-        }
-
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
         }
     }
 }

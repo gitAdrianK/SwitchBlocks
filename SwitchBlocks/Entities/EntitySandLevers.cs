@@ -1,8 +1,8 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
-
 namespace SwitchBlocks.Entities
 {
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Entity responsible for rendering sand levers in the level.<br />
     /// Singleton.
@@ -22,21 +22,15 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
-        private EntitySandLevers()
-        {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
-        }
+        private EntitySandLevers() => this.LeverDictionary = Lever.GetLeversDictonary(ModStrings.SAND);
 
         protected override void Update(float deltaTime)
         {
-            if (UpdateCurrentScreen())
+            if (this.UpdateCurrentScreen())
             {
-                state = DataSand.State;
+                this.State = DataSand.State;
             }
         }
     }

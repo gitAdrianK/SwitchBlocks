@@ -1,8 +1,8 @@
-﻿using SwitchBlocks.Data;
-using SwitchBlocks.Util;
-
 namespace SwitchBlocks.Entities
 {
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Entity responsible for rendering countdown levers in the level.<br />
     /// Singleton.
@@ -22,21 +22,15 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
-        private EntityCountdownLevers()
-        {
-            LeverDictionary = Lever.GetLeversDictonary(ModStrings.COUNTDOWN);
-        }
+        private EntityCountdownLevers() => this.LeverDictionary = Lever.GetLeversDictonary(ModStrings.COUNTDOWN);
 
         protected override void Update(float deltaTime)
         {
-            if (UpdateCurrentScreen())
+            if (this.UpdateCurrentScreen())
             {
-                state = DataCountdown.State;
+                this.State = DataCountdown.State;
             }
         }
     }

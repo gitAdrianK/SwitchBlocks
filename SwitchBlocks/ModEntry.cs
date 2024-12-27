@@ -1,23 +1,23 @@
-﻿using EntityComponent;
-using HarmonyLib;
-using JumpKing;
-using JumpKing.Level;
-using JumpKing.Mods;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Factories;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Setups;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using EntityComponent;
+    using HarmonyLib;
+    using JumpKing;
+    using JumpKing.Level;
+    using JumpKing.Mods;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Factories;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
+
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
-        public static List<Task> tasks = new List<Task>();
+        public static List<Task> Tasks { get; set; } = new List<Task>();
 
         /// <summary>
         /// Called by Jump King before the level loads
@@ -26,19 +26,19 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //Debugger.Launch();
+            //_ = Debugger.Launch();
 
-            LevelManager.RegisterBlockFactory(new FactoryAuto());
-            LevelManager.RegisterBlockFactory(new FactoryBasic());
-            LevelManager.RegisterBlockFactory(new FactoryCountdown());
-            LevelManager.RegisterBlockFactory(new FactoryGroup());
-            LevelManager.RegisterBlockFactory(new FactoryJump());
-            LevelManager.RegisterBlockFactory(new FactorySand());
-            LevelManager.RegisterBlockFactory(new FactorySequence());
+            _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
+            _ = LevelManager.RegisterBlockFactory(new FactoryBasic());
+            _ = LevelManager.RegisterBlockFactory(new FactoryCountdown());
+            _ = LevelManager.RegisterBlockFactory(new FactoryGroup());
+            _ = LevelManager.RegisterBlockFactory(new FactoryJump());
+            _ = LevelManager.RegisterBlockFactory(new FactorySand());
+            _ = LevelManager.RegisterBlockFactory(new FactorySequence());
 
-            Harmony harmony = new Harmony(ModStrings.HARMONY);
-            new Patching.BodyComp(harmony);
-            new Patching.EndingManager(harmony);
+            var harmony = new Harmony(ModStrings.HARMONY);
+            _ = new Patching.BodyComp(harmony);
+            _ = new Patching.EndingManager(harmony);
         }
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace SwitchBlocks
         [OnLevelStart]
         public static void OnLevelStart()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
+            var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null)
             {
                 return;
             }
 
-            ulong levelID = contentManager.level.ID;
+            var levelID = contentManager.level.ID;
             SettingsAuto.IsUsed = levelID == FactoryAuto.LastUsedMapId;
             SettingsBasic.IsUsed = levelID == FactoryBasic.LastUsedMapId;
             SettingsCountdown.IsUsed = levelID == FactoryCountdown.LastUsedMapId;
@@ -73,8 +73,8 @@ namespace SwitchBlocks
                 return;
             }
 
-            EntityManager entityManager = EntityManager.instance;
-            PlayerEntity player = entityManager.Find<PlayerEntity>();
+            var entityManager = EntityManager.instance;
+            var player = entityManager.Find<PlayerEntity>();
 
             if (player == null)
             {
@@ -88,8 +88,8 @@ namespace SwitchBlocks
             // These behaviours are used as a way to create pre and post behaviour points
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
             // want to run the sliding function multiple times.
-            player.m_body.RegisterBlockBehaviour<BlockPre>(new BehaviourPre());
-            player.m_body.RegisterBlockBehaviour<BlockPost>(new BehaviourPost());
+            _ = player.m_body.RegisterBlockBehaviour<BlockPre>(new BehaviourPre());
+            _ = player.m_body.RegisterBlockBehaviour<BlockPost>(new BehaviourPost());
 
             SetupAuto.DoSetup(player);
             SetupBasic.DoSetup(player);
@@ -108,13 +108,13 @@ namespace SwitchBlocks
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
+            var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null)
             {
                 return;
             }
 
-            EntityManager entityManager = EntityManager.instance;
+            var entityManager = EntityManager.instance;
 
             ModSounds.Cleanup();
 
@@ -126,8 +126,8 @@ namespace SwitchBlocks
             SetupSand.DoCleanup(entityManager);
             SetupSequence.DoCleanup(entityManager);
 
-            tasks.ForEach(task => { task.Wait(); });
-            tasks.Clear();
+            Tasks.ForEach(task => task.Wait());
+            Tasks.Clear();
         }
     }
 }

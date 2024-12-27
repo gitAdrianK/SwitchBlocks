@@ -1,73 +1,60 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Util;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using EntityComponent;
+    using JumpKing;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Util;
+
     public class EntityLevers : Entity
     {
-        int currentScreen = -1;
-        int nextScreen;
+        private int currentScreen = -1;
+        private int nextScreen;
 
-        protected bool state;
+        protected bool State { get; set; }
 
         public Dictionary<int, List<Lever>> LeverDictionary { get; protected set; }
-        List<Lever> currentLeverList;
+        private List<Lever> currentLeverList;
 
         protected bool UpdateCurrentScreen()
         {
-            if (LeverDictionary == null)
+            if (this.LeverDictionary == null)
             {
                 return false;
             }
 
-            nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
+            this.nextScreen = Camera.CurrentScreen;
+            if (this.currentScreen != this.nextScreen)
             {
-                LeverDictionary.TryGetValue(nextScreen, out currentLeverList);
-                currentScreen = nextScreen;
+                _ = this.LeverDictionary.TryGetValue(this.nextScreen, out this.currentLeverList);
+                this.currentScreen = this.nextScreen;
             }
-            return currentLeverList != null;
+            return this.currentLeverList != null;
         }
 
         public override void Draw()
         {
-            if (currentLeverList == null || EndingManager.HasFinished)
+            if (this.currentLeverList == null || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentLeverList, lever =>
-            {
-                DrawLever(lever, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.currentLeverList, lever
+                => this.DrawLever(lever, spriteBatch));
         }
 
         private void DrawLever(Lever lever, SpriteBatch spriteBatch)
         {
-            Rectangle rectangle;
-            if (state)
-            {
-                rectangle = new Rectangle(
-                    0,
+            var rectangle = new Rectangle(
+                    lever.Width * Convert.ToInt32(!this.State),
                     0,
                     lever.Width,
                     lever.Height);
-            }
-            else
-            {
-                rectangle = new Rectangle(
-                    lever.Width,
-                    0,
-                    lever.Width,
-                    lever.Height);
-            }
             spriteBatch.Draw(
                 texture: lever.Texture,
                 position: lever.Position,

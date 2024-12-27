@@ -1,17 +1,17 @@
-﻿using EntityComponent;
-using JumpKing;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Setups
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using EntityComponent;
+    using JumpKing;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     public static class SetupGroup
     {
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
@@ -30,7 +30,7 @@ namespace SwitchBlocks.Setups
 
             AssignGroupIds();
 
-            ModEntry.tasks.Add(Task.Run(() =>
+            ModEntry.Tasks.Add(Task.Run(() =>
             {
                 if (LevelDebugState.instance != null)
                 {
@@ -43,15 +43,15 @@ namespace SwitchBlocks.Setups
 
             if (SettingsGroup.Duration == 0)
             {
-                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving());
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving());
             }
             else
             {
-                player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
             }
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
-            player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
         public static void DoCleanup(EntityManager entityManager)
@@ -72,7 +72,7 @@ namespace SwitchBlocks.Setups
 
         private static void AssignGroupIds()
         {
-            int groupId = 1;
+            var groupId = 1;
 
             if (CacheGroup.Seed.Count > 0)
             {

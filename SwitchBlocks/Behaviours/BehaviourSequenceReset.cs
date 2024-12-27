@@ -1,46 +1,30 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     public class BehaviourSequenceReset : IBlockBehaviour
     {
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -49,11 +33,11 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool collidingWithReset = advCollisionInfo.IsCollidingWith<BlockSequenceReset>();
-            bool collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockSequenceResetSolid>();
-            IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
-            if (!IsPlayerOnBlock)
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockSequenceReset>();
+            var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockSequenceResetSolid>();
+            this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
+            if (!this.IsPlayerOnBlock)
             {
                 DataSequence.HasSwitched = false;
                 return true;
@@ -68,7 +52,7 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                IBlock block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockSequenceResetSolid));
+                var block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockSequenceResetSolid));
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                     SettingsSequence.LeverDirections,
                     block))
@@ -77,18 +61,16 @@ namespace SwitchBlocks.Behaviours
                 }
             }
 
-            Parallel.ForEach(DataSequence.Active, group =>
+            _ = Parallel.ForEach(DataSequence.Active, group
+                => DataSequence.Groups[group].ActivatedTick = int.MinValue);
+            _ = Parallel.ForEach(DataSequence.Finished, group =>
             {
-                DataSequence.Groups[group].ActivatedTick = Int32.MinValue;
+                DataSequence.Groups[group].ActivatedTick = int.MinValue;
+                _ = DataSequence.Active.Add(group);
             });
-            Parallel.ForEach(DataSequence.Finished, group =>
-            {
-                DataSequence.Groups[group].ActivatedTick = Int32.MinValue;
-                DataSequence.Active.Add(group);
-            });
-            DataSequence.SetTick(1, Int32.MaxValue);
+            DataSequence.SetTick(1, int.MaxValue);
             DataSequence.Touched = 0;
-            DataSequence.Active.Add(1);
+            _ = DataSequence.Active.Add(1);
             DataSequence.Finished.Clear();
 
             return true;

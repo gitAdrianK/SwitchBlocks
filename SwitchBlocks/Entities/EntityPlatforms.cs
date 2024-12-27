@@ -1,26 +1,25 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Util;
-using System;
-using System.Collections.Generic;
-using static SwitchBlocks.Util.Animation;
-using Curve = SwitchBlocks.Util.Animation.Curve;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using EntityComponent;
+    using JumpKing;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Platforms;
+    using static SwitchBlocks.Util.Animation;
+    using Curve = Util.Animation.Curve;
+
     public class EntityPlatforms : Entity
     {
-        int currentScreen = -1;
-        int nextScreen;
+        private int currentScreen = -1;
+        private int nextScreen;
 
-        protected float progress;
+        protected float Progress { get; set; }
         public Dictionary<int, List<Platform>> PlatformDictionary { get; protected set; }
-        protected List<Platform> currentPlatformList;
+        protected List<Platform> CurrentPlatformList { get; set; }
 
-        public bool IsActiveOnCurrentScreen => currentPlatformList != null;
+        public bool IsActiveOnCurrentScreen => this.CurrentPlatformList != null;
 
         /// <summary>
         /// Updates what screen is currently active and gets the platforms from the platform dictionary
@@ -28,18 +27,19 @@ namespace SwitchBlocks.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            if (PlatformDictionary == null)
+            if (this.PlatformDictionary == null)
             {
                 return false;
             }
 
-            nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
+            this.nextScreen = Camera.CurrentScreen;
+            if (this.currentScreen != this.nextScreen)
             {
-                PlatformDictionary.TryGetValue(nextScreen, out currentPlatformList);
-                currentScreen = nextScreen;
+                _ = this.PlatformDictionary.TryGetValue(this.nextScreen, out var value);
+                this.CurrentPlatformList = value;
+                this.currentScreen = this.nextScreen;
             }
-            return currentPlatformList != null;
+            return this.CurrentPlatformList != null;
         }
 
         /// <summary>
@@ -50,20 +50,20 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier of the amount added/subtracted</param>
         protected void UpdateProgress(bool state, float amount, float multiplier)
         {
-            int stateInt = Convert.ToInt32(state);
-            if (progress == stateInt)
+            var stateInt = Convert.ToInt32(state);
+            if (this.Progress == stateInt)
             {
                 return;
             }
             // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
             amount *= (-1 + (stateInt * 2)) * 2 * multiplier;
-            progress += amount;
-            progress = Math.Min(Math.Max(progress, 0), 1);
+            this.Progress += amount;
+            this.Progress = Math.Min(Math.Max(this.Progress, 0), 1);
         }
 
         public static void DrawPlatform(Platform platform, float progress, bool state, SpriteBatch spriteBatch)
         {
-            float progressAdjusted = platform.StartState ? 1.0f - progress : progress;
+            var progressAdjusted = platform.StartState ? 1.0f - progress : progress;
             if (progressAdjusted == 0.0f)
             {
                 return;
@@ -77,27 +77,29 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            float progressActual = 1.0f;
-            Animation animation = platform.StartState == state ? platform.Animation : platform.AnimationOut;
-            switch (animation.curve)
+            float progressActual;
+            var animation = platform.StartState == state ? platform.Animation : platform.AnimationOut;
+            switch (animation.AnimCurve)
             {
                 case Curve.Linear:
                     progressActual = progressAdjusted;
                     break;
                 case Curve.EaseIn:
-                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI - HALF_PI) + 1.0f;
+                    progressActual = (float)Math.Sin((progressAdjusted * HALF_PI) - HALF_PI) + 1.0f;
                     break;
                 case Curve.EaseOut:
                     progressActual = (float)Math.Sin(progressAdjusted * HALF_PI);
                     break;
                 case Curve.EaseInOut:
-                    progressActual = (float)(Math.Sin(progressAdjusted * Math.PI - HALF_PI) + 1.0f) / 2.0f;
+                    progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
                     break;
+                default:
+                    throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
             }
 
-            int height = platform.Height;
-            int width = platform.Width;
-            switch (animation.style)
+            var height = platform.Height;
+            var width = platform.Width;
+            switch (animation.AnimStyle)
             {
                 case Style.Fade:
                     spriteBatch.Draw(
@@ -111,74 +113,66 @@ namespace SwitchBlocks.Entities
                     break;
 
                 case Style.Top:
-                    int heightTop = (int)(height * progressActual);
-                    Rectangle rectangleTop = new Rectangle(
-                        0,
-                        height - heightTop,
-                        width,
-                        heightTop);
+                    var heightTop = (int)(height * progressActual);
 
                     spriteBatch.Draw(
                         texture: platform.Texture,
                         position: platform.Position,
-                        sourceRectangle: rectangleTop,
+                        sourceRectangle: new Rectangle(
+                            0,
+                            height - heightTop,
+                            width,
+                            heightTop),
                         color: Color.White);
                     break;
 
                 case Style.Bottom:
-                    int heightBottom = (int)(height * progressActual);
-
-                    Vector2 vectorBottom = new Vector2(
-                        platform.Position.X,
-                        platform.Position.Y + height - heightBottom);
-
-                    Rectangle rectangleBottom = new Rectangle(
-                        0,
-                        0,
-                        width,
-                        heightBottom);
+                    var heightBottom = (int)(height * progressActual);
 
                     spriteBatch.Draw(
                         texture: platform.Texture,
-                        position: vectorBottom,
-                        sourceRectangle: rectangleBottom,
+                        position: new Vector2(
+                            platform.Position.X,
+                            platform.Position.Y + height - heightBottom),
+                        sourceRectangle: new Rectangle(
+                            0,
+                            0,
+                            width,
+                            heightBottom),
                         color: Color.White);
                     break;
 
                 case Style.Left:
-                    int widthLeft = (int)(width * progressActual);
-                    Rectangle rectangleLeft = new Rectangle(
-                        width - widthLeft,
-                        0,
-                        widthLeft,
-                        height);
+                    var widthLeft = (int)(width * progressActual);
 
                     spriteBatch.Draw(
                         texture: platform.Texture,
                         position: platform.Position,
-                        sourceRectangle: rectangleLeft,
+                        sourceRectangle: new Rectangle(
+                            width - widthLeft,
+                            0,
+                            widthLeft,
+                            height),
                         color: Color.White);
                     break;
 
                 case Style.Right:
-                    int widthRight = (int)(width * progressActual);
-
-                    Vector2 vectorRight = new Vector2(
-                        platform.Position.X + width - widthRight,
-                        platform.Position.Y);
-
-                    Rectangle rectangleRight = new Rectangle(
-                        0,
-                        0,
-                        widthRight,
-                        height);
+                    var widthRight = (int)(width * progressActual);
 
                     spriteBatch.Draw(
                         texture: platform.Texture,
-                        position: vectorRight,
-                        sourceRectangle: rectangleRight,
+                        position: new Vector2(
+                            platform.Position.X + width - widthRight,
+                            platform.Position.Y),
+                        sourceRectangle: new Rectangle(
+                            0,
+                            0,
+                            widthRight,
+                            height),
                         color: Color.White);
                     break;
+                default:
+                    throw new NotImplementedException("Unknown Animation Style, cannot draw!");
             }
         }
     }

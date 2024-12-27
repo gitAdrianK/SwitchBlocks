@@ -1,15 +1,14 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System;
-using System.Linq;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Behaviour related to basic levers.
     /// </summary>
@@ -19,30 +18,15 @@ namespace SwitchBlocks.Behaviours
 
         public bool IsPlayerOnBlock { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -51,21 +35,21 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockBasicLever>();
-            bool collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverOn>();
-            bool collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverOff>();
-            bool collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>();
-            bool collidingWithLeverSolidOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>();
-            bool collidingWithLeverSolidOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>();
-            bool collidingWithAnyLever = collidingWithLever || collidingWithLeverSolid;
-            bool collidingWithAnyLeverOn = collidingWithLeverOn || collidingWithLeverSolidOn;
-            bool collidingWithAnyLeverOff = collidingWithLeverOff || collidingWithLeverSolidOff;
-            IsPlayerOnBlock = collidingWithAnyLever
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockBasicLever>();
+            var collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverOn>();
+            var collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverOff>();
+            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolid>();
+            var collidingWithLeverSolidOn = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOn>();
+            var collidingWithLeverSolidOff = advCollisionInfo.IsCollidingWith<BlockBasicLeverSolidOff>();
+            var collidingWithAnyLever = collidingWithLever || collidingWithLeverSolid;
+            var collidingWithAnyLeverOn = collidingWithLeverOn || collidingWithLeverSolidOn;
+            var collidingWithAnyLeverOff = collidingWithLeverOff || collidingWithLeverSolidOff;
+            this.IsPlayerOnBlock = collidingWithAnyLever
                 || collidingWithAnyLeverOn
                 || collidingWithAnyLeverOff;
 
-            if (IsPlayerOnBlock)
+            if (this.IsPlayerOnBlock)
             {
                 if (DataBasic.HasSwitched)
                 {
@@ -76,9 +60,9 @@ namespace SwitchBlocks.Behaviours
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
                 {
-                    IBlock block = advCollisionInfo.GetCollidedBlocks().First(b =>
+                    var block = advCollisionInfo.GetCollidedBlocks().First(b =>
                     {
-                        Type type = b.GetType();
+                        var type = b.GetType();
                         return type == typeof(BlockBasicLeverSolid)
                         || type == typeof(BlockBasicLeverSolidOn)
                         || type == typeof(BlockBasicLeverSolidOff);
@@ -91,7 +75,7 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                bool stateBefore = DataBasic.State;
+                var stateBefore = DataBasic.State;
                 if (collidingWithAnyLever)
                 {
                     DataBasic.State = !DataBasic.State;

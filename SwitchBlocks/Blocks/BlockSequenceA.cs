@@ -1,10 +1,10 @@
-﻿using JumpKing.Level;
-using Microsoft.Xna.Framework;
-using SwitchBlocks.Data;
-using SwitchBlocks.Util;
-
 namespace SwitchBlocks.Blocks
 {
+    using JumpKing.Level;
+    using Microsoft.Xna.Framework;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// The sequence A block.
     /// </summary>
@@ -14,27 +14,18 @@ namespace SwitchBlocks.Blocks
 
         private readonly Rectangle collider;
 
-        public BlockSequenceA(Rectangle collider)
-        {
-            this.collider = collider;
-        }
+        public BlockSequenceA(Rectangle collider) => this.collider = collider;
 
-        public Color DebugColor
-        {
-            get { return ModBlocks.SEQUENCE_A; }
-        }
+        public Color DebugColor => ModBlocks.SEQUENCE_A;
 
-        public Rectangle GetRect()
-        {
-            return DataSequence.GetState(GroupId) ? collider : new Rectangle(0, 0, 0, 0);
-        }
+        public Rectangle GetRect() => DataSequence.GetState(this.GroupId) ? this.collider : Rectangle.Empty;
 
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (collider.Intersects(hitbox))
+            if (this.collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, collider);
-                if (DataSequence.GetState(GroupId))
+                intersection = Rectangle.Intersect(hitbox, this.collider);
+                if (DataSequence.GetState(this.GroupId))
                 {
                     return BlockCollisionType.Collision_Blocking;
                 }

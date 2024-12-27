@@ -1,14 +1,14 @@
-﻿using JumpKing.API;
-using JumpKing.Level;
-using JumpKing.Level.Sampler;
-using JumpKing.Workshop;
-using Microsoft.Xna.Framework;
-using SwitchBlocks.Blocks;
-using System;
-using System.Collections.Generic;
-
 namespace SwitchBlocks.Factories
 {
+    using System;
+    using System.Collections.Generic;
+    using JumpKing.API;
+    using JumpKing.Level;
+    using JumpKing.Level.Sampler;
+    using JumpKing.Workshop;
+    using Microsoft.Xna.Framework;
+    using SwitchBlocks.Blocks;
+
     /// <summary>
     /// Factory for auto blocks.
     /// </summary>
@@ -16,7 +16,7 @@ namespace SwitchBlocks.Factories
     {
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
-        private static readonly HashSet<Color> supportedBlockCodes = new HashSet<Color> {
+        private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color> {
             ModBlocks.AUTO_ON,
             ModBlocks.AUTO_OFF,
             ModBlocks.AUTO_ICE_ON,
@@ -27,10 +27,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.AUTO_RESET_FULL,
         };
 
-        public bool CanMakeBlock(Color blockCode, Level level)
-        {
-            return supportedBlockCodes.Contains(blockCode);
-        }
+        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
         public bool IsSolidBlock(Color blockCode)
         {
@@ -43,13 +40,15 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.AUTO_SNOW_ON:
                 case var _ when blockCode == ModBlocks.AUTO_SNOW_OFF:
                     return true;
+                default:
+                    break;
             }
             return false;
         }
 
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
         {
-            if (LastUsedMapId != level.ID && supportedBlockCodes.Contains(blockCode))
+            if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
                 LastUsedMapId = level.ID;
             }
@@ -72,7 +71,7 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.AUTO_RESET_FULL:
                     return new BlockAutoResetFull(blockRect);
                 default:
-                    throw new InvalidOperationException($"{typeof(FactoryAuto).Name} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException($"{nameof(FactoryAuto)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }

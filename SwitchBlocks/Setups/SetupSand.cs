@@ -1,13 +1,13 @@
-﻿using EntityComponent;
-using JumpKing.Player;
-using SwitchBlocks.Behaviours;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Entities;
-using SwitchBlocks.Settings;
-
 namespace SwitchBlocks.Setups
 {
+    using EntityComponent;
+    using JumpKing.Player;
+    using SwitchBlocks.Behaviours;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Entities;
+    using SwitchBlocks.Settings;
+
     public static class SetupSand
     {
         public static void DoSetup(PlayerEntity player)
@@ -25,17 +25,18 @@ namespace SwitchBlocks.Setups
             // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
             // velocity or position! This technically needs updating, but I have to consider
             // Ghost of the Immortal Babe breaking!
-            BehaviourSandPlatform behaviourSandPlatform = new BehaviourSandPlatform();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
+            var behaviourSandPlatform = new BehaviourSandPlatform();
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
 
-            BehaviourSandLever behaviourSandLever = new BehaviourSandLever();
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
-            player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever());
+            //var behaviourSandLever = new BehaviourSandLever();
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourSandLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOn), behaviourSandLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverOff), behaviourSandLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolid), behaviourSandLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOn), behaviourSandLever);
+            //player.m_body.RegisterBlockBehaviour(typeof(BlockSandLeverSolidOff), behaviourSandLever);
         }
 
         public static void DoCleanup(EntityManager entityManager)

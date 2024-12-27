@@ -1,15 +1,14 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Util;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml;
-
 namespace SwitchBlocks.Platforms
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using System.Xml;
+    using JumpKing;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Represents a subclass of platform, sandplatform with two more textures, scrolling and foreground. <br />
     /// Having at least a background OR foreground is required.
@@ -29,41 +28,41 @@ namespace SwitchBlocks.Platforms
         /// <returns>A dictionary containing lists of platforms with the screennumber they appear on as key</returns>
         public static new Dictionary<int, List<PlatformSand>> GetPlatformsDictonary(string subfolder)
         {
-            JKContentManager contentManager = Game1.instance.contentManager;
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{ModStrings.PLATFORMS}{sep}{subfolder}{sep}";
 
             if (!Directory.Exists(path))
             {
                 return null;
             }
-            string[] files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
             if (files.Length == 0)
             {
                 return null;
             }
 
-            Dictionary<int, List<PlatformSand>> dictionary = new Dictionary<int, List<PlatformSand>>();
-            Regex regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-            foreach (string xmlFilePath in files)
+            var dictionary = new Dictionary<int, List<PlatformSand>>();
+            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            foreach (var xmlFilePath in files)
             {
-                string xmlFile = xmlFilePath.Split(sep).Last();
+                var xmlFile = xmlFilePath.Split(sep).Last();
 
                 if (!regex.IsMatch(xmlFile))
                 {
                     continue;
                 }
 
-                XmlDocument document = new XmlDocument();
+                var document = new XmlDocument();
                 document.Load(xmlFilePath);
-                XmlNode xmlPlatforms = document.LastChild;
+                var xmlPlatforms = document.LastChild;
 
                 if (xmlPlatforms.Name != ModStrings.XML_PLATFORMS)
                 {
                     continue;
                 }
 
-                List<PlatformSand> platforms = GetPlatformList(xmlPlatforms, path, sep);
+                var platforms = GetPlatformList(xmlPlatforms, path, sep);
                 if (platforms.Count != 0)
                 {
                     dictionary.Add(int.Parse(Regex.Replace(xmlFile, @"[^\d]", "")) - 1, platforms);
@@ -82,10 +81,10 @@ namespace SwitchBlocks.Platforms
         /// <returns>A list containing all successfully created platforms</returns>
         protected static new List<PlatformSand> GetPlatformList(XmlNode xmlPlatforms, string path, char sep)
         {
-            List<PlatformSand> list = new List<PlatformSand>();
+            var list = new List<PlatformSand>();
             foreach (XmlElement xmlElement in xmlPlatforms.ChildNodes)
             {
-                XmlNodeList xmlPlatform = xmlElement.ChildNodes;
+                var xmlPlatform = xmlElement.ChildNodes;
                 Dictionary<string, int> dictionary;
                 dictionary = Xml.MapNamesRequired(xmlPlatform,
                     ModStrings.POSITION,
@@ -103,8 +102,8 @@ namespace SwitchBlocks.Platforms
                     continue;
                 }
 
-                PlatformSand platform = new PlatformSand();
-                JKContentManager contentManager = Game1.instance.contentManager;
+                var platform = new PlatformSand();
+                var contentManager = Game1.instance.contentManager;
                 // Background
                 if (dictionary.ContainsKey(ModStrings.BACKGROUND))
                 {
@@ -155,7 +154,7 @@ namespace SwitchBlocks.Platforms
                 }
 
                 // Position
-                Vector2? position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
+                var position = Xml.GetVector2(xmlPlatform[dictionary[ModStrings.POSITION]]);
                 if (!position.HasValue)
                 {
                     continue;
@@ -163,7 +162,7 @@ namespace SwitchBlocks.Platforms
                 platform.Position = position.Value;
 
                 // Start state
-                string stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
+                var stateInnerText = xmlPlatform[dictionary[ModStrings.START_STATE]].InnerText.ToLower();
                 if (stateInnerText == "on")
                 {
                     platform.StartState = true;

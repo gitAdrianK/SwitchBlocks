@@ -1,13 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using JumpKing;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering countdown platforms in the level.<br />
     /// Singleton.
@@ -29,46 +28,44 @@ namespace SwitchBlocks.Entities
 
         public void Reset()
         {
-            DataCountdown.Progress = progress;
+            DataCountdown.Progress = this.Progress;
             instance = null;
         }
 
         private EntityCountdownPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.COUNTDOWN);
-            progress = DataCountdown.Progress;
+            this.PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.COUNTDOWN);
+            this.Progress = DataCountdown.Progress;
         }
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataCountdown.State, deltaTime, SettingsCountdown.Multiplier);
+            this.UpdateProgress(DataCountdown.State, deltaTime, SettingsCountdown.Multiplier);
 
             if (!DataCountdown.State)
             {
                 return;
             }
 
-            int currentTick = AchievementManager.GetTicks();
-            int adjustedTick = SettingsCountdown.Duration - (currentTick - DataCountdown.ActivatedTick);
-            if (IsActiveOnCurrentScreen)
+            var currentTick = AchievementManager.GetTicks();
+            var adjustedTick = SettingsCountdown.Duration - (currentTick - DataCountdown.ActivatedTick);
+            if (this.IsActiveOnCurrentScreen)
             {
-                TryWarn(adjustedTick);
+                this.TryWarn(adjustedTick);
             }
-            TrySwitch(currentTick);
+            this.TrySwitch(currentTick);
         }
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataCountdown.State, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.CurrentPlatformList, platform
+                => DrawPlatform(platform, this.Progress, DataCountdown.State, spriteBatch));
         }
 
         private void TryWarn(int adjustedTick)
@@ -77,7 +74,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
-            int warnAdjust = (SettingsCountdown.WarnCount - DataCountdown.WarnCount) * SettingsCountdown.WarnDuration;
+            var warnAdjust = (SettingsCountdown.WarnCount - DataCountdown.WarnCount) * SettingsCountdown.WarnDuration;
             if (adjustedTick - warnAdjust == 0)
             {
                 DataCountdown.WarnCount++;
@@ -94,7 +91,7 @@ namespace SwitchBlocks.Entities
 
             if (DataCountdown.CanSwitchSafely && DataCountdown.SwitchOnceSafe)
             {
-                if (IsActiveOnCurrentScreen)
+                if (this.IsActiveOnCurrentScreen)
                 {
                     ModSounds.CountdownFlip?.PlayOneShot();
                 }
@@ -108,7 +105,7 @@ namespace SwitchBlocks.Entities
             {
                 if (DataCountdown.CanSwitchSafely || SettingsCountdown.ForceSwitch)
                 {
-                    if (IsActiveOnCurrentScreen)
+                    if (this.IsActiveOnCurrentScreen)
                     {
                         ModSounds.CountdownFlip?.PlayOneShot();
                     }

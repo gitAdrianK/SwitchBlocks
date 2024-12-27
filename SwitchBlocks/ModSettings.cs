@@ -1,10 +1,10 @@
-﻿using JumpKing;
-using SwitchBlocks.Settings;
-using System.IO;
-using System.Xml;
-
 namespace SwitchBlocks
 {
+    using System.IO;
+    using System.Xml;
+    using JumpKing;
+    using SwitchBlocks.Settings;
+
     public static class ModSettings
     {
         /// <summary>
@@ -12,11 +12,11 @@ namespace SwitchBlocks
         /// </summary>
         public static void Load()
         {
-            XmlDocument document = new XmlDocument();
-            char sep = Path.DirectorySeparatorChar;
-            string path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
+            var document = new XmlDocument();
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
             document.Load(path);
-            XmlNode blocks = document.LastChild;
+            var blocks = document.LastChild;
             if (blocks == null || blocks.Name != "Blocks")
             {
                 return;

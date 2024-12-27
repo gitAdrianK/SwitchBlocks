@@ -1,9 +1,8 @@
-﻿using SwitchBlocks.Util;
-using System.Collections.Generic;
-using System.Xml;
-
 namespace SwitchBlocks.Settings
 {
+    using System.Xml;
+    using SwitchBlocks.Util;
+
     public static class SettingsJump
     {
         /// <summary>
@@ -21,7 +20,7 @@ namespace SwitchBlocks.Settings
 
         public static void Parse(XmlNode block)
         {
-            Dictionary<string, int> dictionaryJump = Xml.MapNames(block.ChildNodes);
+            var dictionaryJump = Xml.MapNames(block.ChildNodes);
             Multiplier = ParseSettings.ParseMultiplier(dictionaryJump, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryJump);
         }

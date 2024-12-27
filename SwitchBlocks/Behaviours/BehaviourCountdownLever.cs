@@ -1,15 +1,15 @@
-﻿using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using SwitchBlocks.Blocks;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Settings;
-using SwitchBlocks.Util;
-using System.Linq;
-
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using SwitchBlocks.Blocks;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Settings;
+    using SwitchBlocks.Util;
+
     /// <summary>
     /// Behaviour related to countdown levers.
     /// </summary>
@@ -19,30 +19,15 @@ namespace SwitchBlocks.Behaviours
 
         public bool IsPlayerOnBlock { get; set; }
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -51,17 +36,17 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>();
-            bool collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
-            IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>();
+            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
+            this.IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;
 
-            if (IsPlayerOnBlock)
+            if (this.IsPlayerOnBlock)
             {
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid)
                 {
-                    IBlock block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockCountdownLeverSolid));
+                    var block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockCountdownLeverSolid));
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
                         SettingsCountdown.LeverDirections,
                         block))

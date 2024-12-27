@@ -1,13 +1,12 @@
-﻿using JumpKing;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System.Threading.Tasks;
+    using JumpKing;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering auto platforms in the level.<br />
     /// Singleton.
@@ -29,38 +28,36 @@ namespace SwitchBlocks.Entities
 
         public void Reset()
         {
-            DataAuto.Progress = progress;
+            DataAuto.Progress = this.Progress;
             instance = null;
         }
 
         private EntityAutoPlatforms()
         {
-            PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
-            progress = DataAuto.Progress;
+            this.PlatformDictionary = Platform.GetPlatformsDictonary(ModStrings.AUTO);
+            this.Progress = DataAuto.Progress;
         }
 
         protected override void Update(float deltaTime)
         {
-            UpdateProgress(DataAuto.State, deltaTime, SettingsAuto.Multiplier);
+            this.UpdateProgress(DataAuto.State, deltaTime, SettingsAuto.Multiplier);
 
-            int currentTick = AchievementManager.GetTicks();
-            int adjustedTick = ((currentTick + SettingsAuto.DurationCycle) - DataAuto.ResetTick) % SettingsAuto.DurationCycle;
-            TrySound(adjustedTick);
-            TrySwitch(adjustedTick);
+            var currentTick = AchievementManager.GetTicks();
+            var adjustedTick = (currentTick + SettingsAuto.DurationCycle - DataAuto.ResetTick) % SettingsAuto.DurationCycle;
+            this.TrySound(adjustedTick);
+            this.TrySwitch(adjustedTick);
         }
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, progress, DataAuto.State, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.CurrentPlatformList, platform
+                => DrawPlatform(platform, this.Progress, DataAuto.State, spriteBatch));
         }
 
         private void TrySound(int adjustedTick)
@@ -69,8 +66,8 @@ namespace SwitchBlocks.Entities
             {
                 adjustedTick += SettingsAuto.DurationOff;
             }
-            int soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
-            int soundTick = (adjustedTick + soundAdjust) % SettingsAuto.DurationCycle;
+            var soundAdjust = (SettingsAuto.WarnCount - DataAuto.WarnCount) * SettingsAuto.WarnDuration;
+            var soundTick = (adjustedTick + soundAdjust) % SettingsAuto.DurationCycle;
             // Its not yet time to make a sound
             if (soundTick != 0)
             {
@@ -79,18 +76,18 @@ namespace SwitchBlocks.Entities
             // Check which sound is to be played
             if (SettingsAuto.WarnCount == DataAuto.WarnCount)
             {
-                DoFlipSound();
+                this.DoFlipSound();
             }
             else
             {
-                DoWarnSound();
+                this.DoWarnSound();
             }
         }
 
         private void DoWarnSound()
         {
             DataAuto.WarnCount++;
-            if (!IsActiveOnCurrentScreen)
+            if (!this.IsActiveOnCurrentScreen)
             {
                 return;
             }
@@ -115,7 +112,7 @@ namespace SwitchBlocks.Entities
         private void DoFlipSound()
         {
             DataAuto.WarnCount = 0;
-            if (!IsActiveOnCurrentScreen)
+            if (!this.IsActiveOnCurrentScreen)
             {
                 return;
             }
@@ -125,7 +122,7 @@ namespace SwitchBlocks.Entities
         private void TrySwitch(int adjustedTick)
         {
             // I think its < but it could be <=
-            bool currState = adjustedTick - SettingsAuto.DurationOn < 0;
+            var currState = adjustedTick - SettingsAuto.DurationOn < 0;
             if (DataAuto.State == currState)
             {
                 return;

@@ -1,15 +1,14 @@
-﻿using ErikMaths;
-using JumpKing;
-using JumpKing.API;
-using JumpKing.BodyCompBehaviours;
-using JumpKing.Level;
-using JumpKing.MiscEntities.WorldItems;
-using JumpKing.MiscEntities.WorldItems.Inventory;
-using JumpKing.Player;
-using Microsoft.Xna.Framework;
-
 namespace SwitchBlocks.Behaviours
 {
+    using ErikMaths;
+    using JumpKing;
+    using JumpKing.API;
+    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using JumpKing.MiscEntities.WorldItems;
+    using JumpKing.MiscEntities.WorldItems.Inventory;
+    using Microsoft.Xna.Framework;
+
     public class BehaviourPost : IBlockBehaviour
     {
         // Documentation is false, higher numbers are run first!
@@ -21,30 +20,15 @@ namespace SwitchBlocks.Behaviours
         public static bool IsPlayerOnSnow { get; set; }
         public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 
-        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
-        {
-            return false;
-        }
+        public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
-        {
-            return inputXVelocity;
-        }
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
-        {
-            return inputYVelocity;
-        }
+        public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
-        {
-            return inputGravity;
-        }
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
@@ -53,13 +37,13 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            AdvCollisionInfo advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            bool isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
+            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
+            var isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
             if (IsPlayerOnIce
                 && !advCollisionInfo.Ice
                 && !isSnakeringEnabled)
             {
-                BodyComp bodyComp = behaviourContext.BodyComp;
+                var bodyComp = behaviourContext.BodyComp;
                 bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
             }
 

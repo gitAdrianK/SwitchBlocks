@@ -1,16 +1,17 @@
-﻿using EntityComponent;
-using JumpKing;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SwitchBlocks.Data;
-using SwitchBlocks.Patching;
-using SwitchBlocks.Platforms;
-using SwitchBlocks.Settings;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using EntityComponent;
+    using JumpKing;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using SwitchBlocks.Data;
+    using SwitchBlocks.Patching;
+    using SwitchBlocks.Platforms;
+    using SwitchBlocks.Settings;
+
     /// <summary>
     /// Entity responsible for rendering sand platforms in the level.<br />
     /// Singleton.
@@ -30,15 +31,9 @@ namespace SwitchBlocks.Entities
             }
         }
 
-        public void Reset()
-        {
-            instance = null;
-        }
+        public void Reset() => instance = null;
 
-        private EntitySandPlatforms()
-        {
-            PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
-        }
+        private EntitySandPlatforms() => this.PlatformDictionary = PlatformSand.GetPlatformsDictonary(ModStrings.SAND);
 
         private float offset;
 
@@ -48,23 +43,18 @@ namespace SwitchBlocks.Entities
         public Dictionary<int, List<PlatformSand>> PlatformDictionary { get; protected set; }
         private List<PlatformSand> currentPlatformList;
 
-        protected override void Update(float deltaTime)
-        {
-            offset += deltaTime * SettingsSand.Multiplier;
-        }
+        protected override void Update(float deltaTime) => this.offset += deltaTime * SettingsSand.Multiplier;
 
         public override void Draw()
         {
-            if (!UpdateCurrentScreen() || EndingManager.HasFinished)
+            if (!this.UpdateCurrentScreen() || EndingManager.HasFinished)
             {
                 return;
             }
 
-            SpriteBatch spriteBatch = Game1.spriteBatch;
-            Parallel.ForEach(currentPlatformList, platform =>
-            {
-                DrawPlatform(platform, spriteBatch);
-            });
+            var spriteBatch = Game1.spriteBatch;
+            _ = Parallel.ForEach(this.currentPlatformList, platform
+                => this.DrawPlatform(platform, spriteBatch));
         }
 
         /// <summary>
@@ -73,57 +63,45 @@ namespace SwitchBlocks.Entities
         /// <returns>false if no platforms are to be drawn, true otherwise</returns>
         protected bool UpdateCurrentScreen()
         {
-            if (PlatformDictionary == null)
+            if (this.PlatformDictionary == null)
             {
                 return false;
             }
 
-            nextScreen = Camera.CurrentScreen;
-            if (currentScreen != nextScreen)
+            this.nextScreen = Camera.CurrentScreen;
+            if (this.currentScreen != this.nextScreen)
             {
-                PlatformDictionary.TryGetValue(nextScreen, out currentPlatformList);
-                currentScreen = nextScreen;
+                _ = this.PlatformDictionary.TryGetValue(this.nextScreen, out this.currentPlatformList);
+                this.currentScreen = this.nextScreen;
             }
-            return currentPlatformList != null;
+            return this.currentPlatformList != null;
         }
 
         private void DrawPlatform(PlatformSand platform, SpriteBatch spriteBatch)
         {
             if (platform.Texture != null)
             {
-                DrawBackground(platform, spriteBatch);
+                this.DrawBackground(platform, spriteBatch);
             }
 
             if (platform.Scrolling != null)
             {
-                DrawScrolling(platform, spriteBatch);
+                this.DrawScrolling(platform, spriteBatch);
             }
 
             if (platform.Foreground != null)
             {
-                DrawForeground(platform, spriteBatch);
+                this.DrawForeground(platform, spriteBatch);
             }
         }
 
         private void DrawBackground(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangle;
-            if (platform.StartState == DataSand.State)
-            {
-                sourceRectangle = new Rectangle(
-                    0,
+            var sourceRectangle = new Rectangle(
+                    platform.Width * Convert.ToInt32(platform.StartState != DataSand.State),
                     0,
                     platform.Width,
                     platform.Height);
-            }
-            else
-            {
-                sourceRectangle = new Rectangle(
-                    platform.Width,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
 
             spriteBatch.Draw(
                 texture: platform.Texture,
@@ -134,13 +112,13 @@ namespace SwitchBlocks.Entities
 
         private void DrawScrolling(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            int actualOffset = (int)(offset % platform.Scrolling.Height);
+            var actualOffset = (int)(this.offset % platform.Scrolling.Height);
             actualOffset = platform.StartState == DataSand.State ? actualOffset : platform.Scrolling.Height - actualOffset;
 
             // Depending on if the offset would make it so we go past the texture.
             if (actualOffset + platform.Height > platform.Scrolling.Height)
             {
-                int diff = platform.Scrolling.Height - actualOffset;
+                var diff = platform.Scrolling.Height - actualOffset;
                 spriteBatch.Draw(
                 texture: platform.Scrolling,
                 position: platform.Position,
@@ -177,23 +155,12 @@ namespace SwitchBlocks.Entities
 
         private void DrawForeground(PlatformSand platform, SpriteBatch spriteBatch)
         {
-            Rectangle sourceRectangle;
-            if (platform.StartState == DataSand.State)
-            {
-                sourceRectangle = new Rectangle(
-                    0,
+            var sourceRectangle = new Rectangle(
+                    platform.Width * Convert.ToInt32(platform.StartState != DataSand.State),
                     0,
                     platform.Width,
                     platform.Height);
-            }
-            else
-            {
-                sourceRectangle = new Rectangle(
-                    platform.Width,
-                    0,
-                    platform.Width,
-                    platform.Height);
-            }
+
             spriteBatch.Draw(
                 texture: platform.Foreground,
                 position: platform.Position,
