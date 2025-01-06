@@ -125,7 +125,7 @@ namespace SwitchBlocks.Platforms
                 platform.Position = (Vector2)position;
 
                 // Link
-                var link = (screenNr * 10000) + ((int)(platform.Position.X / 8) * 100) + (int)(platform.Position.Y / 8);
+                var link = ((screenNr + 1) * 10000) + ((int)(platform.Position.X / 8) * 100) + (int)(platform.Position.Y / 8);
                 if (dictionary.ContainsKey(ModStrings.LINK_POSITION))
                 {
                     var optionalLink = Xml.GetLink(xmlPlatform[dictionary[ModStrings.LINK_POSITION]]);

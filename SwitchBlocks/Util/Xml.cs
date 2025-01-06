@@ -184,9 +184,9 @@ namespace SwitchBlocks.Util
             {
                 return null;
             }
-            var screen = int.Parse(children[dictionary["Screen"]].InnerText) - 1;
-            var x = int.Parse(children[dictionary["X"]].InnerText) / 8;
-            var y = int.Parse(children[dictionary["Y"]].InnerText) / 8;
+            var screen = int.Parse(children[dictionary["Screen"]].InnerText);
+            var x = int.Parse(children[dictionary["X"]].InnerText);
+            var y = int.Parse(children[dictionary["Y"]].InnerText);
             return (screen * 10000) + (x * 100) + y;
         }
     }
