@@ -40,3 +40,6 @@ Sure, make an issue and I'll have a look at it.
 
 ## Why are the switches called levers?
 switch is a programming keyword, so i would have to name them something along the lines of \_switch or switch\_ or zwitch or whatever name you can think of, in the end I have to choose something ¯\\_(ツ)_/¯
+
+## Is the creation of levers and platforms the ugliest code ever?
+Yes, and I tried to clean it up but it was slower. So ugly it is.
