@@ -137,5 +137,8 @@ namespace SwitchBlocks.Settings
 
         public static bool ParseWarnDisableOff(Dictionary<string, int> dictionary)
             => dictionary.ContainsKey("DisableOff");
+
+        public static bool ParseDisableOnLeaving(Dictionary<string, int> dictionary)
+            => dictionary.ContainsKey("DisableOnLeaving");
     }
 }

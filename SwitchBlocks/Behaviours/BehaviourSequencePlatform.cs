@@ -51,7 +51,9 @@ namespace SwitchBlocks.Behaviours
 
             if (!this.IsPlayerOnBlock)
             {
-                if (SettingsSequence.Duration == 0 && DataSequence.Touched > 0)
+                if (SettingsSequence.DisableOnLeave
+                    && SettingsSequence.Duration == 0
+                    && DataSequence.Touched > 0)
                 {
                     DataSequence.SetTick(DataSequence.Touched, int.MinValue);
                     _ = DataSequence.Active.Add(DataSequence.Touched);

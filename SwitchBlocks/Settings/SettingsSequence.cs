@@ -27,6 +27,10 @@ namespace SwitchBlocks.Settings
         /// Directions the sequence platform can be activated from.
         /// </summary>
         public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
+        /// <summary>
+        /// If the platform should be disabled when left.
+        /// </summary>
+        public static bool DisableOnLeave { get; private set; } = false;
 
         public static void Parse(XmlNode block)
         {
@@ -36,6 +40,7 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
             PlatformDirections = ParseSettings.ParsePlatformSideDisable(dictionaryGroup, block);
+            DisableOnLeave = ParseSettings.ParseDisableOnLeaving(dictionaryGroup);
         }
 
         public static void Reset()
@@ -44,6 +49,7 @@ namespace SwitchBlocks.Settings
             Multiplier = 1.0f;
             LeverDirections = new BitVector32((int)Direction.All);
             PlatformDirections = new BitVector32((int)Direction.All);
+            DisableOnLeave = false;
         }
     }
 }
