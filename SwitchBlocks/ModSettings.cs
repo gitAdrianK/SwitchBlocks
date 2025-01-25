@@ -12,9 +12,22 @@ namespace SwitchBlocks
         /// </summary>
         public static void Load()
         {
-            var document = new XmlDocument();
+            SettingsAuto.Reset();
+            SettingsBasic.Reset();
+            SettingsCountdown.Reset();
+            SettingsGroup.Reset();
+            SettingsJump.Reset();
+            SettingsSand.Reset();
+            SettingsSequence.Reset();
+
             var sep = Path.DirectorySeparatorChar;
             var path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            var document = new XmlDocument();
             document.Load(path);
             var blocks = document.LastChild;
             if (blocks == null || blocks.Name != "Blocks")

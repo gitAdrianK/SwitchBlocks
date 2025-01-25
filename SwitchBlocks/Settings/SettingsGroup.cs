@@ -37,5 +37,13 @@ namespace SwitchBlocks.Settings
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
             PlatformDirections = ParseSettings.ParsePlatformSideDisable(dictionaryGroup, block);
         }
+
+        public static void Reset()
+        {
+            Duration = 0;
+            Multiplier = 1.0f;
+            LeverDirections = new BitVector32((int)Direction.All);
+            PlatformDirections = new BitVector32((int)Direction.All);
+        }
     }
 }

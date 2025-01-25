@@ -51,7 +51,16 @@ namespace SwitchBlocks.Settings
                 WarnCount = ParseSettings.ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
                 WarnDuration = ParseSettings.ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);
             }
+        }
 
+        public static void Reset()
+        {
+            Duration = 180;
+            Multiplier = 1.0f;
+            LeverDirections = new BitVector32((int)Direction.All);
+            ForceSwitch = false;
+            WarnCount = 2;
+            WarnDuration = 60;
         }
     }
 }

@@ -24,5 +24,11 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(dictionaryJump, block);
             ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryJump);
         }
+
+        public static void Reset()
+        {
+            Multiplier = 1.0f;
+            ForceSwitch = false;
+        }
     }
 }

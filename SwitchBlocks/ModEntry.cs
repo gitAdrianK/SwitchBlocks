@@ -98,8 +98,6 @@ namespace SwitchBlocks
             SetupJump.DoSetup(player);
             SetupSand.DoSetup(player);
             SetupSequence.DoSetup(player);
-
-            EntityManager.instance.MoveToFront(player);
         }
 
         /// <summary>

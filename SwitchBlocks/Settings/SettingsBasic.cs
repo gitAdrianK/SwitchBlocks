@@ -26,5 +26,11 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(dictionaryBasic, block);
             LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryBasic, block);
         }
+
+        public static void Reset()
+        {
+            Multiplier = 1.0f;
+            LeverDirections = new BitVector32((int)Direction.All);
+        }
     }
 }

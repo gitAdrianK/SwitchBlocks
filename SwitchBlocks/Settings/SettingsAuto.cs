@@ -66,5 +66,18 @@ namespace SwitchBlocks.Settings
                 WarnDisableOff = ParseSettings.ParseWarnDisableOff(dictionaryAutoWarn);
             }
         }
+
+        public static void Reset()
+        {
+            DurationOn = 180;
+            DurationOff = 180;
+            DurationCycle = 360;
+            Multiplier = 1.0f;
+            ForceSwitch = false;
+            WarnCount = 2;
+            WarnDuration = 60;
+            WarnDisableOn = false;
+            WarnDisableOff = false;
+        }
     }
 }
