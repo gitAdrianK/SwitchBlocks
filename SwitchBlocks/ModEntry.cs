@@ -10,6 +10,7 @@ namespace SwitchBlocks
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
+    using SwitchBlocks.Entities;
     using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Setups;
@@ -98,6 +99,34 @@ namespace SwitchBlocks
             SetupJump.DoSetup(player);
             SetupSand.DoSetup(player);
             SetupSequence.DoSetup(player);
+
+            var entities = new List<Entity>();
+            var playerFound = false;
+            foreach (var entity in entityManager.Entities)
+            {
+                if (entity == player)
+                {
+                    playerFound = true;
+                }
+                if (playerFound
+                    && entity.GetType() != typeof(EntityAutoPlatforms)
+                    && entity.GetType() != typeof(EntityBasicPlatforms)
+                    && entity.GetType() != typeof(EntityBasicLevers)
+                    && entity.GetType() != typeof(EntityCountdownPlatforms)
+                    && entity.GetType() != typeof(EntityCountdownLevers)
+                    && entity.GetType() != typeof(EntityGroupPlatforms)
+                    && entity.GetType() != typeof(EntityJumpPlatforms)
+                    && entity.GetType() != typeof(EntitySandPlatforms)
+                    && entity.GetType() != typeof(EntitySandLevers)
+                    && entity.GetType() != typeof(EntitySequencePlatforms))
+                {
+                    entities.Add(entity);
+                }
+            }
+            foreach (var entity in entities)
+            {
+                entityManager.MoveToFront(entity);
+            }
         }
 
         /// <summary>
