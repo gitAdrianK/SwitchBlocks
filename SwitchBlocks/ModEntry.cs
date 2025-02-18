@@ -1,7 +1,6 @@
 namespace SwitchBlocks
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Threading.Tasks;
     using EntityComponent;
     using HarmonyLib;
@@ -28,7 +27,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            _ = Debugger.Launch();
+            //_ = Debugger.Launch();
 
             _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
             _ = LevelManager.RegisterBlockFactory(new FactoryBasic());
