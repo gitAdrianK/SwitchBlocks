@@ -79,15 +79,19 @@ namespace SwitchBlocks.Behaviours
                 });
                 DataGroup.Finished.Clear();
                 DataGroup.Touched.Clear();
-                return true;
             }
-
-            _ = Parallel.ForEach(block.ResetIds, id =>
+            else
             {
-                DataGroup.Groups[id].ActivatedTick = int.MaxValue;
-                _ = DataGroup.Active.Add(id);
-                _ = DataGroup.Finished.Remove(id);
-            });
+                _ = Parallel.ForEach(block.ResetIds, id =>
+                {
+                    if (DataGroup.Groups.TryGetValue(id, out var blockGroup))
+                    {
+                        blockGroup.ActivatedTick = int.MaxValue;
+                        _ = DataGroup.Active.Add(id);
+                        _ = DataGroup.Finished.Remove(id);
+                    }
+                });
+            }
 
             return true;
         }

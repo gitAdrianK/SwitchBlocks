@@ -54,7 +54,11 @@ namespace SwitchBlocks.Entities
             var finished = new List<int>();
             _ = Parallel.ForEach(DataGroup.Active, group =>
             {
-                var blockGroup = DataGroup.Groups[group];
+                //var blockGroup = DataGroup.Groups[group];
+                if (!DataGroup.Groups.TryGetValue(group, out var blockGroup))
+                {
+                    return;
+                }
                 this.UpdateProgress(blockGroup, deltaTime, multiplier);
                 this.TrySwitch(blockGroup, tick);
                 if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
@@ -72,8 +76,12 @@ namespace SwitchBlocks.Entities
             });
             foreach (var i in finished)
             {
-                var blockGroup = DataGroup.Groups[i];
-                if (!blockGroup.State && blockGroup.Progress == 0.0f)
+                //var blockGroup = DataGroup.Groups[i];
+                if (!DataGroup.Groups.TryGetValue(i, out var blockGroup1))
+                {
+                    continue;
+                }
+                if (!blockGroup1.State && blockGroup1.Progress == 0.0f)
                 {
                     DataGroup.Finished.Add(i);
                 }
