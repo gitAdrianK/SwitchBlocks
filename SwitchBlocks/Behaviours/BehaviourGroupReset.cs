@@ -52,24 +52,42 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                var block = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockGroupResetSolid));
+                var solid = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockGroupResetSolid));
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                     SettingsGroup.LeverDirections,
-                    block))
+                    solid))
                 {
                     return true;
                 }
             }
 
-            _ = Parallel.ForEach(DataGroup.Active, group
-                => DataGroup.Groups[group].ActivatedTick = int.MaxValue);
-            _ = Parallel.ForEach(DataGroup.Finished, group =>
+            var block = (IResetGroupIds)advCollisionInfo.GetCollidedBlocks().First(b =>
             {
-                DataGroup.Groups[group].ActivatedTick = int.MaxValue;
-                _ = DataGroup.Active.Add(group);
+                var type = b.GetType();
+                return type == typeof(BlockGroupReset)
+                || type == typeof(BlockGroupResetSolid);
             });
-            DataGroup.Finished.Clear();
-            DataGroup.Touched.Clear();
+
+            if (block.ResetIds.Length == 1 && block.ResetIds[0] == 0)
+            {
+                _ = Parallel.ForEach(DataGroup.Active, group
+                    => DataGroup.Groups[group].ActivatedTick = int.MaxValue);
+                _ = Parallel.ForEach(DataGroup.Finished, group =>
+                {
+                    DataGroup.Groups[group].ActivatedTick = int.MaxValue;
+                    _ = DataGroup.Active.Add(group);
+                });
+                DataGroup.Finished.Clear();
+                DataGroup.Touched.Clear();
+                return true;
+            }
+
+            _ = Parallel.ForEach(block.ResetIds, id =>
+            {
+                DataGroup.Groups[id].ActivatedTick = int.MaxValue;
+                _ = DataGroup.Active.Add(id);
+                _ = DataGroup.Finished.Remove(id);
+            });
 
             return true;
         }

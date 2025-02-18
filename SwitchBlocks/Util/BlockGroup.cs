@@ -145,5 +145,70 @@ namespace SwitchBlocks.Util
                 _ = PropagateGroupId(blocks, currentPos, cacheId);
             }
         }
+
+        public static bool PropagateResetIds(Dictionary<int, IResetGroupIds> blocks, int startPosition, int[] resetIds)
+        {
+            if (!blocks.TryGetValue(startPosition, out var value) || value.ResetIds.Length != 0)
+            {
+                return false;
+            }
+            var toVisit = new Queue<int>();
+            toVisit.Enqueue(startPosition);
+            while (toVisit.Count != 0)
+            {
+                var currentPos = toVisit.Dequeue();
+                blocks[currentPos].ResetIds = resetIds;
+
+                // Left
+                var left = currentPos - HORIZONTAL;
+                if (blocks.TryGetValue(left, out value) && value.ResetIds.Length == 0)
+                {
+                    toVisit.Enqueue(left);
+                }
+                // Right
+                var right = currentPos + HORIZONTAL;
+                if (blocks.TryGetValue(right, out value) && value.ResetIds.Length == 0)
+                {
+                    toVisit.Enqueue(right);
+                }
+                // Up
+                var up = currentPos % 100 == 0 ? currentPos + SCREEN : currentPos - VERTICAL;
+                if (blocks.TryGetValue(up, out value) && value.ResetIds.Length == 0)
+                {
+                    toVisit.Enqueue(up);
+                }
+                // Down
+                var down = currentPos % 100 == 44 ? currentPos - SCREEN : currentPos + VERTICAL;
+                if (blocks.TryGetValue(down, out value) && value.ResetIds.Length == 0)
+                {
+                    toVisit.Enqueue(down);
+                }
+            }
+            return true;
+        }
+
+        public static void AssignResetIdsFromSeed(Dictionary<int, IResetGroupIds> blocks, SerializableDictionary<int, int[]> seed)
+        {
+            foreach (var kv in seed)
+            {
+                var currentPos = kv.Key;
+                var resetIds = kv.Value;
+                _ = PropagateResetIds(blocks, currentPos, resetIds);
+            }
+        }
+
+        public static void CreateResetsData(Dictionary<int, IResetGroupIds> blocks, SerializableDictionary<int, int[]> seed)
+        {
+            // 0 is used to indicate that the reset block resets all groups / group ids
+            var resetAll = new int[] { 0 };
+            foreach (var kv in blocks)
+            {
+                var position = kv.Key;
+                if (PropagateResetIds(blocks, position, resetAll))
+                {
+                    seed.Add(position, resetAll);
+                }
+            }
+        }
     }
 }

@@ -68,6 +68,7 @@ namespace SwitchBlocks.Factories
                 SetupGroup.BlocksGroupB.Clear();
                 SetupGroup.BlocksGroupC.Clear();
                 SetupGroup.BlocksGroupD.Clear();
+                SetupGroup.Resets.Clear();
                 LastUsedMapId = level.ID;
             }
 
@@ -126,9 +127,13 @@ namespace SwitchBlocks.Factories
                     SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowD;
                     return blockGroupSnowD;
                 case var _ when blockCode == ModBlocks.GROUP_RESET:
-                    return new BlockGroupReset(blockRect);
+                    var blockReset = new BlockGroupReset(blockRect);
+                    SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockReset;
+                    return blockReset;
                 case var _ when blockCode == ModBlocks.GROUP_RESET_SOLID:
-                    return new BlockGroupResetSolid(blockRect);
+                    var blockResetSolid = new BlockGroupResetSolid(blockRect);
+                    SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockResetSolid;
+                    return blockResetSolid;
                 default:
                     throw new InvalidOperationException($"{nameof(FactoryGroup)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }

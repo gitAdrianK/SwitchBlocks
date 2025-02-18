@@ -154,6 +154,7 @@
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Data\CacheSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
+    <Compile Include="Data\ResetsGroup.cs" />
     <Compile Include="Entities\EntitySequencePlatforms.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Util\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Intersecting.cs" />
+    <Compile Include="Util\IResetGroupIds.cs" />
     <Compile Include="Util\Lever.cs" />
     <Compile Include="Platforms\Platform.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />

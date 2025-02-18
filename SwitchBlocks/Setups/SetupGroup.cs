@@ -20,6 +20,8 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IResetGroupIds> Resets { get; private set; } = new Dictionary<int, IResetGroupIds>();
+
 
         public static void DoSetup(PlayerEntity player)
         {
@@ -35,8 +37,10 @@ namespace SwitchBlocks.Setups
                 if (LevelDebugState.instance != null)
                 {
                     CacheGroup.Instance.SaveToFile();
+                    ResetsGroup.Instance.SaveToFile();
                 }
                 CacheGroup.Instance.Reset();
+                ResetsGroup.Instance.Reset();
             }));
 
             _ = EntityGroupPlatforms.Instance;
@@ -88,6 +92,11 @@ namespace SwitchBlocks.Setups
             BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, CacheGroup.Seed, ref groupId);
 
             BlockGroup.CreateGroupData(groupId, DataGroup.Groups, true);
+            if (ResetsGroup.Seed.Count > 0)
+            {
+                BlockGroup.AssignResetIdsFromSeed(Resets, ResetsGroup.Seed);
+            }
+            BlockGroup.CreateResetsData(Resets, ResetsGroup.Seed);
         }
     }
 }

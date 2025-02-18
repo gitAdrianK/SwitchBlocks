@@ -2,9 +2,12 @@ namespace SwitchBlocks.Blocks
 {
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
+    using SwitchBlocks.Util;
 
-    public class BlockGroupResetSolid : IBlock, IBlockDebugColor
+    public class BlockGroupResetSolid : IBlock, IBlockDebugColor, IResetGroupIds
     {
+        public int[] ResetIds { get; set; } = { };
+
         private readonly Rectangle collider;
 
         public BlockGroupResetSolid(Rectangle collider) => this.collider = collider;
