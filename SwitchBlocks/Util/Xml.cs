@@ -51,26 +51,6 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
-        /// Creates a Color from a given xml node should the node contain 3
-        /// children named "R", "G", and "B"
-        /// </summary>
-        /// <param name="root">Xml node to create the color from.</param>
-        /// <returns>Color or null if a color couldn't be made</returns>
-        public static Color? GetColor(XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var dictionary = MapNamesRequired(children, "R", "G", "B");
-            if (dictionary == null)
-            {
-                return null;
-            }
-            return new Color(
-                int.Parse(children[dictionary["R"]].InnerText),
-                int.Parse(children[dictionary["G"]].InnerText),
-                int.Parse(children[dictionary["B"]].InnerText));
-        }
-
-        /// <summary>
         /// Creates a Vector2 from a given xml node should the node contain 2
         /// children named "X", and "Y"
         /// </summary>
@@ -93,25 +73,6 @@ namespace SwitchBlocks.Util
             return new Vector2(
                 float.Parse(xString, CultureInfo.InvariantCulture),
                 float.Parse(yString, CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Creates a Point from a given xml node should the node contain 2
-        /// children named "X", and "Y"
-        /// </summary>
-        /// <param name="root">Xml node to create the point from.</param>
-        /// <returns>Point or null if a point couldn't be made</returns>
-        public static Point? GetPoint(XmlNode root)
-        {
-            var children = root.ChildNodes;
-            var dictionary = MapNamesRequired(children, "X", "Y");
-            if (dictionary == null)
-            {
-                return null;
-            }
-            return new Point(
-                int.Parse(children[dictionary["X"]].InnerText),
-                int.Parse(children[dictionary["Y"]].InnerText));
         }
 
         /// <summary>

@@ -11,7 +11,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataJump Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourJumpOff() => this.Data = DataJump.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -40,7 +43,7 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            if (!DataJump.State)
+            if (!this.Data.State)
             {
                 if (isOnIce)
                 {
@@ -56,11 +59,11 @@ namespace SwitchBlocks.Behaviours
             {
                 if (behaviourContext.BodyComp.IsOnGround)
                 {
-                    DataJump.SwitchOnceSafe = false;
+                    this.Data.SwitchOnceSafe = false;
                 }
-                if (DataJump.CanSwitchSafely)
+                if (this.Data.CanSwitchSafely)
                 {
-                    DataJump.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                    this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
                         behaviourContext,
                         typeof(BlockJumpOff),
                         typeof(BlockJumpIceOff),

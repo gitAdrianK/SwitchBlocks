@@ -13,7 +13,7 @@ namespace SwitchBlocks.Data
     /// Contains data relevant for the sequence block.
     /// </summary>
     [Serializable, XmlRoot("DataSequence")]
-    public class DataSequence
+    public class DataSequence : IGroupDataProvider
     {
         private static DataSequence instance;
         public static DataSequence Instance
@@ -81,9 +81,9 @@ namespace SwitchBlocks.Data
             xmlSerializer.Serialize(textWriter, Instance);
         }
 
-        public static bool GetState(int id)
+        public bool GetState(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return false;
                 //throw new Exception($"Could not get state data for group nr {id}! Did not exist!");
@@ -91,9 +91,9 @@ namespace SwitchBlocks.Data
             return group.State;
         }
 
-        public static void SetState(int id, bool state)
+        public void SetState(int id, bool state)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set state data for group nr {id}! Did not exist!");
@@ -101,9 +101,9 @@ namespace SwitchBlocks.Data
             group.State = state;
         }
 
-        public static float GetProgress(int id)
+        public float GetProgress(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return 0.0f;
                 //throw new Exception($"Could not get progress data for group nr {id}! Did not exist!");
@@ -111,9 +111,9 @@ namespace SwitchBlocks.Data
             return group.Progress;
         }
 
-        public static void SetProgress(int id, float progress)
+        public void SetProgress(int id, float progress)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set progress data for group nr {id}! Did not exist!");
@@ -121,9 +121,9 @@ namespace SwitchBlocks.Data
             group.Progress = progress;
         }
 
-        public static int GetTick(int id)
+        public int GetTick(int id)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return 0;
                 //throw new Exception($"Could not get tick data for group nr {id}! Did not exist!");
@@ -131,9 +131,9 @@ namespace SwitchBlocks.Data
             return group.ActivatedTick;
         }
 
-        public static void SetTick(int id, int tick)
+        public void SetTick(int id, int tick)
         {
-            if (!Instance._groups.TryGetValue(id, out var group))
+            if (!this._groups.TryGetValue(id, out var group))
             {
                 return;
                 //throw new Exception($"Could not set tick data for group nr {id}! Did not exist!");
@@ -145,10 +145,10 @@ namespace SwitchBlocks.Data
         /// Groups belonging to the respective id.
         /// A group has the data related to a platform.
         /// </summary>
-        public static SerializableDictionary<int, BlockGroup> Groups
+        public SerializableDictionary<int, BlockGroup> Groups
         {
-            get => Instance._groups;
-            set => Instance._groups = value;
+            get => this._groups;
+            set => this._groups = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, BlockGroup> _groups;
@@ -157,10 +157,10 @@ namespace SwitchBlocks.Data
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
-        public static bool HasSwitched
+        public bool HasSwitched
         {
-            get => Instance._hasSwitched;
-            set => Instance._hasSwitched = value;
+            get => this._hasSwitched;
+            set => this._hasSwitched = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasSwitched;
@@ -170,10 +170,10 @@ namespace SwitchBlocks.Data
         /// Since the active groups are always n and n+1 we dont need to keep track of multiple Ids
         /// like the group type.
         /// </summary>
-        public static int Touched
+        public int Touched
         {
-            get => Instance._touched;
-            set => Instance._touched = value;
+            get => this._touched;
+            set => this._touched = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public int _touched;
@@ -182,10 +182,10 @@ namespace SwitchBlocks.Data
         /// GroupIds that are currently in the process of changing state from active to inactive or vice versa.
         /// They are considered active until the progress has reached 0/1.
         /// </summary>
-        public static HashSet<int> Active
+        public HashSet<int> Active
         {
-            get => Instance._active;
-            set => Instance._active = value;
+            get => this._active;
+            set => this._active = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public HashSet<int> _active;
@@ -193,10 +193,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// GroupIds that have finished going from their default startstate to the other state.
         /// </summary>
-        public static List<int> Finished
+        public List<int> Finished
         {
-            get => Instance._finished;
-            set => Instance._finished = value;
+            get => this._finished;
+            set => this._finished = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public List<int> _finished;

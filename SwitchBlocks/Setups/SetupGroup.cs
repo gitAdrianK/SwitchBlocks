@@ -1,8 +1,6 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using EntityComponent;
     using JumpKing;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
@@ -22,28 +20,24 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IResetGroupIds> Resets { get; private set; } = new Dictionary<int, IResetGroupIds>();
 
-
-        public static void DoSetup(PlayerEntity player)
+        public static void Setup(PlayerEntity player)
         {
             if (!SettingsGroup.IsUsed)
             {
                 return;
             }
 
-            AssignGroupIds();
+            var cache = CacheGroup.TryDeserialize();
+            var resets = ResetsGroup.TryDeserialize();
+            AssignGroupIds(cache, resets);
 
-            ModEntry.Tasks.Add(Task.Run(() =>
+            if (LevelDebugState.instance != null)
             {
-                if (LevelDebugState.instance != null)
-                {
-                    CacheGroup.Instance.SaveToFile();
-                    ResetsGroup.Instance.SaveToFile();
-                }
-                CacheGroup.Instance.Reset();
-                ResetsGroup.Instance.Reset();
-            }));
+                cache.SaveToFile();
+                resets.SaveToFile();
+            }
 
-            _ = EntityGroupPlatforms.Instance;
+            _ = new EntityLogicGroup();
 
             if (SettingsGroup.Duration == 0)
             {
@@ -58,15 +52,12 @@ namespace SwitchBlocks.Setups
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void Cleanup()
         {
             if (!SettingsGroup.IsUsed)
             {
                 return;
             }
-
-            entityManager.RemoveObject(EntityGroupPlatforms.Instance);
-            EntityGroupPlatforms.Instance.Reset();
 
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();
@@ -74,29 +65,32 @@ namespace SwitchBlocks.Setups
             SettingsGroup.IsUsed = false;
         }
 
-        private static void AssignGroupIds()
+        private static void AssignGroupIds(CacheGroup cache, ResetsGroup resets)
         {
             var groupId = 1;
 
-            if (CacheGroup.Seed.Count > 0)
+            var seed = cache.Seed;
+            if (seed.Count > 0)
             {
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupA, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupB, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupC, CacheGroup.Seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupD, CacheGroup.Seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupA, seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupB, seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupC, seed, ref groupId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupD, seed, ref groupId);
             }
 
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupB, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupC, CacheGroup.Seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, CacheGroup.Seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupB, seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupC, seed, ref groupId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, seed, ref groupId);
 
-            BlockGroup.CreateGroupData(groupId, DataGroup.Groups, true);
-            if (ResetsGroup.Seed.Count > 0)
+            BlockGroup.CreateGroupData(groupId, DataGroup.Instance.Groups, true);
+
+            var rseed = resets.Seed;
+            if (rseed.Count > 0)
             {
-                BlockGroup.AssignResetIdsFromSeed(Resets, ResetsGroup.Seed);
+                BlockGroup.AssignResetIdsFromSeed(Resets, rseed);
             }
-            BlockGroup.CreateResetsData(Resets, ResetsGroup.Seed);
+            BlockGroup.CreateResetsData(Resets, rseed);
         }
     }
 }

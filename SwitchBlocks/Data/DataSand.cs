@@ -9,7 +9,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the sand block.
     /// </summary>
-    public class DataSand
+    public class DataSand : IDataProvider
     {
 
         private static DataSand instance;
@@ -79,22 +79,28 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Its current state.
         /// </summary>
-        public static bool State
+        public bool State
         {
-            get => Instance._state;
-            set => Instance._state = value;
+            get => this._state;
+            set => this._state = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _state;
 
         /// <summary>
+        /// Progress is not being saved between play sessions as it is unnecessary.
+        /// </summary>
+        [XmlIgnore]
+        public float Progress { get; set; }
+
+        /// <summary>
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
-        public static bool HasSwitched
+        public bool HasSwitched
         {
-            get => Instance._hasSwitched;
-            set => Instance._hasSwitched = value;
+            get => this._hasSwitched;
+            set => this._hasSwitched = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasSwitched;
@@ -102,11 +108,12 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Whether the player is currently inside the block.
         /// </summary>
-        public static bool HasEntered
+        public bool HasEntered
         {
-            get => Instance._hasEntered;
-            set => Instance._hasEntered = value;
+            get => this._hasEntered;
+            set => this._hasEntered = value;
         }
+
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasEntered;
     }

@@ -14,48 +14,36 @@ namespace SwitchBlocks.Data
     [Serializable, XmlRoot("CacheSequence")]
     public class CacheSequence
     {
-        private static CacheSequence instance;
-        public static CacheSequence Instance
+        public static CacheSequence TryDeserialize()
         {
-            get
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var file = $"{path}cache_{ModStrings.SEQUENCE}.sav";
+            if (File.Exists(file))
             {
-                if (instance != null)
+                StreamReader streamReader = null;
+                try
                 {
-                    return instance;
+                    streamReader = new StreamReader(file);
+                    var xmlSerializer = new XmlSerializer(typeof(CacheSequence));
+                    return (CacheSequence)xmlSerializer.Deserialize(streamReader);
                 }
-
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}cache_{ModStrings.SEQUENCE}.sav";
-                if (File.Exists(file))
+                catch
                 {
-                    StreamReader streamReader = null;
-                    try
-                    {
-                        streamReader = new StreamReader(file);
-                        var xmlSerializer = new XmlSerializer(typeof(CacheSequence));
-                        instance = (CacheSequence)xmlSerializer.Deserialize(streamReader);
-                    }
-                    catch
-                    {
-                        instance = new CacheSequence();
-                    }
-                    finally
-                    {
-                        streamReader?.Close();
-                        streamReader?.Dispose();
-                    }
+                    return new CacheSequence();
                 }
-                else
+                finally
                 {
-                    instance = new CacheSequence();
+                    streamReader?.Close();
+                    streamReader?.Dispose();
                 }
-                return instance;
+            }
+            else
+            {
+                return new CacheSequence();
             }
         }
-
-        public void Reset() => instance = null;
 
         private CacheSequence() => this._seed = new SerializableDictionary<int, int>();
 
@@ -78,19 +66,12 @@ namespace SwitchBlocks.Data
             }
             var xmlSerializer = new XmlSerializer(typeof(CacheSequence));
             TextWriter textWriter = new StreamWriter($"{path}cache_{ModStrings.SEQUENCE}.sav");
-            xmlSerializer.Serialize(textWriter, Instance);
+            xmlSerializer.Serialize(textWriter, this);
         }
 
-        /// <summary>
-        /// Groups belonging to the respective id.
-        /// A group has the data related to a platform.
-        /// </summary>
-        public static SerializableDictionary<int, int> Seed
-        {
-            get => Instance._seed;
-            private set => Instance._seed = value;
-        }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, int> _seed;
+
+        public SerializableDictionary<int, int> Seed => this._seed;
     }
 }

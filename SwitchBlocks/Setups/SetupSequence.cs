@@ -1,8 +1,6 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using EntityComponent;
     using JumpKing;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
@@ -21,31 +19,29 @@ namespace SwitchBlocks.Setups
 
         public static int SequenceCount { get; private set; }
 
-        public static void DoSetup(PlayerEntity player)
+        public static void Setup(PlayerEntity player)
         {
             if (!SettingsSequence.IsUsed)
             {
                 return;
             }
 
-            AssignSequenceIds();
+            var instance = DataSequence.Instance;
+            var cache = CacheSequence.TryDeserialize();
+            AssignSequenceIds(instance, cache);
 
-            ModEntry.Tasks.Add(Task.Run(() =>
+            if (LevelDebugState.instance != null)
             {
-                if (LevelDebugState.instance != null)
-                {
-                    CacheSequence.Instance.SaveToFile();
-                }
-                CacheSequence.Instance.Reset();
-            }));
-
-            if (DataSequence.Touched == 0)
-            {
-                DataSequence.SetTick(1, int.MaxValue);
-                _ = DataSequence.Active.Add(1);
+                cache.SaveToFile();
             }
 
-            _ = EntitySequencePlatforms.Instance;
+            if (instance.Touched == 0)
+            {
+                instance.SetTick(1, int.MaxValue);
+                _ = instance.Active.Add(1);
+            }
+
+            _ = new EntityLogicSequence();
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
@@ -53,40 +49,39 @@ namespace SwitchBlocks.Setups
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void Cleanup()
         {
             if (!SettingsSequence.IsUsed)
             {
                 return;
             }
 
-            entityManager.RemoveObject(EntitySequencePlatforms.Instance);
-            EntitySequencePlatforms.Instance.Reset();
-
-            DataSequence.Instance.SaveToFile();
-            DataSequence.Instance.Reset();
+            var instance = DataSequence.Instance;
+            instance.SaveToFile();
+            instance.Reset();
 
             SettingsSequence.IsUsed = false;
         }
 
-        private static void AssignSequenceIds()
+        private static void AssignSequenceIds(DataSequence instance, CacheSequence cache)
         {
             var sequenceId = 1;
+            var seed = cache.Seed;
 
-            if (CacheSequence.Seed.Count > 0)
+            if (seed.Count > 0)
             {
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceA, seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceB, seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceC, seed, ref sequenceId);
+                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceD, seed, ref sequenceId);
             }
 
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceA, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceB, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceC, CacheSequence.Seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceD, CacheSequence.Seed, ref sequenceId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceA, seed, ref sequenceId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceB, seed, ref sequenceId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceC, seed, ref sequenceId);
+            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceD, seed, ref sequenceId);
 
-            BlockGroup.CreateGroupData(sequenceId, DataSequence.Groups, false);
+            BlockGroup.CreateGroupData(sequenceId, instance.Groups, false);
 
             SequenceCount = sequenceId - 1;
         }

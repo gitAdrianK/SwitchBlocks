@@ -14,9 +14,12 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourSandLever : IBlockBehaviour
     {
+        private DataSand Data { get; }
         public float BlockPriority => 2.0f;
 
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourSandLever() => this.Data = DataSand.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -51,11 +54,11 @@ namespace SwitchBlocks.Behaviours
 
             if (this.IsPlayerOnBlock)
             {
-                if (DataSand.HasSwitched)
+                if (this.Data.HasSwitched)
                 {
                     return true;
                 }
-                DataSand.HasSwitched = true;
+                this.Data.HasSwitched = true;
 
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
@@ -75,28 +78,28 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                var stateBefore = DataSand.State;
+                var stateBefore = this.Data.State;
                 if (collidingWithAnyLever)
                 {
-                    DataSand.State = !DataSand.State;
+                    this.Data.State = !this.Data.State;
                 }
                 else if (collidingWithAnyLeverOn)
                 {
-                    DataSand.State = true;
+                    this.Data.State = true;
                 }
                 else if (collidingWithAnyLeverOff)
                 {
-                    DataSand.State = false;
+                    this.Data.State = false;
                 }
 
-                if (stateBefore != DataSand.State)
+                if (stateBefore != this.Data.State)
                 {
                     ModSounds.SandFlip?.PlayOneShot();
                 }
             }
             else
             {
-                DataSand.HasSwitched = false;
+                this.Data.HasSwitched = false;
             }
             return true;
         }

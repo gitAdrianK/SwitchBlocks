@@ -12,7 +12,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataGroup Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourGroupSnow() => this.Data = DataGroup.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -52,7 +55,7 @@ namespace SwitchBlocks.Behaviours
             });
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
-                if (DataGroup.GetState(block.GroupId))
+                if (this.Data.GetState(block.GroupId))
                 {
                     BehaviourPost.IsPlayerOnSnow = true;
                     break;

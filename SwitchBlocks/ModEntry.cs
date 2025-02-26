@@ -1,7 +1,6 @@
 namespace SwitchBlocks
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using EntityComponent;
     using HarmonyLib;
     using JumpKing;
@@ -18,8 +17,6 @@ namespace SwitchBlocks
     [JumpKingMod(ModStrings.MODNAME)]
     public static class ModEntry
     {
-        public static List<Task> Tasks { get; set; } = new List<Task>();
-
         /// <summary>
         /// Called by Jump King before the level loads
         /// -> OnGameStart
@@ -92,13 +89,13 @@ namespace SwitchBlocks
             _ = player.m_body.RegisterBlockBehaviour<BlockPre>(new BehaviourPre());
             _ = player.m_body.RegisterBlockBehaviour<BlockPost>(new BehaviourPost());
 
-            SetupAuto.DoSetup(player);
-            SetupBasic.DoSetup(player);
-            SetupCountdown.DoSetup(player);
-            SetupGroup.DoSetup(player);
-            SetupJump.DoSetup(player);
-            SetupSand.DoSetup(player);
-            SetupSequence.DoSetup(player);
+            SetupAuto.Setup(player);
+            SetupBasic.Setup(player);
+            SetupCountdown.Setup(player);
+            SetupGroup.Setup(player);
+            SetupJump.Setup(player);
+            SetupSand.Setup(player);
+            SetupSequence.Setup(player);
 
             var entities = new List<Entity>();
             var playerFound = false;
@@ -109,16 +106,7 @@ namespace SwitchBlocks
                     playerFound = true;
                 }
                 if (playerFound
-                    && entity.GetType() != typeof(EntityAutoPlatforms)
-                    && entity.GetType() != typeof(EntityBasicPlatforms)
-                    && entity.GetType() != typeof(EntityBasicLevers)
-                    && entity.GetType() != typeof(EntityCountdownPlatforms)
-                    && entity.GetType() != typeof(EntityCountdownLevers)
-                    && entity.GetType() != typeof(EntityGroupPlatforms)
-                    && entity.GetType() != typeof(EntityJumpPlatforms)
-                    && entity.GetType() != typeof(EntitySandPlatforms)
-                    && entity.GetType() != typeof(EntitySandLevers)
-                    && entity.GetType() != typeof(EntitySequencePlatforms))
+                    && entity.GetType() != typeof(EntityDraw))
                 {
                     entities.Add(entity);
                 }
@@ -141,20 +129,26 @@ namespace SwitchBlocks
                 return;
             }
 
-            var entityManager = EntityManager.instance;
+            if (!SettingsAuto.IsUsed
+                && !SettingsBasic.IsUsed
+                && !SettingsCountdown.IsUsed
+                && !SettingsGroup.IsUsed
+                && !SettingsJump.IsUsed
+                && !SettingsSand.IsUsed
+                && !SettingsSequence.IsUsed)
+            {
+                return;
+            }
 
             ModSounds.Cleanup();
 
-            SetupAuto.DoCleanup(entityManager);
-            SetupBasic.DoCleanup(entityManager);
-            SetupCountdown.DoCleanup(entityManager);
-            SetupGroup.DoCleanup(entityManager);
-            SetupJump.DoCleanup(entityManager);
-            SetupSand.DoCleanup(entityManager);
-            SetupSequence.DoCleanup(entityManager);
-
-            Tasks.ForEach(task => task.Wait());
-            Tasks.Clear();
+            SetupAuto.Cleanup();
+            SetupBasic.Cleanup();
+            SetupCountdown.Cleanup();
+            SetupGroup.Cleanup();
+            SetupJump.Cleanup();
+            SetupSand.Cleanup();
+            SetupSequence.Cleanup();
         }
     }
 }

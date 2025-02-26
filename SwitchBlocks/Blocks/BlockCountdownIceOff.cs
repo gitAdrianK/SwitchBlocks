@@ -1,35 +1,16 @@
 namespace SwitchBlocks.Blocks
 {
-    using JumpKing.Level;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Data;
 
     /// <summary>
     /// The countdown ice off block.
     /// </summary>
-    public class BlockCountdownIceOff : IBlock, IBlockDebugColor
+    public class BlockCountdownIceOff : BlockOff
     {
-        private readonly Rectangle collider;
-
-        public BlockCountdownIceOff(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.COUNTDOWN_ICE_OFF;
-
-        public Rectangle GetRect() => !DataCountdown.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        public BlockCountdownIceOff(Rectangle collider)
+            : base(collider, ModBlocks.COUNTDOWN_ICE_OFF, DataCountdown.Instance)
         {
-            if (this.collider.Intersects(hitbox))
-            {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
-                if (DataCountdown.State)
-                {
-                    return BlockCollisionType.Collision_NonBlocking;
-                }
-                return BlockCollisionType.Collision_Blocking;
-            }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
         }
     }
 }

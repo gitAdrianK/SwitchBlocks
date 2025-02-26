@@ -14,48 +14,36 @@ namespace SwitchBlocks.Data
     [Serializable, XmlRoot("CacheGroup")]
     public class CacheGroup
     {
-        private static CacheGroup instance;
-        public static CacheGroup Instance
+        public static CacheGroup TryDeserialize()
         {
-            get
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var file = $"{path}cache_{ModStrings.GROUP}.sav";
+            if (File.Exists(file))
             {
-                if (instance != null)
+                StreamReader streamReader = null;
+                try
                 {
-                    return instance;
+                    streamReader = new StreamReader(file);
+                    var xmlSerializer = new XmlSerializer(typeof(CacheGroup));
+                    return (CacheGroup)xmlSerializer.Deserialize(streamReader);
                 }
-
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}cache_{ModStrings.GROUP}.sav";
-                if (File.Exists(file))
+                catch
                 {
-                    StreamReader streamReader = null;
-                    try
-                    {
-                        streamReader = new StreamReader(file);
-                        var xmlSerializer = new XmlSerializer(typeof(CacheGroup));
-                        instance = (CacheGroup)xmlSerializer.Deserialize(streamReader);
-                    }
-                    catch
-                    {
-                        instance = new CacheGroup();
-                    }
-                    finally
-                    {
-                        streamReader?.Close();
-                        streamReader?.Dispose();
-                    }
+                    return new CacheGroup();
                 }
-                else
+                finally
                 {
-                    instance = new CacheGroup();
+                    streamReader?.Close();
+                    streamReader?.Dispose();
                 }
-                return instance;
+            }
+            else
+            {
+                return new CacheGroup();
             }
         }
-
-        public void Reset() => instance = null;
 
         private CacheGroup() => this._seed = new SerializableDictionary<int, int>();
 
@@ -78,18 +66,14 @@ namespace SwitchBlocks.Data
             }
             var xmlSerializer = new XmlSerializer(typeof(CacheGroup));
             TextWriter textWriter = new StreamWriter($"{path}cache_{ModStrings.GROUP}.sav");
-            xmlSerializer.Serialize(textWriter, Instance);
+            xmlSerializer.Serialize(textWriter, this);
         }
 
         /// <summary>
         /// Groups belonging to the respective id.
         /// A group has the data related to a platform.
         /// </summary>
-        public static SerializableDictionary<int, int> Seed
-        {
-            get => Instance._seed;
-            private set => Instance._seed = value;
-        }
+        public SerializableDictionary<int, int> Seed => this._seed;
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, int> _seed;
     }

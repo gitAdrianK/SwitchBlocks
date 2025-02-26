@@ -1,35 +1,17 @@
 namespace SwitchBlocks.Blocks
 {
-    using JumpKing.Level;
     using Microsoft.Xna.Framework;
+
     using SwitchBlocks.Data;
 
     /// <summary>
     /// The auto on block.
     /// </summary>
-    public class BlockAutoOn : IBlock, IBlockDebugColor
+    public class BlockAutoOn : BlockOn
     {
-        private readonly Rectangle collider;
-
-        public BlockAutoOn(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.AUTO_ON;
-
-        public Rectangle GetRect() => DataAuto.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        public BlockAutoOn(Rectangle collider)
+            : base(collider, ModBlocks.AUTO_ON, DataAuto.Instance)
         {
-            if (this.collider.Intersects(hitbox))
-            {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
-                if (DataAuto.State)
-                {
-                    return BlockCollisionType.Collision_Blocking;
-                }
-                return BlockCollisionType.Collision_NonBlocking;
-            }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
         }
     }
 }

@@ -1,16 +1,18 @@
 namespace SwitchBlocks.Setups
 {
-    using EntityComponent;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
+    using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
 
     public static class SetupJump
     {
-        public static void DoSetup(PlayerEntity player)
+        private static EntityLogicJump entityLogic;
+
+        public static void Setup(PlayerEntity player)
         {
             if (!SettingsJump.IsUsed)
             {
@@ -19,7 +21,9 @@ namespace SwitchBlocks.Setups
 
             _ = DataJump.Instance;
 
-            _ = EntityJumpPlatforms.Instance;
+            entityLogic = new EntityLogicJump();
+
+            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Jump);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
@@ -34,14 +38,12 @@ namespace SwitchBlocks.Setups
             }
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void Cleanup()
         {
             if (!SettingsJump.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntityJumpPlatforms.Instance);
-            EntityJumpPlatforms.Instance.Reset();
 
             if (SettingsJump.ForceSwitch)
             {
@@ -60,13 +62,13 @@ namespace SwitchBlocks.Setups
 
         private static void JumpSwitchUnsafe()
         {
-            if (EntityJumpPlatforms.Instance.IsActiveOnCurrentScreen)
+            if (entityLogic != null && entityLogic.IsActiveOnCurrentScreen)
             {
                 ModSounds.JumpFlip?.PlayOneShot();
             }
-            DataJump.State = !DataJump.State;
+            DataJump.Instance.State = !DataJump.Instance.State;
         }
 
-        private static void JumpSwitchSafe() => DataJump.SwitchOnceSafe = true;
+        private static void JumpSwitchSafe() => DataJump.Instance.SwitchOnceSafe = true;
     }
 }

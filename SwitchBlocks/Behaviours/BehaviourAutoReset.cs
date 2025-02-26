@@ -15,7 +15,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataAuto Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourAutoReset() => this.Data = DataAuto.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -44,11 +47,11 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            DataAuto.WarnCount = 0;
-            DataAuto.ResetTick = AchievementManager.GetTicks();
-            if (isReset && !DataAuto.State)
+            this.Data.WarnCount = 0;
+            this.Data.ResetTick = AchievementManager.GetTicks();
+            if (isReset && !this.Data.State)
             {
-                DataAuto.ResetTick += SettingsAuto.DurationOff;
+                this.Data.ResetTick += SettingsAuto.DurationOff;
             }
 
             return true;

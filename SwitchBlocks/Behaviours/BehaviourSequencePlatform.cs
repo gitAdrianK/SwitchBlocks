@@ -13,10 +13,11 @@ namespace SwitchBlocks.Behaviours
 
     public class BehaviourSequencePlatform : IBlockBehaviour
     {
+        private DataSequence Data { get; }
         public float BlockPriority => 2.0f;
-
         public bool IsPlayerOnBlock { get; set; }
-        public static bool IsPlayerOnIce { get; set; }
+
+        public BehaviourSequencePlatform() => this.Data = DataSequence.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -53,10 +54,10 @@ namespace SwitchBlocks.Behaviours
             {
                 if (SettingsSequence.DisableOnLeave
                     && SettingsSequence.Duration == 0
-                    && DataSequence.Touched > 0)
+                    && this.Data.Touched > 0)
                 {
-                    DataSequence.SetTick(DataSequence.Touched, int.MinValue);
-                    _ = DataSequence.Active.Add(DataSequence.Touched);
+                    this.Data.SetTick(this.Data.Touched, int.MinValue);
+                    _ = this.Data.Active.Add(this.Data.Touched);
                 }
                 return true;
             }
@@ -80,8 +81,8 @@ namespace SwitchBlocks.Behaviours
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 var groupId = block.GroupId;
-                if (!DataSequence.GetState(groupId)
-                    || DataSequence.Touched != (groupId - 1)
+                if (!this.Data.GetState(groupId)
+                    || this.Data.Touched != (groupId - 1)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                         SettingsSequence.PlatformDirections,
                         (IBlock)block))
@@ -93,22 +94,22 @@ namespace SwitchBlocks.Behaviours
                 {
                     if (groupId > 1)
                     {
-                        DataSequence.SetTick(groupId - 1, int.MinValue);
-                        _ = DataSequence.Active.Add(groupId - 1);
+                        this.Data.SetTick(groupId - 1, int.MinValue);
+                        _ = this.Data.Active.Add(groupId - 1);
                     }
                 }
                 else
                 {
                     var tick = AchievementManager.GetTicks();
-                    DataSequence.SetTick(groupId, tick + SettingsSequence.Duration);
-                    _ = DataSequence.Active.Add(groupId);
+                    this.Data.SetTick(groupId, tick + SettingsSequence.Duration);
+                    _ = this.Data.Active.Add(groupId);
                 }
                 if (groupId < SetupSequence.SequenceCount)
                 {
-                    DataSequence.SetTick(groupId + 1, int.MaxValue);
-                    _ = DataSequence.Active.Add(groupId + 1);
+                    this.Data.SetTick(groupId + 1, int.MaxValue);
+                    _ = this.Data.Active.Add(groupId + 1);
                 }
-                DataSequence.Touched = groupId;
+                this.Data.Touched = groupId;
                 break;
             }
 

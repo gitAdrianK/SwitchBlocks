@@ -16,14 +16,18 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 1.0f;
 
+        private DataSand Data { get; }
         public bool IsPlayerOnBlock { get; set; }
         public bool IsPlayerOnBlockOn { get; set; }
         public bool IsPlayerOnBlockOff { get; set; }
 
+        public BehaviourSandPlatform() => this.Data = DataSand.Instance;
+
+
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
-            var num = DataSand.HasEntered ? 0.5f : 1.0f;
+            var num = this.Data.HasEntered ? 0.5f : 1.0f;
             return inputXVelocity * num;
         }
 
@@ -41,9 +45,9 @@ namespace SwitchBlocks.Behaviours
             }
 
             var bodyComp = behaviourContext.BodyComp;
-            var num = (DataSand.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
+            var num = (this.Data.HasEntered && bodyComp.Velocity.Y <= 0.0f) ? 0.75f : 1.0f;
             var result = inputYVelocity * num;
-            if (!DataSand.HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
+            if (!this.Data.HasEntered && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
             {
                 bodyComp.Position.Y += 1.0f;
             }
@@ -54,7 +58,7 @@ namespace SwitchBlocks.Behaviours
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            if (DataSand.HasEntered)
+            if (this.Data.HasEntered)
             {
                 return false;
             }
@@ -67,23 +71,23 @@ namespace SwitchBlocks.Behaviours
 
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
-            if ((info.IsCollidingWith<BlockSandOn>() && DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && !DataSand.State))
+            if ((info.IsCollidingWith<BlockSandOn>() && this.Data.State) || (info.IsCollidingWith<BlockSandOff>() && !this.Data.State))
             {
-                if (DataSand.HasEntered)
+                if (this.Data.HasEntered)
                 {
                     return false;
                 }
-                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
-                return !DataSand.HasEntered;
+                this.Data.HasEntered = behaviourContext.BodyComp.Velocity.Y < 0.0f;
+                return !this.Data.HasEntered;
             }
-            if ((info.IsCollidingWith<BlockSandOn>() && !DataSand.State) || (info.IsCollidingWith<BlockSandOff>() && DataSand.State))
+            if ((info.IsCollidingWith<BlockSandOn>() && !this.Data.State) || (info.IsCollidingWith<BlockSandOff>() && this.Data.State))
             {
-                if (DataSand.HasEntered)
+                if (this.Data.HasEntered)
                 {
                     return false;
                 }
-                DataSand.HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
-                return !DataSand.HasEntered;
+                this.Data.HasEntered = behaviourContext.BodyComp.Velocity.Y >= 0.0f;
+                return !this.Data.HasEntered;
             }
             return false;
         }
@@ -104,12 +108,12 @@ namespace SwitchBlocks.Behaviours
 
             if (!this.IsPlayerOnBlock)
             {
-                DataSand.HasEntered = false;
+                this.Data.HasEntered = false;
             }
 
-            if (DataSand.HasEntered)
+            if (this.Data.HasEntered)
             {
-                if ((this.IsPlayerOnBlockOn && DataSand.State) || (this.IsPlayerOnBlockOff && !DataSand.State))
+                if ((this.IsPlayerOnBlockOn && this.Data.State) || (this.IsPlayerOnBlockOff && !this.Data.State))
                 {
                     bodyComp.Position.Y -= 0.75f;
                 }

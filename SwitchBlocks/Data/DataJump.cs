@@ -9,7 +9,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the jump block.
     /// </summary>
-    public class DataJump
+    public class DataJump : IDataProvider
     {
 
         private static DataJump instance;
@@ -80,21 +80,21 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Its current state.
         /// </summary>
-        public static bool State
+        public bool State
         {
-            get => Instance._state;
-            set => Instance._state = value;
+            get => this._state;
+            set => this._state = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        private bool _state;
+        public bool _state;
 
         /// <summary>
         /// Animation progress.
         /// </summary>
-        public static float Progress
+        public float Progress
         {
-            get => Instance._progress;
-            set => Instance._progress = value;
+            get => this._progress;
+            set => this._progress = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public float _progress;
@@ -102,10 +102,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// If the block can switch safely.
         /// </summary>
-        public static bool CanSwitchSafely
+        public bool CanSwitchSafely
         {
-            get => Instance._canSwitchSafely;
-            set => Instance._canSwitchSafely = value;
+            get => this._canSwitchSafely;
+            set => this._canSwitchSafely = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _canSwitchSafely;
@@ -113,10 +113,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// If the block should switch next opportunity.
         /// </summary>
-        public static bool SwitchOnceSafe
+        public bool SwitchOnceSafe
         {
-            get => Instance._switchOnceSafe;
-            set => Instance._switchOnceSafe = value;
+            get => this._switchOnceSafe;
+            set => this._switchOnceSafe = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _switchOnceSafe;

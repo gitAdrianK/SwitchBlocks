@@ -14,48 +14,36 @@ namespace SwitchBlocks.Data
     [Serializable, XmlRoot("ResetsGroup")]
     public class ResetsGroup
     {
-        private static ResetsGroup instance;
-        public static ResetsGroup Instance
+        public static ResetsGroup TryDeserialize()
         {
-            get
+            var contentManager = Game1.instance.contentManager;
+            var sep = Path.DirectorySeparatorChar;
+            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var file = $"{path}resets_{ModStrings.GROUP}.sav";
+            if (File.Exists(file))
             {
-                if (instance != null)
+                StreamReader streamReader = null;
+                try
                 {
-                    return instance;
+                    streamReader = new StreamReader(file);
+                    var xmlSerializer = new XmlSerializer(typeof(ResetsGroup));
+                    return (ResetsGroup)xmlSerializer.Deserialize(streamReader);
                 }
-
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}resets_{ModStrings.GROUP}.sav";
-                if (File.Exists(file))
+                catch
                 {
-                    StreamReader streamReader = null;
-                    try
-                    {
-                        streamReader = new StreamReader(file);
-                        var xmlSerializer = new XmlSerializer(typeof(ResetsGroup));
-                        instance = (ResetsGroup)xmlSerializer.Deserialize(streamReader);
-                    }
-                    catch
-                    {
-                        instance = new ResetsGroup();
-                    }
-                    finally
-                    {
-                        streamReader?.Close();
-                        streamReader?.Dispose();
-                    }
+                    return new ResetsGroup();
                 }
-                else
+                finally
                 {
-                    instance = new ResetsGroup();
+                    streamReader?.Close();
+                    streamReader?.Dispose();
                 }
-                return instance;
+            }
+            else
+            {
+                return new ResetsGroup();
             }
         }
-
-        public void Reset() => instance = null;
 
         private ResetsGroup() => this._seed = new SerializableDictionary<int, int[]>();
 
@@ -78,19 +66,12 @@ namespace SwitchBlocks.Data
             }
             var xmlSerializer = new XmlSerializer(typeof(ResetsGroup));
             TextWriter textWriter = new StreamWriter($"{path}resets_{ModStrings.GROUP}.sav");
-            xmlSerializer.Serialize(textWriter, Instance);
+            xmlSerializer.Serialize(textWriter, this);
         }
 
-        /// <summary>
-        /// Resets belonging to the respective id.
-        /// A group has the data related to a platform.
-        /// </summary>
-        public static SerializableDictionary<int, int[]> Seed
-        {
-            get => Instance._seed;
-            private set => Instance._seed = value;
-        }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public SerializableDictionary<int, int[]> _seed;
+
+        public SerializableDictionary<int, int[]> Seed => this._seed;
     }
 }

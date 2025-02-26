@@ -1,16 +1,16 @@
 namespace SwitchBlocks.Setups
 {
-    using EntityComponent;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
+    using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
 
     public static class SetupAuto
     {
-        public static void DoSetup(PlayerEntity player)
+        public static void Setup(PlayerEntity player)
         {
             if (!SettingsAuto.IsUsed)
             {
@@ -19,21 +19,21 @@ namespace SwitchBlocks.Setups
 
             _ = DataAuto.Instance;
 
-            _ = EntityAutoPlatforms.Instance;
+            _ = new EntityLogicAuto();
+
+            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Auto);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void Cleanup()
         {
             if (!SettingsAuto.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntityAutoPlatforms.Instance);
-            EntityAutoPlatforms.Instance.Reset();
 
             DataAuto.Instance.SaveToFile();
             DataAuto.Instance.Reset();

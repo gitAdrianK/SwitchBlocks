@@ -11,7 +11,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataAuto Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourAutoOff() => this.Data = DataAuto.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -40,7 +43,7 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            if (!DataAuto.State)
+            if (!this.Data.State)
             {
                 if (isOnIce)
                 {
@@ -54,9 +57,9 @@ namespace SwitchBlocks.Behaviours
             }
             else
             {
-                if (DataAuto.CanSwitchSafely)
+                if (this.Data.CanSwitchSafely)
                 {
-                    DataAuto.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                    this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
                         behaviourContext,
                         typeof(BlockAutoOff),
                         typeof(BlockAutoIceOff),

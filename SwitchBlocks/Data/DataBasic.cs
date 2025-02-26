@@ -9,7 +9,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the basic block.
     /// </summary>
-    public class DataBasic
+    public class DataBasic : IDataProvider
     {
         private static DataBasic instance;
         public static DataBasic Instance
@@ -79,10 +79,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Its current state.
         /// </summary>
-        public static bool State
+        public bool State
         {
-            get => Instance._state;
-            set => Instance._state = value;
+            get => this._state;
+            set => this._state = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _state;
@@ -90,10 +90,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Animation progress.
         /// </summary>
-        public static float Progress
+        public float Progress
         {
-            get => Instance._progress;
-            set => Instance._progress = value;
+            get => this._progress;
+            set => this._progress = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public float _progress;
@@ -102,10 +102,10 @@ namespace SwitchBlocks.Data
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
-        public static bool HasSwitched
+        public bool HasSwitched
         {
-            get => Instance._hasSwitched;
-            set => Instance._hasSwitched = value;
+            get => this._hasSwitched;
+            set => this._hasSwitched = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _hasSwitched;

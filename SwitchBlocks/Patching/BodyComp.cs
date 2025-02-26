@@ -31,7 +31,7 @@ namespace SwitchBlocks.Patching
         {
             if (blockType == typeof(SandBlock))
             {
-                __result |= DataSand.HasEntered;
+                __result |= DataSand.Instance.HasEntered;
             }
             if (blockType == typeof(IceBlock))
             {

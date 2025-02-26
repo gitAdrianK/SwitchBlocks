@@ -16,8 +16,11 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataGroup Data { get; }
         public bool IsPlayerOnBlock { get; set; }
         public static bool IsPlayerOnIce { get; set; }
+
+        public BehaviourGroupLeaving() => this.Data = DataGroup.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -53,12 +56,12 @@ namespace SwitchBlocks.Behaviours
             var tick = AchievementManager.GetTicks();
             if (!this.IsPlayerOnBlock)
             {
-                Parallel.ForEach(DataGroup.Touched, id =>
+                Parallel.ForEach(this.Data.Touched, id =>
                 {
-                    DataGroup.SetTick(id, tick);
-                    DataGroup.Active.Add(id);
+                    this.Data.SetTick(id, tick);
+                    this.Data.Active.Add(id);
                 });
-                DataGroup.Touched.Clear();
+                this.Data.Touched.Clear();
                 return true;
             }
 
@@ -82,7 +85,7 @@ namespace SwitchBlocks.Behaviours
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 var groupId = block.GroupId;
-                if (!DataGroup.GetState(groupId)
+                if (!this.Data.GetState(groupId)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                     SettingsGroup.PlatformDirections,
                     (IBlock)block))
@@ -92,13 +95,13 @@ namespace SwitchBlocks.Behaviours
                 _ = currentlyTouched.Add(groupId);
             }
 
-            _ = Parallel.ForEach(DataGroup.Touched.Except(currentlyTouched), id =>
+            _ = Parallel.ForEach(this.Data.Touched.Except(currentlyTouched), id =>
                     {
-                        DataGroup.SetTick(id, tick);
-                        _ = DataGroup.Active.Add(id);
+                        this.Data.SetTick(id, tick);
+                        _ = this.Data.Active.Add(id);
                     });
 
-            DataGroup.Touched = currentlyTouched;
+            this.Data.Touched = currentlyTouched;
 
             return true;
         }

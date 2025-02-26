@@ -9,7 +9,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     /// Contains data relevant for the auto block.
     /// </summary>
-    public class DataAuto
+    public class DataAuto : IDataProvider
     {
 
         private static DataAuto instance;
@@ -82,10 +82,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Its current state.
         /// </summary>
-        public static bool State
+        public bool State
         {
-            get => Instance._state;
-            set => Instance._state = value;
+            get => this._state;
+            set => this._state = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _state;
@@ -93,10 +93,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Animation progress.
         /// </summary>
-        public static float Progress
+        public float Progress
         {
-            get => Instance._progress;
-            set => Instance._progress = value;
+            get => this._progress;
+            set => this._progress = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public float _progress;
@@ -104,10 +104,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// If the block can switch safely.
         /// </summary>
-        public static bool CanSwitchSafely
+        public bool CanSwitchSafely
         {
-            get => Instance._canSwitchSafely;
-            set => Instance._canSwitchSafely = value;
+            get => this._canSwitchSafely;
+            set => this._canSwitchSafely = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _canSwitchSafely;
@@ -115,10 +115,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// If the block should switch next opportunity.
         /// </summary>
-        public static bool SwitchOnceSafe
+        public bool SwitchOnceSafe
         {
-            get => Instance._switchOnceSafe;
-            set => Instance._switchOnceSafe = value;
+            get => this._switchOnceSafe;
+            set => this._switchOnceSafe = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public bool _switchOnceSafe;
@@ -126,10 +126,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// The amount of times the warning sound has been played.
         /// </summary>
-        public static int WarnCount
+        public int WarnCount
         {
-            get => Instance._warnCount;
-            set => Instance._warnCount = value;
+            get => this._warnCount;
+            set => this._warnCount = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public int _warnCount;
@@ -137,10 +137,10 @@ namespace SwitchBlocks.Data
         /// <summary>
         /// Tick the auto block has been reset.
         /// </summary>
-        public static int ResetTick
+        public int ResetTick
         {
-            get => Instance._resetTick;
-            set => Instance._resetTick = value;
+            get => this._resetTick;
+            set => this._resetTick = value;
         }
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
         public int _resetTick;

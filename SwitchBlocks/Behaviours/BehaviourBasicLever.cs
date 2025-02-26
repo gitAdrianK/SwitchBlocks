@@ -16,7 +16,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataBasic Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourBasicLever() => this.Data = DataBasic.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -51,11 +54,11 @@ namespace SwitchBlocks.Behaviours
 
             if (this.IsPlayerOnBlock)
             {
-                if (DataBasic.HasSwitched)
+                if (this.Data.HasSwitched)
                 {
                     return true;
                 }
-                DataBasic.HasSwitched = true;
+                this.Data.HasSwitched = true;
 
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
                 if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
@@ -75,28 +78,28 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                var stateBefore = DataBasic.State;
+                var stateBefore = this.Data.State;
                 if (collidingWithAnyLever)
                 {
-                    DataBasic.State = !DataBasic.State;
+                    this.Data.State = !this.Data.State;
                 }
                 else if (collidingWithAnyLeverOn)
                 {
-                    DataBasic.State = true;
+                    this.Data.State = true;
                 }
                 else if (collidingWithAnyLeverOff)
                 {
-                    DataBasic.State = false;
+                    this.Data.State = false;
                 }
 
-                if (stateBefore != DataBasic.State)
+                if (stateBefore != this.Data.State)
                 {
                     ModSounds.BasicFlip?.PlayOneShot();
                 }
             }
             else
             {
-                DataBasic.HasSwitched = false;
+                this.Data.HasSwitched = false;
             }
             return true;
         }

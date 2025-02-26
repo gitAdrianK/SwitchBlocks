@@ -14,7 +14,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataGroup Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourGroupReset() => this.Data = DataGroup.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -39,15 +42,15 @@ namespace SwitchBlocks.Behaviours
             this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
             if (!this.IsPlayerOnBlock)
             {
-                DataGroup.HasSwitched = false;
+                this.Data.HasSwitched = false;
                 return true;
             }
 
-            if (DataGroup.HasSwitched)
+            if (this.Data.HasSwitched)
             {
                 return true;
             }
-            DataGroup.HasSwitched = true;
+            this.Data.HasSwitched = true;
 
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
@@ -70,25 +73,25 @@ namespace SwitchBlocks.Behaviours
 
             if (block.ResetIds.Length == 1 && block.ResetIds[0] == 0)
             {
-                _ = Parallel.ForEach(DataGroup.Active, group
-                    => DataGroup.Groups[group].ActivatedTick = int.MaxValue);
-                _ = Parallel.ForEach(DataGroup.Finished, group =>
+                _ = Parallel.ForEach(this.Data.Active, group
+                    => this.Data.Groups[group].ActivatedTick = int.MaxValue);
+                _ = Parallel.ForEach(this.Data.Finished, group =>
                 {
-                    DataGroup.Groups[group].ActivatedTick = int.MaxValue;
-                    _ = DataGroup.Active.Add(group);
+                    this.Data.Groups[group].ActivatedTick = int.MaxValue;
+                    _ = this.Data.Active.Add(group);
                 });
-                DataGroup.Finished.Clear();
-                DataGroup.Touched.Clear();
+                this.Data.Finished.Clear();
+                this.Data.Touched.Clear();
             }
             else
             {
                 _ = Parallel.ForEach(block.ResetIds, id =>
                 {
-                    if (DataGroup.Groups.TryGetValue(id, out var blockGroup))
+                    if (this.Data.Groups.TryGetValue(id, out var blockGroup))
                     {
                         blockGroup.ActivatedTick = int.MaxValue;
-                        _ = DataGroup.Active.Add(id);
-                        _ = DataGroup.Finished.Remove(id);
+                        _ = this.Data.Active.Add(id);
+                        _ = this.Data.Finished.Remove(id);
                     }
                 });
             }

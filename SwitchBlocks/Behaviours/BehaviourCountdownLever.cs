@@ -17,7 +17,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataCountdown Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourCountdownLever() => this.Data = DataCountdown.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -55,24 +58,24 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                DataCountdown.ActivatedTick = AchievementManager.GetTicks();
+                this.Data.ActivatedTick = AchievementManager.GetTicks();
 
-                if (DataCountdown.HasSwitched)
+                if (this.Data.HasSwitched)
                 {
                     return true;
                 }
 
-                if (!DataCountdown.State)
+                if (!this.Data.State)
                 {
                     ModSounds.CountdownFlip?.PlayOneShot();
                 }
 
-                DataCountdown.HasSwitched = true;
-                DataCountdown.State = true;
+                this.Data.HasSwitched = true;
+                this.Data.State = true;
             }
             else
             {
-                DataCountdown.HasSwitched = false;
+                this.Data.HasSwitched = false;
             }
             return true;
         }

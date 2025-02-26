@@ -1,16 +1,16 @@
 namespace SwitchBlocks.Setups
 {
-    using EntityComponent;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
+    using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
 
     public static class SetupCountdown
     {
-        public static void DoSetup(PlayerEntity player)
+        public static void Setup(PlayerEntity player)
         {
             if (!SettingsCountdown.IsUsed)
             {
@@ -19,24 +19,22 @@ namespace SwitchBlocks.Setups
 
             _ = DataCountdown.Instance;
 
-            _ = EntityCountdownPlatforms.Instance;
-            _ = EntityCountdownLevers.Instance;
+            _ = new EntityLogicCountdown();
+
+            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Countdown);
+            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Levers, FactoryDrawables.BlockType.Countdown);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownLever), new BehaviourCountdownLever());
         }
 
-        public static void DoCleanup(EntityManager entityManager)
+        public static void Cleanup()
         {
             if (!SettingsCountdown.IsUsed)
             {
                 return;
             }
-            entityManager.RemoveObject(EntityCountdownPlatforms.Instance);
-            entityManager.RemoveObject(EntityCountdownLevers.Instance);
-            EntityCountdownPlatforms.Instance.Reset();
-            EntityCountdownLevers.Instance.Reset();
 
             DataCountdown.Instance.SaveToFile();
             DataCountdown.Instance.Reset();

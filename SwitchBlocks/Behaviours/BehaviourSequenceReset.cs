@@ -12,9 +12,11 @@ namespace SwitchBlocks.Behaviours
 
     public class BehaviourSequenceReset : IBlockBehaviour
     {
+        private DataSequence Data { get; }
         public float BlockPriority => 2.0f;
-
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourSequenceReset() => this.Data = DataSequence.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -39,15 +41,15 @@ namespace SwitchBlocks.Behaviours
             this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
             if (!this.IsPlayerOnBlock)
             {
-                DataSequence.HasSwitched = false;
+                this.Data.HasSwitched = false;
                 return true;
             }
 
-            if (DataSequence.HasSwitched)
+            if (this.Data.HasSwitched)
             {
                 return true;
             }
-            DataSequence.HasSwitched = true;
+            this.Data.HasSwitched = true;
 
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
@@ -61,17 +63,17 @@ namespace SwitchBlocks.Behaviours
                 }
             }
 
-            _ = Parallel.ForEach(DataSequence.Active, group
-                => DataSequence.Groups[group].ActivatedTick = int.MinValue);
-            _ = Parallel.ForEach(DataSequence.Finished, group =>
+            _ = Parallel.ForEach(this.Data.Active, group
+                => this.Data.Groups[group].ActivatedTick = int.MinValue);
+            _ = Parallel.ForEach(this.Data.Finished, group =>
             {
-                DataSequence.Groups[group].ActivatedTick = int.MinValue;
-                _ = DataSequence.Active.Add(group);
+                this.Data.Groups[group].ActivatedTick = int.MinValue;
+                _ = this.Data.Active.Add(group);
             });
-            DataSequence.SetTick(1, int.MaxValue);
-            DataSequence.Touched = 0;
-            _ = DataSequence.Active.Add(1);
-            DataSequence.Finished.Clear();
+            this.Data.SetTick(1, int.MaxValue);
+            this.Data.Touched = 0;
+            _ = this.Data.Active.Add(1);
+            this.Data.Finished.Clear();
 
             return true;
         }

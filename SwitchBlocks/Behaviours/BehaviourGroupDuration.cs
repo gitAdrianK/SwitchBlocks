@@ -14,8 +14,11 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataGroup Data { get; }
         public bool IsPlayerOnBlock { get; set; }
         public static bool IsPlayerOnIce { get; set; }
+
+        public BehaviourGroupDuration() => this.Data = DataGroup.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -73,17 +76,17 @@ namespace SwitchBlocks.Behaviours
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 var groupId = block.GroupId;
-                if (!DataGroup.GetState(groupId)
-                    || DataGroup.Touched.Contains(groupId)
+                if (!this.Data.GetState(groupId)
+                    || this.Data.Touched.Contains(groupId)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                     SettingsGroup.PlatformDirections,
                     (IBlock)block))
                 {
                     continue;
                 }
-                DataGroup.SetTick(groupId, tick + SettingsGroup.Duration);
-                _ = DataGroup.Active.Add(groupId);
-                _ = DataGroup.Touched.Add(groupId);
+                this.Data.SetTick(groupId, tick + SettingsGroup.Duration);
+                _ = this.Data.Active.Add(groupId);
+                _ = this.Data.Touched.Add(groupId);
             }
 
             return true;

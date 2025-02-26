@@ -11,7 +11,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataCountdown Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourCountdownOn() => this.Data = DataCountdown.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -40,7 +43,7 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            if (DataCountdown.State)
+            if (this.Data.State)
             {
                 if (isOnIce)
                 {
@@ -54,9 +57,9 @@ namespace SwitchBlocks.Behaviours
             }
             else
             {
-                if (DataCountdown.CanSwitchSafely)
+                if (this.Data.CanSwitchSafely)
                 {
-                    DataCountdown.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                    this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
                         behaviourContext,
                         typeof(BlockCountdownOn),
                         typeof(BlockCountdownIceOn),

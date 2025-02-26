@@ -10,7 +10,17 @@ namespace SwitchBlocks.Behaviours
         // Documentation is false, higher numbers are run first!
         public float BlockPriority => 3.0f;
 
+        private DataAuto Auto { get; }
+        private DataCountdown Countdown { get; }
+        private DataJump Jump { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourPre()
+        {
+            this.Auto = DataAuto.Instance;
+            this.Countdown = DataCountdown.Instance;
+            this.Jump = DataJump.Instance;
+        }
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -24,9 +34,9 @@ namespace SwitchBlocks.Behaviours
 
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            DataAuto.CanSwitchSafely = true;
-            DataCountdown.CanSwitchSafely = true;
-            DataJump.CanSwitchSafely = true;
+            this.Auto.CanSwitchSafely = true;
+            this.Countdown.CanSwitchSafely = true;
+            this.Jump.CanSwitchSafely = true;
 
             BehaviourPost.IsPlayerOnIce = false;
             BehaviourPost.IsPlayerOnSnow = false;

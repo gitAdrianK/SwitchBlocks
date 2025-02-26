@@ -10,7 +10,10 @@ namespace SwitchBlocks.Behaviours
     {
         public float BlockPriority => 2.0f;
 
+        private DataBasic Data { get; }
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourBasicOn() => this.Data = DataBasic.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -33,13 +36,13 @@ namespace SwitchBlocks.Behaviours
             var isOnBasic = advCollisionInfo.IsCollidingWith<BlockBasicOn>();
             var isOnIce = advCollisionInfo.IsCollidingWith<BlockBasicIceOn>();
             var isOnSnow = advCollisionInfo.IsCollidingWith<BlockBasicSnowOn>();
-            this.IsPlayerOnBlock = DataBasic.State && (isOnBasic || isOnIce || isOnSnow);
+            this.IsPlayerOnBlock = this.Data.State && (isOnBasic || isOnIce || isOnSnow);
             if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
-            if (DataBasic.State)
+            if (this.Data.State)
             {
                 if (isOnIce)
                 {

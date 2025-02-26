@@ -10,9 +10,11 @@ namespace SwitchBlocks.Behaviours
 
     public class BehaviourSequenceIce : IBlockBehaviour
     {
+        private DataSequence Data { get; }
         public float BlockPriority => 2.0f;
-
         public bool IsPlayerOnBlock { get; set; }
+
+        public BehaviourSequenceIce() => this.Data = DataSequence.Instance;
 
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -52,7 +54,7 @@ namespace SwitchBlocks.Behaviours
             });
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
-                if (DataSequence.GetState(block.GroupId))
+                if (this.Data.GetState(block.GroupId))
                 {
                     BehaviourPost.IsPlayerOnIce = true;
                     break;
