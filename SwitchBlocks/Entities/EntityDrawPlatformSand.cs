@@ -12,8 +12,6 @@ namespace SwitchBlocks.Entities
         private Texture2D Scrolling { get; }
         private Texture2D Foreground { get; }
         private bool StartState { get; }
-        private int Height { get; }
-        private int Width { get; }
         private IDataProvider Logic { get; }
 
         public EntityDrawPlatformSand(

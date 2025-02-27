@@ -15,8 +15,6 @@ namespace SwitchBlocks.Entities
         private bool StartState { get; }
         private Animation Animation { get; }
         private Animation AnimationOut { get; }
-        private int Height { get; }
-        private int Width { get; }
         private int GroupId { get; }
         private IGroupDataProvider Logic { get; }
 
@@ -38,6 +36,15 @@ namespace SwitchBlocks.Entities
         }
 
         public override void Draw()
+        {
+            if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
+            {
+                return;
+            }
+            this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
+        }
+
+        public void DrawWithRectangle(Rectangle rect)
         {
             if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
             {
@@ -79,7 +86,6 @@ namespace SwitchBlocks.Entities
             }
 
             var color = Color.White;
-            var rect = new Rectangle(0, 0, this.Width, this.Height);
             var pos = this.Position;
             switch (animation.AnimStyle)
             {

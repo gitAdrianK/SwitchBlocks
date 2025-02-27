@@ -15,8 +15,6 @@ namespace SwitchBlocks.Entities
         protected bool StartState { get; }
         protected Animation Animation { get; }
         protected Animation AnimationOut { get; }
-        protected int Height { get; set; }
-        protected int Width { get; set; }
         protected IDataProvider Logic { get; }
 
         public EntityDrawPlatform(
@@ -31,8 +29,6 @@ namespace SwitchBlocks.Entities
             this.StartState = startState;
             this.Animation = animation;
             this.AnimationOut = animationOut;
-            this.Height = texture.Height;
-            this.Width = texture.Width;
             this.Logic = logic;
         }
 

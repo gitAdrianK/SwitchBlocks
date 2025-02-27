@@ -2,6 +2,7 @@ namespace SwitchBlocks.Factories
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -197,17 +198,71 @@ namespace SwitchBlocks.Factories
             return;
             Found:
 
-            entityGroupLogic.AddScreen(screen);
+            if (dictionary.TryGetValue(ModStrings.SPRITES, out index))
+            {
+                var children = drawable[index].ChildNodes;
+                var dictSprites = Xml.MapNamesRequired(children,
+                    ModStrings.CELLS);
+                if (dictSprites == null)
+                {
+                    return;
+                }
 
-            _ = new EntityDrawPlatformGroup(
-                texture,
-                position.Value,
-                false,
-                animation,
-                animationOut,
-                screen,
-                groupId,
-                dataProvider);
+                var cells = Xml.GetPoint(children[dictSprites[ModStrings.CELLS]]);
+                if (!cells.HasValue)
+                {
+                    return;
+                }
+
+                float[] frames = null;
+                if (dictSprites.TryGetValue(ModStrings.FRAMES, out index))
+                {
+                    var numbers = children[index].ChildNodes;
+                    frames = new float[numbers.Count];
+                    for (var i = 0; i < numbers.Count; i++)
+                    {
+                        frames[i] = float.Parse(numbers[i].InnerText, CultureInfo.InvariantCulture);
+                    }
+                }
+
+                var fps = 1.0f;
+                if (dictSprites.TryGetValue(ModStrings.FPS, out index))
+                {
+                    fps = 1.0f / float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
+                }
+
+                var randomOffset = dictSprites.ContainsKey(ModStrings.OFFSET);
+
+                entityGroupLogic.AddScreen(screen);
+
+                _ = new EntityDrawPlatformGroupLoop(
+                    texture,
+                    position.Value,
+                    false,
+                    animation,
+                    animationOut,
+                    screen,
+                    groupId,
+                    dataProvider,
+                    cells.Value,
+                    fps,
+                    frames,
+                    randomOffset);
+            }
+            else
+            {
+                entityGroupLogic.AddScreen(screen);
+
+                _ = new EntityDrawPlatformGroup(
+                    texture,
+                    position.Value,
+                    false,
+                    animation,
+                    animationOut,
+                    screen,
+                    groupId,
+                    dataProvider);
+            }
         }
     }
 }

@@ -9,8 +9,6 @@ namespace SwitchBlocks.Entities
 
     public class EntityDrawLever : EntityDraw
     {
-        private int Height { get; }
-        private int Width { get; }
         private IDataProvider Logic { get; }
 
         public EntityDrawLever(

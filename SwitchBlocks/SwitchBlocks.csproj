@@ -165,6 +165,7 @@
     <Compile Include="Entities\EntityDrawLever.cs" />
     <Compile Include="Entities\EntityDrawPlatform.cs" />
     <Compile Include="Entities\EntityDrawPlatformGroup.cs" />
+    <Compile Include="Entities\EntityDrawPlatformGroupLoop.cs" />
     <Compile Include="Entities\EntityDrawPlatformLoop.cs" />
     <Compile Include="Entities\EntityDrawPlatformSand.cs" />
     <Compile Include="Entities\EntityGroupLogic.cs" />
