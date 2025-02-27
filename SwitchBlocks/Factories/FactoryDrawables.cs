@@ -309,7 +309,7 @@ namespace SwitchBlocks.Factories
                 var fps = 1.0f;
                 if (dictSprites.TryGetValue(ModStrings.FPS, out index))
                 {
-                    fps = float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
+                    fps = 1.0f / float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
                 }
 
                 var randomOffset = dictSprites.ContainsKey(ModStrings.OFFSET);
