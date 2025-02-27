@@ -19,10 +19,15 @@ namespace SwitchBlocks.Setups
 
             _ = DataSand.Instance;
 
-            _ = new EntityLogicSand();
-
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Sand);
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Levers, FactoryDrawables.BlockType.Sand);
+            var entityLogic = new EntityLogicSand();
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Platforms,
+                FactoryDrawables.BlockType.Sand,
+                entityLogic);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Levers,
+                FactoryDrawables.BlockType.Sand,
+                entityLogic);
 
             // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
             // velocity or position! This technically needs updating, but I have to consider

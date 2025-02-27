@@ -7,6 +7,7 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
+    using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
@@ -41,7 +42,8 @@ namespace SwitchBlocks.Setups
                 _ = instance.Active.Add(1);
             }
 
-            _ = new EntityLogicSequence();
+            var entityLogic = new EntityLogicSequence();
+            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());

@@ -76,6 +76,25 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
+        /// Creates a Point from a given xml node should the node contain 2
+        /// children named "X", and "Y"
+        /// </summary>
+        /// <param name="root">Xml node to create the point from.</param>
+        /// <returns>Point or null if a point couldn't be made</returns>
+        public static Point? GetPoint(XmlNode root)
+        {
+            var children = root.ChildNodes;
+            var dictionary = MapNamesRequired(children, "X", "Y");
+            if (dictionary == null)
+            {
+                return null;
+            }
+            return new Point(
+                int.Parse(children[dictionary["X"]].InnerText),
+                int.Parse(children[dictionary["Y"]].InnerText));
+        }
+
+        /// <summary>
         /// Creates an Animation from a given xml node .
         /// </summary>
         /// <param name="root">Xml node to create the animation from.</param>

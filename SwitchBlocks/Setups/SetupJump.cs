@@ -22,8 +22,10 @@ namespace SwitchBlocks.Setups
             _ = DataJump.Instance;
 
             entityLogic = new EntityLogicJump();
-
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Jump);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Platforms,
+                FactoryDrawables.BlockType.Jump,
+                entityLogic);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());

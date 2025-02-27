@@ -165,6 +165,7 @@
     <Compile Include="Entities\EntityDrawLever.cs" />
     <Compile Include="Entities\EntityDrawPlatform.cs" />
     <Compile Include="Entities\EntityDrawPlatformGroup.cs" />
+    <Compile Include="Entities\EntityDrawPlatformLoop.cs" />
     <Compile Include="Entities\EntityDrawPlatformSand.cs" />
     <Compile Include="Entities\EntityGroupLogic.cs" />
     <Compile Include="Entities\EntityLogic.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Entities\EntityLogicJump.cs" />
     <Compile Include="Entities\EntityLogicSand.cs" />
     <Compile Include="Entities\EntityLogicSequence.cs" />
+    <Compile Include="Factories\FactoryDrawablesGroup.cs" />
     <Compile Include="Factories\FactoryDrawables.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
@@ -220,6 +222,7 @@
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Util\SerializableDictionary.cs" />
+    <Compile Include="Util\WrappedIndex.cs" />
     <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

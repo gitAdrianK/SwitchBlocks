@@ -7,6 +7,7 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
+    using SwitchBlocks.Factories;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
@@ -37,7 +38,8 @@ namespace SwitchBlocks.Setups
                 resets.SaveToFile();
             }
 
-            _ = new EntityLogicGroup();
+            var entityLogic = new EntityLogicGroup();
+            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
             if (SettingsGroup.Duration == 0)
             {

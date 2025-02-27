@@ -79,8 +79,8 @@ namespace SwitchBlocks.Data
             xmlSerializer.Serialize(textWriter, Instance);
         }
 
-        // Used to be a static class, I can update all occurences to include instance or 
-        // provide gettters like this.
+        // Can probably simplify it now using [XmlAttribute("_state")] etc.,
+        // now that the properties are no longer static
 
         /// <summary>
         /// Its current state.

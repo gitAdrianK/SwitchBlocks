@@ -19,10 +19,15 @@ namespace SwitchBlocks.Setups
 
             _ = DataBasic.Instance;
 
-            _ = new EntityLogicBasic();
-
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Basic);
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Levers, FactoryDrawables.BlockType.Basic);
+            var entityLogic = new EntityLogicBasic();
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Platforms,
+                FactoryDrawables.BlockType.Basic,
+                entityLogic);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Levers,
+                FactoryDrawables.BlockType.Basic,
+                entityLogic);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());

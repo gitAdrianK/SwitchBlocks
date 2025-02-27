@@ -12,12 +12,12 @@ namespace SwitchBlocks.Entities
 
     public class EntityDrawPlatform : EntityDraw
     {
-        private bool StartState { get; }
-        private Animation Animation { get; }
-        private Animation AnimationOut { get; }
-        private int Height { get; }
-        private int Width { get; }
-        private IDataProvider Logic { get; }
+        protected bool StartState { get; }
+        protected Animation Animation { get; }
+        protected Animation AnimationOut { get; }
+        protected int Height { get; set; }
+        protected int Width { get; set; }
+        protected IDataProvider Logic { get; }
 
         public EntityDrawPlatform(
             Texture2D texture,
@@ -31,6 +31,8 @@ namespace SwitchBlocks.Entities
             this.StartState = startState;
             this.Animation = animation;
             this.AnimationOut = animationOut;
+            this.Height = texture.Height;
+            this.Width = texture.Width;
             this.Logic = logic;
         }
 
@@ -40,7 +42,11 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
+            this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
+        }
 
+        protected void DrawWithRectangle(Rectangle rect)
+        {
             var progressAdjusted = this.StartState ? 1.0f - this.Logic.Progress : this.Logic.Progress;
             if (progressAdjusted == 0.0f)
             {
@@ -51,6 +57,7 @@ namespace SwitchBlocks.Entities
                 Game1.spriteBatch.Draw(
                     texture: this.Texture,
                     position: this.Position,
+                    sourceRectangle: rect,
                     color: Color.White);
                 return;
             }
@@ -76,7 +83,6 @@ namespace SwitchBlocks.Entities
             }
 
             var color = Color.White;
-            var rect = new Rectangle(0, 0, this.Width, this.Height);
             var pos = this.Position;
             switch (animation.AnimStyle)
             {

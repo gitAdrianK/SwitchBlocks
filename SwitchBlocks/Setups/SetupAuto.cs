@@ -19,9 +19,11 @@ namespace SwitchBlocks.Setups
 
             _ = DataAuto.Instance;
 
-            _ = new EntityLogicAuto();
-
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Auto);
+            var entityLogic = new EntityLogicAuto();
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Platforms,
+                FactoryDrawables.BlockType.Auto,
+                entityLogic);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());

@@ -105,8 +105,7 @@ namespace SwitchBlocks
                 {
                     playerFound = true;
                 }
-                if (playerFound
-                    && entity.GetType() != typeof(EntityDraw))
+                if (playerFound && !(entity is EntityDraw))
                 {
                     entities.Add(entity);
                 }

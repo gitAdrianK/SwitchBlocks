@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Factories
 {
     using System;
-    using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -10,12 +10,12 @@ namespace SwitchBlocks.Factories
     using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
-    using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
 
     public class FactoryDrawables
     {
         // Don't look :D
+        // Calling it a factory makes it okay to have infinite method parameters, right.
 
         public enum DrawType
         {
@@ -28,10 +28,8 @@ namespace SwitchBlocks.Factories
             Auto,
             Basic,
             Countdown,
-            Group,
             Jump,
             Sand,
-            Sequence,
         }
 
         /// <summary>
@@ -40,7 +38,7 @@ namespace SwitchBlocks.Factories
         /// </summary>
         /// <param name="drawType">If the drawable is a lever or a platform</param>
         /// <param name="blockType">What type of block should be created</param>
-        public static void CreateDrawables(DrawType drawType, BlockType blockType)
+        public static void CreateDrawables<T>(DrawType drawType, BlockType blockType, EntityLogic<T> entityLogic) where T : IDataProvider
         {
             var contentManager = Game1.instance.contentManager;
             var sep = Path.DirectorySeparatorChar;
@@ -71,7 +69,7 @@ namespace SwitchBlocks.Factories
                 var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
                 var document = new XmlDocument();
                 document.Load(file);
-                GetDrawables(document.LastChild.ChildNodes, drawType, blockType, screen, path, sep);
+                GetDrawables(document.LastChild.ChildNodes, drawType, blockType, entityLogic, screen, path, sep);
             }
         }
 
@@ -93,13 +91,15 @@ namespace SwitchBlocks.Factories
             }
         }
 
-        private static void GetDrawables(
+        private static void GetDrawables<T>(
             XmlNodeList list,
             DrawType drawType,
             BlockType blockType,
+            EntityLogic<T> entityLogic,
             int screen,
             string path,
             char sep)
+            where T : IDataProvider
         {
             foreach (XmlElement element in list)
             {
@@ -107,7 +107,7 @@ namespace SwitchBlocks.Factories
                 switch (drawType)
                 {
                     case DrawType.Platforms:
-                        GetPlatforms(drawable, blockType, screen, path, sep);
+                        GetPlatforms(drawable, blockType, entityLogic, screen, path, sep);
                         break;
                     case DrawType.Levers:
                         GetLevers(drawable, blockType, screen, path, sep);
@@ -149,9 +149,7 @@ namespace SwitchBlocks.Factories
             switch (blockType)
             {
                 case BlockType.Auto:
-                case BlockType.Group:
                 case BlockType.Jump:
-                case BlockType.Sequence:
                     // These types do not have levers
                     break;
                 case BlockType.Basic:
@@ -168,12 +166,14 @@ namespace SwitchBlocks.Factories
             }
         }
 
-        private static void GetPlatforms(
+        private static void GetPlatforms<T>(
             XmlNodeList drawable,
             BlockType blockType,
+            EntityLogic<T> entityLogic,
             int screen,
             string path,
             char sep)
+            where T : IDataProvider
         {
             switch (blockType)
             {
@@ -181,6 +181,7 @@ namespace SwitchBlocks.Factories
                     GetPlatform(
                         drawable,
                         DataAuto.Instance,
+                        entityLogic,
                         screen,
                         path,
                         sep);
@@ -189,6 +190,7 @@ namespace SwitchBlocks.Factories
                     GetPlatform(
                         drawable,
                         DataBasic.Instance,
+                        entityLogic,
                         screen,
                         path,
                         sep);
@@ -197,26 +199,16 @@ namespace SwitchBlocks.Factories
                     GetPlatform(
                         drawable,
                         DataCountdown.Instance,
+                        entityLogic,
                         screen,
                         path,
                         sep);
-                    break;
-                case BlockType.Group:
-                    GetPlatformGroup(
-                        drawable,
-                        DataGroup.Instance,
-                        screen,
-                        path,
-                        sep,
-                        SetupGroup.BlocksGroupA,
-                        SetupGroup.BlocksGroupB,
-                        SetupGroup.BlocksGroupC,
-                        SetupGroup.BlocksGroupD);
                     break;
                 case BlockType.Jump:
                     GetPlatform(
                         drawable,
                         DataJump.Instance,
+                        entityLogic,
                         screen,
                         path,
                         sep);
@@ -229,29 +221,19 @@ namespace SwitchBlocks.Factories
                         path,
                         sep);
                     break;
-                case BlockType.Sequence:
-                    GetPlatformGroup(
-                        drawable,
-                        DataSequence.Instance,
-                        screen,
-                        path,
-                        sep,
-                        SetupSequence.BlocksSequenceA,
-                        SetupSequence.BlocksSequenceB,
-                        SetupSequence.BlocksSequenceC,
-                        SetupSequence.BlocksSequenceD);
-                    break;
                 default:
                     throw new NotImplementedException("Unknown Block Type, cannot create entity!");
             }
         }
 
-        private static void GetPlatform(
+        private static void GetPlatform<T>(
             XmlNodeList drawable,
             IDataProvider dataProvider,
+            EntityLogic<T> entityLogic,
             int screen,
             string path,
             char sep)
+            where T : IDataProvider
         {
             var dictionary = Xml.MapNamesRequired(drawable,
                 ModStrings.TEXTURE,
@@ -297,100 +279,69 @@ namespace SwitchBlocks.Factories
                 animationOut = animation;
             }
 
-            _ = new EntityDrawPlatform(
-                texture,
-                position.Value,
-                startState,
-                animation,
-                animationOut,
-                screen,
-                dataProvider);
-        }
-
-        private static void GetPlatformGroup(
-            XmlNodeList drawable,
-            IGroupDataProvider dataProvider,
-            int screen,
-            string path,
-            char sep,
-            params Dictionary<int, IBlockGroupId>[] blockGroups)
-        {
-            var dictionary = Xml.MapNamesRequired(drawable,
-                ModStrings.TEXTURE,
-                ModStrings.POSITION,
-                ModStrings.START_STATE);
-            if (dictionary == null)
+            if (dictionary.TryGetValue(ModStrings.SPRITES, out index))
             {
-                return;
-            }
-
-            var position = Xml.GetVector2(drawable[dictionary[ModStrings.POSITION]]);
-            if (!position.HasValue)
-            {
-                return;
-            }
-
-            var filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.TEXTURE]].InnerText}";
-            if (!File.Exists($"{filePath}.xnb"))
-            {
-                return;
-            }
-            var texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-
-            var startState = drawable[dictionary[ModStrings.START_STATE]].InnerText.ToLower() == "on";
-
-            Animation animation;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION, out var index))
-            {
-                animation = Xml.GetAnimation(drawable[index]);
-            }
-            else
-            {
-                animation = default;
-            }
-
-            Animation animationOut;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION_OUT, out index))
-            {
-                animationOut = Xml.GetAnimation(drawable[index]);
-            }
-            else
-            {
-                animationOut = animation;
-            }
-
-            var link = ((screen + 1) * 10000) + ((int)(position.Value.X / 8) * 100) + (int)(position.Value.Y / 8);
-            if (dictionary.ContainsKey(ModStrings.LINK_POSITION))
-            {
-                var optionalLink = Xml.GetLink(drawable[dictionary[ModStrings.LINK_POSITION]]);
-                if (optionalLink == null)
+                var children = drawable[index].ChildNodes;
+                var dictSprites = Xml.MapNamesRequired(children,
+                    ModStrings.CELLS);
+                if (dictSprites == null)
                 {
                     return;
                 }
-                link = (int)optionalLink;
-            }
 
-            int groupId;
-            foreach (var blockGroup in blockGroups)
-            {
-                if (blockGroup.ContainsKey(link))
+                var cells = Xml.GetPoint(children[dictSprites[ModStrings.CELLS]]);
+                if (!cells.HasValue)
                 {
-                    groupId = blockGroup[link].GroupId;
-                    goto Found;
+                    return;
                 }
-            }
-            return;
-            Found:
 
-            _ = new EntityDrawPlatformGroup(
-                texture,
-                position.Value,
-                startState,
-                animation,
-                animationOut,
-                screen,
-                link,
-                dataProvider);
+                float[] frames = null;
+                if (dictSprites.TryGetValue(ModStrings.FRAMES, out index))
+                {
+                    var numbers = children[index].ChildNodes;
+                    frames = new float[numbers.Count];
+                    for (var i = 0; i < numbers.Count; i++)
+                    {
+                        frames[i] = float.Parse(numbers[i].InnerText, CultureInfo.InvariantCulture);
+                    }
+                }
+
+                var fps = 1.0f;
+                if (dictSprites.TryGetValue(ModStrings.FPS, out index))
+                {
+                    fps = float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
+                }
+
+                var randomOffset = dictSprites.ContainsKey(ModStrings.OFFSET);
+
+                entityLogic.AddScreen(screen);
+
+                _ = new EntityDrawPlatformLoop(
+                    texture,
+                    position.Value,
+                    startState,
+                    animation,
+                    animationOut,
+                    screen,
+                    dataProvider,
+                    cells.Value,
+                    fps,
+                    frames,
+                    randomOffset);
+            }
+            else
+            {
+                entityLogic.AddScreen(screen);
+
+                _ = new EntityDrawPlatform(
+                    texture,
+                    position.Value,
+                    startState,
+                    animation,
+                    animationOut,
+                    screen,
+                    dataProvider);
+            }
         }
 
         private static void GetPlatformSand(

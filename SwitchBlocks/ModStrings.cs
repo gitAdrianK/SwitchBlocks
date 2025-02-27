@@ -1,4 +1,4 @@
-﻿namespace SwitchBlocks
+namespace SwitchBlocks
 {
     public static class ModStrings
     {
@@ -7,19 +7,20 @@
 
         // File related
         public const string FOLDER = "switchBlocksMod";
-        public const string LEVERS = "levers";
-        public const string PLATFORMS = "platforms";
         public const string TEXTURES = "textures";
 
         // Xml tags
-        public const string XML_LEVERS = "Levers";
-        public const string XML_PLATFORMS = "Platforms";
         public const string POSITION = "Position";
         public const string TEXTURE = "Texture";
         public const string SIZE = "Size";
         public const string START_STATE = "StartState";
         public const string ANIMATION = "Animation";
         public const string ANIMATION_OUT = "AnimationOut";
+        public const string SPRITES = "Sprites";
+        public const string CELLS = "Cells";
+        public const string FRAMES = "Frames";
+        public const string FPS = "FPS";
+        public const string OFFSET = "RandomOffset";
 
         // Relevant for sand Xml
         public const string BACKGROUND = "Background";
@@ -37,8 +38,5 @@
         public const string JUMP = "jump";
         public const string SAND = "sand";
         public const string SEQUENCE = "sequence";
-
-        // Blocks, Animation or RGB/XY strings are not here because they are pretty much used in that one class,
-        // typos in there are easier to spot
     }
 }

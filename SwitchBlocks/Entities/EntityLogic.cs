@@ -19,6 +19,7 @@ namespace SwitchBlocks.Entities
         {
             this.Data = data;
             this.Multiplier = multiplier;
+            this.Screens = new HashSet<int>();
         }
 
         /// <summary>

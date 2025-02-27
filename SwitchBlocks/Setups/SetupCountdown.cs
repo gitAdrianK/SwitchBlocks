@@ -19,10 +19,15 @@ namespace SwitchBlocks.Setups
 
             _ = DataCountdown.Instance;
 
-            _ = new EntityLogicCountdown();
-
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Platforms, FactoryDrawables.BlockType.Countdown);
-            FactoryDrawables.CreateDrawables(FactoryDrawables.DrawType.Levers, FactoryDrawables.BlockType.Countdown);
+            var entityLogic = new EntityLogicCountdown();
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Platforms,
+                FactoryDrawables.BlockType.Countdown,
+                entityLogic);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Levers,
+                FactoryDrawables.BlockType.Countdown,
+                entityLogic);
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
