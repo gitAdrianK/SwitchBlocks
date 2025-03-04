@@ -32,6 +32,7 @@ namespace SwitchBlocks.Entities
                 this.Timer = 0;
                 var frameIndex = this.FrameIndex;
                 frameIndex.Index = 0;
+                return;
             }
             this.Timer += p_delta;
             while (this.Timer > this.Frames[this.FrameIndex.Index])
