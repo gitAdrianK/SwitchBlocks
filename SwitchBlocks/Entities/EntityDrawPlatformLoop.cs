@@ -9,19 +9,19 @@ namespace SwitchBlocks.Entities
 
     public class EntityDrawPlatformLoop : EntityDrawPlatform
     {
-        private Rectangle[] Rects { get; }
-        private float[] Frames { get; }
-        private float Timer { get; set; }
-        private float TimeStep { get; }
+        protected Rectangle[] Rects { get; }
+        protected float[] Frames { get; }
+        protected float Timer { get; set; }
+        protected float TimeStep { get; }
 
-        private WrappedIndex FrameIndex { get; set; }
+        protected WrappedIndex FrameIndex { get; set; }
 
-        private int Index
+        protected int Index
         {
             get => this.InternalIndex;
             set => this.InternalIndex = value % this.Rects.Length;
         }
-        private int InternalIndex { get; set; }
+        protected int InternalIndex { get; set; }
 
         public EntityDrawPlatformLoop(
             Texture2D texture,

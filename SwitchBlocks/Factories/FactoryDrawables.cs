@@ -16,6 +16,8 @@ namespace SwitchBlocks.Factories
     {
         // Don't look :D
         // Calling it a factory makes it okay to have infinite method parameters, right.
+        // All of this shit could have been avoided if XmlReader didn't framedrop for
+        // some reason. Has to be cleanup but what?
 
         public enum DrawType
         {
@@ -316,18 +318,37 @@ namespace SwitchBlocks.Factories
 
                 entityLogic.AddScreen(screen);
 
-                _ = new EntityDrawPlatformLoop(
-                    texture,
-                    position.Value,
-                    startState,
-                    animation,
-                    animationOut,
-                    screen,
-                    dataProvider,
-                    cells.Value,
-                    fps,
-                    frames,
-                    randomOffset);
+                if (dictSprites.ContainsKey("ResetWithLever"))
+                {
+                    // Its getting so fucked man, all because of some fucking framedrop shit.
+                    // Also this shit is basically countdown only
+                    _ = new EntityDrawPlatformReset(
+                        texture,
+                        position.Value,
+                        startState,
+                        animation,
+                        animationOut,
+                        screen,
+                        cells.Value,
+                        fps,
+                        frames,
+                        randomOffset);
+                }
+                else
+                {
+                    _ = new EntityDrawPlatformLoop(
+                        texture,
+                        position.Value,
+                        startState,
+                        animation,
+                        animationOut,
+                        screen,
+                        dataProvider,
+                        cells.Value,
+                        fps,
+                        frames,
+                        randomOffset);
+                }
             }
             else
             {
