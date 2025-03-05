@@ -100,16 +100,12 @@
     <Compile Include="Blocks\BlockCountdownOn.cs" />
     <Compile Include="Blocks\BlockCountdownSnowOff.cs" />
     <Compile Include="Blocks\BlockCountdownSnowOn.cs" />
-    <Compile Include="Blocks\BlockData.cs" />
-    <Compile Include="Blocks\BlockDataGroup.cs" />
     <Compile Include="Blocks\BlockJumpIceOff.cs" />
     <Compile Include="Blocks\BlockJumpIceOn.cs" />
     <Compile Include="Blocks\BlockJumpOff.cs" />
     <Compile Include="Blocks\BlockJumpOn.cs" />
     <Compile Include="Blocks\BlockJumpSnowOff.cs" />
     <Compile Include="Blocks\BlockJumpSnowOn.cs" />
-    <Compile Include="Blocks\BlockOff.cs" />
-    <Compile Include="Blocks\BlockOn.cs" />
     <Compile Include="Blocks\BlockPost.cs" />
     <Compile Include="Blocks\BlockPre.cs" />
     <Compile Include="Blocks\BlockAutoReset.cs" />
