@@ -19,6 +19,7 @@ namespace SwitchBlocks
     ///     <item>jumpFlip.xnb</item>
     ///     <item>sandFlip.xnb</item>
     ///     <item>sequenceFlip.xnb</item>
+    ///     <item>windFlip.xnb</item>
     /// </list>
     /// A sound can be null, this should be checked for before trying to play it.
     /// </summary>
@@ -66,6 +67,11 @@ namespace SwitchBlocks
         /// Sound played when the sequence block flips state.
         /// </summary>
         public static JKSound SequenceFlip { get; private set; }
+
+        /// <summary>
+        /// Sound played when the wind block flips state.
+        /// </summary>
+        public static JKSound WindFlip { get; private set; }
 
         /// <summary>
         /// Tries to load sounds used in the mod.
@@ -131,6 +137,12 @@ namespace SwitchBlocks
             {
                 SequenceFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
             }
+
+            // Wind
+            if (SettingsWind.IsUsed && File.Exists($"{path}windFlip.xnb"))
+            {
+                WindFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}windFlip"), SoundType.SFX);
+            }
         }
 
         public static void Cleanup()
@@ -144,6 +156,7 @@ namespace SwitchBlocks
             JumpFlip = null;
             SandFlip = null;
             SequenceFlip = null;
+            WindFlip = null;
         }
     }
 }

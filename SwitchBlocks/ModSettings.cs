@@ -59,6 +59,9 @@ namespace SwitchBlocks
                     case "Sequence":
                         SettingsSequence.Parse(block);
                         break;
+                    case "Wind":
+                        SettingsWind.Parse(block);
+                        break;
                     default:
                         // Do nothing.
                         break;

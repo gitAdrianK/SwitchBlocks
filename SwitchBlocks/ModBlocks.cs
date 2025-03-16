@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
 namespace SwitchBlocks
 {
+    using Microsoft.Xna.Framework;
+
     /// <summary>
     /// Contains colors used in this mod for its blocks as well as various other properties
     /// that can be set for the types of blocks, like durations and animation speed multiplier.
@@ -294,5 +294,34 @@ namespace SwitchBlocks
         /// Color that represents the sequence solid reset block. 
         /// </summary>
         public static readonly Color SEQUENCE_RESET_SOLID = new Color(238, 64, 124);
+
+        /// <summary>
+        /// Color that represents the wind enable block. 
+        /// </summary>
+        public static readonly Color WIND_ENABLE = new Color(238, 124, 70);
+        /// <summary>
+        /// Color that represents the wind solid lever block. 
+        /// </summary>
+        public static readonly Color WIND_LEVER = new Color(238, 71, 124);
+        /// <summary>
+        /// Color that represents the wind lever block, that can only turn the state on. 
+        /// </summary>
+        public static readonly Color WIND_LEVER_ON = new Color(238, 72, 124);
+        /// <summary>
+        /// Color that represents the wind lever block, that can only turn the state off. 
+        /// </summary>
+        public static readonly Color WIND_LEVER_OFF = new Color(238, 73, 124);
+        /// <summary>
+        /// Color that represents the wind lever block. 
+        /// </summary>
+        public static readonly Color WIND_LEVER_SOLID = new Color(238, 74, 124);
+        /// <summary>
+        /// Color that represents the wind solid lever block, that can only turn the state on. 
+        /// </summary>
+        public static readonly Color WIND_LEVER_SOLID_ON = new Color(238, 75, 124);
+        /// <summary>
+        /// Color that represents the wind solid lever block, that can only turn the state off. 
+        /// </summary>
+        public static readonly Color WIND_LEVER_SOLID_OFF = new Color(238, 76, 124);
     }
 }

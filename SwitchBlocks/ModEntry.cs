@@ -33,10 +33,12 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactoryJump());
             _ = LevelManager.RegisterBlockFactory(new FactorySand());
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
+            _ = LevelManager.RegisterBlockFactory(new FactoryWind());
 
             var harmony = new Harmony(ModStrings.HARMONY);
             _ = new Patching.BodyComp(harmony);
             _ = new Patching.EndingManager(harmony);
+            _ = new Patching.WindManager(harmony);
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace SwitchBlocks
             SettingsJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
             SettingsSand.IsUsed = levelID == FactorySand.LastUsedMapId;
             SettingsSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
+            SettingsWind.IsUsed = levelID == FactoryWind.LastUsedMapId;
 
             if (!SettingsAuto.IsUsed
                 && !SettingsBasic.IsUsed
@@ -66,7 +69,8 @@ namespace SwitchBlocks
                 && !SettingsGroup.IsUsed
                 && !SettingsJump.IsUsed
                 && !SettingsSand.IsUsed
-                && !SettingsSequence.IsUsed)
+                && !SettingsSequence.IsUsed
+                && !SettingsWind.IsUsed)
             {
                 return;
             }
@@ -96,6 +100,7 @@ namespace SwitchBlocks
             SetupJump.Setup(player);
             SetupSand.Setup(player);
             SetupSequence.Setup(player);
+            SetupWind.Setup(player);
 
             var entities = new List<Entity>();
             var playerFound = false;
@@ -134,7 +139,8 @@ namespace SwitchBlocks
                 && !SettingsGroup.IsUsed
                 && !SettingsJump.IsUsed
                 && !SettingsSand.IsUsed
-                && !SettingsSequence.IsUsed)
+                && !SettingsSequence.IsUsed
+                && !SettingsWind.IsUsed)
             {
                 return;
             }
@@ -148,6 +154,7 @@ namespace SwitchBlocks
             SetupJump.Cleanup();
             SetupSand.Cleanup();
             SetupSequence.Cleanup();
+            SetupWind.Cleanup();
         }
     }
 }

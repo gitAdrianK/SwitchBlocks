@@ -38,5 +38,6 @@ namespace SwitchBlocks
         public const string JUMP = "jump";
         public const string SAND = "sand";
         public const string SEQUENCE = "sequence";
+        public const string WIND = "wind";
     }
 }
