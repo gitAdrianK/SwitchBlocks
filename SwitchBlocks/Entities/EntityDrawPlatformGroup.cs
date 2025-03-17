@@ -82,7 +82,7 @@ namespace SwitchBlocks.Entities
                     progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
-                    progressActual = this.StartState == this.Logic.GetState(this.GroupId) ? 1.0f : 0.0f;
+                    progressActual = this.StartState == this.Logic.GetState(this.GroupId) ? 0.0f : 1.0f;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");

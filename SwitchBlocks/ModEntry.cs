@@ -1,5 +1,6 @@
 namespace SwitchBlocks
 {
+    using System.Diagnostics;
     using System.Linq;
     using EntityComponent;
     using HarmonyLib;
@@ -23,7 +24,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            //_ = Debugger.Launch();
+            _ = Debugger.Launch();
 
             _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
             _ = LevelManager.RegisterBlockFactory(new FactoryBasic());
@@ -97,9 +98,10 @@ namespace SwitchBlocks
             SetupSand.Setup(player);
             SetupSequence.Setup(player);
 
-            entityManager.Entities
+            var entities = entityManager.Entities
                 .SkipWhile(e => e != player)
-                .DoIf(e => !(e is EntityDraw), e => e.GoToFront());
+                .ToList();
+            entities.DoIf(e => !(e is EntityDraw), e => e.GoToFront());
         }
 
         /// <summary>

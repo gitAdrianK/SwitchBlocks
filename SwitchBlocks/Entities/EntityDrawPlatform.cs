@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using System;
+    using System.Diagnostics;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -75,7 +76,8 @@ namespace SwitchBlocks.Entities
                     progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
-                    progressActual = this.StartState == this.Logic.State ? 1.0f : 0.0f;
+                    Debugger.Log(1, "", ">>> " + (this.StartState == this.Logic.State) + "\n");
+                    progressActual = this.StartState == this.Logic.State ? 0.0f : 1.0f;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
