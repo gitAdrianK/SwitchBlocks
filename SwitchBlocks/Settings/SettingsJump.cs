@@ -6,10 +6,6 @@ namespace SwitchBlocks.Settings
     public static class SettingsJump
     {
         /// <summary>
-        /// Whether the jump block appears inside the hitbox file and counts as used.
-        /// </summary>
-        public static bool IsUsed { get; set; } = false;
-        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the jump block type.
         /// </summary>
         public static float Multiplier { get; private set; } = 1.0f;

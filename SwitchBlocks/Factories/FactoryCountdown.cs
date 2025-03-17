@@ -8,6 +8,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Blocks;
+    using SwitchBlocks.Setups;
 
     /// <summary>
     /// Factory for countdown blocks.
@@ -25,6 +26,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.COUNTDOWN_SNOW_OFF,
             ModBlocks.COUNTDOWN_LEVER,
             ModBlocks.COUNTDOWN_LEVER_SOLID,
+            ModBlocks.COUNTDOWN_WIND_ENABLE,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
@@ -51,6 +53,7 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
+                SetupCountdown.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
             switch (blockCode)
@@ -71,6 +74,9 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
                     return new BlockCountdownLeverSolid(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_WIND_ENABLE:
+                    _ = SetupCountdown.WindEnabled.Add(currentScreen);
+                    return new BlockWind();
                 default:
                     throw new InvalidOperationException($"{nameof(FactoryCountdown)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }

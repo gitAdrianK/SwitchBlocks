@@ -148,6 +148,9 @@ namespace SwitchBlocks.Util
                     case "easeInOut":
                         animation.AnimCurve = Animation.Curve.EaseInOut;
                         break;
+                    case "stepped":
+                        animation.AnimCurve = Animation.Curve.Stepped;
+                        break;
                     default:
                         animation.AnimCurve = Animation.Curve.Linear;
                         break;

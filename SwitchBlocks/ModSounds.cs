@@ -4,7 +4,7 @@ namespace SwitchBlocks
     using JumpKing;
     using JumpKing.XnaWrappers;
     using Microsoft.Xna.Framework.Audio;
-    using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
 
     /// <summary>
     /// Contains sounds used in this mod for its blocks.<br />
@@ -69,11 +69,6 @@ namespace SwitchBlocks
         public static JKSound SequenceFlip { get; private set; }
 
         /// <summary>
-        /// Sound played when the wind block flips state.
-        /// </summary>
-        public static JKSound WindFlip { get; private set; }
-
-        /// <summary>
         /// Tries to load sounds used in the mod.
         /// </summary>
         public static void Load()
@@ -83,7 +78,7 @@ namespace SwitchBlocks
             var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
 
             // Auto
-            if (SettingsAuto.IsUsed)
+            if (SetupAuto.IsUsed)
             {
                 if (File.Exists($"{path}autoFlip.xnb"))
                 {
@@ -96,13 +91,13 @@ namespace SwitchBlocks
             }
 
             // Basic
-            if (SettingsBasic.IsUsed && File.Exists($"{path}basicFlip.xnb"))
+            if (SetupBasic.IsUsed && File.Exists($"{path}basicFlip.xnb"))
             {
                 BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
             }
 
             // Countdown
-            if (SettingsCountdown.IsUsed)
+            if (SetupCountdown.IsUsed)
             {
                 if (File.Exists($"{path}countdownFlip.xnb"))
                 {
@@ -115,33 +110,27 @@ namespace SwitchBlocks
             }
 
             // Group
-            if (SettingsGroup.IsUsed && File.Exists($"{path}groupFlip.xnb"))
+            if (SetupGroup.IsUsed && File.Exists($"{path}groupFlip.xnb"))
             {
                 GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
             }
 
             // Jump
-            if (SettingsJump.IsUsed && File.Exists($"{path}jumpFlip.xnb"))
+            if (SetupJump.IsUsed && File.Exists($"{path}jumpFlip.xnb"))
             {
                 JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
             }
 
             // Sand
-            if (SettingsSand.IsUsed && File.Exists($"{path}sandFlip.xnb"))
+            if (SetupSand.IsUsed && File.Exists($"{path}sandFlip.xnb"))
             {
                 SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
             }
 
             // Sequence
-            if (SettingsSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
+            if (SetupSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
             {
                 SequenceFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
-            }
-
-            // Wind
-            if (SettingsWind.IsUsed && File.Exists($"{path}windFlip.xnb"))
-            {
-                WindFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}windFlip"), SoundType.SFX);
             }
         }
 
@@ -156,7 +145,6 @@ namespace SwitchBlocks
             JumpFlip = null;
             SandFlip = null;
             SequenceFlip = null;
-            WindFlip = null;
         }
     }
 }

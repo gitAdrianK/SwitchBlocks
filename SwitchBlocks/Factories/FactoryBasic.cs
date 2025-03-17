@@ -8,6 +8,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Blocks;
+    using SwitchBlocks.Setups;
 
     /// <summary>
     /// Factory for basic blocks.
@@ -29,6 +30,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.BASIC_LEVER_SOLID,
             ModBlocks.BASIC_LEVER_SOLID_ON,
             ModBlocks.BASIC_LEVER_SOLID_OFF,
+            ModBlocks.BASIC_WIND_ENABLE,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
@@ -57,6 +59,7 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
+                SetupBasic.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
             switch (blockCode)
@@ -85,6 +88,9 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicLeverSolidOn(blockRect);
                 case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
                     return new BlockBasicLeverSolidOff(blockRect);
+                case var _ when blockCode == ModBlocks.BASIC_WIND_ENABLE:
+                    _ = SetupBasic.WindEnabled.Add(currentScreen);
+                    return new BlockWind();
                 default:
                     throw new InvalidOperationException($"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }

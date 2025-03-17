@@ -8,6 +8,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Blocks;
+    using SwitchBlocks.Setups;
 
     /// <summary>
     /// Factory for auto blocks.
@@ -25,6 +26,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.AUTO_SNOW_OFF,
             ModBlocks.AUTO_RESET,
             ModBlocks.AUTO_RESET_FULL,
+            ModBlocks.AUTO_WIND_ENABLE,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
@@ -50,6 +52,7 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
+                SetupAuto.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
             switch (blockCode)
@@ -70,6 +73,9 @@ namespace SwitchBlocks.Factories
                     return new BlockAutoReset(blockRect);
                 case var _ when blockCode == ModBlocks.AUTO_RESET_FULL:
                     return new BlockAutoResetFull(blockRect);
+                case var _ when blockCode == ModBlocks.AUTO_WIND_ENABLE:
+                    _ = SetupAuto.WindEnabled.Add(currentScreen);
+                    return new BlockWind();
                 default:
                     throw new InvalidOperationException($"{nameof(FactoryAuto)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }

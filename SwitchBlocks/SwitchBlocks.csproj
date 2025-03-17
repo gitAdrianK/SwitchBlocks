@@ -56,7 +56,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\BehaviourWindLever.cs" />
     <Compile Include="Behaviours\BehaviourGroupIce.cs" />
     <Compile Include="Behaviours\BehaviourJumpOff.cs" />
     <Compile Include="Behaviours\BehaviourJumpOn.cs" />
@@ -89,12 +88,6 @@
     <Compile Include="Blocks\BlockAutoSnowOn.cs" />
     <Compile Include="Blocks\BlockBasicIceOff.cs" />
     <Compile Include="Blocks\BlockBasicIceOn.cs" />
-    <Compile Include="Blocks\BlockWindEnable.cs" />
-    <Compile Include="Blocks\BlockWindLeverOff.cs" />
-    <Compile Include="Blocks\BlockWindLeverOn.cs" />
-    <Compile Include="Blocks\BlockWindLeverSolid.cs" />
-    <Compile Include="Blocks\BlockWindLeverSolidOff.cs" />
-    <Compile Include="Blocks\BlockWindLeverSolidOn.cs" />
     <Compile Include="Blocks\BlockBasicOff.cs" />
     <Compile Include="Blocks\BlockBasicOn.cs" />
     <Compile Include="Blocks\BlockBasicSnowOff.cs" />
@@ -159,7 +152,7 @@
     <Compile Include="Blocks\BlockSandLeverSolid.cs" />
     <Compile Include="Blocks\BlockSandOff.cs" />
     <Compile Include="Blocks\BlockSandOn.cs" />
-    <Compile Include="Blocks\BlockWindLever.cs" />
+    <Compile Include="Blocks\BlockWind.cs" />
     <Compile Include="Data\CacheSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
     <Compile Include="Data\DataWind.cs" />
@@ -186,10 +179,7 @@
     <Compile Include="Factories\FactoryDrawablesGroup.cs" />
     <Compile Include="Factories\FactoryDrawables.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
-    <Compile Include="Factories\FactoryWind.cs" />
     <Compile Include="Patching\WindManager.cs" />
-    <Compile Include="Settings\SettingsWind.cs" />
-    <Compile Include="Setups\SetupWind.cs" />
     <Compile Include="Util\IBlockGroupId.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />

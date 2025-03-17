@@ -21,6 +21,7 @@ namespace SwitchBlocks.Util
             EaseIn,
             EaseOut,
             EaseInOut,
+            Stepped,
         }
 
         public Style AnimStyle { get; set; }

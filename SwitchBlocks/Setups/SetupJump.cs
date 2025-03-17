@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Setups
 {
+    using System.Collections.Generic;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
@@ -10,11 +11,21 @@ namespace SwitchBlocks.Setups
 
     public static class SetupJump
     {
+        /// <summary>
+        /// Whether the jump block appears inside the hitbox file and counts as used.
+        /// </summary>
+        public static bool IsUsed { get; set; } = false;
+
+        /// <summary>
+        /// Screens that contain a wind enable block.
+        /// </summary>
+        public static HashSet<int> WindEnabled { get; set; } = new HashSet<int>();
+
         private static EntityLogicJump entityLogic;
 
         public static void Setup(PlayerEntity player)
         {
-            if (!SettingsJump.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -42,7 +53,7 @@ namespace SwitchBlocks.Setups
 
         public static void Cleanup()
         {
-            if (!SettingsJump.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -59,7 +70,7 @@ namespace SwitchBlocks.Setups
             DataJump.Instance.SaveToFile();
             DataJump.Instance.Reset();
 
-            SettingsJump.IsUsed = false;
+            IsUsed = false;
         }
 
         private static void JumpSwitchUnsafe()

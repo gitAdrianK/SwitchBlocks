@@ -6,13 +6,17 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Factories;
-    using SwitchBlocks.Settings;
 
     public static class SetupSand
     {
+        /// <summary>
+        /// Whether the sand block appears inside the hitbox file and counts as used.
+        /// </summary>
+        public static bool IsUsed { get; set; } = false;
+
         public static void Setup(PlayerEntity player)
         {
-            if (!SettingsSand.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -41,7 +45,7 @@ namespace SwitchBlocks.Setups
 
         public static void Cleanup()
         {
-            if (!SettingsSand.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -49,7 +53,7 @@ namespace SwitchBlocks.Setups
             DataSand.Instance.SaveToFile();
             DataSand.Instance.Reset();
 
-            SettingsSand.IsUsed = false;
+            IsUsed = false;
         }
     }
 }

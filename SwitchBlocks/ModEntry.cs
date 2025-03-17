@@ -11,7 +11,6 @@ namespace SwitchBlocks
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Factories;
-    using SwitchBlocks.Settings;
     using SwitchBlocks.Setups;
 
     [JumpKingMod(ModStrings.MODNAME)]
@@ -33,7 +32,6 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactoryJump());
             _ = LevelManager.RegisterBlockFactory(new FactorySand());
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
-            _ = LevelManager.RegisterBlockFactory(new FactoryWind());
 
             var harmony = new Harmony(ModStrings.HARMONY);
             _ = new Patching.BodyComp(harmony);
@@ -54,23 +52,21 @@ namespace SwitchBlocks
             }
 
             var levelID = contentManager.level.ID;
-            SettingsAuto.IsUsed = levelID == FactoryAuto.LastUsedMapId;
-            SettingsBasic.IsUsed = levelID == FactoryBasic.LastUsedMapId;
-            SettingsCountdown.IsUsed = levelID == FactoryCountdown.LastUsedMapId;
-            SettingsGroup.IsUsed = levelID == FactoryGroup.LastUsedMapId;
-            SettingsJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
-            SettingsSand.IsUsed = levelID == FactorySand.LastUsedMapId;
-            SettingsSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
-            SettingsWind.IsUsed = levelID == FactoryWind.LastUsedMapId;
+            SetupAuto.IsUsed = levelID == FactoryAuto.LastUsedMapId;
+            SetupBasic.IsUsed = levelID == FactoryBasic.LastUsedMapId;
+            SetupCountdown.IsUsed = levelID == FactoryCountdown.LastUsedMapId;
+            SetupGroup.IsUsed = levelID == FactoryGroup.LastUsedMapId;
+            SetupJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
+            SetupSand.IsUsed = levelID == FactorySand.LastUsedMapId;
+            SetupSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
 
-            if (!SettingsAuto.IsUsed
-                && !SettingsBasic.IsUsed
-                && !SettingsCountdown.IsUsed
-                && !SettingsGroup.IsUsed
-                && !SettingsJump.IsUsed
-                && !SettingsSand.IsUsed
-                && !SettingsSequence.IsUsed
-                && !SettingsWind.IsUsed)
+            if (!SetupAuto.IsUsed
+                && !SetupBasic.IsUsed
+                && !SetupCountdown.IsUsed
+                && !SetupGroup.IsUsed
+                && !SetupJump.IsUsed
+                && !SetupSand.IsUsed
+                && !SetupSequence.IsUsed)
             {
                 return;
             }
@@ -100,7 +96,6 @@ namespace SwitchBlocks
             SetupJump.Setup(player);
             SetupSand.Setup(player);
             SetupSequence.Setup(player);
-            SetupWind.Setup(player);
 
             var entities = new List<Entity>();
             var playerFound = false;
@@ -133,14 +128,13 @@ namespace SwitchBlocks
                 return;
             }
 
-            if (!SettingsAuto.IsUsed
-                && !SettingsBasic.IsUsed
-                && !SettingsCountdown.IsUsed
-                && !SettingsGroup.IsUsed
-                && !SettingsJump.IsUsed
-                && !SettingsSand.IsUsed
-                && !SettingsSequence.IsUsed
-                && !SettingsWind.IsUsed)
+            if (!SetupAuto.IsUsed
+                && !SetupBasic.IsUsed
+                && !SetupCountdown.IsUsed
+                && !SetupGroup.IsUsed
+                && !SetupJump.IsUsed
+                && !SetupSand.IsUsed
+                && !SetupSequence.IsUsed)
             {
                 return;
             }
@@ -154,7 +148,6 @@ namespace SwitchBlocks
             SetupJump.Cleanup();
             SetupSand.Cleanup();
             SetupSequence.Cleanup();
-            SetupWind.Cleanup();
         }
     }
 }

@@ -8,10 +8,6 @@ namespace SwitchBlocks.Settings
     public static class SettingsBasic
     {
         /// <summary>
-        /// Whether the basic block appears inside the hitbox file and counts as used.
-        /// </summary>
-        public static bool IsUsed { get; set; } = false;
-        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the basic block type.
         /// </summary>
         public static float Multiplier { get; private set; } = 1.0f;

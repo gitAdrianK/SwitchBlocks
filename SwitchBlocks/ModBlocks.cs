@@ -40,6 +40,10 @@ namespace SwitchBlocks
         /// Color that represents the auto reset block. 
         /// </summary>
         public static readonly Color AUTO_RESET_FULL = new Color(238, 12, 124);
+        /// <summary>
+        /// Color that represents the auto wind enable block. 
+        /// </summary>
+        public static readonly Color AUTO_WIND_ENABLE = new Color(238, 17, 124);
 
         /// <summary>
         /// Color that represents the basic on block. 
@@ -89,6 +93,10 @@ namespace SwitchBlocks
         /// Color that represents the basic solid lever block, that can only turn the state off. 
         /// </summary>
         public static readonly Color BASIC_LEVER_SOLID_OFF = new Color(238, 26, 124);
+        /// <summary>
+        /// Color that represents the basic wind enable block. 
+        /// </summary>
+        public static readonly Color BASIC_WIND_ENABLE = new Color(238, 27, 124);
 
         /// <summary>
         /// Color that represents the countdown on block. 
@@ -122,6 +130,10 @@ namespace SwitchBlocks
         /// Color that represents the countdown solid lever block. 
         /// </summary>
         public static readonly Color COUNTDOWN_LEVER_SOLID = new Color(238, 34, 124);
+        /// <summary>
+        /// Color that represents the countdown wind enable block. 
+        /// </summary>
+        public static readonly Color COUNTDOWN_WIND_ENABLE = new Color(238, 37, 124);
 
         /// <summary>
         /// Color that represents the group A block. 
@@ -204,6 +216,10 @@ namespace SwitchBlocks
         /// Color that represents the jump snow off block. 
         /// </summary>
         public static readonly Color JUMP_SNOW_OFF = new Color(95, 97, 95);
+        /// <summary>
+        /// Color that represents the jump wind enable block. 
+        /// </summary>
+        public static readonly Color JUMP_WIND_ENABLE = new Color(95, 95, 96);
 
         /// <summary>
         /// Color that represents the sand on block. 
@@ -294,34 +310,5 @@ namespace SwitchBlocks
         /// Color that represents the sequence solid reset block. 
         /// </summary>
         public static readonly Color SEQUENCE_RESET_SOLID = new Color(238, 64, 124);
-
-        /// <summary>
-        /// Color that represents the wind enable block. 
-        /// </summary>
-        public static readonly Color WIND_ENABLE = new Color(238, 124, 70);
-        /// <summary>
-        /// Color that represents the wind solid lever block. 
-        /// </summary>
-        public static readonly Color WIND_LEVER = new Color(238, 71, 124);
-        /// <summary>
-        /// Color that represents the wind lever block, that can only turn the state on. 
-        /// </summary>
-        public static readonly Color WIND_LEVER_ON = new Color(238, 72, 124);
-        /// <summary>
-        /// Color that represents the wind lever block, that can only turn the state off. 
-        /// </summary>
-        public static readonly Color WIND_LEVER_OFF = new Color(238, 73, 124);
-        /// <summary>
-        /// Color that represents the wind lever block. 
-        /// </summary>
-        public static readonly Color WIND_LEVER_SOLID = new Color(238, 74, 124);
-        /// <summary>
-        /// Color that represents the wind solid lever block, that can only turn the state on. 
-        /// </summary>
-        public static readonly Color WIND_LEVER_SOLID_ON = new Color(238, 75, 124);
-        /// <summary>
-        /// Color that represents the wind solid lever block, that can only turn the state off. 
-        /// </summary>
-        public static readonly Color WIND_LEVER_SOLID_OFF = new Color(238, 76, 124);
     }
 }

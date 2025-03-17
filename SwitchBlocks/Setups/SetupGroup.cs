@@ -13,6 +13,11 @@ namespace SwitchBlocks.Setups
 
     public static class SetupGroup
     {
+        /// <summary>
+        /// Whether the group block appears inside the hitbox file and counts as used.
+        /// </summary>
+        public static bool IsUsed { get; set; } = false;
+
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
         // clearing would result in the dict being empty on same level reload.
         public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<int, IBlockGroupId>();
@@ -23,7 +28,7 @@ namespace SwitchBlocks.Setups
 
         public static void Setup(PlayerEntity player)
         {
-            if (!SettingsGroup.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -56,7 +61,7 @@ namespace SwitchBlocks.Setups
 
         public static void Cleanup()
         {
-            if (!SettingsGroup.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -64,7 +69,7 @@ namespace SwitchBlocks.Setups
             DataGroup.Instance.SaveToFile();
             DataGroup.Instance.Reset();
 
-            SettingsGroup.IsUsed = false;
+            IsUsed = false;
         }
 
         private static void AssignGroupIds(CacheGroup cache, ResetsGroup resets)

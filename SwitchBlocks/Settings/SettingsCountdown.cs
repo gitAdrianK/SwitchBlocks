@@ -8,10 +8,6 @@ namespace SwitchBlocks.Settings
     public static class SettingsCountdown
     {
         /// <summary>
-        /// Whether the countdown block appears inside the hitbox file and counts as used.
-        /// </summary>
-        public static bool IsUsed { get; set; } = false;
-        /// <summary>
         /// How long the blocks stay in their state before switching.
         /// </summary>
         public static int Duration { get; private set; } = 180;

@@ -8,11 +8,15 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Factories;
-    using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
     public static class SetupSequence
     {
+        /// <summary>
+        /// Whether the sequence block appears inside the hitbox file and counts as used.
+        /// </summary>
+        public static bool IsUsed { get; set; } = false;
+
         public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<int, IBlockGroupId>();
         public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
@@ -22,7 +26,7 @@ namespace SwitchBlocks.Setups
 
         public static void Setup(PlayerEntity player)
         {
-            if (!SettingsSequence.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -53,7 +57,7 @@ namespace SwitchBlocks.Setups
 
         public static void Cleanup()
         {
-            if (!SettingsSequence.IsUsed)
+            if (!IsUsed)
             {
                 return;
             }
@@ -62,7 +66,7 @@ namespace SwitchBlocks.Setups
             instance.SaveToFile();
             instance.Reset();
 
-            SettingsSequence.IsUsed = false;
+            IsUsed = false;
         }
 
         private static void AssignSequenceIds(DataSequence instance, CacheSequence cache)

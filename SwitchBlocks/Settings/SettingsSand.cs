@@ -8,10 +8,6 @@ namespace SwitchBlocks.Settings
     public static class SettingsSand
     {
         /// <summary>
-        /// Whether the sand block appears inside the hitbox file and counts as used.
-        /// </summary>
-        public static bool IsUsed { get; set; } = false;
-        /// <summary>
         /// Multiplier of the deltaTime used in the animation of the sand block type.
         /// </summary>
         public static float Multiplier { get; private set; } = 1.0f;

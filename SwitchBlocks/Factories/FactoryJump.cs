@@ -8,6 +8,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Blocks;
+    using SwitchBlocks.Setups;
 
     public class FactoryJump : IBlockFactory
     {
@@ -20,6 +21,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.JUMP_ICE_OFF,
             ModBlocks.JUMP_SNOW_ON,
             ModBlocks.JUMP_SNOW_OFF,
+            ModBlocks.JUMP_WIND_ENABLE,
         };
 
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
@@ -45,6 +47,7 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
+                SetupJump.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
             switch (blockCode)
@@ -61,6 +64,9 @@ namespace SwitchBlocks.Factories
                     return new BlockJumpSnowOn(blockRect);
                 case var _ when blockCode == ModBlocks.JUMP_SNOW_OFF:
                     return new BlockJumpSnowOff(blockRect);
+                case var _ when blockCode == ModBlocks.JUMP_WIND_ENABLE:
+                    _ = SetupJump.WindEnabled.Add(currentScreen);
+                    return new BlockWind();
                 default:
                     throw new InvalidOperationException($"{nameof(FactoryJump)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
