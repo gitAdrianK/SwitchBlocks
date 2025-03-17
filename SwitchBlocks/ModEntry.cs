@@ -24,7 +24,7 @@ namespace SwitchBlocks
         [BeforeLevelLoad]
         public static void BeforeLevelLoad()
         {
-            _ = Debugger.Launch();
+            //_ = Debugger.Launch();
 
             _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
             _ = LevelManager.RegisterBlockFactory(new FactoryBasic());
