@@ -155,7 +155,6 @@
     <Compile Include="Blocks\BlockWind.cs" />
     <Compile Include="Data\CacheSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
-    <Compile Include="Data\DataWind.cs" />
     <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\IGroupDataProvider.cs" />
     <Compile Include="Data\ResetsGroup.cs" />

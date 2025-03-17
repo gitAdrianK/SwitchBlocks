@@ -98,7 +98,7 @@ namespace SwitchBlocks
             SetupSequence.Setup(player);
 
             entityManager.Entities
-                .SkipWhile(e => e == player)
+                .SkipWhile(e => e != player)
                 .DoIf(e => !(e is EntityDraw), e => e.GoToFront());
         }
 

@@ -26,11 +26,8 @@ namespace SwitchBlocks.Patching
             {
                 if (DataAuto.Instance.State)
                 {
-                    __result = -__result * DataAuto.Instance.Progress;
-                }
-                else
-                {
-                    __result *= 1.0f - DataAuto.Instance.Progress;
+                    __result = -__result;
+                    return;
                 }
             }
             if (SetupBasic.IsUsed
@@ -38,11 +35,8 @@ namespace SwitchBlocks.Patching
             {
                 if (DataBasic.Instance.State)
                 {
-                    __result = -__result * DataBasic.Instance.Progress;
-                }
-                else
-                {
-                    __result *= 1.0f - DataBasic.Instance.Progress;
+                    __result = -__result;
+                    return;
                 }
             }
             if (SetupCountdown.IsUsed
@@ -50,11 +44,8 @@ namespace SwitchBlocks.Patching
             {
                 if (DataCountdown.Instance.State)
                 {
-                    __result = -__result * DataCountdown.Instance.Progress;
-                }
-                else
-                {
-                    __result *= 1.0f - DataCountdown.Instance.Progress;
+                    __result = -__result;
+                    return;
                 }
             }
             if (SetupJump.IsUsed
@@ -62,11 +53,8 @@ namespace SwitchBlocks.Patching
             {
                 if (DataJump.Instance.State)
                 {
-                    __result = -__result * DataJump.Instance.Progress;
-                }
-                else
-                {
-                    __result *= 1.0f - DataJump.Instance.Progress;
+                    __result = -__result;
+                    return;
                 }
             }
         }
