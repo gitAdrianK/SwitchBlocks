@@ -1,6 +1,6 @@
 namespace SwitchBlocks
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using EntityComponent;
     using HarmonyLib;
     using JumpKing;
@@ -97,23 +97,9 @@ namespace SwitchBlocks
             SetupSand.Setup(player);
             SetupSequence.Setup(player);
 
-            var entities = new List<Entity>();
-            var playerFound = false;
-            foreach (var entity in entityManager.Entities)
-            {
-                if (entity == player)
-                {
-                    playerFound = true;
-                }
-                if (playerFound && !(entity is EntityDraw))
-                {
-                    entities.Add(entity);
-                }
-            }
-            foreach (var entity in entities)
-            {
-                entityManager.MoveToFront(entity);
-            }
+            entityManager.Entities
+                .SkipWhile(e => e == player)
+                .DoIf(e => !(e is EntityDraw), e => e.GoToFront());
         }
 
         /// <summary>
