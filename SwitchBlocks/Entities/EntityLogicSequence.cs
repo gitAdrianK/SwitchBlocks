@@ -6,7 +6,6 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
-    using SwitchBlocks.Util;
 
     public class EntityLogicSequence : EntityGroupLogic<DataSequence>
     {
@@ -43,7 +42,7 @@ namespace SwitchBlocks.Entities
                 var blockGroup = this.Data.Groups[i];
                 if (blockGroup.State && blockGroup.Progress == 1.0f)
                 {
-                    this.Data.Finished.Add(i);
+                    _ = this.Data.Finished.Add(i);
                 }
                 _ = this.Data.Active.Remove(i);
             }

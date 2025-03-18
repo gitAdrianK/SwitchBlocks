@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Xml;
-    using SwitchBlocks.Util;
+    using System.Xml.Linq;
 
     public static class SettingsAuto
     {
@@ -43,23 +42,20 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static bool WarnDisableOff { get; private set; } = false;
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XElement element)
         {
-            var childrenAuto = block.ChildNodes;
-            var dictionaryAuto = Xml.MapNames(childrenAuto);
-            DurationOn = ParseSettings.ParseDuration(dictionaryAuto, block);
-            DurationOff = ParseSettings.ParseDuration("DurationOff", dictionaryAuto, block, DurationOn);
+            DurationOn = ParseSettings.ParseDuration(element.Element("Duration"), 3.0f);
+            DurationOff = ParseSettings.ParseDuration(element.Element("DurationOff"), DurationOn);
             DurationCycle = DurationOn + DurationOff;
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryAuto, block);
-            ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryAuto);
-            if (dictionaryAuto.TryGetValue("Warn", out var value))
+            Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
+            ForceSwitch = element.Element("ForceStateSwitch") != null;
+            var warnElement = element.Element("Warn");
+            if (warnElement != null)
             {
-                var rootAutoWarn = childrenAuto[value];
-                var dictionaryAutoWarn = Xml.MapNames(rootAutoWarn.ChildNodes);
-                WarnCount = ParseSettings.ParseWarnCount(dictionaryAutoWarn, rootAutoWarn);
-                WarnDuration = ParseSettings.ParseWarnDuration(dictionaryAutoWarn, rootAutoWarn);
-                WarnDisableOn = ParseSettings.ParseWarnDisableOn(dictionaryAutoWarn);
-                WarnDisableOff = ParseSettings.ParseWarnDisableOff(dictionaryAutoWarn);
+                WarnCount = ParseSettings.ParseCount(warnElement.Element("Count"), 2);
+                WarnDuration = ParseSettings.ParseDuration(warnElement.Element("Duration"), 1.0f);
+                WarnDisableOn = element.Element("DisableOn") != null;
+                WarnDisableOff = element.Element("DisableOff") != null;
             }
         }
 

@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.Linq;
     using JumpKing;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
@@ -32,12 +33,12 @@ namespace SwitchBlocks.Setups
             }
 
             var instance = DataSequence.Instance;
-            var cache = CacheSequence.TryDeserialize();
-            AssignSequenceIds(instance, cache);
+            var seeds = SeedsSequence.TryDeserialize();
+            AssignSequenceIds(instance, seeds);
 
             if (LevelDebugState.instance != null)
             {
-                cache.SaveToFile();
+                seeds.SaveToFile();
             }
 
             if (instance.Touched == 0)
@@ -69,26 +70,31 @@ namespace SwitchBlocks.Setups
             IsUsed = false;
         }
 
-        private static void AssignSequenceIds(DataSequence instance, CacheSequence cache)
+        private static void AssignSequenceIds(DataSequence instance, SeedsSequence seeds)
         {
             var sequenceId = 1;
-            var seed = cache.Seed;
+            var seed = seeds.Seeds;
 
-            if (seed.Count > 0)
+            if (seed.Any())
             {
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceA, seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceB, seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceC, seed, ref sequenceId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksSequenceD, seed, ref sequenceId);
+                BlockGroupId.AssignGroupIdsFromSeed(
+                    seed,
+                    ref sequenceId,
+                    BlocksSequenceA,
+                    BlocksSequenceB,
+                    BlocksSequenceC,
+                    BlocksSequenceD);
             }
 
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceA, seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceB, seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceC, seed, ref sequenceId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksSequenceD, seed, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seed, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seed, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seed, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seed, ref sequenceId);
 
             BlockGroup.CreateGroupData(sequenceId, instance.Groups, false);
 
+            // The sequence id, that is how many groups got created,
+            // is increased one more time at the end and is thus one too high.
             SequenceCount = sequenceId - 1;
         }
     }

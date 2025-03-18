@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Xml;
-    using SwitchBlocks.Util;
+    using System.Xml.Linq;
 
     public static class SettingsJump
     {
@@ -14,11 +13,10 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static bool ForceSwitch { get; private set; } = false;
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XElement element)
         {
-            var dictionaryJump = Xml.MapNames(block.ChildNodes);
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryJump, block);
-            ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryJump);
+            Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
+            ForceSwitch = element.Element("ForceStateSwitch") != null;
         }
 
         public static void Reset()

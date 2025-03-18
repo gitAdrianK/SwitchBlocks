@@ -1,8 +1,7 @@
 namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
-    using System.Xml;
-    using SwitchBlocks.Util;
+    using System.Xml.Linq;
     using static SwitchBlocks.Util.Directions;
 
     public static class SettingsCountdown
@@ -32,20 +31,17 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static int WarnDuration { get; private set; } = 60;
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XElement element)
         {
-            var childrenCountdown = block.ChildNodes;
-            var dictionaryCountdown = Xml.MapNames(childrenCountdown);
-            Duration = ParseSettings.ParseDuration(dictionaryCountdown, block);
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryCountdown, block);
-            LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryCountdown, block);
-            ForceSwitch = ParseSettings.ParseForceSwitch(dictionaryCountdown);
-            if (dictionaryCountdown.TryGetValue("Warn", out var value))
+            Duration = ParseSettings.ParseDuration(element.Element("Duration"), 3.0f);
+            Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
+            LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
+            ForceSwitch = element.Element("ForceStateSwitch") != null;
+            var warnElement = element.Element("Warn");
+            if (warnElement != null)
             {
-                var rootContdownWarn = childrenCountdown[value];
-                var dictionaryCountdownWarn = Xml.MapNames(rootContdownWarn.ChildNodes);
-                WarnCount = ParseSettings.ParseWarnCount(dictionaryCountdownWarn, rootContdownWarn);
-                WarnDuration = ParseSettings.ParseWarnDuration(dictionaryCountdownWarn, rootContdownWarn);
+                WarnCount = ParseSettings.ParseCount(warnElement.Element("Count"), 2);
+                WarnDuration = ParseSettings.ParseDuration(warnElement.Element("Duration"), 1.0f);
             }
         }
 

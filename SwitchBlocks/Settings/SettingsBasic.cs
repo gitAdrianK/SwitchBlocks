@@ -1,8 +1,7 @@
 namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
-    using System.Xml;
-    using SwitchBlocks.Util;
+    using System.Xml.Linq;
     using static SwitchBlocks.Util.Directions;
 
     public static class SettingsBasic
@@ -16,11 +15,10 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XElement element)
         {
-            var dictionaryBasic = Xml.MapNames(block.ChildNodes);
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryBasic, block);
-            LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryBasic, block);
+            Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
+            LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
         }
 
         public static void Reset()

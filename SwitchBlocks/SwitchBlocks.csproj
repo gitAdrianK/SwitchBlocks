@@ -153,7 +153,7 @@
     <Compile Include="Blocks\BlockSandOff.cs" />
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Blocks\BlockWind.cs" />
-    <Compile Include="Data\CacheSequence.cs" />
+    <Compile Include="Data\SeedsSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
     <Compile Include="Data\IDataProvider.cs" />
     <Compile Include="Data\IGroupDataProvider.cs" />
@@ -161,8 +161,6 @@
     <Compile Include="Entities\EntityDraw.cs" />
     <Compile Include="Entities\EntityDrawLever.cs" />
     <Compile Include="Entities\EntityDrawPlatform.cs" />
-    <Compile Include="Entities\EntityDrawPlatformGroup.cs" />
-    <Compile Include="Entities\EntityDrawPlatformGroupLoop.cs" />
     <Compile Include="Entities\EntityDrawPlatformLoop.cs" />
     <Compile Include="Entities\EntityDrawPlatformReset.cs" />
     <Compile Include="Entities\EntityDrawPlatformSand.cs" />
@@ -179,11 +177,15 @@
     <Compile Include="Factories\FactoryDrawables.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
     <Compile Include="Patching\WindManager.cs" />
-    <Compile Include="Util\IBlockGroupId.cs" />
+    <Compile Include="Util\BlockGroupId.cs" />
+    <Compile Include="Util\Deserialization\Lever.cs" />
+    <Compile Include="Util\Deserialization\Platform.cs" />
+    <Compile Include="Util\Deserialization\PlatformSand.cs" />
+    <Compile Include="Util\Deserialization\Sprites.cs" />
     <Compile Include="Data\DataAuto.cs" />
     <Compile Include="Data\DataBasic.cs" />
     <Compile Include="Data\DataCountdown.cs" />
-    <Compile Include="Data\CacheGroup.cs" />
+    <Compile Include="Data\SeedsGroup.cs" />
     <Compile Include="Data\DataGroup.cs" />
     <Compile Include="Data\DataJump.cs" />
     <Compile Include="Data\DataSand.cs" />
@@ -210,10 +212,9 @@
     <Compile Include="Setups\SetupAuto.cs" />
     <Compile Include="Setups\SetupBasic.cs" />
     <Compile Include="Util\Animation.cs" />
-    <Compile Include="Util\BlockGroup.cs" />
+    <Compile Include="Data\BlockGroup.cs" />
     <Compile Include="Util\Directions.cs" />
     <Compile Include="Util\Intersecting.cs" />
-    <Compile Include="Util\IResetGroupIds.cs" />
     <Compile Include="Factories\FactoryAuto.cs" />
     <Compile Include="Factories\FactoryBasic.cs" />
     <Compile Include="Factories\FactoryCountdown.cs" />
@@ -221,9 +222,8 @@
     <Compile Include="ModSounds.cs" />
     <Compile Include="ModBlocks.cs" />
     <Compile Include="ModEntry.cs" />
-    <Compile Include="Util\SerializableDictionary.cs" />
+    <Compile Include="Util\ResetGroupIds.cs" />
     <Compile Include="Util\WrappedIndex.cs" />
-    <Compile Include="Util\Xml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

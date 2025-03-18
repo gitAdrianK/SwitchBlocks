@@ -2,10 +2,10 @@ namespace SwitchBlocks.Entities
 {
     using JumpKing;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Util;
+    using SwitchBlocks.Util.Deserialization;
 
     public class EntityDrawPlatformLoop : EntityDrawPlatform
     {
@@ -18,24 +18,17 @@ namespace SwitchBlocks.Entities
 
         protected int Index
         {
-            get => this.InternalIndex;
-            set => this.InternalIndex = value % this.Rects.Length;
+            get => this.Index;
+            set => this.Index = value % this.Rects.Length;
         }
-        protected int InternalIndex { get; set; }
 
         public EntityDrawPlatformLoop(
-            Texture2D texture,
-            Vector2 position,
-            bool startState,
-            Animation animation,
-            Animation animationOut,
+            Platform platform,
             int screen,
-            IDataProvider logic,
-            Point cells,
-            float timeStep,
-            float[] frames,
-            bool randomOffset) : base(texture, position, startState, animation, animationOut, screen, logic)
+            IDataProvider logic) : base(platform, screen, logic)
         {
+            var sprites = platform.Sprites;
+            var cells = sprites.Cells;
             var rects = new Rectangle[cells.X * cells.Y];
             this.Width /= cells.X;
             this.Height /= cells.Y;
@@ -51,9 +44,8 @@ namespace SwitchBlocks.Entities
                 }
             }
             this.Rects = rects;
-            this.TimeStep = timeStep;
-            this.Frames = frames;
-            if (this.Frames == null)
+            this.TimeStep = 1.0f / sprites.FPS;
+            if (sprites.Frames == null)
             {
                 this.Frames = new float[this.Rects.Length];
                 for (var i = 0; i < this.Frames.Length; i++)
@@ -63,12 +55,12 @@ namespace SwitchBlocks.Entities
             }
             else
             {
-                this.Frames = frames;
+                this.Frames = sprites.Frames.ToArray();
             }
             this.FrameIndex = new WrappedIndex(this.Frames.Length);
-            if (randomOffset)
+            if (sprites.RandomOffset)
             {
-                this.Timer = (float)Game1.random.NextDouble() * 100f;
+                this.Timer = (float)Game1.random.NextDouble() * 100.0f;
             }
         }
 
@@ -82,9 +74,9 @@ namespace SwitchBlocks.Entities
                 var index = frameIndex.Index;
                 frameIndex.Index = index + 1;
             }
-            if (this.Timer < 0f)
+            if (this.Timer < 0.0f)
             {
-                this.Timer = 0f;
+                this.Timer = 0.0f;
             }
             this.Index = this.FrameIndex.Index;
         }

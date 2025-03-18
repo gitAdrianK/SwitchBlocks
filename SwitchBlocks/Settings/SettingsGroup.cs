@@ -1,8 +1,7 @@
 namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
-    using System.Xml;
-    using SwitchBlocks.Util;
+    using System.Xml.Linq;
     using static SwitchBlocks.Util.Directions;
 
     public static class SettingsGroup
@@ -24,14 +23,12 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
 
-        public static void Parse(XmlNode block)
+        public static void Parse(XElement element)
         {
-            var childrenGroup = block.ChildNodes;
-            var dictionaryGroup = Xml.MapNames(childrenGroup);
-            Duration = ParseSettings.ParseDuration(dictionaryGroup, block, 0);
-            Multiplier = ParseSettings.ParseMultiplier(dictionaryGroup, block);
-            LeverDirections = ParseSettings.ParseLeverSideDisable(dictionaryGroup, block);
-            PlatformDirections = ParseSettings.ParsePlatformSideDisable(dictionaryGroup, block);
+            Duration = ParseSettings.ParseDuration(element.Element("Duration"), 0);
+            Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
+            LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
+            PlatformDirections = ParseSettings.ParseSideDisable(element.Element("PlatformSideDisable"));
         }
 
         public static void Reset()

@@ -74,63 +74,87 @@ namespace SwitchBlocks
         public static void Load()
         {
             var contentManager = Game1.instance.contentManager;
-            var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}audio{sep}";
+            var path = Path.Combine(contentManager.root, ModStrings.FOLDER, "audio");
+            string file;
 
             // Auto
             if (SetupAuto.IsUsed)
             {
-                if (File.Exists($"{path}autoFlip.xnb"))
+                file = Path.Combine(path, "autoFlip");
+                if (File.Exists(file + ".xnb"))
                 {
-                    AutoFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}autoFlip"), SoundType.SFX);
+                    AutoFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
                 }
-                if (File.Exists($"{path}autoWarn.xnb"))
+                file = Path.Combine(path, "autoWarn");
+                if (File.Exists(file + ".xnb"))
                 {
-                    AutoWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}autoWarn"), SoundType.SFX);
+                    AutoWarn = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
                 }
             }
 
             // Basic
-            if (SetupBasic.IsUsed && File.Exists($"{path}basicFlip.xnb"))
+            if (SetupBasic.IsUsed)
             {
-                BasicFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}basicFlip"), SoundType.SFX);
+                file = Path.Combine(path, "basicFlip");
+                if (File.Exists(file + ".xnb"))
+                {
+                    BasicFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
+                }
             }
 
             // Countdown
             if (SetupCountdown.IsUsed)
             {
-                if (File.Exists($"{path}countdownFlip.xnb"))
+                file = Path.Combine(path, "countdownFlip");
+                if (File.Exists(file + ".xnb"))
                 {
-                    CountdownFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownFlip"), SoundType.SFX);
+                    CountdownFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
                 }
-                if (File.Exists($"{path}countdownWarn.xnb"))
+                file = Path.Combine(path, "countdownWarn");
+                if (File.Exists(file + ".xnb"))
                 {
-                    CountdownWarn = new JKSound(contentManager.Load<SoundEffect>($"{path}countdownWarn"), SoundType.SFX);
+                    CountdownWarn = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
                 }
             }
 
             // Group
-            if (SetupGroup.IsUsed && File.Exists($"{path}groupFlip.xnb"))
+            if (SetupGroup.IsUsed)
             {
-                GroupFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}groupFlip"), SoundType.SFX);
+                file = Path.Combine(path, "groupFlip");
+                if (File.Exists(file + ".xnb"))
+                {
+                    GroupFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
+                }
             }
 
             // Jump
-            if (SetupJump.IsUsed && File.Exists($"{path}jumpFlip.xnb"))
+            if (SetupJump.IsUsed)
             {
-                JumpFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}jumpFlip"), SoundType.SFX);
+                file = Path.Combine(path, "jumpFlip");
+                if (File.Exists(file + ".xnb"))
+                {
+                    JumpFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
+                }
             }
 
             // Sand
-            if (SetupSand.IsUsed && File.Exists($"{path}sandFlip.xnb"))
+            if (SetupSand.IsUsed)
             {
-                SandFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sandFlip"), SoundType.SFX);
+                file = Path.Combine(path, "sandFlip");
+                if (File.Exists(file + ".xnb"))
+                {
+                    SandFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
+                }
             }
 
             // Sequence
-            if (SetupSequence.IsUsed && File.Exists($"{path}sequenceFlip.xnb"))
+            if (SetupSequence.IsUsed)
             {
-                SequenceFlip = new JKSound(contentManager.Load<SoundEffect>($"{path}sequenceFlip"), SoundType.SFX);
+                file = Path.Combine(path, "sequenceFlip");
+                if (File.Exists(file + ".xnb"))
+                {
+                    SequenceFlip = new JKSound(contentManager.Load<SoundEffect>(file), SoundType.SFX);
+                }
             }
         }
 

@@ -3,24 +3,22 @@ namespace SwitchBlocks.Entities
     using System;
     using JumpKing;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
+    using SwitchBlocks.Util.Deserialization;
 
     public class EntityDrawLever : EntityDraw
     {
-        private IDataProvider Logic { get; }
+        private IDataProvider Data { get; }
 
         public EntityDrawLever(
-            Texture2D texture,
-            Vector2 position,
+            Lever lever,
             int screen,
-            IDataProvider logic)
-            : base(texture, position, screen)
+            IDataProvider data)
+            : base(lever.Texture, lever.Position, screen)
         {
-            this.Width = texture.Width / 2;
-            this.Height = texture.Height;
-            this.Logic = logic;
+            this.Width /= 2;
+            this.Data = data;
         }
 
         public override void Draw()
@@ -33,7 +31,7 @@ namespace SwitchBlocks.Entities
                 texture: this.Texture,
                 position: this.Position,
                 sourceRectangle: new Rectangle(
-                    this.Width * Convert.ToInt32(!this.Logic.State),
+                    this.Width * Convert.ToInt32(!this.Data.State),
                     0,
                     this.Width,
                     this.Height),

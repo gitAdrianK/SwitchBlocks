@@ -6,31 +6,28 @@ namespace SwitchBlocks.Entities
     using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
+    using SwitchBlocks.Util.Deserialization;
 
     public class EntityDrawPlatformSand : EntityDraw
     {
         private Texture2D Scrolling { get; }
         private Texture2D Foreground { get; }
         private bool StartState { get; }
-        private IDataProvider Logic { get; }
+        private IDataProvider Data { get; }
 
         public EntityDrawPlatformSand(
-            Texture2D background,
-            Texture2D scrolling,
-            Texture2D foreground,
-            Vector2 position,
-            bool startState,
+            PlatformSand platform,
             int screen,
-            IDataProvider logic)
-            : base(background, position, screen)
+            IDataProvider data)
+            : base(platform.Background, platform.Position, screen)
         {
-            this.Scrolling = scrolling;
-            this.Foreground = foreground;
-            this.StartState = startState;
+            this.Scrolling = platform.Scrolling;
+            this.Foreground = platform.Foreground;
+            this.StartState = platform.StartState;
 
             if (this.Texture != null)
             {
-                this.Width = this.Texture.Width / 2;
+                this.Width /= 2;
                 this.Height = this.Texture.Height;
             }
             else if (this.Foreground != null)
@@ -39,7 +36,7 @@ namespace SwitchBlocks.Entities
                 this.Height = this.Foreground.Height;
             }
 
-            this.Logic = logic;
+            this.Data = data;
         }
 
         public override void Draw()
@@ -70,7 +67,7 @@ namespace SwitchBlocks.Entities
                 texture: texture,
                 position: this.Position,
                 sourceRectangle: new Rectangle(
-                    this.Width * Convert.ToInt32(this.StartState != this.Logic.State),
+                    this.Width * Convert.ToInt32(this.StartState != this.Data.State),
                     0,
                     this.Width,
                     this.Height),
@@ -78,8 +75,8 @@ namespace SwitchBlocks.Entities
 
         private void DrawScrolling()
         {
-            var actualOffset = (int)(this.Logic.Progress % this.Scrolling.Height);
-            actualOffset = this.StartState == this.Logic.State ? actualOffset : this.Scrolling.Height - actualOffset;
+            var actualOffset = (int)(this.Data.Progress % this.Scrolling.Height);
+            actualOffset = this.StartState == this.Data.State ? actualOffset : this.Scrolling.Height - actualOffset;
 
             // Depending on if the offset would make it so we go past the texture.
             if (actualOffset + this.Height > this.Scrolling.Height)

@@ -1,8 +1,7 @@
 namespace SwitchBlocks.Data
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Xml.Serialization;
+    using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
 
@@ -22,32 +21,27 @@ namespace SwitchBlocks.Data
                     return instance;
                 }
 
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}save_{ModStrings.SAND}.sav";
-                if (!SaveManager.instance.IsNewGame && File.Exists(file))
-                {
-                    StreamReader streamReader = null;
-                    try
-                    {
-                        streamReader = new StreamReader(file);
-                        var xmlSerializer = new XmlSerializer(typeof(DataSand));
-                        instance = (DataSand)xmlSerializer.Deserialize(streamReader);
-                    }
-                    catch
-                    {
-                        instance = new DataSand();
-                    }
-                    finally
-                    {
-                        streamReader?.Close();
-                        streamReader?.Dispose();
-                    }
-                }
-                else
+                var file = Path.Combine(
+                    Game1.instance.contentManager.root,
+                    ModStrings.FOLDER,
+                    ModStrings.SAVES,
+                    $"{ModStrings.PREFIX_SAVE}{ModStrings.SAND}{ModStrings.SUFFIX_SAV}");
+                if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataSand();
+                    return instance;
+                }
+
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    instance = new DataSand
+                    {
+                        State = bool.Parse(root.Element(ModStrings.SAVE_STATE).Value),
+                        HasSwitched = bool.Parse(root.Element(ModStrings.SAVE_HAS_SWITCHED).Value),
+                        HasEntered = bool.Parse(root.Element(ModStrings.SAVE_HAS_ENTERED).Value),
+                    };
                 }
                 return instance;
             }
@@ -57,64 +51,61 @@ namespace SwitchBlocks.Data
 
         private DataSand()
         {
-            this._state = false;
-            this._hasSwitched = false;
-            this._hasEntered = false;
+            this.State = false;
+            this.HasSwitched = false;
+            this.HasEntered = false;
         }
 
         public void SaveToFile()
         {
-            var contentManager = Game1.instance.contentManager;
-            var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var path = Path.Combine(
+                Game1.instance.contentManager.root,
+                ModStrings.FOLDER,
+                ModStrings.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
             }
-            var xmlSerializer = new XmlSerializer(typeof(DataSand));
-            TextWriter textWriter = new StreamWriter($"{path}save_sand.sav");
-            xmlSerializer.Serialize(textWriter, Instance);
+
+            var doc = new XDocument(
+                new XElement("DataSand",
+                    new XElement(ModStrings.SAVE_STATE, this.State),
+                    new XElement(ModStrings.SAVE_HAS_SWITCHED, this.HasSwitched),
+                    new XElement(ModStrings.SAVE_HAS_ENTERED, this.HasEntered)
+                )
+            );
+
+            using (var fs = new FileStream(
+                Path.Combine(
+                    path,
+                    $"{ModStrings.PREFIX_SAVE}{ModStrings.SAND}{ModStrings.SUFFIX_SAV}"),
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None))
+            {
+                doc.Save(fs);
+            }
         }
 
         /// <summary>
         /// Its current state.
         /// </summary>
-        public bool State
-        {
-            get => this._state;
-            set => this._state = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _state;
+        public bool State { get; set; }
 
         /// <summary>
         /// Progress is not being saved between play sessions as it is unnecessary.
         /// </summary>
-        [XmlIgnore]
         public float Progress { get; set; }
 
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
-        public bool HasSwitched
-        {
-            get => this._hasSwitched;
-            set => this._hasSwitched = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _hasSwitched;
+        public bool HasSwitched { get; set; }
 
         /// <summary>
         /// Whether the player is currently inside the block.
         /// </summary>
-        public bool HasEntered
-        {
-            get => this._hasEntered;
-            set => this._hasEntered = value;
-        }
-
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _hasEntered;
+        public bool HasEntered { get; set; }
     }
 }

@@ -3,10 +3,10 @@ namespace SwitchBlocks.Entities
     using System;
     using JumpKing;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Util;
+    using SwitchBlocks.Util.Deserialization;
     using static SwitchBlocks.Util.Animation;
     using Curve = Util.Animation.Curve;
 
@@ -15,21 +15,17 @@ namespace SwitchBlocks.Entities
         protected bool StartState { get; }
         protected Animation Animation { get; }
         protected Animation AnimationOut { get; }
-        protected IDataProvider Logic { get; }
+        protected IDataProvider Data { get; }
 
         public EntityDrawPlatform(
-            Texture2D texture,
-            Vector2 position,
-            bool startState,
-            Animation animation,
-            Animation animationOut,
+            Platform platform,
             int screen,
-            IDataProvider logic) : base(texture, position, screen)
+            IDataProvider data) : base(platform.Texture, platform.Position, screen)
         {
-            this.StartState = startState;
-            this.Animation = animation;
-            this.AnimationOut = animationOut;
-            this.Logic = logic;
+            this.StartState = platform.StartState;
+            this.Animation = platform.Animation;
+            this.AnimationOut = platform.AnimationOut;
+            this.Data = data;
         }
 
         public override void Draw()
@@ -43,7 +39,7 @@ namespace SwitchBlocks.Entities
 
         protected void DrawWithRectangle(Rectangle rect)
         {
-            var progressAdjusted = this.StartState ? 1.0f - this.Logic.Progress : this.Logic.Progress;
+            var progressAdjusted = this.StartState ? 1.0f - this.Data.Progress : this.Data.Progress;
             if (progressAdjusted == 0.0f)
             {
                 return;
@@ -59,7 +55,7 @@ namespace SwitchBlocks.Entities
             }
 
             float progressActual;
-            var animation = this.StartState == this.Logic.State ? this.Animation : this.AnimationOut;
+            var animation = this.StartState == this.Data.State ? this.Animation : this.AnimationOut;
             switch (animation.AnimCurve)
             {
                 case Curve.Linear:
@@ -75,10 +71,14 @@ namespace SwitchBlocks.Entities
                     progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
-                    progressActual = this.StartState == this.Logic.State ? 0.0f : 1.0f;
+                    progressActual = this.StartState == this.Data.State ? 0.0f : 1.0f;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
+            }
+            if (progressActual == 0.0f)
+            {
+                return;
             }
 
             var color = Color.White;

@@ -1,9 +1,10 @@
 namespace SwitchBlocks
 {
     using System.IO;
-    using System.Xml;
+    using System.Xml.Linq;
     using JumpKing;
     using SwitchBlocks.Settings;
+    using SwitchBlocks.Setups;
 
     public static class ModSettings
     {
@@ -20,48 +21,52 @@ namespace SwitchBlocks
             SettingsSand.Reset();
             SettingsSequence.Reset();
 
-            var sep = Path.DirectorySeparatorChar;
-            var path = $"{Game1.instance.contentManager.root}{sep}{ModStrings.FOLDER}{sep}blocks.xml";
-            if (!File.Exists(path))
+            var file = Path.Combine(
+                Game1.instance.contentManager.root,
+                ModStrings.FOLDER,
+                "blocks.xml");
+            if (!File.Exists(file))
             {
                 return;
             }
 
-            var document = new XmlDocument();
-            document.Load(path);
-            var blocks = document.LastChild;
-            if (blocks == null || blocks.Name != "Blocks")
+            using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                return;
-            }
-            foreach (XmlNode block in blocks)
-            {
-                switch (block.Name)
+                var doc = XDocument.Load(fs);
+                var root = doc.Root;
+                if (root?.Name != "Blocks")
                 {
-                    case "Auto":
-                        SettingsAuto.Parse(block);
-                        break;
-                    case "Basic":
-                        SettingsBasic.Parse(block);
-                        break;
-                    case "Countdown":
-                        SettingsCountdown.Parse(block);
-                        break;
-                    case "Group":
-                        SettingsGroup.Parse(block);
-                        break;
-                    case "Jump":
-                        SettingsJump.Parse(block);
-                        break;
-                    case "Sand":
-                        SettingsSand.Parse(block);
-                        break;
-                    case "Sequence":
-                        SettingsSequence.Parse(block);
-                        break;
-                    default:
-                        // Do nothing.
-                        break;
+                    return;
+                }
+
+                XElement xel;
+                if (SetupAuto.IsUsed && (xel = root.Element("Auto")) != null)
+                {
+                    SettingsAuto.Parse(xel);
+                }
+                if (SetupBasic.IsUsed && (xel = root.Element("Basic")) != null)
+                {
+                    SettingsBasic.Parse(xel);
+                }
+                if (SetupCountdown.IsUsed && (xel = root.Element("Countdown")) != null)
+                {
+                    SettingsCountdown.Parse(xel);
+                }
+                if (SetupGroup.IsUsed && (xel = root.Element("Group")) != null)
+                {
+                    SettingsGroup.Parse(xel);
+                }
+                if (SetupJump.IsUsed && (xel = root.Element("Jump")) != null)
+                {
+                    SettingsJump.Parse(xel);
+                }
+                if (SetupSand.IsUsed && (xel = root.Element("Sand")) != null)
+                {
+                    SettingsSand.Parse(xel);
+                }
+                if (SetupSequence.IsUsed && (xel = root.Element("Sequence")) != null)
+                {
+                    SettingsSequence.Parse(xel);
                 }
             }
         }

@@ -1,23 +1,28 @@
 namespace SwitchBlocks.Factories
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Xml;
+    using System.Xml.Linq;
     using JumpKing;
+    using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Util;
+    using SwitchBlocks.Util.Deserialization;
+    using static SwitchBlocks.Util.Animation;
+    using Curve = Util.Animation.Curve;
 
     public class FactoryDrawables
     {
-        // Don't look :D
-        // Calling it a factory makes it okay to have infinite method parameters, right.
-        // All of this shit could have been avoided if XmlReader didn't framedrop for
-        // some reason. Has to be cleanup but what?
+        // Apparently XDocument is faster, but you'll have to do the elements yourself
+        // And testing it, it does seem faster, or at least not slower, so we change to XDcoument
+        // (here and all other instances, like Data/Cache/Resets)
+        // in hopes of cleaning up the entity creation mess that was previously.
+        // Lets hope there no framedrops this time around and we can keep this.
 
         public enum DrawType
         {
@@ -43,9 +48,12 @@ namespace SwitchBlocks.Factories
         public static void CreateDrawables<T>(DrawType drawType, BlockType blockType, EntityLogic<T> entityLogic) where T : IDataProvider
         {
             var contentManager = Game1.instance.contentManager;
-            var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}{drawType.ToString().ToLower()}{sep}{blockType}{sep}";
 
+            var path = Path.Combine(
+                contentManager.root,
+                ModStrings.FOLDER,
+                drawType.ToString(),
+                blockType.ToString());
             if (!Directory.Exists(path))
             {
                 return;
@@ -57,397 +65,343 @@ namespace SwitchBlocks.Factories
                 return;
             }
 
-            var regex = GetRegex(drawType);
+            var data = GetData(blockType);
+            switch (drawType)
+            {
+                case DrawType.Platforms:
+                    switch (blockType)
+                    {
+                        case BlockType.Auto:
+                        case BlockType.Basic:
+                        case BlockType.Countdown:
+                        case BlockType.Jump:
+                            GetPlatforms(path, files, data, entityLogic);
+                            break;
+                        case BlockType.Sand:
+                            GetPlatformsSand(path, files, data, entityLogic);
+                            break;
+                        default:
+                            throw new NotImplementedException("Unknown Block Type, cannot create entities!");
+                    }
+                    break;
+                case DrawType.Levers:
+                    GetLevers(path, files, data);
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown Draw Type, cannot create entities!");
+            }
+        }
+
+        private static void GetPlatforms<T>(
+            string path,
+            string[] files,
+            IDataProvider data,
+            EntityLogic<T> entityLogic)
+            where T : IDataProvider
+        {
+            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
             foreach (var file in files)
             {
-                var fileName = file.Split(sep).Last();
-
+                var fileName = Path.GetFileName(file);
                 if (!regex.IsMatch(fileName))
                 {
                     continue;
                 }
 
                 var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
-                var document = new XmlDocument();
-                document.Load(file);
-                GetDrawables(document.LastChild.ChildNodes, drawType, blockType, entityLogic, screen, path, sep);
-            }
-        }
 
-        private static Regex GetRegex(DrawType drawType)
-        {
-            // It seems "Verbatim text" and "String interpolation" together are C# 6 and up.
-            // So a simple
-            // new Regex(@$"^{drawType.ToString().ToLower()}(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-            // would be cool, but whatever.
-            switch (drawType)
-            {
-
-                case DrawType.Platforms:
-                    return new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-                case DrawType.Levers:
-                    return new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-                default:
-                    throw new NotImplementedException("Unknown Draw Type, cannot create regex!");
-            }
-        }
-
-        private static void GetDrawables<T>(
-            XmlNodeList list,
-            DrawType drawType,
-            BlockType blockType,
-            EntityLogic<T> entityLogic,
-            int screen,
-            string path,
-            char sep)
-            where T : IDataProvider
-        {
-            foreach (XmlElement element in list)
-            {
-                var drawable = element.ChildNodes;
-                switch (drawType)
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    case DrawType.Platforms:
-                        GetPlatforms(drawable, blockType, entityLogic, screen, path, sep);
-                        break;
-                    case DrawType.Levers:
-                        GetLevers(drawable, blockType, screen, path, sep);
-                        break;
-                    default:
-                        throw new NotImplementedException("Unknown Draw Type, cannot create entity!");
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != "Platforms")
+                    {
+                        continue;
+                    }
+
+                    foreach (var platformElement in root.Elements("Platform"))
+                    {
+                        // Texture
+                        XElement xel;
+                        if ((xel = platformElement.Element("Texture")) == null)
+                        {
+                            continue;
+                        }
+                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        if (!File.Exists(texturePath + ".xnb"))
+                        {
+                            continue;
+                        }
+                        var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                        // Position
+                        if ((xel = platformElement.Element("Position")) == null)
+                        {
+                            continue;
+                        }
+                        var x = xel.Element("X");
+                        var y = xel.Element("Y");
+                        if (x == null || y == null)
+                        {
+                            continue;
+                        }
+                        var position = new Vector2
+                        {
+                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                        };
+                        // Platform
+                        var platform = new Platform
+                        {
+                            Texture = texture,
+                            Position = position,
+                            StartState = platformElement.Element("StartState")?.Value == "on",
+                            Animation = new Animation
+                            {
+                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
+                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
+                            },
+                            AnimationOut = new Animation
+                            {
+                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
+                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
+                            },
+                            Sprites = null,
+                        };
+                        // Sprites
+                        if ((xel = platformElement.Element("Sprites")) != null)
+                        {
+                            platform.Sprites = new Sprites
+                            {
+                                Cells = new Point
+                                {
+                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value, out var parsedInt) ? parsedInt : 1,
+                                    Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt) ? parsedInt : 1,
+                                },
+                                FPS = int.TryParse(xel.Element("FPS")?.Value, out parsedInt) ? parsedInt : 1,
+                                Frames = null,
+                                RandomOffset = bool.TryParse(xel.Element("RandomOffset")?.Value, out var parsedBool) && parsedBool,
+                                ResetWithLever = bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) && parsedBool,
+                            };
+                            if ((xel = xel.Element("Frames")) != null)
+                            {
+                                var frames = new List<float>();
+                                foreach (var framesElement in xel.Elements("float"))
+                                {
+                                    var frame = float.Parse(framesElement.Value, CultureInfo.InvariantCulture);
+                                    frames.Add(frame);
+                                }
+                                platform.Sprites.Frames = frames;
+                            }
+                            // Entity
+                            if (platform.Sprites.ResetWithLever)
+                            {
+                                // Specially hardcoded to work with countdown blocks only.
+                                _ = new EntityDrawPlatformReset(platform, screen);
+                            }
+                            else
+                            {
+                                _ = new EntityDrawPlatformLoop(platform, screen, data);
+                            }
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatform(platform, screen, data);
+                        }
+                        entityLogic.AddScreen(screen);
+                    };
                 }
             }
         }
+
+        private static void GetPlatformsSand<T>(
+            string path,
+            string[] files,
+            IDataProvider data,
+            EntityLogic<T> entityLogic)
+            where T : IDataProvider
+        {
+            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                if (!regex.IsMatch(fileName))
+                {
+                    continue;
+                }
+
+                var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
+
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != "Platforms")
+                    {
+                        continue;
+                    }
+
+                    foreach (var platformElement in root.Elements("Platform"))
+                    {
+                        // Texture
+                        var textureFolder = Path.Combine(path, ModStrings.TEXTURES);
+                        string texturePath;
+                        Texture2D background = null;
+                        Texture2D scrolling = null;
+                        Texture2D foreground = null;
+                        // Background
+                        XElement xel;
+                        if ((xel = platformElement.Element("Background")) != null)
+                        {
+                            texturePath = Path.Combine(textureFolder, xel.Value);
+                            if (File.Exists(texturePath + ".xnb"))
+                            {
+                                background = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                            }
+                        }
+                        // Scrolling
+                        if ((xel = platformElement.Element("Scrolling")) != null)
+                        {
+                            texturePath = Path.Combine(textureFolder, xel.Value);
+                            if (!File.Exists(texturePath + ".xnb"))
+                            {
+                                scrolling = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                            }
+                        }
+                        // Foregorund
+                        if ((xel = platformElement.Element("Foreground")) != null)
+                        {
+                            texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                            if (File.Exists(texturePath + ".xnb"))
+                            {
+                                foreground = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                            }
+                        }
+                        // Min one size giving texture
+                        if (background == null && foreground == null)
+                        {
+                            continue;
+                        }
+                        // Position
+                        if ((xel = platformElement.Element("Position")) == null)
+                        {
+                            continue;
+                        }
+                        var x = xel.Element("X");
+                        var y = xel.Element("Y");
+                        if (x == null || y == null)
+                        {
+                            continue;
+                        }
+                        var position = new Vector2
+                        {
+                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                        };
+                        // Platform
+                        var platform = new PlatformSand
+                        {
+                            Background = background,
+                            Scrolling = scrolling,
+                            Foreground = foreground,
+                            Position = position,
+                            StartState = platformElement.Element("StartState")?.Value == "on",
+                        };
+                        _ = new EntityDrawPlatformSand(platform, screen, data);
+                        entityLogic.AddScreen(screen);
+                    };
+                }
+            }
+        }
+
 
         private static void GetLevers(
-            XmlNodeList drawable,
-            BlockType blockType,
-            int screen,
             string path,
-            char sep)
+            string[] files,
+            IDataProvider data)
         {
-            var dictionary = Xml.MapNamesRequired(drawable,
-                ModStrings.TEXTURE,
-                ModStrings.POSITION);
-            if (dictionary == null)
-            {
-                return;
-            }
+            var regex = new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
-            var position = Xml.GetVector2(drawable[dictionary[ModStrings.POSITION]]);
-            if (!position.HasValue)
+            foreach (var file in files)
             {
-                return;
-            }
-
-            var filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.TEXTURE]].InnerText}";
-            if (!File.Exists($"{filePath}.xnb"))
-            {
-                return;
-            }
-            var texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-
-            switch (blockType)
-            {
-                case BlockType.Auto:
-                case BlockType.Jump:
-                    // These types do not have levers
-                    break;
-                case BlockType.Basic:
-                    _ = new EntityDrawLever(texture, position.Value, screen, DataBasic.Instance);
-                    break;
-                case BlockType.Countdown:
-                    _ = new EntityDrawLever(texture, position.Value, screen, DataCountdown.Instance);
-                    break;
-                case BlockType.Sand:
-                    _ = new EntityDrawLever(texture, position.Value, screen, DataSand.Instance);
-                    break;
-                default:
-                    throw new NotImplementedException("Unknown Block Type, cannot create entity!");
-            }
-        }
-
-        private static void GetPlatforms<T>(
-            XmlNodeList drawable,
-            BlockType blockType,
-            EntityLogic<T> entityLogic,
-            int screen,
-            string path,
-            char sep)
-            where T : IDataProvider
-        {
-            switch (blockType)
-            {
-                case BlockType.Auto:
-                    GetPlatform(
-                        drawable,
-                        DataAuto.Instance,
-                        entityLogic,
-                        screen,
-                        path,
-                        sep);
-                    break;
-                case BlockType.Basic:
-                    GetPlatform(
-                        drawable,
-                        DataBasic.Instance,
-                        entityLogic,
-                        screen,
-                        path,
-                        sep);
-                    break;
-                case BlockType.Countdown:
-                    GetPlatform(
-                        drawable,
-                        DataCountdown.Instance,
-                        entityLogic,
-                        screen,
-                        path,
-                        sep);
-                    break;
-                case BlockType.Jump:
-                    GetPlatform(
-                        drawable,
-                        DataJump.Instance,
-                        entityLogic,
-                        screen,
-                        path,
-                        sep);
-                    break;
-                case BlockType.Sand:
-                    GetPlatformSand(
-                        drawable,
-                        DataSand.Instance,
-                        screen,
-                        path,
-                        sep);
-                    break;
-                default:
-                    throw new NotImplementedException("Unknown Block Type, cannot create entity!");
-            }
-        }
-
-        private static void GetPlatform<T>(
-            XmlNodeList drawable,
-            IDataProvider dataProvider,
-            EntityLogic<T> entityLogic,
-            int screen,
-            string path,
-            char sep)
-            where T : IDataProvider
-        {
-            var dictionary = Xml.MapNamesRequired(drawable,
-                ModStrings.TEXTURE,
-                ModStrings.POSITION,
-                ModStrings.START_STATE);
-            if (dictionary == null)
-            {
-                return;
-            }
-
-            var position = Xml.GetVector2(drawable[dictionary[ModStrings.POSITION]]);
-            if (!position.HasValue)
-            {
-                return;
-            }
-
-            var filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.TEXTURE]].InnerText}";
-            if (!File.Exists($"{filePath}.xnb"))
-            {
-                return;
-            }
-            var texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-
-            var startState = drawable[dictionary[ModStrings.START_STATE]].InnerText.ToLower() == "on";
-
-            Animation animation;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION, out var index))
-            {
-                animation = Xml.GetAnimation(drawable[index]);
-            }
-            else
-            {
-                animation = default;
-            }
-
-            Animation animationOut;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION_OUT, out index))
-            {
-                animationOut = Xml.GetAnimation(drawable[index]);
-            }
-            else
-            {
-                animationOut = animation;
-            }
-
-            if (dictionary.TryGetValue(ModStrings.SPRITES, out index))
-            {
-                var children = drawable[index].ChildNodes;
-                var dictSprites = Xml.MapNamesRequired(children,
-                    ModStrings.CELLS);
-                if (dictSprites == null)
+                var fileName = Path.GetFileName(file);
+                if (!regex.IsMatch(fileName))
                 {
-                    return;
+                    continue;
                 }
 
-                var cells = Xml.GetPoint(children[dictSprites[ModStrings.CELLS]]);
-                if (!cells.HasValue)
-                {
-                    return;
-                }
+                var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
 
-                float[] frames = null;
-                if (dictSprites.TryGetValue(ModStrings.FRAMES, out index))
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var numbers = children[index].ChildNodes;
-                    frames = new float[numbers.Count];
-                    for (var i = 0; i < numbers.Count; i++)
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != "Levers")
                     {
-                        frames[i] = float.Parse(numbers[i].InnerText, CultureInfo.InvariantCulture);
+                        continue;
                     }
+
+                    foreach (var leverElement in root.Elements("Lever"))
+                    {
+                        // Texture
+                        var xel = leverElement.Element("Texture");
+                        if (xel == null)
+                        {
+                            continue;
+                        }
+                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        if (!File.Exists(texturePath + ".xnb"))
+                        {
+                            continue;
+                        }
+                        var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                        // Position
+                        xel = leverElement.Element("Position");
+                        if (xel == null)
+                        {
+                            continue;
+                        }
+                        var x = xel.Element("X");
+                        var y = xel.Element("Y");
+                        if (x == null || y == null)
+                        {
+                            continue;
+                        }
+                        var position = new Vector2
+                        {
+                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                        };
+                        // Lever
+                        var lever = new Lever
+                        {
+                            Texture = texture,
+                            Position = position,
+                        };
+                        _ = new EntityDrawLever(lever, screen, data);
+                    };
                 }
-
-                var fps = 1.0f;
-                if (dictSprites.TryGetValue(ModStrings.FPS, out index))
-                {
-                    fps = 1.0f / float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
-                }
-
-                var randomOffset = dictSprites.ContainsKey(ModStrings.OFFSET);
-
-                entityLogic.AddScreen(screen);
-
-                if (dictSprites.ContainsKey("ResetWithLever"))
-                {
-                    // Its getting so fucked man, all because of some fucking framedrop shit.
-                    // Also this shit is basically countdown only
-                    _ = new EntityDrawPlatformReset(
-                        texture,
-                        position.Value,
-                        startState,
-                        animation,
-                        animationOut,
-                        screen,
-                        cells.Value,
-                        fps,
-                        frames,
-                        randomOffset);
-                }
-                else
-                {
-                    _ = new EntityDrawPlatformLoop(
-                        texture,
-                        position.Value,
-                        startState,
-                        animation,
-                        animationOut,
-                        screen,
-                        dataProvider,
-                        cells.Value,
-                        fps,
-                        frames,
-                        randomOffset);
-                }
-            }
-            else
-            {
-                entityLogic.AddScreen(screen);
-
-                _ = new EntityDrawPlatform(
-                    texture,
-                    position.Value,
-                    startState,
-                    animation,
-                    animationOut,
-                    screen,
-                    dataProvider);
             }
         }
 
-        private static void GetPlatformSand(
-            XmlNodeList drawable,
-            IDataProvider dataProvider,
-            int screen,
-            string path,
-            char sep)
+        private static IDataProvider GetData(BlockType blockType)
         {
-            var dictionary = Xml.MapNamesRequired(drawable,
-                ModStrings.POSITION,
-                ModStrings.START_STATE);
-
-            if (dictionary == null)
+            switch (blockType)
             {
-                return;
+                case BlockType.Auto:
+                    return DataAuto.Instance;
+                case BlockType.Basic:
+                    return DataBasic.Instance;
+                case BlockType.Countdown:
+                    return DataCountdown.Instance;
+                case BlockType.Jump:
+                    return DataJump.Instance;
+                case BlockType.Sand:
+                    return DataSand.Instance;
+                default:
+                    throw new NotImplementedException("Unknown Block Type, cannot get data!");
             }
-
-            string filePath;
-            // Require at least one of the size giving textures to exist (Background or Foregroud)
-            if (!dictionary.ContainsKey(ModStrings.BACKGROUND) && !dictionary.ContainsKey(ModStrings.FOREGROUND))
-            {
-                return;
-            }
-
-            var contentManager = Game1.instance.contentManager;
-            // Background
-            Texture2D background = null;
-            if (dictionary.ContainsKey(ModStrings.BACKGROUND))
-            {
-                filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.BACKGROUND]].InnerText}";
-                if (!File.Exists($"{filePath}.xnb"))
-                {
-                    return;
-                }
-                background = contentManager.Load<Texture2D>($"{filePath}");
-            }
-
-            // Scrolling
-            Texture2D scrolling = null;
-            if (dictionary.ContainsKey(ModStrings.SCROLLING))
-            {
-                filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.SCROLLING]].InnerText}";
-                if (!File.Exists($"{filePath}.xnb"))
-                {
-                    return;
-                }
-                scrolling = contentManager.Load<Texture2D>($"{filePath}");
-            }
-
-            // Foreground
-            Texture2D foreground = null;
-            if (dictionary.ContainsKey(ModStrings.FOREGROUND))
-            {
-                filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.FOREGROUND]].InnerText}";
-                if (!File.Exists($"{filePath}.xnb"))
-                {
-                    return;
-                }
-                foreground = contentManager.Load<Texture2D>($"{filePath}");
-            }
-
-            // Make sure at least one texture existed so a size can be set.
-            if ((background == null) && (foreground == null))
-            {
-                return;
-            }
-
-            // Position
-            var position = Xml.GetVector2(drawable[dictionary[ModStrings.POSITION]]);
-            if (!position.HasValue)
-            {
-                return;
-            }
-
-            var startState = drawable[dictionary[ModStrings.START_STATE]].InnerText.ToLower() == "on";
-
-            _ = new EntityDrawPlatformSand(
-                background,
-                scrolling,
-                foreground,
-                position.Value,
-                startState,
-                screen,
-                dataProvider);
         }
     }
 }

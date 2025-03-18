@@ -1,6 +1,5 @@
 namespace SwitchBlocks
 {
-    using System.Diagnostics;
     using System.Linq;
     using EntityComponent;
     using HarmonyLib;
@@ -41,7 +40,7 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Called by Jump King when the Level Starts
+        /// Called by Jump King when the level starts
         /// </summary>
         [OnLevelStart]
         public static void OnLevelStart()
@@ -74,7 +73,6 @@ namespace SwitchBlocks
 
             var entityManager = EntityManager.instance;
             var player = entityManager.Find<PlayerEntity>();
-
             if (player == null)
             {
                 return;
@@ -87,8 +85,8 @@ namespace SwitchBlocks
             // These behaviours are used as a way to create pre and post behaviour points
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
             // want to run the sliding function multiple times.
-            _ = player.m_body.RegisterBlockBehaviour<BlockPre>(new BehaviourPre());
-            _ = player.m_body.RegisterBlockBehaviour<BlockPost>(new BehaviourPost());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
 
             SetupAuto.Setup(player);
             SetupBasic.Setup(player);
@@ -105,7 +103,7 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Called by Jump King when the Level Ends
+        /// Called by Jump King when the level ends
         /// </summary>
         [OnLevelEnd]
         public static void OnLevelEnd()

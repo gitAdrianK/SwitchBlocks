@@ -5,7 +5,6 @@ namespace SwitchBlocks.Entities
     using EntityComponent;
     using JumpKing;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Util;
 
     public abstract class EntityGroupLogic<T> : Entity where T : IGroupDataProvider
     {

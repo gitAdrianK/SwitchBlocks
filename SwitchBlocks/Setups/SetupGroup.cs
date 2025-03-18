@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.Linq;
     using JumpKing;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
@@ -33,13 +34,13 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            var cache = CacheGroup.TryDeserialize();
+            var seed = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
-            AssignGroupIds(cache, resets);
+            AssignGroupIds(seed, resets);
 
             if (LevelDebugState.instance != null)
             {
-                cache.SaveToFile();
+                seed.SaveToFile();
                 resets.SaveToFile();
             }
 
@@ -72,32 +73,35 @@ namespace SwitchBlocks.Setups
             IsUsed = false;
         }
 
-        private static void AssignGroupIds(CacheGroup cache, ResetsGroup resets)
+        private static void AssignGroupIds(SeedsGroup seeds, ResetsGroup resets)
         {
             var groupId = 1;
 
-            var seed = cache.Seed;
-            if (seed.Count > 0)
+            var seed = seeds.Seeds;
+            if (seed.Any())
             {
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupA, seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupB, seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupC, seed, ref groupId);
-                BlockGroup.AssignGroupIdsFromSeed(BlocksGroupD, seed, ref groupId);
+                BlockGroupId.AssignGroupIdsFromSeed(
+                    seed,
+                    ref groupId,
+                    BlocksGroupA,
+                    BlocksGroupB,
+                    BlocksGroupC,
+                    BlocksGroupD);
             }
 
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupA, seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupB, seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupC, seed, ref groupId);
-            BlockGroup.AssignGroupIdsConsecutively(BlocksGroupD, seed, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupA, seed, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupB, seed, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupC, seed, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupD, seed, ref groupId);
 
             BlockGroup.CreateGroupData(groupId, DataGroup.Instance.Groups, true);
 
-            var rseed = resets.Seed;
-            if (rseed.Count > 0)
+            var rseed = resets.Resets;
+            if (rseed.Any())
             {
-                BlockGroup.AssignResetIdsFromSeed(Resets, rseed);
+                ResetGroupIds.AssignResetIdsFromSeed(Resets, rseed);
             }
-            BlockGroup.CreateResetsData(Resets, rseed);
+            ResetGroupIds.AssignOtherResets(Resets, rseed);
         }
     }
 }

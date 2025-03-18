@@ -44,15 +44,8 @@ namespace SwitchBlocks.Behaviours
 
             if (this.Data.State)
             {
-                if (isOnIce)
-                {
-                    BehaviourPost.IsPlayerOnIce = true;
-                }
-
-                if (isOnSnow)
-                {
-                    BehaviourPost.IsPlayerOnSnow = true;
-                }
+                BehaviourPost.IsPlayerOnIce |= isOnIce;
+                BehaviourPost.IsPlayerOnSnow |= isOnSnow;
             }
 
             return true;

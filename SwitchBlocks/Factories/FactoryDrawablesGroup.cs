@@ -4,15 +4,18 @@ namespace SwitchBlocks.Factories
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Xml;
+    using System.Xml.Linq;
     using JumpKing;
+    using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
+    using SwitchBlocks.Util.Deserialization;
+    using static SwitchBlocks.Util.Animation;
+    using Curve = Util.Animation.Curve;
 
     public class FactoryDrawablesGroup
     {
@@ -31,238 +34,218 @@ namespace SwitchBlocks.Factories
         /// <param name="blockType">What type of block should be created</param>
         public static void CreateDrawables<T>(BlockType blockType, EntityGroupLogic<T> entityGroupLogic) where T : IGroupDataProvider
         {
+            var contentManager = Game1.instance.contentManager;
+
+            var path = Path.Combine(
+            contentManager.root,
+                ModStrings.FOLDER,
+                "platforms",
+                blockType.ToString());
+            if (!Directory.Exists(path))
             {
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}platforms{sep}{blockType}{sep}";
+                return;
+            }
 
-                if (!Directory.Exists(path))
+            var files = Directory.GetFiles(path);
+            if (files.Length == 0)
+            {
+                return;
+            }
+
+            var groups = GetGroups(blockType);
+            GetPlatforms(path, files, blockType, groups, entityGroupLogic);
+        }
+
+        private static void GetPlatforms<T>(
+            string path,
+            string[] files,
+            BlockType blockType,
+            Dictionary<int, BlockGroup> groups,
+            EntityGroupLogic<T> entityGroupLogic)
+            where T : IGroupDataProvider
+        {
+            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                if (!regex.IsMatch(fileName))
                 {
-                    return;
+                    continue;
                 }
 
-                var files = Directory.GetFiles(path);
-                if (files.Length == 0)
+                var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
+
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    return;
-                }
-
-                var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
-
-                foreach (var file in files)
-                {
-                    var fileName = file.Split(sep).Last();
-
-                    if (!regex.IsMatch(fileName))
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != "Platforms")
                     {
                         continue;
                     }
 
-                    var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
-                    var document = new XmlDocument();
-                    document.Load(file);
-                    GetDrawables(document.LastChild.ChildNodes, blockType, entityGroupLogic, screen, path, sep);
+                    foreach (var platformElement in root.Elements("Platform"))
+                    {
+                        // Texture
+                        XElement xel;
+                        if ((xel = platformElement.Element("Texture")) == null)
+                        {
+                            continue;
+                        }
+                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        if (!File.Exists(texturePath + ".xnb"))
+                        {
+                            continue;
+                        }
+                        var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
+                        // Position
+                        if ((xel = platformElement.Element("Position")) == null)
+                        {
+                            continue;
+                        }
+                        var x = xel.Element("X");
+                        var y = xel.Element("Y");
+                        if (x == null || y == null)
+                        {
+                            continue;
+                        }
+                        var position = new Vector2
+                        {
+                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                        };
+                        // Platform
+                        var platform = new Platform
+                        {
+                            Texture = texture,
+                            Position = position,
+                            StartState = platformElement.Element("StartState")?.Value == "on",
+                            Animation = new Animation
+                            {
+                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
+                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
+                            },
+                            AnimationOut = new Animation
+                            {
+                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
+                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
+                            },
+                            Sprites = null,
+                        };
+                        // Sprites
+                        if ((xel = platformElement.Element("Sprites")) != null)
+                        {
+                            platform.Sprites = new Sprites
+                            {
+                                Cells = new Point
+                                {
+                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value, out var parsedInt) ? parsedInt : 1,
+                                    Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt) ? parsedInt : 1,
+                                },
+                                FPS = int.TryParse(xel.Element("FPS")?.Value, out parsedInt) ? parsedInt : 1,
+                                Frames = null,
+                                RandomOffset = xel.Element("RandomOffset")?.Value == "true",
+                                ResetWithLever = xel.Element("ResetWithLever")?.Value == "true",
+                            };
+                            if (xel.Element("Frames") != null)
+                            {
+                                var frames = new List<float>();
+                                foreach (var framesElement in xel.Elements("Frames"))
+                                {
+                                    var frame = float.Parse(framesElement.Value, CultureInfo.InvariantCulture);
+                                    frames.Add(frame);
+                                }
+                                platform.Sprites.Frames = frames;
+                            }
+                        };
+                        // Group
+                        int groupId;
+                        switch (blockType)
+                        {
+                            case BlockType.Group:
+                                groupId = GetGroupId(
+                                    platformElement,
+                                    screen,
+                                    platform.Position,
+                                    SetupGroup.BlocksGroupA,
+                                    SetupGroup.BlocksGroupB,
+                                    SetupGroup.BlocksGroupC,
+                                    SetupGroup.BlocksGroupD);
+                                break;
+                            case BlockType.Sequence:
+                                groupId = GetGroupId(
+                                    platformElement,
+                                    screen,
+                                    platform.Position,
+                                    SetupSequence.BlocksSequenceA,
+                                    SetupSequence.BlocksSequenceB,
+                                    SetupSequence.BlocksSequenceC,
+                                    SetupSequence.BlocksSequenceD);
+                                break;
+                            default:
+                                throw new NotImplementedException("Unknown Block Type, cannot get group ID!");
+                        }
+                        if (groupId == 0)
+                        {
+                            continue;
+                        }
+                        if (!groups.TryGetValue(groupId, out var group))
+                        {
+                            continue;
+                        }
+                        // Entity
+                        if (platform.Sprites == null)
+                        {
+                            _ = new EntityDrawPlatform(platform, screen, group);
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatformLoop(platform, screen, group);
+                        }
+                        entityGroupLogic.AddScreen(screen);
+                    }
                 }
             }
         }
 
-        private static void GetDrawables<T>(
-            XmlNodeList list,
-            BlockType blockType,
-            EntityGroupLogic<T> entityGroupLogic,
-            int screen,
-            string path,
-            char sep)
-            where T : IGroupDataProvider
-        {
-            foreach (XmlElement element in list)
-            {
-                var drawable = element.ChildNodes;
-                GetPlatforms(drawable, blockType, entityGroupLogic, screen, path, sep);
-            }
-        }
-
-        private static void GetPlatforms<T>(
-            XmlNodeList drawable,
-            BlockType blockType,
-            EntityGroupLogic<T> entityGroupLogic,
-            int screen,
-            string path,
-            char sep)
-            where T : IGroupDataProvider
+        private static Dictionary<int, BlockGroup> GetGroups(BlockType blockType)
         {
             switch (blockType)
             {
                 case BlockType.Group:
-                    GetPlatformGroup(
-                        drawable,
-                        DataGroup.Instance,
-                        entityGroupLogic,
-                        screen,
-                        path,
-                        sep,
-                        SetupGroup.BlocksGroupA,
-                        SetupGroup.BlocksGroupB,
-                        SetupGroup.BlocksGroupC,
-                        SetupGroup.BlocksGroupD);
-                    break;
+                    return DataGroup.Instance.Groups;
                 case BlockType.Sequence:
-                    GetPlatformGroup(
-                        drawable,
-                        DataSequence.Instance,
-                        entityGroupLogic,
-                        screen,
-                        path,
-                        sep,
-                        SetupSequence.BlocksSequenceA,
-                        SetupSequence.BlocksSequenceB,
-                        SetupSequence.BlocksSequenceC,
-                        SetupSequence.BlocksSequenceD);
-                    break;
+                    return DataSequence.Instance.Groups;
                 default:
-                    throw new NotImplementedException("Unknown Block Type, cannot create entity!");
+                    throw new NotImplementedException("Unknown Block Type, cannot get groups!");
             }
         }
 
-        private static void GetPlatformGroup<T>(
-            XmlNodeList drawable,
-            IGroupDataProvider dataProvider,
-            EntityGroupLogic<T> entityGroupLogic,
-            int screen,
-            string path,
-            char sep,
-            params Dictionary<int, IBlockGroupId>[] blockGroups)
-            where T : IGroupDataProvider
+        private static int GetGroupId(XElement root, int screen, Vector2 position, params Dictionary<int, IBlockGroupId>[] blockGroups)
         {
-            var dictionary = Xml.MapNamesRequired(drawable,
-                ModStrings.TEXTURE,
-                ModStrings.POSITION);
-            if (dictionary == null)
+            int link;
+            var xel = root.Element("Link");
+            if (xel != null)
             {
-                return;
-            }
-
-            var position = Xml.GetVector2(drawable[dictionary[ModStrings.POSITION]]);
-            if (!position.HasValue)
-            {
-                return;
-            }
-
-            var filePath = $"{path}{ModStrings.TEXTURES}{sep}{drawable[dictionary[ModStrings.TEXTURE]].InnerText}";
-            if (!File.Exists($"{filePath}.xnb"))
-            {
-                return;
-            }
-            var texture = Game1.instance.contentManager.Load<Texture2D>($"{filePath}");
-
-            Animation animation;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION, out var index))
-            {
-                animation = Xml.GetAnimation(drawable[index]);
+                link = (int.Parse(xel.Element("Screen").Value) * 10000)
+                    + (int.Parse(xel.Element("X").Value) * 100)
+                    + int.Parse(xel.Element("Y").Value);
             }
             else
             {
-                animation = default;
+                link = ((screen + 1) * 10000) + ((int)(position.X / 8) * 100) + (int)(position.Y / 8);
             }
 
-            Animation animationOut;
-            if (dictionary.TryGetValue(ModStrings.ANIMATION_OUT, out index))
-            {
-                animationOut = Xml.GetAnimation(drawable[index]);
-            }
-            else
-            {
-                animationOut = animation;
-            }
-
-            var link = ((screen + 1) * 10000) + ((int)(position.Value.X / 8) * 100) + (int)(position.Value.Y / 8);
-            if (dictionary.ContainsKey(ModStrings.LINK_POSITION))
-            {
-                var optionalLink = Xml.GetLink(drawable[dictionary[ModStrings.LINK_POSITION]]);
-                if (optionalLink == null)
-                {
-                    return;
-                }
-                link = (int)optionalLink;
-            }
-
-            int groupId;
             foreach (var blockGroup in blockGroups)
             {
-                if (blockGroup.ContainsKey(link))
+                if (blockGroup.TryGetValue(link, out var value))
                 {
-                    groupId = blockGroup[link].GroupId;
-                    goto Found;
+                    return value.GroupId;
                 }
             }
-            return;
-            Found:
 
-            if (dictionary.TryGetValue(ModStrings.SPRITES, out index))
-            {
-                var children = drawable[index].ChildNodes;
-                var dictSprites = Xml.MapNamesRequired(children,
-                    ModStrings.CELLS);
-                if (dictSprites == null)
-                {
-                    return;
-                }
-
-                var cells = Xml.GetPoint(children[dictSprites[ModStrings.CELLS]]);
-                if (!cells.HasValue)
-                {
-                    return;
-                }
-
-                float[] frames = null;
-                if (dictSprites.TryGetValue(ModStrings.FRAMES, out index))
-                {
-                    var numbers = children[index].ChildNodes;
-                    frames = new float[numbers.Count];
-                    for (var i = 0; i < numbers.Count; i++)
-                    {
-                        frames[i] = float.Parse(numbers[i].InnerText, CultureInfo.InvariantCulture);
-                    }
-                }
-
-                var fps = 1.0f;
-                if (dictSprites.TryGetValue(ModStrings.FPS, out index))
-                {
-                    fps = 1.0f / float.Parse(children[index].InnerText, CultureInfo.InvariantCulture);
-                }
-
-                var randomOffset = dictSprites.ContainsKey(ModStrings.OFFSET);
-
-                entityGroupLogic.AddScreen(screen);
-
-                _ = new EntityDrawPlatformGroupLoop(
-                    texture,
-                    position.Value,
-                    false,
-                    animation,
-                    animationOut,
-                    screen,
-                    groupId,
-                    dataProvider,
-                    cells.Value,
-                    fps,
-                    frames,
-                    randomOffset);
-            }
-            else
-            {
-                entityGroupLogic.AddScreen(screen);
-
-                _ = new EntityDrawPlatformGroup(
-                    texture,
-                    position.Value,
-                    false,
-                    animation,
-                    animationOut,
-                    screen,
-                    groupId,
-                    dataProvider);
-            }
+            return 0;
         }
     }
 }

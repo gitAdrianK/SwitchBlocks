@@ -1,8 +1,8 @@
 namespace SwitchBlocks.Data
 {
-    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
-    using System.Xml.Serialization;
+    using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
 
@@ -22,32 +22,28 @@ namespace SwitchBlocks.Data
                     return instance;
                 }
 
-                var contentManager = Game1.instance.contentManager;
-                var sep = Path.DirectorySeparatorChar;
-                var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
-                var file = $"{path}save_{ModStrings.JUMP}.sav";
-                if (!SaveManager.instance.IsNewGame && File.Exists(file))
-                {
-                    StreamReader streamReader = null;
-                    try
-                    {
-                        streamReader = new StreamReader(file);
-                        var xmlSerializer = new XmlSerializer(typeof(DataJump));
-                        instance = (DataJump)xmlSerializer.Deserialize(streamReader);
-                    }
-                    catch
-                    {
-                        instance = new DataJump();
-                    }
-                    finally
-                    {
-                        streamReader?.Close();
-                        streamReader?.Dispose();
-                    }
-                }
-                else
+                var file = Path.Combine(
+                    Game1.instance.contentManager.root,
+                    ModStrings.FOLDER,
+                    ModStrings.SAVES,
+                    $"{ModStrings.PREFIX_SAVE}{ModStrings.JUMP}{ModStrings.SUFFIX_SAV}");
+                if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataJump();
+                    return instance;
+                }
+
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    instance = new DataJump
+                    {
+                        State = bool.Parse(root.Element(ModStrings.SAVE_STATE).Value),
+                        Progress = float.Parse(root.Element(ModStrings.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                        CanSwitchSafely = bool.Parse(root.Element(ModStrings.SAVE_CSS).Value),
+                        SwitchOnceSafe = bool.Parse(root.Element(ModStrings.SAVE_SOS).Value),
+                    };
                 }
                 return instance;
             }
@@ -57,68 +53,62 @@ namespace SwitchBlocks.Data
 
         private DataJump()
         {
-            this._state = false;
-            this._progress = 0.0f;
-            this._canSwitchSafely = true;
-            this._switchOnceSafe = false;
+            this.State = false;
+            this.Progress = 0.0f;
+            this.CanSwitchSafely = true;
+            this.SwitchOnceSafe = false;
         }
 
         public void SaveToFile()
         {
-            var contentManager = Game1.instance.contentManager;
-            var sep = Path.DirectorySeparatorChar;
-            var path = $"{contentManager.root}{sep}{ModStrings.FOLDER}{sep}saves{sep}";
+            var path = Path.Combine(
+                Game1.instance.contentManager.root,
+                ModStrings.FOLDER,
+                ModStrings.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
             }
-            var xmlSerializer = new XmlSerializer(typeof(DataJump));
-            TextWriter textWriter = new StreamWriter($"{path}save_jump.sav");
-            xmlSerializer.Serialize(textWriter, Instance);
+
+            var doc = new XDocument(
+                new XElement("DataJump",
+                    new XElement(ModStrings.SAVE_STATE, this.State),
+                    new XElement(ModStrings.SAVE_PROGRESS, this.Progress),
+                    new XElement(ModStrings.SAVE_CSS, this.CanSwitchSafely),
+                    new XElement(ModStrings.SAVE_SOS, this.SwitchOnceSafe)
+                )
+            );
+
+            using (var fs = new FileStream(
+                Path.Combine(
+                    path,
+                    $"{ModStrings.PREFIX_SAVE}{ModStrings.JUMP}{ModStrings.SUFFIX_SAV}"),
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None))
+            {
+                doc.Save(fs);
+            }
         }
 
         /// <summary>
         /// Its current state.
         /// </summary>
-        public bool State
-        {
-            get => this._state;
-            set => this._state = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _state;
+        public bool State { get; set; }
 
         /// <summary>
         /// Animation progress.
         /// </summary>
-        public float Progress
-        {
-            get => this._progress;
-            set => this._progress = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public float _progress;
+        public float Progress { get; set; }
 
         /// <summary>
         /// If the block can switch safely.
         /// </summary>
-        public bool CanSwitchSafely
-        {
-            get => this._canSwitchSafely;
-            set => this._canSwitchSafely = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _canSwitchSafely;
+        public bool CanSwitchSafely { get; set; }
 
         /// <summary>
         /// If the block should switch next opportunity.
         /// </summary>
-        public bool SwitchOnceSafe
-        {
-            get => this._switchOnceSafe;
-            set => this._switchOnceSafe = value;
-        }
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Only used for XML")]
-        public bool _switchOnceSafe;
+        public bool SwitchOnceSafe { get; set; }
     }
 }

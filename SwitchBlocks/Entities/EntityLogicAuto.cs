@@ -31,8 +31,7 @@ namespace SwitchBlocks.Entities
         {
             this.UpdateProgress(this.Data.State, deltaTime);
 
-            var currentTick = AchievementManager.GetTicks();
-            var adjustedTick = (currentTick + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
+            var adjustedTick = (AchievementManager.GetTicks() + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
             this.TrySound(adjustedTick);
             this.TrySwitch(adjustedTick);
         }

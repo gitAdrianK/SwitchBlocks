@@ -1,28 +1,18 @@
 namespace SwitchBlocks.Entities
 {
     using JumpKing;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
-    using SwitchBlocks.Util;
+    using SwitchBlocks.Util.Deserialization;
 
     public class EntityDrawPlatformReset : EntityDrawPlatformLoop
     {
-        private DataCountdown Data { get; }
+        private new DataCountdown Data { get; }
 
         public EntityDrawPlatformReset(
-            Texture2D texture,
-            Vector2 position,
-            bool startState,
-            Animation animation,
-            Animation animationOut,
-            int screen,
-            Point cells,
-            float timeStep,
-            float[] frames,
-            bool randomOffset)
-            : base(texture, position, startState, animation, animationOut, screen, DataCountdown.Instance, cells, timeStep, frames, randomOffset)
+            Platform platform,
+            int screen)
+            : base(platform, screen, DataCountdown.Instance)
             => this.Data = DataCountdown.Instance;
 
         protected override void Update(float p_delta)

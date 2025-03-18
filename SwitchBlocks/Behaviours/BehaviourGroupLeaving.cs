@@ -56,10 +56,10 @@ namespace SwitchBlocks.Behaviours
             var tick = AchievementManager.GetTicks();
             if (!this.IsPlayerOnBlock)
             {
-                Parallel.ForEach(this.Data.Touched, id =>
+                _ = Parallel.ForEach(this.Data.Touched, id =>
                 {
                     this.Data.SetTick(id, tick);
-                    this.Data.Active.Add(id);
+                    _ = this.Data.Active.Add(id);
                 });
                 this.Data.Touched.Clear();
                 return true;
