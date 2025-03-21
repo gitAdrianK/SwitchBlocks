@@ -37,15 +37,12 @@ namespace SwitchBlocks.Data
                     $"{ModStrings.PREFIX_CACHE}{ModStrings.SEQUENCE}{ModStrings.SUFFIX_SAV}");
             if (File.Exists(file))
             {
-                SeedsSequence seeds;
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    seeds = GetLegacyDict(root.Element(ModStrings.SAVE_SEED).Elements("item"));
+                    return GetLegacyDict(root.Element(ModStrings.SAVE_SEED).Elements("item"));
                 };
-                File.Delete(file);
-                return seeds;
             }
             return new SeedsSequence();
         }

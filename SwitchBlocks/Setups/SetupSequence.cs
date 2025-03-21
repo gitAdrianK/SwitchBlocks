@@ -34,7 +34,7 @@ namespace SwitchBlocks.Setups
 
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
-            AssignSequenceIds(instance, seeds);
+            AssignSequenceIds(instance.Groups, seeds.Seeds);
 
             if (LevelDebugState.instance != null)
             {
@@ -63,22 +63,20 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            var instance = DataSequence.Instance;
-            instance.SaveToFile();
-            instance.Reset();
+            DataSequence.Instance.SaveToFile();
+            DataSequence.Instance.Reset();
 
             IsUsed = false;
         }
 
-        private static void AssignSequenceIds(DataSequence instance, SeedsSequence seeds)
+        private static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds)
         {
             var sequenceId = 1;
-            var seed = seeds.Seeds;
 
-            if (seed.Any())
+            if (seeds.Any())
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
-                    seed,
+                    seeds,
                     ref sequenceId,
                     BlocksSequenceA,
                     BlocksSequenceB,
@@ -86,12 +84,12 @@ namespace SwitchBlocks.Setups
                     BlocksSequenceD);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seed, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seed, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seed, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seed, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
 
-            BlockGroup.CreateGroupData(sequenceId, instance.Groups, false);
+            BlockGroup.CreateGroupData(sequenceId, groups, false);
 
             // The sequence id, that is how many groups got created,
             // is increased one more time at the end and is thus one too high.

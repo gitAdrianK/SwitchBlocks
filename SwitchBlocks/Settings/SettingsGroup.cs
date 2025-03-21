@@ -2,7 +2,7 @@ namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
     using System.Xml.Linq;
-    using static SwitchBlocks.Util.Directions;
+    using SwitchBlocks.Util;
 
     public static class SettingsGroup
     {

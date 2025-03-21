@@ -4,7 +4,7 @@ namespace SwitchBlocks.Entities
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
-    public class EntityDraw : Entity
+    public abstract class EntityDraw : Entity
     {
         protected Texture2D Texture { get; }
         protected Vector2 Position { get; }

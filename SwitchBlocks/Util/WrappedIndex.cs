@@ -6,21 +6,22 @@ namespace SwitchBlocks.Util
 
         public int Index
         {
-            get => this.Index;
+            get => this.InternalIndex;
             set
             {
-                this.Index = value;
-                while (this.Index < 0)
+                this.InternalIndex = value;
+                while (this.InternalIndex < 0)
                 {
-                    this.Index += this.Length;
+                    this.InternalIndex += this.Length;
                 }
-                while (this.Index >= this.Length)
+                while (this.InternalIndex >= this.Length)
                 {
-                    this.Index -= this.Length;
+                    this.InternalIndex -= this.Length;
                 }
             }
         }
 
         private int Length { get; }
+        private int InternalIndex { get; set; }
     }
 }

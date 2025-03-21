@@ -34,13 +34,13 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            var seed = SeedsGroup.TryDeserialize();
+            var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
-            AssignGroupIds(seed, resets);
+            AssignGroupIds(seeds.Seeds, resets.Resets);
 
             if (LevelDebugState.instance != null)
             {
-                seed.SaveToFile();
+                seeds.SaveToFile();
                 resets.SaveToFile();
             }
 
@@ -73,15 +73,14 @@ namespace SwitchBlocks.Setups
             IsUsed = false;
         }
 
-        private static void AssignGroupIds(SeedsGroup seeds, ResetsGroup resets)
+        private static void AssignGroupIds(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
         {
             var groupId = 1;
 
-            var seed = seeds.Seeds;
-            if (seed.Any())
+            if (seeds.Any())
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
-                    seed,
+                    seeds,
                     ref groupId,
                     BlocksGroupA,
                     BlocksGroupB,
@@ -89,19 +88,18 @@ namespace SwitchBlocks.Setups
                     BlocksGroupD);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupA, seed, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupB, seed, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupC, seed, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupD, seed, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupA, seeds, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupB, seeds, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupC, seeds, ref groupId);
+            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupD, seeds, ref groupId);
 
             BlockGroup.CreateGroupData(groupId, DataGroup.Instance.Groups, true);
 
-            var rseed = resets.Resets;
-            if (rseed.Any())
+            if (resets.Any())
             {
-                ResetGroupIds.AssignResetIdsFromSeed(Resets, rseed);
+                ResetGroupIds.AssignResetIdsFromSeed(Resets, resets);
             }
-            ResetGroupIds.AssignOtherResets(Resets, rseed);
+            ResetGroupIds.AssignOtherResets(Resets, resets);
         }
     }
 }

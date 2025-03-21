@@ -7,11 +7,12 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Patching;
     using SwitchBlocks.Util;
     using SwitchBlocks.Util.Deserialization;
-    using static SwitchBlocks.Util.Animation;
-    using Curve = Util.Animation.Curve;
+    using Curve = Util.Curve;
 
     public class EntityDrawPlatform : EntityDraw
     {
+        private const double HALF_PI = Math.PI / 2.0d;
+
         protected bool StartState { get; }
         protected Animation Animation { get; }
         protected Animation AnimationOut { get; }
@@ -56,7 +57,7 @@ namespace SwitchBlocks.Entities
 
             float progressActual;
             var animation = this.StartState == this.Data.State ? this.Animation : this.AnimationOut;
-            switch (animation.AnimCurve)
+            switch (animation.Curve)
             {
                 case Curve.Linear:
                     progressActual = progressAdjusted;
@@ -83,7 +84,7 @@ namespace SwitchBlocks.Entities
 
             var color = Color.White;
             var pos = this.Position;
-            switch (animation.AnimStyle)
+            switch (animation.Style)
             {
                 case Style.Fade:
                     color = new Color(

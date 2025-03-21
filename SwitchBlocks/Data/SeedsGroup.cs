@@ -37,15 +37,12 @@ namespace SwitchBlocks.Data
                     $"{ModStrings.PREFIX_CACHE}{ModStrings.GROUP}{ModStrings.SUFFIX_SAV}");
             if (File.Exists(file))
             {
-                SeedsGroup seeds;
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    seeds = GetLegacySeeds(root.Element(ModStrings.SAVE_SEED).Elements("item"));
+                    return GetLegacySeeds(root.Element(ModStrings.SAVE_SEED).Elements("item"));
                 };
-                File.Delete(file);
-                return seeds;
             }
             return new SeedsGroup();
         }
@@ -56,7 +53,6 @@ namespace SwitchBlocks.Data
                 key => int.Parse(key.Element(ModStrings.SAVE_POSITION).Value),
                 value => int.Parse(value.Element(ModStrings.SAVE_ID).Value))
         };
-
 
         private static SeedsGroup GetLegacySeeds(IEnumerable<XElement> xels) => new SeedsGroup
         {

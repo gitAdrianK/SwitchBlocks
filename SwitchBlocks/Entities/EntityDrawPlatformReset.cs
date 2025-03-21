@@ -20,22 +20,9 @@ namespace SwitchBlocks.Entities
             if (AchievementManager.GetTicks() == this.Data.ActivatedTick)
             {
                 this.Timer = 0;
-                var frameIndex = this.FrameIndex;
-                frameIndex.Index = 0;
+                this.FrameIndex.Index = 0;
             }
-            this.Timer += p_delta;
-            while (this.Timer > this.Frames[this.FrameIndex.Index])
-            {
-                this.Timer -= this.Frames[this.FrameIndex.Index];
-                var frameIndex = this.FrameIndex;
-                var index = frameIndex.Index;
-                frameIndex.Index = index + 1;
-            }
-            if (this.Timer < 0f)
-            {
-                this.Timer = 0f;
-            }
-            this.Index = this.FrameIndex.Index;
+            base.Update(p_delta);
         }
 
         public override void Draw()

@@ -3,7 +3,7 @@ namespace SwitchBlocks.Settings
     using System.Collections.Specialized;
     using System.Globalization;
     using System.Xml.Linq;
-    using static SwitchBlocks.Util.Directions;
+    using SwitchBlocks.Util;
 
     public static class ParseSettings
     {
@@ -13,26 +13,13 @@ namespace SwitchBlocks.Settings
         private const float DeltaTime = 0.01666667f;
 
         public static int ParseDuration(XElement element, int defaultDuration)
-        {
-            if (element == null)
-            {
-                return defaultDuration;
-            }
-            // float.TryParse with CultureInfo is .net7 and up
-            return (int)((float.Parse(element.Value, CultureInfo.InvariantCulture) / DeltaTime) + 0.5f);
-        }
+            => float.TryParse(element?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? (int)((result / DeltaTime) + 0.5f) : defaultDuration;
 
         public static int ParseDuration(XElement element, float defaultDuration)
             => ParseDuration(element, (int)((defaultDuration / DeltaTime) + 0.5f));
 
         public static float ParseMultiplier(XElement element)
-        {
-            if (element == null)
-            {
-                return 1.0f;
-            }
-            return float.Parse(element.Value, CultureInfo.InvariantCulture);
-        }
+            => float.TryParse(element?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : 1.0f;
 
         public static int ParseCount(XElement element, int defaultCount)
             => int.TryParse(element?.Value, out var result) ? result : defaultCount;

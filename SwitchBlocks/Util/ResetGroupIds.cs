@@ -10,6 +10,8 @@ namespace SwitchBlocks.Util
 
     public static class ResetGroupIds
     {
+        private static readonly int[] RESET_ALL = { 0 };
+
         public const int VERTICAL = BlockGroupId.VERTICAL;
         public const int HORIZONTAL = BlockGroupId.HORIZONTAL;
         public const int SCREEN = BlockGroupId.SCREEN;
@@ -19,7 +21,7 @@ namespace SwitchBlocks.Util
             int startPosition,
             int[] resetIds)
         {
-            if (!blocks.TryGetValue(startPosition, out var value) || value.ResetIds.Length != 0)
+            if (!blocks.TryGetValue(startPosition, out var value) || value.ResetIds.Any())
             {
                 return false;
             }
@@ -32,25 +34,25 @@ namespace SwitchBlocks.Util
 
                 // Left
                 var left = currentPos - HORIZONTAL;
-                if (blocks.TryGetValue(left, out value) && value.ResetIds.Length == 0)
+                if (blocks.TryGetValue(left, out value) && !value.ResetIds.Any())
                 {
                     toVisit.Enqueue(left);
                 }
                 // Right
                 var right = currentPos + HORIZONTAL;
-                if (blocks.TryGetValue(right, out value) && value.ResetIds.Length == 0)
+                if (blocks.TryGetValue(right, out value) && !value.ResetIds.Any())
                 {
                     toVisit.Enqueue(right);
                 }
                 // Up
                 var up = currentPos % 100 == 0 ? currentPos + SCREEN : currentPos - VERTICAL;
-                if (blocks.TryGetValue(up, out value) && value.ResetIds.Length == 0)
+                if (blocks.TryGetValue(up, out value) && !value.ResetIds.Any())
                 {
                     toVisit.Enqueue(up);
                 }
                 // Down
                 var down = currentPos % 100 == 44 ? currentPos - SCREEN : currentPos + VERTICAL;
-                if (blocks.TryGetValue(down, out value) && value.ResetIds.Length == 0)
+                if (blocks.TryGetValue(down, out value) && !value.ResetIds.Any())
                 {
                     toVisit.Enqueue(down);
                 }
@@ -83,13 +85,12 @@ namespace SwitchBlocks.Util
             Dictionary<int, int[]> resets)
         {
             // 0 is used to indicate that the reset block resets all groups / group ids
-            var resetAll = new int[] { 0 };
             foreach (var kv in blocks)
             {
                 var position = kv.Key;
-                if (PropagateResetIds(blocks, position, resetAll))
+                if (PropagateResetIds(blocks, position, RESET_ALL))
                 {
-                    resets.Add(position, resetAll);
+                    resets.Add(position, RESET_ALL);
                 }
             }
         }

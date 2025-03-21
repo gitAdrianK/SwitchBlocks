@@ -15,9 +15,11 @@ namespace SwitchBlocks.Util
         public static bool IsIntersectingBlocks(BehaviourContext behaviourContext, params Type[] blocks)
         {
             var playerRect = behaviourContext.BodyComp.GetHitbox();
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
-            var filtered = advCollisionInfo.GetCollidedBlocks().Where(b => blocks.Contains(b.GetType()));
-            foreach (var block in filtered)
+            foreach (var block in behaviourContext
+                .CollisionInfo
+                .PreResolutionCollisionInfo
+                .GetCollidedBlocks()
+                .Where(b => blocks.Contains(b.GetType())))
             {
                 _ = block.Intersects(playerRect, out var collision);
                 if (collision.Size.X > 0 || collision.Size.Y > 0)

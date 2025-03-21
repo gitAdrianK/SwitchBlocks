@@ -18,9 +18,10 @@ namespace SwitchBlocks.Entities
 
         protected int Index
         {
-            get => this.Index;
-            set => this.Index = value % this.Rects.Length;
+            get => this.InternalIndex;
+            set => this.InternalIndex = value % this.Rects.Length;
         }
+        protected int InternalIndex { get; set; }
 
         public EntityDrawPlatformLoop(
             Platform platform,
@@ -55,7 +56,7 @@ namespace SwitchBlocks.Entities
             }
             else
             {
-                this.Frames = sprites.Frames.ToArray();
+                this.Frames = sprites.Frames;
             }
             this.FrameIndex = new WrappedIndex(this.Frames.Length);
             if (sprites.RandomOffset)
@@ -74,9 +75,9 @@ namespace SwitchBlocks.Entities
                 var index = frameIndex.Index;
                 frameIndex.Index = index + 1;
             }
-            if (this.Timer < 0.0f)
+            if (this.Timer < 0f)
             {
-                this.Timer = 0.0f;
+                this.Timer = 0f;
             }
             this.Index = this.FrameIndex.Index;
         }

@@ -5,17 +5,17 @@ namespace SwitchBlocks.Util
     using JumpKing.Level;
     using SwitchBlocks.Behaviours;
 
+    public enum Direction : byte
+    {
+        Up = 0b0001,
+        Down = 0b0010,
+        Left = 0b0100,
+        Right = 0b1000,
+        All = 0b1111,
+    }
+
     public static class Directions
     {
-        public enum Direction : byte
-        {
-            Up = 0b0001,
-            Down = 0b0010,
-            Left = 0b0100,
-            Right = 0b1000,
-            All = 0b1111,
-        }
-
         /// <summary>
         /// Checks from with direction the collision took place and if its a valid direction.
         /// </summary>

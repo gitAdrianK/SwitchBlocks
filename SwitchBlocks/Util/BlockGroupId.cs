@@ -18,6 +18,7 @@ namespace SwitchBlocks.Util
         // Top left is (0, 0)
         // Bottom right is (59, 44)
 
+        private const int NOT_ASSIGNED = 0;
         // To move 1 up or down is to change the integer by 1
         // - is up, + is down
         public const int VERTICAL = 1;
@@ -39,7 +40,7 @@ namespace SwitchBlocks.Util
             int startPosition,
             int groupId)
         {
-            if (!blocks.TryGetValue(startPosition, out var value) || value.GroupId != 0)
+            if (!blocks.TryGetValue(startPosition, out var value) || value.GroupId != NOT_ASSIGNED)
             {
                 return false;
             }
@@ -52,25 +53,25 @@ namespace SwitchBlocks.Util
 
                 // Left
                 var left = currentPos - HORIZONTAL;
-                if (blocks.TryGetValue(left, out value) && value.GroupId == 0)
+                if (blocks.TryGetValue(left, out value) && value.GroupId == NOT_ASSIGNED)
                 {
                     toVisit.Enqueue(left);
                 }
                 // Right
                 var right = currentPos + HORIZONTAL;
-                if (blocks.TryGetValue(right, out value) && value.GroupId == 0)
+                if (blocks.TryGetValue(right, out value) && value.GroupId == NOT_ASSIGNED)
                 {
                     toVisit.Enqueue(right);
                 }
                 // Up
                 var up = currentPos % 100 == 0 ? currentPos + SCREEN : currentPos - VERTICAL;
-                if (blocks.TryGetValue(up, out value) && value.GroupId == 0)
+                if (blocks.TryGetValue(up, out value) && value.GroupId == NOT_ASSIGNED)
                 {
                     toVisit.Enqueue(up);
                 }
                 // Down
                 var down = currentPos % 100 == 44 ? currentPos - SCREEN : currentPos + VERTICAL;
-                if (blocks.TryGetValue(down, out value) && value.GroupId == 0)
+                if (blocks.TryGetValue(down, out value) && value.GroupId == NOT_ASSIGNED)
                 {
                     toVisit.Enqueue(down);
                 }

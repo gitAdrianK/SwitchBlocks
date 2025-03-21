@@ -4,6 +4,7 @@ namespace SwitchBlocks.Factories
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
     using JumpKing;
@@ -14,8 +15,7 @@ namespace SwitchBlocks.Factories
     using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
     using SwitchBlocks.Util.Deserialization;
-    using static SwitchBlocks.Util.Animation;
-    using Curve = Util.Animation.Curve;
+    using Curve = Util.Curve;
 
     public class FactoryDrawablesGroup
     {
@@ -47,7 +47,7 @@ namespace SwitchBlocks.Factories
             }
 
             var files = Directory.GetFiles(path);
-            if (files.Length == 0)
+            if (!files.Any())
             {
                 return;
             }
@@ -123,13 +123,13 @@ namespace SwitchBlocks.Factories
                             StartState = platformElement.Element("StartState")?.Value == "on",
                             Animation = new Animation
                             {
-                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
-                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
+                                Curve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
+                                Style = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
                             },
                             AnimationOut = new Animation
                             {
-                                AnimCurve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
-                                AnimStyle = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
+                                Curve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
+                                Style = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
                             },
                             Sprites = null,
                         };
@@ -143,21 +143,11 @@ namespace SwitchBlocks.Factories
                                     X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value, out var parsedInt) ? parsedInt : 1,
                                     Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt) ? parsedInt : 1,
                                 },
-                                FPS = int.TryParse(xel.Element("FPS")?.Value, out parsedInt) ? parsedInt : 1,
-                                Frames = null,
+                                FPS = float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedFloat) ? parsedFloat : 1.0f,
+                                Frames = xel.Element("Frames")?.Elements("float").Select(f => float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
                                 RandomOffset = xel.Element("RandomOffset")?.Value == "true",
                                 ResetWithLever = xel.Element("ResetWithLever")?.Value == "true",
                             };
-                            if (xel.Element("Frames") != null)
-                            {
-                                var frames = new List<float>();
-                                foreach (var framesElement in xel.Elements("Frames"))
-                                {
-                                    var frame = float.Parse(framesElement.Value, CultureInfo.InvariantCulture);
-                                    frames.Add(frame);
-                                }
-                                platform.Sprites.Frames = frames;
-                            }
                         };
                         // Group
                         int groupId;
