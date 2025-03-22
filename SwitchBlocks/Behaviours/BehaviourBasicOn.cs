@@ -6,25 +6,37 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
 
+    /// <summary>
+    /// Behaviour attached to the basic on block.
+    /// </summary>
     public class BehaviourBasicOn : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
-
+        /// <summary>Basic data.</summary>
         private DataBasic Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourBasicOn() => this.Data = DataBasic.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)

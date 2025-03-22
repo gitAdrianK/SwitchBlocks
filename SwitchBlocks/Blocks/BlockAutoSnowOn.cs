@@ -7,21 +7,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The auto snow on block.
     /// </summary>
-    public class BlockAutoSnowOn : IBlock, IBlockDebugColor
+    public class BlockAutoSnowOn : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockAutoSnowOn(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.AUTO_SNOW_ON;
-
-        public Rectangle GetRect() => DataAuto.Instance.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockAutoSnowOn(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.AUTO_SNOW_ON;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => DataAuto.Instance.State ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataAuto.Instance.State)
                 {
                     return BlockCollisionType.Collision_Blocking;

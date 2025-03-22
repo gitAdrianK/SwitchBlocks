@@ -6,21 +6,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The sand lever block, capable of only turning the state off.
     /// </summary>
-    public class BlockSandLeverOff : IBlock, IBlockDebugColor
+    public class BlockSandLeverOff : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockSandLeverOff(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.SAND_LEVER_OFF;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockSandLeverOff(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.SAND_LEVER_OFF;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

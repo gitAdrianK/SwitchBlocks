@@ -9,27 +9,38 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.MiscEntities.WorldItems.Inventory;
     using Microsoft.Xna.Framework;
 
+    /// <summary>
+    /// Behaviour attached to the post block.
+    /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
         // Documentation is false, higher numbers are run first!
         public float BlockPriority => 1.0f;
-
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
-
+        /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
+        /// <summary>If the player is on any snow block.</summary>
         public static bool IsPlayerOnSnow { get; set; }
+        /// <summary>The velocity of the previous time this behaviour has run.</summary>
         public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)

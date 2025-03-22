@@ -11,6 +11,10 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class ResetsGroup
     {
+        /// <summary>
+        /// Tries to load resets from file. Default otherwise.
+        /// </summary>
+        /// <returns>Resets.</returns>
         public static ResetsGroup TryDeserialize()
         {
             var file = Path.Combine(
@@ -49,6 +53,11 @@ namespace SwitchBlocks.Data
                 value => value.Elements(ModStrings.SAVE_ID).Select(id => int.Parse(id.Value)).ToArray())
         };
 
+        /// <summary>
+        /// Gets ResetsGroup from the legacy file format.
+        /// </summary>
+        /// <param name="xels"><see cref="XElement"/> root of the legacy data format.</param>
+        /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static ResetsGroup GetLegacyDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
             Resets = xels.ToDictionary(
@@ -56,8 +65,9 @@ namespace SwitchBlocks.Data
                 value => value.Element("value").Element("ArrayOfInt").Elements("int").Select(id => int.Parse(id.Value)).ToArray())
         };
 
-        private ResetsGroup() => this.Resets = new Dictionary<int, int[]>();
-
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -72,7 +82,7 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("ResetsGroup",
                     new XElement(ModStrings.SAVE_RESETS,
-                        this.Resets.Any()
+                        this.Resets.Count() != 0
                         ? this.Resets.OrderBy(kv => kv.Key).Select(kv =>
                             new XElement(ModStrings.SAVE_RESET,
                                 new XElement(ModStrings.SAVE_POSITION, kv.Key),

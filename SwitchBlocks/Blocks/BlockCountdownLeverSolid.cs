@@ -4,23 +4,27 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The countdown lever block.
+    /// The countdown solid lever block.
     /// </summary>
-    public class BlockCountdownLeverSolid : IBlock, IBlockDebugColor
+    public class BlockCountdownLeverSolid : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockCountdownLeverSolid(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.COUNTDOWN_LEVER_SOLID;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockCountdownLeverSolid(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.COUNTDOWN_LEVER_SOLID;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_Blocking;
             }
             intersection = Rectangle.Empty;

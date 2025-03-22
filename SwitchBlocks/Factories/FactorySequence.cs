@@ -15,8 +15,9 @@ namespace SwitchBlocks.Factories
     /// </summary>
     public class FactorySequence : IBlockFactory
     {
+        /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
-
+        /// <summary>Supported Block Codes.</summary>
         private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color> {
             ModBlocks.SEQUENCE_A,
             ModBlocks.SEQUENCE_B,
@@ -34,8 +35,10 @@ namespace SwitchBlocks.Factories
             ModBlocks.SEQUENCE_RESET_SOLID,
         };
 
+        /// <inheritdoc/>
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
+        /// <inheritdoc/>
         public bool IsSolidBlock(Color blockCode)
         {
             switch (blockCode)
@@ -60,6 +63,7 @@ namespace SwitchBlocks.Factories
             return false;
         }
 
+        /// <inheritdoc/>
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))

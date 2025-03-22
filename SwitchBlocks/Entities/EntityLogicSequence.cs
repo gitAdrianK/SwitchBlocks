@@ -7,16 +7,27 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
 
+    /// <summary>
+    /// Sequence logic entity.
+    /// </summary>
     public class EntityLogicSequence : EntityGroupLogic<DataSequence>
     {
+        /// <summary>Duration the state lasts for.</summary>
         private int Duration { get; set; }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EntityLogicSequence() : base(DataSequence.Instance, SettingsSequence.Multiplier)
             => this.Duration = SettingsGroup.Duration;
 
+        /// <summary>
+        /// Updates progress and state of groups that are marked as active.
+        /// </summary>
+        /// <param name="deltaTime">deltaTime.</param>
         protected override void Update(float deltaTime)
         {
-            var tick = AchievementManager.GetTicks();
+            var tick = AchievementManager.GetTick();
             var multiplier = this.Multiplier;
             var finished = new List<int>();
             _ = Parallel.ForEach(this.Data.Active, group =>
@@ -48,6 +59,11 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        /// <summary>
+        /// Tries to switch the state if it should do so.
+        /// </summary>
+        /// <param name="group">Group that is trying to switch state.</param>
+        /// <param name="tick">Current gametick.</param>
         private void TrySwitch(BlockGroup group, int tick)
         {
             // A platform is solid if the activated tick is larger than the current tick.

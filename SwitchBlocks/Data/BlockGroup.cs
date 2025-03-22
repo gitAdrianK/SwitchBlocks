@@ -2,16 +2,29 @@ namespace SwitchBlocks.Data
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Data for groups of blocks created by group and sequence block types.
+    /// </summary>
     public class BlockGroup : IDataProvider
     {
+        /// <summary>State.</summary>
         public bool State { get; set; }
+        /// <summary>Progress.</summary>
         public float Progress { get; set; }
+        /// <summary>ActivatedTick.</summary>
         public int ActivatedTick { get; set; }
 
+        /// <summary>
+        /// Ctor. Creates a BlockGroup set to be enabled.
+        /// </summary>
         public BlockGroup() : this(true)
         {
         }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="isEnabled">If this is enabled by default.</param>
         public BlockGroup(bool isEnabled)
         {
             this.State = isEnabled;

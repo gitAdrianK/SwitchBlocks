@@ -12,21 +12,32 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
+    /// <summary>
+    /// Setup and cleanup as well as setup related fields.
+    /// </summary>
     public static class SetupGroup
     {
-        /// <summary>
-        /// Whether the group block appears inside the hitbox file and counts as used.
-        /// </summary>
+        /// <summary>Whether the group block appears inside the hitbox file and counts as used.</summary>
         public static bool IsUsed { get; set; } = false;
+        /// <summary>Group A blocks.</summary>
+        public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Group B blocks.</summary>
+        public static Dictionary<int, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Group C blocks.</summary>
+        public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Group D blocks.</summary>
+        public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Group Reset blocks.</summary>
+        public static Dictionary<int, IResetGroupIds> Resets { get; private set; } = new Dictionary<int, IResetGroupIds>();
 
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
         // clearing would result in the dict being empty on same level reload.
-        public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; private set; } = new Dictionary<int, IBlockGroupId>();
-        public static Dictionary<int, IBlockGroupId> BlocksGroupB { get; private set; } = new Dictionary<int, IBlockGroupId>();
-        public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; private set; } = new Dictionary<int, IBlockGroupId>();
-        public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; private set; } = new Dictionary<int, IBlockGroupId>();
-        public static Dictionary<int, IResetGroupIds> Resets { get; private set; } = new Dictionary<int, IResetGroupIds>();
+        // Or can they...
 
+        /// <summary>
+        /// Sets up data, entities, block behaviours and does other required actions.
+        /// </summary>
+        /// <param name="player">Player to register block behaviours to.</param>
         public static void Setup(PlayerEntity player)
         {
             if (!IsUsed)
@@ -36,7 +47,7 @@ namespace SwitchBlocks.Setups
 
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
-            AssignGroupIds(seeds.Seeds, resets.Resets);
+            AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
 
             if (LevelDebugState.instance != null)
             {
@@ -60,6 +71,9 @@ namespace SwitchBlocks.Setups
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
+        /// <summary>
+        /// Cleans up saving data, resetting fields and does other required actions.
+        /// </summary>
         public static void Cleanup()
         {
             if (!IsUsed)
@@ -73,11 +87,17 @@ namespace SwitchBlocks.Setups
             IsUsed = false;
         }
 
-        private static void AssignGroupIds(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
+        /// <summary>
+        /// Assigns group ids to all groups blocks.
+        /// </summary>
+        /// <param name="groups">Block groups to add groups to holding that groups data.</param>
+        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="resets">Positions to add reset ids to reset blocks to.</param>
+        private static void AssignGroupIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
         {
             var groupId = 1;
 
-            if (seeds.Any())
+            if (seeds.Count() != 0)
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
@@ -93,9 +113,9 @@ namespace SwitchBlocks.Setups
             BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupC, seeds, ref groupId);
             BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupD, seeds, ref groupId);
 
-            BlockGroup.CreateGroupData(groupId, DataGroup.Instance.Groups, true);
+            BlockGroup.CreateGroupData(groupId, groups, true);
 
-            if (resets.Any())
+            if (resets.Count() != 0)
             {
                 ResetGroupIds.AssignResetIdsFromSeed(Resets, resets);
             }

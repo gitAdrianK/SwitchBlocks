@@ -7,21 +7,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The countdown off block.
     /// </summary>
-    public class BlockCountdownOff : IBlock, IBlockDebugColor
+    public class BlockCountdownOff : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockCountdownOff(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.COUNTDOWN_OFF;
-
-        public Rectangle GetRect() => !DataCountdown.Instance.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockCountdownOff(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.COUNTDOWN_OFF;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => !DataCountdown.Instance.State ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataCountdown.Instance.State)
                 {
                     return BlockCollisionType.Collision_NonBlocking;

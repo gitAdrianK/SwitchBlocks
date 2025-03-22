@@ -10,11 +10,21 @@ namespace SwitchBlocks.Entities
 
     public class EntityDrawPlatformSand : EntityDraw
     {
+        /// <summary>Scrolling <see cref="Texture2D"/>.</summary>
         private Texture2D Scrolling { get; }
+        /// <summary>Foreground <see cref="Texture2D"/>.</summary>
         private Texture2D Foreground { get; }
+        /// <summary>Start state.</summary>
         private bool StartState { get; }
+        /// <summary><see cref="IDataProvider"/>.</summary>
         private IDataProvider Data { get; }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="platform">Deserialization helper <see cref="PlatformSand"/>.</param>
+        /// <param name="screen">Screen this entity is on.</param>
+        /// <param name="data"><see cref="IDataProvider"/>.</param>
         public EntityDrawPlatformSand(
             PlatformSand platform,
             int screen,
@@ -39,6 +49,10 @@ namespace SwitchBlocks.Entities
             this.Data = data;
         }
 
+        /// <summary>
+        /// Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
+        /// Draws background, scrolling and foreground <see cref="Texture2D"/>s if not null.
+        /// </summary>
         public override void Draw()
         {
             if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
@@ -62,6 +76,10 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        /// <summary>
+        /// Draws a given <see cref="Texture2D"/>.
+        /// </summary>
+        /// <param name="texture"><see cref="Texture2D"/>.</param>
         private void DrawTexture(Texture2D texture)
             => Game1.spriteBatch.Draw(
                 texture: texture,
@@ -73,6 +91,9 @@ namespace SwitchBlocks.Entities
                     this.Height),
                 color: Color.White);
 
+        /// <summary>
+        /// Draws the scrolling <see cref="Texture2D"/> wrapped based on progress.
+        /// </summary>
         private void DrawScrolling()
         {
             var actualOffset = (int)(this.Data.Progress % this.Scrolling.Height);

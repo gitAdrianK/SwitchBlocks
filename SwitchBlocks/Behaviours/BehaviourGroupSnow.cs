@@ -8,25 +8,37 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Data;
     using SwitchBlocks.Util;
 
+    /// <summary>
+    /// Behaviour attached to the group A snow block.
+    /// </summary>
     public class BehaviourGroupSnow : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
-
+        /// <summary>Group data.</summary>
         private DataGroup Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourGroupSnow() => this.Data = DataGroup.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)

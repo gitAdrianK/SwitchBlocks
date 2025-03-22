@@ -11,8 +11,12 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataAuto : IDataProvider
     {
-
+        /// <summary>Singleton instance.</summary>
         private static DataAuto instance;
+        /// <summary>
+        /// Returns the instance should it already exist.
+        /// If it doesn't exist loads it from file.
+        /// </summary>
         public static DataAuto Instance
         {
             get
@@ -53,8 +57,14 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>
+        /// Sets the singleton instance to null.
+        /// </summary>
         public void Reset() => instance = null;
 
+        /// <summary>
+        /// Private ctor.
+        /// </summary>
         private DataAuto()
         {
             this.State = false;
@@ -65,6 +75,9 @@ namespace SwitchBlocks.Data
             this.ResetTick = 0;
         }
 
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -99,34 +112,17 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>
-        /// Its current state.
-        /// </summary>
+        /// <summary>Current state.</summary>
         public bool State { get; set; }
-
-        /// <summary>
-        /// Animation progress.
-        /// </summary>
+        /// <summary>Animation progress.</summary>
         public float Progress { get; set; }
-
-        /// <summary>
-        /// If the block can switch safely.
-        /// </summary>
+        /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
-
-        /// <summary>
-        /// If the block should switch next opportunity.
-        /// </summary>
+        /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
-
-        /// <summary>
-        /// The amount of times the warning sound has been played.
-        /// </summary>
+        /// <summary>The amount of times the warning sound has been played.</summary>
         public int WarnCount { get; set; }
-
-        /// <summary>
-        /// Tick the auto block has been reset.
-        /// </summary>
+        /// <summary>Tick the auto block has been reset.</summary>
         public int ResetTick { get; set; }
     }
 }

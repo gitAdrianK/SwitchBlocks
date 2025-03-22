@@ -6,21 +6,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The sand lever block.
     /// </summary>
-    public class BlockSandLever : IBlock, IBlockDebugColor
+    public class BlockSandLever : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockSandLever(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.SAND_LEVER;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockSandLever(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.SAND_LEVER;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

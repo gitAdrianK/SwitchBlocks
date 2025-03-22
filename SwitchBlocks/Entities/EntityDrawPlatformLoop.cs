@@ -2,31 +2,48 @@ namespace SwitchBlocks.Entities
 {
     using JumpKing;
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Util;
     using SwitchBlocks.Util.Deserialization;
 
+    /// <summary>
+    /// Looping animated platform drawn based on data.
+    /// </summary>
     public class EntityDrawPlatformLoop : EntityDrawPlatform
     {
+        /// <summary>
+        /// Rectangles for all sectors of the <see cref="Texture2D"/>
+        /// </summary>
         protected Rectangle[] Rects { get; }
+        /// <summary>Duration of every frame.</summary>
         protected float[] Frames { get; }
+        /// <summary>Timer counting deltaTime.</summary>
         protected float Timer { get; set; }
+        /// <summary>Frames per second, ignored if Frames is not null.</summary>
         protected float TimeStep { get; }
-
+        /// <summary><see cref="WrappedIndex"/> providing the index of the Timer limited to its length.</summary>
         protected WrappedIndex FrameIndex { get; set; }
-
+        /// <summary>Index limited to Rects length.</summary>
         protected int Index
         {
             get => this.InternalIndex;
             set => this.InternalIndex = value % this.Rects.Length;
         }
+        /// <summary>InternalIndex.</summary>
         protected int InternalIndex { get; set; }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="platform">Deserialization helper <see cref="Platform"/>.</param>
+        /// <param name="screen">Screen this entity is on.</param>
+        /// <param name="data"><see cref="IDataProvider"/>.</param>
         public EntityDrawPlatformLoop(
             Platform platform,
             int screen,
-            IDataProvider logic) : base(platform, screen, logic)
+            IDataProvider data) : base(platform, screen, data)
         {
             var sprites = platform.Sprites;
             var cells = sprites.Cells;
@@ -65,6 +82,10 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        /// <summary>
+        /// Updates Timer and Index.
+        /// </summary>
+        /// <param name="p_delta">Amount timer is increased by.</param>
         protected override void Update(float p_delta)
         {
             this.Timer += p_delta;
@@ -82,6 +103,10 @@ namespace SwitchBlocks.Entities
             this.Index = this.FrameIndex.Index;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// Draws only the part of the texture given by the index.
+        /// </summary>
         public override void Draw()
         {
             if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)

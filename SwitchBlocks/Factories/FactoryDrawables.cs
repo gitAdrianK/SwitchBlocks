@@ -6,6 +6,7 @@ namespace SwitchBlocks.Factories
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
+    using EntityComponent;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -15,20 +16,19 @@ namespace SwitchBlocks.Factories
     using SwitchBlocks.Util.Deserialization;
     using Curve = Util.Curve;
 
+    /// <summary>
+    /// Factory for drawable entities.
+    /// </summary>
     public class FactoryDrawables
     {
-        // Apparently XDocument is faster, but you'll have to do the elements yourself
-        // And testing it, it does seem faster, or at least not slower, so we change to XDcoument
-        // (here and all other instances, like Data/Cache/Resets)
-        // in hopes of cleaning up the entity creation mess that was previously.
-        // Lets hope there no framedrops this time around and we can keep this.
-
+        /// <summary>Draw types.</summary>
         public enum DrawType
         {
             Platforms,
             Levers,
         }
 
+        /// <summary>Block types.</summary>
         public enum BlockType
         {
             Auto,
@@ -39,11 +39,14 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Creates all drawbles for a given DrawType and BlockType.
-        /// Entities are added to the manager automatically, this will not return anything.
+        /// Creates all drawbles for a given <see cref="DrawType"/> and <see cref="BlockType"/>.
+        /// Created entities are added to the <see cref="EntityManager"/> automatically.
         /// </summary>
-        /// <param name="drawType">If the drawable is a lever or a platform</param>
-        /// <param name="blockType">What type of block should be created</param>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
+        /// <param name="drawType"><see cref="DrawType"/>.</param>
+        /// <param name="blockType"><see cref="BlockType"/>.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}"/></param>
+        /// <exception cref="NotImplementedException">This should never happen.</exception>
         public static void CreateDrawables<T>(DrawType drawType, BlockType blockType, EntityLogic<T> entityLogic) where T : IDataProvider
         {
             var contentManager = Game1.instance.contentManager;
@@ -59,7 +62,7 @@ namespace SwitchBlocks.Factories
             }
 
             var files = Directory.GetFiles(path);
-            if (!files.Any())
+            if (files.Count() == 0)
             {
                 return;
             }
@@ -74,24 +77,32 @@ namespace SwitchBlocks.Factories
                         case BlockType.Basic:
                         case BlockType.Countdown:
                         case BlockType.Jump:
-                            GetPlatforms(path, files, data, entityLogic);
+                            CreatePlatforms(path, files, data, entityLogic);
                             break;
                         case BlockType.Sand:
-                            GetPlatformsSand(path, files, data, entityLogic);
+                            CreatePlatformsSand(path, files, data, entityLogic);
                             break;
                         default:
                             throw new NotImplementedException("Unknown Block Type, cannot create entities!");
                     }
                     break;
                 case DrawType.Levers:
-                    GetLevers(path, files, data);
+                    CreateLevers(path, files, data);
                     break;
                 default:
                     throw new NotImplementedException("Unknown Draw Type, cannot create entities!");
             }
         }
 
-        private static void GetPlatforms<T>(
+        /// <summary>
+        /// Creates <see cref="EntityDrawPlatform"/>, <see cref="EntityDrawPlatformLoop"/> and <see cref="EntityDrawPlatformReset"/>.
+        /// </summary>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
+        /// <param name="path">Path to the files containing platform definitions.</param>
+        /// <param name="files">Files inside the given path.</param>
+        /// <param name="data">Data provider.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}">.</param>
+        private static void CreatePlatforms<T>(
             string path,
             string[] files,
             IDataProvider data,
@@ -203,7 +214,15 @@ namespace SwitchBlocks.Factories
             }
         }
 
-        private static void GetPlatformsSand<T>(
+        /// <summary>
+        /// Creates <see cref="EntityDrawPlatformSand"/>.
+        /// </summary>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
+        /// <param name="path">Path to the files containing platform definitions.</param>
+        /// <param name="files">Files inside the given path.</param>
+        /// <param name="data"><see cref="IDataProvider"/>.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}"/>.</param>
+        private static void CreatePlatformsSand<T>(
             string path,
             string[] files,
             IDataProvider data,
@@ -304,8 +323,13 @@ namespace SwitchBlocks.Factories
             }
         }
 
-
-        private static void GetLevers(
+        /// <summary>
+        /// Creates <see cref="EntityDrawLever"/>.
+        /// </summary>
+        /// <param name="path">Path to the files containing platform definitions.</param>
+        /// <param name="files">Files inside the given path.</param>
+        /// <param name="data"><see cref="IDataProvider"/>.</param>
+        private static void CreateLevers(
             string path,
             string[] files,
             IDataProvider data)
@@ -374,6 +398,12 @@ namespace SwitchBlocks.Factories
             }
         }
 
+        /// <summary>
+        /// Get the <see cref="IDataProvider"/> based on the <see cref="BlockType"/>.
+        /// </summary>
+        /// <param name="blockType"><see cref="BlockType"/>.</param>
+        /// <returns><see cref="IDataProvider"/>.</returns>
+        /// <exception cref="NotImplementedException">This should never happen.</exception>
         private static IDataProvider GetData(BlockType blockType)
         {
             switch (blockType)

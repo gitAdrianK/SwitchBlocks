@@ -6,21 +6,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The basic lever block.
     /// </summary>
-    public class BlockBasicLever : IBlock, IBlockDebugColor
+    public class BlockBasicLever : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockBasicLever(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.BASIC_LEVER;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockBasicLever(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.BASIC_LEVER;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

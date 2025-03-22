@@ -3,21 +3,28 @@ namespace SwitchBlocks.Blocks
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
-    public class BlockSequenceReset : IBlock, IBlockDebugColor
+    /// <summary>
+    /// The sequence reset block.
+    /// </summary>
+    public class BlockSequenceReset : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockSequenceReset(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.SEQUENCE_RESET;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockSequenceReset(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.SEQUENCE_RESET;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

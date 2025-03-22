@@ -6,21 +6,17 @@ namespace SwitchBlocks
     using SwitchBlocks.Settings;
     using SwitchBlocks.Setups;
 
+    /// <summary>
+    /// Collection of settings that are used by the mod and a way to load/reset them.
+    /// </summary>
     public static class ModSettings
     {
         /// <summary>
-        /// Loads the settings for blocks with such fields
+        /// Loads the settings for blocks with such fields from a blocks.xml file
+        /// that is places inside the mods root folder.
         /// </summary>
-        public static void Load()
+        public static void Setup()
         {
-            SettingsAuto.Reset();
-            SettingsBasic.Reset();
-            SettingsCountdown.Reset();
-            SettingsGroup.Reset();
-            SettingsJump.Reset();
-            SettingsSand.Reset();
-            SettingsSequence.Reset();
-
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
                 ModStrings.FOLDER,
@@ -64,6 +60,41 @@ namespace SwitchBlocks
                 {
                     SettingsSequence.Parse(xel);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Resets all settings to their default value.
+        /// </summary>
+        public static void Cleanup()
+        {
+            if (SetupAuto.IsUsed)
+            {
+                SettingsAuto.Reset();
+            }
+            if (SetupBasic.IsUsed)
+            {
+                SettingsBasic.Reset();
+            }
+            if (SetupCountdown.IsUsed)
+            {
+                SettingsCountdown.Reset();
+            }
+            if (SetupGroup.IsUsed)
+            {
+                SettingsGroup.Reset();
+            }
+            if (SetupJump.IsUsed)
+            {
+                SettingsJump.Reset();
+            }
+            if (SetupSand.IsUsed)
+            {
+                SettingsSand.Reset();
+            }
+            if (SetupSequence.IsUsed)
+            {
+                SettingsSequence.Reset();
             }
         }
     }

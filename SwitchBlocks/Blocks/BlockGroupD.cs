@@ -8,23 +8,28 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The group D block.
     /// </summary>
-    public class BlockGroupD : IBlock, IBlockDebugColor, IBlockGroupId
+    public class BlockGroupD : ModBlock, IBlockGroupId
     {
+        /// <inheritdoc/>
         public int GroupId { get; set; } = 0;
 
-        private readonly Rectangle collider;
-
-        public BlockGroupD(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.GROUP_D;
-
-        public Rectangle GetRect() => DataGroup.Instance.GetState(this.GroupId) ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockGroupD(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.GROUP_D;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => DataGroup.Instance.GetState(this.GroupId) ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataGroup.Instance.GetState(this.GroupId))
                 {
                     return BlockCollisionType.Collision_Blocking;

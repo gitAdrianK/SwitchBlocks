@@ -6,21 +6,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The sand on block.
     /// </summary>
-    public class BlockSandOn : IBlock, IBlockDebugColor
+    public class BlockSandOn : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockSandOn(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.SAND_ON;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockSandOn(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.SAND_ON;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

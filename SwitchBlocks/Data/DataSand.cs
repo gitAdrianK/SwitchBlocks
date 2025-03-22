@@ -10,8 +10,12 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataSand : IDataProvider
     {
-
+        /// <summary>Singleton instance.</summary>
         private static DataSand instance;
+        /// <summary>
+        /// Returns the instance should it already exist.
+        /// If it doesn't exist loads it from file.
+        /// </summary>
         public static DataSand Instance
         {
             get
@@ -47,8 +51,14 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>
+        /// Sets the singleton instance to null.
+        /// </summary>
         public void Reset() => instance = null;
 
+        /// <summary>
+        /// Private ctor.
+        /// </summary>
         private DataSand()
         {
             this.State = false;
@@ -56,6 +66,9 @@ namespace SwitchBlocks.Data
             this.HasEntered = false;
         }
 
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -87,25 +100,16 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>
-        /// Its current state.
-        /// </summary>
+        /// <summary>Current state.</summary>
         public bool State { get; set; }
-
-        /// <summary>
-        /// Progress is not being saved between play sessions as it is unnecessary.
-        /// </summary>
+        /// <summary>Progress is not being saved between play sessions as it is unnecessary.</summary>
         public float Progress { get; set; }
-
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
         public bool HasSwitched { get; set; }
-
-        /// <summary>
-        /// Whether the player is currently inside the block.
-        /// </summary>
+        /// <summary>Whether the player is currently inside the block.</summary>
         public bool HasEntered { get; set; }
     }
 }

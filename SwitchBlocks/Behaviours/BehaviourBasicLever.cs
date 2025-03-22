@@ -10,27 +10,36 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Util;
 
     /// <summary>
-    /// Behaviour related to basic levers.
+    /// Behaviour attached to the basic lever block.
     /// </summary>
     public class BehaviourBasicLever : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
-
+        /// <summary>Basic data.</summary>
         private DataBasic Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourBasicLever() => this.Data = DataBasic.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)

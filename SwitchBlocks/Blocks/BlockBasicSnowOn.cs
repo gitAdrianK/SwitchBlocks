@@ -7,21 +7,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The basic snow on block.
     /// </summary>
-    public class BlockBasicSnowOn : IBlock, IBlockDebugColor
+    public class BlockBasicSnowOn : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockBasicSnowOn(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.BASIC_SNOW_ON;
-
-        public Rectangle GetRect() => DataBasic.Instance.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockBasicSnowOn(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.BASIC_SNOW_ON;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => DataBasic.Instance.State ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataBasic.Instance.State)
                 {
                     return BlockCollisionType.Collision_Blocking;

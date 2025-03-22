@@ -11,7 +11,12 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataCountdown : IDataProvider
     {
+        /// <summary>Singleton instance.</summary>
         private static DataCountdown instance;
+        /// <summary>
+        /// Returns the instance should it already exist.
+        /// If it doesn't exist loads it from file.
+        /// </summary>
         public static DataCountdown Instance
         {
             get
@@ -51,8 +56,14 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>
+        /// Sets the singleton instance to null.
+        /// </summary>
         public void Reset() => instance = null;
 
+        /// <summary>
+        /// Private ctor.
+        /// </summary>
         private DataCountdown()
         {
             this.State = false;
@@ -64,6 +75,9 @@ namespace SwitchBlocks.Data
             this.ActivatedTick = int.MinValue;
         }
 
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -99,40 +113,22 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>
-        /// Its current state.
-        /// </summary>
+        /// <summary>Current state.</summary>
         public bool State { get; set; }
-
-        /// <summary>
-        /// Animation progress.
-        /// </summary>
+        /// <summary>Animation progress.</summary>
         public float Progress { get; set; }
-
         /// <summary>
         /// Whether the state has switched touching a lever.<br />
         /// One time touching the lever = one switch
         /// </summary>
         public bool HasSwitched { get; set; }
-
-        /// <summary>
-        /// If the block can switch safely.
-        /// </summary>
+        /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
-
-        /// <summary>
-        /// If the block should switch next opportunity.
-        /// </summary>
+        /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
-
-        /// <summary>
-        /// The amount of times the warning sound has been played.
-        /// </summary>
+        /// <summary>The amount of times the warning sound has been played.</summary>
         public int WarnCount { get; set; }
-
-        /// <summary>
-        /// Tick the countdown block has been activated.
-        /// </summary>
+        /// <summary>Tick the countdown block has been activated.</summary>
         public int ActivatedTick { get; set; }
     }
 }

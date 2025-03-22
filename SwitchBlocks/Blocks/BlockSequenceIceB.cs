@@ -8,23 +8,28 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The sequence ice B block.
     /// </summary>
-    public class BlockSequenceIceB : IBlock, IBlockDebugColor, IBlockGroupId
+    public class BlockSequenceIceB : ModBlock, IBlockGroupId
     {
+        /// <inheritdoc/>
         public int GroupId { get; set; } = 0;
 
-        private readonly Rectangle collider;
-
-        public BlockSequenceIceB(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.SEQUENCE_ICE_B;
-
-        public Rectangle GetRect() => DataSequence.Instance.GetState(this.GroupId) ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockSequenceIceB(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.SEQUENCE_ICE_B;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => DataSequence.Instance.GetState(this.GroupId) ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataSequence.Instance.GetState(this.GroupId))
                 {
                     return BlockCollisionType.Collision_Blocking;

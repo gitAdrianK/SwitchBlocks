@@ -153,6 +153,7 @@
     <Compile Include="Blocks\BlockSandOff.cs" />
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Blocks\BlockWind.cs" />
+    <Compile Include="Blocks\ModBlock.cs" />
     <Compile Include="Data\SeedsSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
     <Compile Include="Data\IDataProvider.cs" />

@@ -17,10 +17,14 @@ namespace SwitchBlocks.Factories
     using SwitchBlocks.Util.Deserialization;
     using Curve = Util.Curve;
 
+    /// <summary>
+    /// Factory for drawable group entities.
+    /// </summary>
     public class FactoryDrawablesGroup
     {
         // There are no levers for both group types
 
+        /// <summary>Block types.</summary>
         public enum BlockType
         {
             Group,
@@ -28,10 +32,11 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Creates all drawbles for a given BlockType.
-        /// Entities are added to the manager automatically, this will not return anything.
+        /// Creates all drawbles for a given <see cref="BlockType"/>.
         /// </summary>
-        /// <param name="blockType">What type of block should be created</param>
+        /// <typeparam name="T">A class implementing <see cref="IGroupDataProvider"/>.</typeparam>
+        /// <param name="blockType"><see cref="BlockType"/>.</param>
+        /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}"/></param>
         public static void CreateDrawables<T>(BlockType blockType, EntityGroupLogic<T> entityGroupLogic) where T : IGroupDataProvider
         {
             var contentManager = Game1.instance.contentManager;
@@ -47,16 +52,26 @@ namespace SwitchBlocks.Factories
             }
 
             var files = Directory.GetFiles(path);
-            if (!files.Any())
+            if (files.Count() == 0)
             {
                 return;
             }
 
             var groups = GetGroups(blockType);
-            GetPlatforms(path, files, blockType, groups, entityGroupLogic);
+            CreatePlatforms(path, files, blockType, groups, entityGroupLogic);
         }
 
-        private static void GetPlatforms<T>(
+        /// <summary>
+        /// Creates <see cref="EntityDrawPlatform"/>, <see cref="EntityDrawPlatformLoop"/> and <see cref="EntityDrawPlatformReset"/>.
+        /// </summary>
+        /// <typeparam name="T">>A class implementing <see cref="IGroupDataProvider"/>.</typeparam>
+        /// <param name="path">Path to the files containing platform definitions.</param>
+        /// <param name="files"></param>
+        /// <param name="blockType">Files inside the given path.</param>
+        /// <param name="groups">Collection of BlockGroups.</param>
+        /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}"/>.</param>
+        /// <exception cref="NotImplementedException">This should never happen.</exception>
+        private static void CreatePlatforms<T>(
             string path,
             string[] files,
             BlockType blockType,
@@ -199,6 +214,12 @@ namespace SwitchBlocks.Factories
             }
         }
 
+        /// <summary>
+        /// Gets the groups data of the given <see cref="BlockType"/>.
+        /// </summary>
+        /// <param name="blockType"><see cref="BlockType"/>.</param>
+        /// <returns>The groups data.</returns>
+        /// <exception cref="NotImplementedException">This should never happen.</exception>
         private static Dictionary<int, BlockGroup> GetGroups(BlockType blockType)
         {
             switch (blockType)
@@ -212,10 +233,19 @@ namespace SwitchBlocks.Factories
             }
         }
 
+        /// <summary>
+        /// Get the group id of the block that is at the position of the entity,
+        /// or specified link position.
+        /// </summary>
+        /// <param name="root">Root <see cref="XElement"/> specified link may be taken from.</param>
+        /// <param name="screen">Screen this entity is to be created on.</param>
+        /// <param name="position">Position this entity is to be created at.</param>
+        /// <param name="blockGroups">Collection of <see cref="IBlockGroupId"/>.</param>
+        /// <returns>Id of the block at the position. 0 if no block exists at that the position.</returns>
         private static int GetGroupId(XElement root, int screen, Vector2 position, params Dictionary<int, IBlockGroupId>[] blockGroups)
         {
-            int link;
             var xel = root.Element("Link");
+            int link;
             if (xel != null)
             {
                 link = (int.Parse(xel.Element("Screen").Value) * 10000)
@@ -234,7 +264,6 @@ namespace SwitchBlocks.Factories
                     return value.GroupId;
                 }
             }
-
             return 0;
         }
     }

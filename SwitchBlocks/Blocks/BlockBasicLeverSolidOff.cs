@@ -4,23 +4,27 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The basic lever block, capable of only turning the state off.
+    /// The basic solid lever block, capable of only turning the state off.
     /// </summary>
-    public class BlockBasicLeverSolidOff : IBlock, IBlockDebugColor
+    public class BlockBasicLeverSolidOff : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockBasicLeverSolidOff(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.BASIC_LEVER_SOLID_OFF;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockBasicLeverSolidOff(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.BASIC_LEVER_SOLID_OFF;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_Blocking;
             }
             intersection = Rectangle.Empty;

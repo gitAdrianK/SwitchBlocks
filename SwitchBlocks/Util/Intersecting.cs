@@ -4,14 +4,15 @@ namespace SwitchBlocks.Util
     using System.Linq;
     using JumpKing.BodyCompBehaviours;
 
+    /// <summary>Contains a way to determine if the playeris intersecting blocks.</summary>
     public class Intersecting
     {
         /// <summary>
         /// Checks if the player is intersecting one of the blocks in a larger than zero manner.
         /// </summary>
-        /// <param name="behaviourContext">The behaviour context of the situation</param>
-        /// <param name="blocks">The blocks to check for</param>
-        /// <returns>True if the player is intersecting one of the blocks, false otherwise</returns>
+        /// <param name="behaviourContext"><see cref="BehaviourContext"/> of the situation.</param>
+        /// <param name="blocks">Blocks to check for.</param>
+        /// <returns><c>true</c> if the player is intersecting one of the blocks, <c>false</c> otherwise.</returns>
         public static bool IsIntersectingBlocks(BehaviourContext behaviourContext, params Type[] blocks)
         {
             var playerRect = behaviourContext.BodyComp.GetHitbox();

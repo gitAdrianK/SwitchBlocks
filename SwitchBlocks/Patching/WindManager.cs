@@ -7,8 +7,15 @@ namespace SwitchBlocks.Patching
     using SwitchBlocks.Setups;
     using JK = JumpKing;
 
+    /// <summary>
+    /// Adds a postfix to the vanilla <see cref="JK.WindManager"/>.
+    /// </summary>
     public class WindManager
     {
+        /// <summary>
+        /// Patches the get_CurrentVelocityRaw method of the <see cref="JK.WindManager"/>
+        /// </summary>
+        /// <param name="harmony">The <see cref="Harmony"/> instance used to patch the method.</param>
         public WindManager(Harmony harmony)
         {
             var getCurrentVelocity = typeof(JK.WindManager).GetMethod("get_CurrentVelocityRaw");
@@ -18,6 +25,11 @@ namespace SwitchBlocks.Patching
                 postfix: velocityPatch);
         }
 
+        /// <summary>
+        /// Flips the sign of the wind velocity if the player is on a screen that has wind enabled if the state
+        /// for that block type is <c>true</c>.
+        /// </summary>
+        /// <param name="__result">Result of the original function.</param>
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         public static void VelocityPostfix(ref float __result)
         {

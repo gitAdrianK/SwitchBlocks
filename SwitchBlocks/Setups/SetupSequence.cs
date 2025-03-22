@@ -11,20 +11,28 @@ namespace SwitchBlocks.Setups
     using SwitchBlocks.Factories;
     using SwitchBlocks.Util;
 
+    /// <summary>
+    /// Setup and cleanup as well as setup related fields.
+    /// </summary>
     public static class SetupSequence
     {
-        /// <summary>
-        /// Whether the sequence block appears inside the hitbox file and counts as used.
-        /// </summary>
+        /// <summary>Whether the sequence block appears inside the hitbox file and counts as used.</summary>
         public static bool IsUsed { get; set; } = false;
-
+        /// <summary>The amount of groups created.</summary>
+        public static int SequenceCount { get; private set; }
+        /// <summary>Sequence A blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Sequence B blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Sequence C blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        /// <summary>Sequence D blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<int, IBlockGroupId>();
 
-        public static int SequenceCount { get; private set; }
-
+        /// <summary>
+        /// Sets up data, entities, block behaviours and does other required actions.
+        /// </summary>
+        /// <param name="player">Player to register block behaviours to.</param>
         public static void Setup(PlayerEntity player)
         {
             if (!IsUsed)
@@ -56,6 +64,9 @@ namespace SwitchBlocks.Setups
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
         }
 
+        /// <summary>
+        /// Cleans up saving data, resetting fields and does other required actions.
+        /// </summary>
         public static void Cleanup()
         {
             if (!IsUsed)
@@ -69,11 +80,16 @@ namespace SwitchBlocks.Setups
             IsUsed = false;
         }
 
+        /// <summary>
+        /// Assigns sequence ids to all sequence blocks.
+        /// </summary>
+        /// <param name="groups">Block groups to add groups to holding that groups data.</param>
+        /// <param name="seeds">Seeds to use for assignment.</param>
         private static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds)
         {
             var sequenceId = 1;
 
-            if (seeds.Any())
+            if (seeds.Count() != 0)
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
@@ -91,8 +107,7 @@ namespace SwitchBlocks.Setups
 
             BlockGroup.CreateGroupData(sequenceId, groups, false);
 
-            // The sequence id, that is how many groups got created,
-            // is increased one more time at the end and is thus one too high.
+            // Increased one more time at the end and is thus one too high.
             SequenceCount = sequenceId - 1;
         }
     }

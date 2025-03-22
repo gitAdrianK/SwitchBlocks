@@ -6,15 +6,31 @@ namespace SwitchBlocks.Entities
     using JumpKing;
     using SwitchBlocks.Data;
 
+    /// <summary>
+    /// Abstract class other logic entities inherit from.
+    /// </summary>
+    /// <typeparam name="T">Class implementing<see cref="IDataProvider"/>.</typeparam>
     public abstract class EntityLogic<T> : Entity where T : IDataProvider
     {
+        /// <summary>Class implementing <see cref="IDataProvider"/>.</summary>
         protected T Data { get; set; }
+        /// <summary>Multiplier.</summary>
         protected float Multiplier { get; set; }
-
+        /// <summary>Screens platform entites appear on.</summary>
         private HashSet<int> Screens { get; set; }
+        /// <summary>If the current screen contains platform entites.</summary>
         public bool IsActiveOnCurrentScreen => this.Screens.Contains(Camera.CurrentScreen);
+        /// <summary>
+        /// Adds a screen as a screen a platform entity appears on.
+        /// </summary>
+        /// <param name="screen">Screen a platform entity appears on.</param>
         public void AddScreen(int screen) => this.Screens.Add(screen);
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="data">Class implementing <see cref="IDataProvider"/>.</param>
+        /// <param name="multiplier">Multiplier.</param>
         protected EntityLogic(T data, float multiplier)
         {
             this.Data = data;

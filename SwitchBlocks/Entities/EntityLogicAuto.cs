@@ -4,17 +4,31 @@ namespace SwitchBlocks.Entities
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
 
+    /// <summary>
+    /// Auto logic entity.
+    /// </summary>
     public class EntityLogicAuto : EntityLogic<DataAuto>
     {
+        /// <summary>Duration the full cycle of on/off lasts for.</summary>
         private int DurationCycle { get; set; }
+        /// <summary>Duration the on lasts for.</summary>
         private int DurationOn { get; set; }
+        /// <summary>Duration the off lasts for.</summary>
         private int DurationOff { get; set; }
+        /// <summary>Amount of warns played.</summary>
         private int WarnCount { get; set; }
+        /// <summary>Duration warns are apart.</summary>
         private int WarnDuration { get; set; }
+        /// <summary>If warn has been disabled for the state on.</summary>
         private bool WarnDisableOn { get; set; }
+        /// <summary>If warn has been disabled for the state off.</summary>
         private bool WarnDisableOff { get; set; }
+        /// <summary>If the state is forced to switch regardless of player intersection.</summary>
         private bool ForceSwitch { get; set; }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EntityLogicAuto() : base(DataAuto.Instance, SettingsAuto.Multiplier)
         {
             this.DurationCycle = SettingsAuto.DurationCycle;
@@ -27,15 +41,23 @@ namespace SwitchBlocks.Entities
             this.ForceSwitch = SettingsAuto.ForceSwitch;
         }
 
+        /// <summary>
+        /// Updates progress, tries to play sounds and switch the state.
+        /// </summary>
+        /// <param name="deltaTime">deltaTime.</param>
         protected override void Update(float deltaTime)
         {
             this.UpdateProgress(this.Data.State, deltaTime);
 
-            var adjustedTick = (AchievementManager.GetTicks() + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
+            var adjustedTick = (AchievementManager.GetTick() + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
             this.TrySound(adjustedTick);
             this.TrySwitch(adjustedTick);
         }
 
+        /// <summary>
+        /// Tries to make warn or flip sounds.
+        /// </summary>
+        /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
         private void TrySound(int adjustedTick)
         {
             if (this.Data.State)
@@ -60,6 +82,9 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        /// <summary>
+        /// Plays the warn sound if it should do so.
+        /// </summary>
         private void DoWarnSound()
         {
             this.Data.WarnCount++;
@@ -85,6 +110,9 @@ namespace SwitchBlocks.Entities
             ModSounds.AutoWarn?.PlayOneShot();
         }
 
+        /// <summary>
+        /// Plays the flip sound.
+        /// </summary>
         private void DoFlipSound()
         {
             this.Data.WarnCount = 0;
@@ -95,6 +123,10 @@ namespace SwitchBlocks.Entities
             ModSounds.AutoFlip?.PlayOneShot();
         }
 
+        /// <summary>
+        /// Tries to switch the state if it should do so.
+        /// </summary>
+        /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
         private void TrySwitch(int adjustedTick)
         {
             // I think its < but it could be <=

@@ -11,24 +11,37 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
 
+    /// <summary>
+    /// Behaviour attached to the sequence A block.
+    /// </summary>
     public class BehaviourSequencePlatform : IBlockBehaviour
     {
+        /// <summary>Sequence data.</summary>
         private DataSequence Data { get; }
+        /// <inheritdoc/>
         public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourSequencePlatform() => this.Data = DataSequence.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
@@ -100,7 +113,7 @@ namespace SwitchBlocks.Behaviours
                 }
                 else
                 {
-                    var tick = AchievementManager.GetTicks();
+                    var tick = AchievementManager.GetTick();
                     this.Data.SetTick(groupId, tick + SettingsSequence.Duration);
                     _ = this.Data.Active.Add(groupId);
                 }

@@ -11,6 +11,10 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class SeedsGroup
     {
+        /// <summary>
+        /// Tries to load seeds from file. Default otherwise.
+        /// </summary>
+        /// <returns>Seeds.</returns>
         public static SeedsGroup TryDeserialize()
         {
             var contentManagerRoot = Game1.instance.contentManager.root;
@@ -54,6 +58,11 @@ namespace SwitchBlocks.Data
                 value => int.Parse(value.Element(ModStrings.SAVE_ID).Value))
         };
 
+        /// <summary>
+        /// Gets SeedsGroup from the legacy file format.
+        /// </summary>
+        /// <param name="xels"><see cref="XElement"/> root of the legacy data format.</param>
+        /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static SeedsGroup GetLegacySeeds(IEnumerable<XElement> xels) => new SeedsGroup
         {
             Seeds = xels.ToDictionary(
@@ -61,8 +70,9 @@ namespace SwitchBlocks.Data
                 value => int.Parse(value.Element("value").Element("int").Value))
         };
 
-        private SeedsGroup() => this.Seeds = new Dictionary<int, int>();
-
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -77,7 +87,7 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("SeedsGroup",
                     new XElement(ModStrings.SAVE_SEEDS,
-                        this.Seeds.Any()
+                        this.Seeds.Count() != 0
                         ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
                             new XElement(ModStrings.SAVE_SEED,
                                 new XElement(ModStrings.SAVE_POSITION, kv.Key),

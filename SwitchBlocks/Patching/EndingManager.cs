@@ -5,8 +5,13 @@ namespace SwitchBlocks.Patching
 
     public class EndingManager
     {
+        /// <summary>If the game has finished/ the babe has been reached.</summary>
         public static bool HasFinished { get; private set; }
 
+        /// <summary>
+        /// Adds a postfix to the vanilla EndingManager.
+        /// </summary>
+        /// <param name="harmony"><see cref="Harmony"/> instance used to patch the method.</param>
         public EndingManager(Harmony harmony)
         {
             var endingManager = AccessTools.TypeByName("JumpKing.GameManager.MultiEnding.EndingManager");
@@ -17,6 +22,10 @@ namespace SwitchBlocks.Patching
                 postfix: checkWinPatch);
         }
 
+        /// <summary>
+        /// Sets <see cref="HasFinished"/> to the same result as the CheckWin function.
+        /// </summary>
+        /// <param name="__result">Result of the original function.</param>
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         public static void CheckWinPostfix(bool __result) => HasFinished = __result;
     }

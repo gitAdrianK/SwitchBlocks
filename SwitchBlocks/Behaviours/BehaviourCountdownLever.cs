@@ -11,27 +11,36 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Util;
 
     /// <summary>
-    /// Behaviour related to countdown levers.
+    /// Behaviour attached to the countdown lever block.
     /// </summary>
     public class BehaviourCountdownLever : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
-
+        /// <summary>Countdown data.</summary>
         private DataCountdown Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourCountdownLever() => this.Data = DataCountdown.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
@@ -58,7 +67,7 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                this.Data.ActivatedTick = AchievementManager.GetTicks();
+                this.Data.ActivatedTick = AchievementManager.GetTick();
 
                 if (this.Data.HasSwitched)
                 {

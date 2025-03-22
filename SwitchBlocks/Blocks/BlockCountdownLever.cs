@@ -6,21 +6,25 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     /// The countdown lever block.
     /// </summary>
-    public class BlockCountdownLever : IBlock, IBlockDebugColor
+    public class BlockCountdownLever : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockCountdownLever(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.COUNTDOWN_LEVER;
-
-        public Rectangle GetRect() => this.collider;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockCountdownLever(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.COUNTDOWN_LEVER;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => this.Ccollider;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

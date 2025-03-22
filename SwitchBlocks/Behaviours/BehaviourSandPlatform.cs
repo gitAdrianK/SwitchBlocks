@@ -10,20 +10,23 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Data;
 
     /// <summary>
-    /// Behaviour related to sand platforms.
+    /// Behaviour attached to the sand platform block.
     /// </summary>
     public class BehaviourSandPlatform : IBlockBehaviour
     {
-        public float BlockPriority => 1.0f;
-
+        /// <summary>Sand data.</summary>
         private DataSand Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 1.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
         public bool IsPlayerOnBlockOn { get; set; }
         public bool IsPlayerOnBlockOff { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourSandPlatform() => this.Data = DataSand.Instance;
 
-
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
         {
             // 0.25f from SandBlockBehaviour results in the wrong X speed, 0.5f seems to be about right.
@@ -31,6 +34,7 @@ namespace SwitchBlocks.Behaviours
             return inputXVelocity * num;
         }
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
 
@@ -54,8 +58,10 @@ namespace SwitchBlocks.Behaviours
             return result;
         }
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
             if (this.Data.HasEntered)
@@ -69,6 +75,7 @@ namespace SwitchBlocks.Behaviours
             return false;
         }
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext)
         {
             if ((info.IsCollidingWith<BlockSandOn>() && this.Data.State) || (info.IsCollidingWith<BlockSandOff>() && !this.Data.State))
@@ -92,6 +99,7 @@ namespace SwitchBlocks.Behaviours
             return false;
         }
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)

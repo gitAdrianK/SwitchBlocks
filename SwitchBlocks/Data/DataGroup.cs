@@ -13,7 +13,12 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataGroup : IGroupDataProvider
     {
+        /// <summary>Singleton instance.</summary>
         private static DataGroup instance;
+        /// <summary>
+        /// Returns the instance should it already exist.
+        /// If it doesn't exist loads it from file.
+        /// </summary>
         public static DataGroup Instance
         {
             get
@@ -45,11 +50,11 @@ namespace SwitchBlocks.Data
                     var xel = root.Element(ModStrings.SAVE_GROUPS);
                     // Legacy data then saves a group as <item>, new saves it as <_group>
                     var xels = xel.Elements(ModStrings.SAVE_GROUP);
-                    if (xels.Any())
+                    if (xels.Count() != 0)
                     {
                         groupsDict = GetNewDict(xels);
                     }
-                    else if ((xels = xel.Elements("item")).Any())
+                    else if ((xels = xel.Elements("item")).Count() != 0)
                     {
                         groupsDict = GetLegacyDict(xels);
                     }
@@ -79,6 +84,11 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>
+        /// Gets block groups from the new file format.
+        /// </summary>
+        /// <param name="xels"><see cref="XElement"/> root of the new data format.</param>
+        /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetNewDict(IEnumerable<XElement> xels)
             => xels.ToDictionary(
                 key => int.Parse(key.Element(ModStrings.SAVE_ID).Value),
@@ -89,6 +99,11 @@ namespace SwitchBlocks.Data
                     ActivatedTick = int.Parse(value.Element(ModStrings.SAVE_ACTIVATED).Value),
                 });
 
+        /// <summary>
+        /// Gets block groups from the legacy file format.
+        /// </summary>
+        /// <param name="xels"><see cref="XElement"/> root of the legacy data format.</param>
+        /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetLegacyDict(IEnumerable<XElement> xels)
             => xels.ToDictionary(
                 key => int.Parse(key.Element("key").Element("int").Value),
@@ -99,8 +114,14 @@ namespace SwitchBlocks.Data
                     ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup").Element("ActivatedTick").Value),
                 });
 
+        /// <summary>
+        /// Sets the singleton instance to null.
+        /// </summary>
         public void Reset() => instance = null;
 
+        /// <summary>
+        /// Private ctor.
+        /// </summary>
         private DataGroup()
         {
             this.Groups = new Dictionary<int, BlockGroup>();
@@ -110,6 +131,9 @@ namespace SwitchBlocks.Data
             this.Finished = new HashSet<int>();
         }
 
+        /// <summary>
+        /// Saves the data to file.
+        /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
@@ -124,7 +148,7 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("DataGroup",
                     new XElement(ModStrings.SAVE_GROUPS,
-                        this.Groups.Any()
+                        this.Groups.Count() != 0
                         ? this.Groups.Select(kv =>
                             new XElement(ModStrings.SAVE_GROUP,
                                 new XElement(ModStrings.SAVE_ID, kv.Key),
@@ -134,15 +158,15 @@ namespace SwitchBlocks.Data
                         : null),
                     new XElement(ModStrings.SAVE_HAS_SWITCHED, this.HasSwitched),
                     new XElement(ModStrings.SAVE_TOUCHED,
-                        this.Touched.Any()
+                        this.Touched.Count() != 0
                         ? new List<XElement>(this.Touched.Select(id => new XElement(ModStrings.SAVE_ID, id)))
                         : null),
                     new XElement(ModStrings.SAVE_ACTIVE,
-                        this.Active.Any()
+                        this.Active.Count() != 0
                         ? new List<XElement>(this.Active.Select(id => new XElement(ModStrings.SAVE_ID, id)))
                         : null),
                     new XElement(ModStrings.SAVE_FINISHED,
-                        this.Finished.Any()
+                        this.Finished.Count() != 0
                         ? new List<XElement>(this.Finished.Select(id => new XElement(ModStrings.SAVE_ID, id)))
                         : null)));
 
@@ -158,10 +182,17 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <inheritdoc/>
         public bool GetState(int id) => this.Groups.TryGetValue(id, out var group) && group.State;
 
+        /// <inheritdoc/>
         public float GetProgress(int id) => this.Groups.TryGetValue(id, out var group) ? group.Progress : 0.0f;
 
+        /// <summary>
+        /// Sets the tick of a block group with the given id.
+        /// </summary>
+        /// <param name="id">Id of the block group.</param>
+        /// <param name="tick">Tick to be set.</param>
         public void SetTick(int id, int tick)
         {
             if (!this.Groups.TryGetValue(id, out var group))

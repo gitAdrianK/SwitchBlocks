@@ -4,21 +4,28 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Data;
 
-    public class BlockJumpIceOn : IBlock, IBlockDebugColor
+    /// <summary>
+    /// The jump ice on block.
+    /// </summary>
+    public class BlockJumpIceOn : ModBlock
     {
-        private readonly Rectangle collider;
-
-        public BlockJumpIceOn(Rectangle collider) => this.collider = collider;
-
-        public Color DebugColor => ModBlocks.JUMP_ICE_ON;
-
-        public Rectangle GetRect() => DataJump.Instance.State ? this.collider : Rectangle.Empty;
-
-        public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        /// <inheritdoc/>
+        public BlockJumpIceOn(Rectangle collider) : base(collider)
         {
-            if (this.collider.Intersects(hitbox))
+        }
+
+        /// <inheritdoc/>
+        public override Color DebugColor => ModBlocks.JUMP_ICE_ON;
+
+        /// <inheritdoc/>
+        public override Rectangle GetRect() => DataJump.Instance.State ? this.Ccollider : Rectangle.Empty;
+
+        /// <inheritdoc/>
+        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
+        {
+            if (this.Ccollider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.collider);
+                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
                 if (DataJump.Instance.State)
                 {
                     return BlockCollisionType.Collision_Blocking;

@@ -78,9 +78,9 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModSettings.Load();
+            ModSettings.Setup();
 
-            ModSounds.Load();
+            ModSounds.Setup();
 
             // These behaviours are used as a way to create pre and post behaviour points
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
@@ -96,10 +96,17 @@ namespace SwitchBlocks
             SetupSand.Setup(player);
             SetupSequence.Setup(player);
 
+            // DoIf is a Harmony extension (that also does extra, for us unneeded, checks).
             var entities = entityManager.Entities
                 .SkipWhile(entity => entity != player)
                 .ToList();
-            entities.DoIf(entity => !(entity is EntityDraw), entity => entity.GoToFront());
+            entities.ForEach(entity =>
+            {
+                if (!(entity is EntityDraw))
+                {
+                    entity.GoToFront();
+                }
+            });
         }
 
         /// <summary>
@@ -124,6 +131,8 @@ namespace SwitchBlocks
             {
                 return;
             }
+
+            ModSettings.Cleanup();
 
             ModSounds.Cleanup();
 

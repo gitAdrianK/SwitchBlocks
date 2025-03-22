@@ -9,27 +9,36 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Settings;
 
     /// <summary>
-    /// Behaviour related to auto reset blocks.
+    /// Behaviour attached to the auto reset block.
     /// </summary>
     public class BehaviourAutoReset : IBlockBehaviour
     {
-        public float BlockPriority => 2.0f;
-
+        /// <summary>Auto data.</summary>
         private DataAuto Data { get; }
+        /// <inheritdoc/>
+        public float BlockPriority => 2.0f;
+        /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
+        /// <inheritdoc/>
         public BehaviourAutoReset() => this.Data = DataAuto.Instance;
 
+        /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
+        /// <inheritdoc/>
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
+        /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
+        /// <inheritdoc/>
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
+        /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
@@ -48,7 +57,7 @@ namespace SwitchBlocks.Behaviours
             }
 
             this.Data.WarnCount = 0;
-            this.Data.ResetTick = AchievementManager.GetTicks();
+            this.Data.ResetTick = AchievementManager.GetTick();
             if (isReset && !this.Data.State)
             {
                 this.Data.ResetTick += SettingsAuto.DurationOff;

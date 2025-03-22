@@ -3,21 +3,36 @@ namespace SwitchBlocks.Entities
     using System;
     using JumpKing;
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Util;
     using SwitchBlocks.Util.Deserialization;
     using Curve = Util.Curve;
 
+    /// <summary>
+    /// Platform drawn based on data.
+    /// </summary>
     public class EntityDrawPlatform : EntityDraw
     {
+        /// <summary>Half of <see cref="Math.PI"/> used for animations.</summary>
         private const double HALF_PI = Math.PI / 2.0d;
-
+        /// <summary>Start state.</summary>
         protected bool StartState { get; }
+        /// <summary>Animation.</summary>
         protected Animation Animation { get; }
+        /// <summary>Out animation.</summary>
         protected Animation AnimationOut { get; }
+
+        /// <summary><see cref="IDataProvider"/>.</summary>
         protected IDataProvider Data { get; }
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="platform">Deserialization helper <see cref="Platform"/>.</param>
+        /// <param name="screen">Screen this entity is on.</param>
+        /// <param name="data"><see cref="IDataProvider"/>.</param>
         public EntityDrawPlatform(
             Platform platform,
             int screen,
@@ -29,6 +44,9 @@ namespace SwitchBlocks.Entities
             this.Data = data;
         }
 
+        /// <summary>
+        /// Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
+        /// </summary>
         public override void Draw()
         {
             if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
@@ -38,6 +56,11 @@ namespace SwitchBlocks.Entities
             this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
         }
 
+        /// <summary>
+        /// Draws the entity with a given rectangle to limit the <see cref="Texture2D"/> to.
+        /// </summary>
+        /// <param name="rect"><see cref="Rectangle"/> to limit the texture to.</param>
+        /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
             var progressAdjusted = this.StartState ? 1.0f - this.Data.Progress : this.Data.Progress;
