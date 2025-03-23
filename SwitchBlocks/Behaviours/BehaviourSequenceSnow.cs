@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Generic;
     using System.Linq;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
@@ -13,15 +14,15 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourSequenceSnow : IBlockBehaviour
     {
-        /// <summary>Sequence data.</summary>
-        private DataSequence Data { get; }
+        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
+        private Dictionary<int, BlockGroup> Groups { get; set; }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourSequenceSnow() => this.Data = DataSequence.Instance;
+        public BehaviourSequenceSnow() => this.Groups = DataSequence.Instance.Groups;
 
         /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
@@ -41,12 +42,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowB>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowC>()
@@ -67,7 +68,11 @@ namespace SwitchBlocks.Behaviours
             });
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
-                if (this.Data.GetState(block.GroupId))
+                if (!this.Groups.TryGetValue(block.GroupId, out var group))
+                {
+                    continue;
+                }
+                if (group.State)
                 {
                     BehaviourPost.IsPlayerOnSnow = true;
                     break;

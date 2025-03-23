@@ -15,8 +15,13 @@ namespace SwitchBlocks.Entities
         // Okay but I get it, technically if I want no code duplication at all
         // I need another class that both logic classes inherit from
 
-        /// <summary>Class implementing <see cref="IGroupDataProvider"/>.</summary>
-        protected T Data { get; set; }
+        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
+        protected Dictionary<int, BlockGroup> Groups { get; set; }
+        /// <summary>Cached ids considered active./// </summary>
+        protected HashSet<int> Active { get; set; }
+        /// <summary>Cached ids considered finished./// </summary>
+        protected HashSet<int> Finished { get; set; }
+
         /// <summary>Multiplier.</summary>
         protected float Multiplier { get; set; }
         /// <summary>Screens platform entites appear on.</summary>
@@ -36,7 +41,9 @@ namespace SwitchBlocks.Entities
         /// <param name="multiplier">Multiplier.</param>
         protected EntityGroupLogic(T data, float multiplier)
         {
-            this.Data = data;
+            this.Groups = data.Groups;
+            this.Active = data.Active;
+            this.Finished = data.Finished;
             this.Multiplier = multiplier;
             this.Screens = new HashSet<int>();
         }

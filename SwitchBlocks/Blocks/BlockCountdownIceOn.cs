@@ -18,14 +18,14 @@ namespace SwitchBlocks.Blocks
         public override Color DebugColor => ModBlocks.COUNTDOWN_ICE_ON;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => DataCountdown.Instance.State ? this.Ccollider : Rectangle.Empty;
+        public override Rectangle GetRect() => DataCountdown.Instance.State ? this.Collider : Rectangle.Empty;
 
         /// <inheritdoc/>
         public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (this.Ccollider.Intersects(hitbox))
+            if (this.Collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
+                intersection = Rectangle.Intersect(hitbox, this.Collider);
                 if (DataCountdown.Instance.State)
                 {
                     return BlockCollisionType.Collision_Blocking;

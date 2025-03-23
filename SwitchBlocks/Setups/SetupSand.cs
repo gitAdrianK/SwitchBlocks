@@ -1,11 +1,13 @@
 namespace SwitchBlocks.Setups
 {
+    using JumpKing.Level;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Entities;
     using SwitchBlocks.Factories;
+    using SwitchBlocks.Settings;
 
     /// <summary>
     /// Setup and cleanup as well as setup related fields.
@@ -38,12 +40,22 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Sand,
                 entityLogic);
 
-            // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
-            // velocity or position! This technically needs updating, but I have to consider
-            // Ghost of the Immortal Babe breaking!
-            var behaviourSandPlatform = new BehaviourSandPlatform();
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
+            if (SettingsSand.IsV2)
+            {
+                var collisionQuery = LevelManager.Instance;
+                // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), new BehaviourSandOn(collisionQuery));
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), new BehaviourSandOff(collisionQuery));
+            }
+            else
+            {
+                // XXX: Do not register the same behaviour for multiple blocks if the behaviour changes
+                // velocity or position! This technically needs updating, but I have to consider
+                // Ghost of the Immortal Babe breaking!
+                var behaviourSandPlatform = new BehaviourSandLegacy();
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
+                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
+            }
 
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever());
         }

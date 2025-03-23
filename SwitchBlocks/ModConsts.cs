@@ -3,7 +3,7 @@ namespace SwitchBlocks
     /// <summary>
     /// Collection of string that are used by the mod. Strings that are used exclusively in a single class may not appear here.
     /// </summary>
-    public static class ModStrings
+    public static class ModConsts
     {
         /// <summary>Modname.</summary>
         public const string MODNAME = "Zebra.SwitchBlocksMod";
@@ -83,5 +83,16 @@ namespace SwitchBlocks
         public const string SAND = "sand";
         /// <summary>Sequence folder name.</summary>
         public const string SEQUENCE = "sequence";
+
+        /// <summary>Behaviour priority run before all other behaviours. Used for BehaviourPre.</summary>
+        public const float PRIO_FIRST = 3.0f;
+        /// <summary>Behaviour priority run before normal behaviours but after the one run first.</summary>
+        public const float PRIO_EARLY = 2.5f;
+        /// <summary>Behaviour priority run "normally", this is the priority for most.</summary>
+        public const float PRIO_NORMAL = 2.0f;
+        /// <summary>Behaviour priority run after normal behaviours but before the one run last.</summary>
+        public const float PRIO_LATE = 1.5f;
+        /// <summary>Behaviour priority run after all other behaviours. Used for BehaviourPost.</summary>
+        public const float PRIO_LAST = 1.0f;
     }
 }

@@ -1,8 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.Collections.Concurrent;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
@@ -28,34 +27,32 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             var tick = AchievementManager.GetTick();
-            var multiplier = this.Multiplier;
-            var finished = new List<int>();
-            _ = Parallel.ForEach(this.Data.Active, group =>
+            var finishedIds = new ConcurrentBag<int>();
+            foreach (var groupId in this.Active)
             {
-                var blockGroup = this.Data.Groups[group];
-                this.UpdateProgress(blockGroup, deltaTime);
-                this.TrySwitch(blockGroup, tick);
-                if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
+                if (!this.Groups.TryGetValue(groupId, out var group))
+                {
+                    continue;
+                }
+                this.UpdateProgress(group, deltaTime);
+                this.TrySwitch(group, tick);
+                if (group.Progress == Convert.ToInt32(group.State))
                 {
                     // if the group is "finished", but the switch is planned in the near future,
                     // dont add it to finished just yet.
-                    if (!(tick <= blockGroup.ActivatedTick && tick + this.Duration >= blockGroup.ActivatedTick))
+                    if (!(tick <= group.ActivatedTick && tick + this.Duration >= group.ActivatedTick))
                     {
-                        lock (finished)
+                        finishedIds.Add(groupId);
+                        if (group.State && group.Progress == 1.0f)
                         {
-                            finished.Add(group);
+                            _ = this.Finished.Add(groupId);
                         }
                     }
                 }
-            });
-            foreach (var i in finished)
+            }
+            foreach (var groupId in finishedIds)
             {
-                var blockGroup = this.Data.Groups[i];
-                if (blockGroup.State && blockGroup.Progress == 1.0f)
-                {
-                    _ = this.Data.Finished.Add(i);
-                }
-                _ = this.Data.Active.Remove(i);
+                _ = this.Active.Remove(groupId);
             }
         }
 

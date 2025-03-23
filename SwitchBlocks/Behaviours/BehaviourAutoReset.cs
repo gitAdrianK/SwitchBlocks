@@ -16,7 +16,7 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Auto data.</summary>
         private DataAuto Data { get; }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
@@ -41,12 +41,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var isReset = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
             var isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
             this.IsPlayerOnBlock = isReset || isResetFull;

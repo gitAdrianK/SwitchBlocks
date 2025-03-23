@@ -13,7 +13,7 @@ namespace SwitchBlocks
     using SwitchBlocks.Factories;
     using SwitchBlocks.Setups;
 
-    [JumpKingMod(ModStrings.MODNAME)]
+    [JumpKingMod(ModConsts.MODNAME)]
     public static class ModEntry
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactorySand());
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
 
-            var harmony = new Harmony(ModStrings.HARMONY);
+            var harmony = new Harmony(ModConsts.HARMONY);
             _ = new Patching.BodyComp(harmony);
             _ = new Patching.EndingManager(harmony);
             _ = new Patching.WindManager(harmony);

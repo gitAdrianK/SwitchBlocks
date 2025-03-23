@@ -69,6 +69,8 @@
     <Compile Include="Behaviours\BehaviourPre.cs" />
     <Compile Include="Behaviours\BehaviourAutoReset.cs" />
     <Compile Include="Behaviours\BehaviourBasicLever.cs" />
+    <Compile Include="Behaviours\BehaviourSandOff.cs" />
+    <Compile Include="Behaviours\BehaviourSandOn.cs" />
     <Compile Include="Behaviours\BehaviourSequenceIce.cs" />
     <Compile Include="Behaviours\BehaviourSequencePlatform.cs" />
     <Compile Include="Behaviours\BehaviourSequenceSnow.cs" />
@@ -78,7 +80,7 @@
     <Compile Include="Behaviours\BehaviourGroupLeaving.cs" />
     <Compile Include="Behaviours\BehaviourGroupDuration.cs" />
     <Compile Include="Behaviours\BehaviourCountdownLever.cs" />
-    <Compile Include="Behaviours\BehaviourSandPlatform.cs" />
+    <Compile Include="Behaviours\BehaviourSandLegacy.cs" />
     <Compile Include="Behaviours\BehaviourSandLever.cs" />
     <Compile Include="Blocks\BlockAutoIceOff.cs" />
     <Compile Include="Blocks\BlockAutoIceOn.cs" />
@@ -193,7 +195,7 @@
     <Compile Include="Factories\FactoryGroup.cs" />
     <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="ModSettings.cs" />
-    <Compile Include="ModStrings.cs" />
+    <Compile Include="ModConsts.cs" />
     <Compile Include="Patching\AchievementManager.cs" />
     <Compile Include="Patching\BodyComp.cs" />
     <Compile Include="Patching\EndingManager.cs" />

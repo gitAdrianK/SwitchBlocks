@@ -28,9 +28,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.JUMP}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.JUMP}{ModConsts.SUFFIX_SAV}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataJump();
@@ -43,10 +43,10 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataJump
                     {
-                        State = bool.Parse(root.Element(ModStrings.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModStrings.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        CanSwitchSafely = bool.Parse(root.Element(ModStrings.SAVE_CSS).Value),
-                        SwitchOnceSafe = bool.Parse(root.Element(ModStrings.SAVE_SOS).Value),
+                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
+                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                        CanSwitchSafely = bool.Parse(root.Element(ModConsts.SAVE_CSS).Value),
+                        SwitchOnceSafe = bool.Parse(root.Element(ModConsts.SAVE_SOS).Value),
                     };
                 }
                 return instance;
@@ -76,8 +76,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -85,17 +85,17 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataJump",
-                    new XElement(ModStrings.SAVE_STATE, this.State),
-                    new XElement(ModStrings.SAVE_PROGRESS, this.Progress),
-                    new XElement(ModStrings.SAVE_CSS, this.CanSwitchSafely),
-                    new XElement(ModStrings.SAVE_SOS, this.SwitchOnceSafe)
+                    new XElement(ModConsts.SAVE_STATE, this.State),
+                    new XElement(ModConsts.SAVE_PROGRESS, this.Progress),
+                    new XElement(ModConsts.SAVE_CSS, this.CanSwitchSafely),
+                    new XElement(ModConsts.SAVE_SOS, this.SwitchOnceSafe)
                 )
             );
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.JUMP}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.JUMP}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))

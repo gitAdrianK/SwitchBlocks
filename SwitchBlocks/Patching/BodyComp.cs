@@ -39,12 +39,13 @@ namespace SwitchBlocks.Patching
             if (blockType == typeof(SandBlock))
             {
                 __result |= DataSand.Instance.HasEntered;
+                __result |= BehaviourPost.IsPlayerOnSand;
             }
-            if (blockType == typeof(IceBlock))
+            else if (blockType == typeof(IceBlock))
             {
                 __result |= BehaviourPost.IsPlayerOnIce;
             }
-            if (blockType == typeof(SnowBlock))
+            else if (blockType == typeof(SnowBlock))
             {
                 __result |= BehaviourPost.IsPlayerOnSnow;
             }

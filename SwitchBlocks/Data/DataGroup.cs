@@ -30,9 +30,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.GROUP}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.GROUP}{ModConsts.SUFFIX_SAV}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataGroup();
@@ -47,9 +47,9 @@ namespace SwitchBlocks.Data
                     Dictionary<int, BlockGroup> groupsDict = null;
 
                     // Both legacy and new data saves all groups as <_groups>
-                    var xel = root.Element(ModStrings.SAVE_GROUPS);
+                    var xel = root.Element(ModConsts.SAVE_GROUPS);
                     // Legacy data then saves a group as <item>, new saves it as <_group>
-                    var xels = xel.Elements(ModStrings.SAVE_GROUP);
+                    var xels = xel.Elements(ModConsts.SAVE_GROUP);
                     if (xels.Count() != 0)
                     {
                         groupsDict = GetNewDict(xels);
@@ -62,20 +62,20 @@ namespace SwitchBlocks.Data
                     instance = new DataGroup
                     {
                         Groups = groupsDict ?? new Dictionary<int, BlockGroup>(),
-                        HasSwitched = bool.Parse(root.Element(ModStrings.SAVE_HAS_SWITCHED).Value),
+                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
                         Touched = new HashSet<int>(
-                            root.Element(ModStrings.SAVE_TOUCHED)?
-                                .Elements(ModStrings.SAVE_POSITION)
+                            root.Element(ModConsts.SAVE_TOUCHED)?
+                                .Elements(ModConsts.SAVE_POSITION)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Active = new HashSet<int>(
-                            root.Element(ModStrings.SAVE_ACTIVE)?
-                                .Elements(ModStrings.SAVE_POSITION)
+                            root.Element(ModConsts.SAVE_ACTIVE)?
+                                .Elements(ModConsts.SAVE_POSITION)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Finished = new HashSet<int>(
-                            root.Element(ModStrings.SAVE_FINISHED)?
-                                .Elements(ModStrings.SAVE_POSITION)
+                            root.Element(ModConsts.SAVE_FINISHED)?
+                                .Elements(ModConsts.SAVE_POSITION)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>())
                     };
@@ -91,12 +91,12 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetNewDict(IEnumerable<XElement> xels)
             => xels.ToDictionary(
-                key => int.Parse(key.Element(ModStrings.SAVE_ID).Value),
+                key => int.Parse(key.Element(ModConsts.SAVE_ID).Value),
                 value => new BlockGroup
                 {
-                    State = bool.Parse(value.Element(ModStrings.SAVE_STATE).Value),
-                    Progress = float.Parse(value.Element(ModStrings.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                    ActivatedTick = int.Parse(value.Element(ModStrings.SAVE_ACTIVATED).Value),
+                    State = bool.Parse(value.Element(ModConsts.SAVE_STATE).Value),
+                    Progress = float.Parse(value.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                    ActivatedTick = int.Parse(value.Element(ModConsts.SAVE_ACTIVATED).Value),
                 });
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -147,33 +147,33 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataGroup",
-                    new XElement(ModStrings.SAVE_GROUPS,
+                    new XElement(ModConsts.SAVE_GROUPS,
                         this.Groups.Count() != 0
                         ? this.Groups.Select(kv =>
-                            new XElement(ModStrings.SAVE_GROUP,
-                                new XElement(ModStrings.SAVE_ID, kv.Key),
-                                new XElement(ModStrings.SAVE_STATE, kv.Value.State),
-                                new XElement(ModStrings.SAVE_PROGRESS, kv.Value.Progress),
-                                new XElement(ModStrings.SAVE_ACTIVATED, kv.Value.ActivatedTick)))
+                            new XElement(ModConsts.SAVE_GROUP,
+                                new XElement(ModConsts.SAVE_ID, kv.Key),
+                                new XElement(ModConsts.SAVE_STATE, kv.Value.State),
+                                new XElement(ModConsts.SAVE_PROGRESS, kv.Value.Progress),
+                                new XElement(ModConsts.SAVE_ACTIVATED, kv.Value.ActivatedTick)))
                         : null),
-                    new XElement(ModStrings.SAVE_HAS_SWITCHED, this.HasSwitched),
-                    new XElement(ModStrings.SAVE_TOUCHED,
+                    new XElement(ModConsts.SAVE_HAS_SWITCHED, this.HasSwitched),
+                    new XElement(ModConsts.SAVE_TOUCHED,
                         this.Touched.Count() != 0
-                        ? new List<XElement>(this.Touched.Select(id => new XElement(ModStrings.SAVE_ID, id)))
+                        ? new List<XElement>(this.Touched.Select(id => new XElement(ModConsts.SAVE_ID, id)))
                         : null),
-                    new XElement(ModStrings.SAVE_ACTIVE,
+                    new XElement(ModConsts.SAVE_ACTIVE,
                         this.Active.Count() != 0
-                        ? new List<XElement>(this.Active.Select(id => new XElement(ModStrings.SAVE_ID, id)))
+                        ? new List<XElement>(this.Active.Select(id => new XElement(ModConsts.SAVE_ID, id)))
                         : null),
-                    new XElement(ModStrings.SAVE_FINISHED,
+                    new XElement(ModConsts.SAVE_FINISHED,
                         this.Finished.Count() != 0
-                        ? new List<XElement>(this.Finished.Select(id => new XElement(ModStrings.SAVE_ID, id)))
+                        ? new List<XElement>(this.Finished.Select(id => new XElement(ModConsts.SAVE_ID, id)))
                         : null)));
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.GROUP}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.GROUP}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))
@@ -183,36 +183,13 @@ namespace SwitchBlocks.Data
         }
 
         /// <inheritdoc/>
-        public bool GetState(int id) => this.Groups.TryGetValue(id, out var group) && group.State;
-
-        /// <inheritdoc/>
-        public float GetProgress(int id) => this.Groups.TryGetValue(id, out var group) ? group.Progress : 0.0f;
-
-        /// <summary>
-        /// Sets the tick of a block group with the given id.
-        /// </summary>
-        /// <param name="id">Id of the block group.</param>
-        /// <param name="tick">Tick to be set.</param>
-        public void SetTick(int id, int tick)
-        {
-            if (!this.Groups.TryGetValue(id, out var group))
-            {
-                return;
-            }
-            group.ActivatedTick = tick;
-        }
-
-        /// <summary>
-        /// Groups belonging to the respective id.
-        /// A group has the data related to a platform.
-        /// </summary>
         public Dictionary<int, BlockGroup> Groups { get; set; }
 
-        /// <summary>
-        /// Whether the state has switched touching a lever.<br />
-        /// One time touching the lever = one switch
-        /// </summary>
-        public bool HasSwitched { get; set; }
+        /// <inheritdoc/>
+        public HashSet<int> Active { get; set; }
+
+        /// <inheritdoc/>
+        public HashSet<int> Finished { get; set; }
 
         /// <summary>
         /// GroupIds of block groups that are currently touched by the player.
@@ -220,14 +197,9 @@ namespace SwitchBlocks.Data
         public HashSet<int> Touched { get; set; }
 
         /// <summary>
-        /// GroupIds that are currently in the process of changing state from active to inactive or vice versa.
-        /// They are considered active until the progress has reached 0/1.
+        /// Whether the state has switched touching a lever.<br />
+        /// One time touching the lever = one switch
         /// </summary>
-        public HashSet<int> Active { get; set; }
-
-        /// <summary>
-        /// GroupIds that have finished going from their default startstate to the other state.
-        /// </summary>
-        public HashSet<int> Finished { get; set; }
+        public bool HasSwitched { get; set; }
     }
 }

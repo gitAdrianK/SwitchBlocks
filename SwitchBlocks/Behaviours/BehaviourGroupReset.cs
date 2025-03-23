@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
@@ -15,15 +15,32 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourGroupReset : IBlockBehaviour
     {
-        /// <summary>Group data.</summary>
-        private DataGroup Data { get; }
+        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
+        private Dictionary<int, BlockGroup> Groups { get; set; }
+        /// <summary>Cached ids considered active.</summary>
+        private HashSet<int> Active { get; set; }
+        /// <summary>Cached ids considered finished.</summary>
+        private HashSet<int> Finished { get; set; }
+        /// <summary>Get or set the sequence datas HasSwitched.</summary>
+        private bool HasSwitched
+        {
+            get => DataGroup.Instance.HasSwitched;
+            set => DataGroup.Instance.HasSwitched = value;
+        }
+        /// <summary>Get or set the sequence datas Touched.</summary>
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourGroupReset() => this.Data = DataGroup.Instance;
+        public BehaviourGroupReset()
+        {
+            var data = DataGroup.Instance;
+            this.Groups = data.Groups;
+            this.Active = data.Active;
+            this.Finished = data.Finished;
+        }
 
         /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
@@ -43,26 +60,25 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockGroupReset>();
             var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockGroupResetSolid>();
             this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
             if (!this.IsPlayerOnBlock)
             {
-                this.Data.HasSwitched = false;
+                this.HasSwitched = false;
                 return true;
             }
-
-            if (this.Data.HasSwitched)
+            if (this.HasSwitched)
             {
                 return true;
             }
-            this.Data.HasSwitched = true;
+            this.HasSwitched = true;
 
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
@@ -83,29 +99,41 @@ namespace SwitchBlocks.Behaviours
                 || type == typeof(BlockGroupResetSolid);
             });
 
-            if (block.ResetIds.Length == 1 && block.ResetIds[0] == 0)
+            // If the only reset id is 0, reset all groups.
+            var resetIds = block.ResetIds;
+            if (resetIds.Length == 1 && resetIds[0] == 0)
             {
-                _ = Parallel.ForEach(this.Data.Active, group
-                    => this.Data.Groups[group].ActivatedTick = int.MaxValue);
-                _ = Parallel.ForEach(this.Data.Finished, group =>
+                foreach (var groupId in this.Active)
                 {
-                    this.Data.Groups[group].ActivatedTick = int.MaxValue;
-                    _ = this.Data.Active.Add(group);
-                });
-                this.Data.Finished.Clear();
-                this.Data.Touched.Clear();
+                    if (!this.Groups.TryGetValue(groupId, out var group))
+                    {
+                        continue;
+                    }
+                    group.ActivatedTick = int.MaxValue;
+                }
+                foreach (var groupId in this.Finished)
+                {
+                    if (!this.Groups.TryGetValue(groupId, out var group))
+                    {
+                        continue;
+                    }
+                    group.ActivatedTick = int.MaxValue;
+                    _ = this.Active.Add(groupId);
+                }
+                this.Finished.Clear();
             }
             else
             {
-                _ = Parallel.ForEach(block.ResetIds, id =>
+                foreach (var resetId in resetIds)
                 {
-                    if (this.Data.Groups.TryGetValue(id, out var blockGroup))
+                    if (!this.Groups.TryGetValue(resetId, out var group))
                     {
-                        blockGroup.ActivatedTick = int.MaxValue;
-                        _ = this.Data.Active.Add(id);
-                        _ = this.Data.Finished.Remove(id);
+                        continue;
                     }
-                });
+                    group.ActivatedTick = int.MaxValue;
+                    _ = this.Active.Add(resetId);
+                    _ = this.Finished.Remove(resetId);
+                }
             }
 
             return true;

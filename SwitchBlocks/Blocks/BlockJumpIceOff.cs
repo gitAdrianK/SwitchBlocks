@@ -18,14 +18,14 @@ namespace SwitchBlocks.Blocks
         public override Color DebugColor => ModBlocks.JUMP_ICE_OFF;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => !DataJump.Instance.State ? this.Ccollider : Rectangle.Empty;
+        public override Rectangle GetRect() => !DataJump.Instance.State ? this.Collider : Rectangle.Empty;
 
         /// <inheritdoc/>
         public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (this.Ccollider.Intersects(hitbox))
+            if (this.Collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
+                intersection = Rectangle.Intersect(hitbox, this.Collider);
                 if (DataJump.Instance.State)
                 {
                     return BlockCollisionType.Collision_NonBlocking;

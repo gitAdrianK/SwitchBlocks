@@ -18,7 +18,7 @@ namespace SwitchBlocks.Behaviours
         private DataJump Jump { get; }
         // Documentation is false, higher numbers are run first!
         /// <inheritdoc/>
-        public float BlockPriority => 3.0f;
+        public float BlockPriority => ModConsts.PRIO_FIRST;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
@@ -54,6 +54,7 @@ namespace SwitchBlocks.Behaviours
 
             BehaviourPost.IsPlayerOnIce = false;
             BehaviourPost.IsPlayerOnSnow = false;
+            BehaviourPost.IsPlayerOnSand = false;
 
             return true;
         }

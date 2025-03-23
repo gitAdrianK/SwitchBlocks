@@ -22,15 +22,23 @@ namespace SwitchBlocks.Blocks
         public override Color DebugColor => ModBlocks.SEQUENCE_ICE_C;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => DataSequence.Instance.GetState(this.GroupId) ? this.Ccollider : Rectangle.Empty;
+        public override Rectangle GetRect()
+        {
+            if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group)
+                && group.State)
+            {
+                return this.Collider;
+            }
+            return Rectangle.Empty;
+        }
 
         /// <inheritdoc/>
         public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (this.Ccollider.Intersects(hitbox))
+            if (this.Collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
-                if (DataSequence.Instance.GetState(this.GroupId))
+                intersection = Rectangle.Intersect(hitbox, this.Collider);
+                if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group) && group.State)
                 {
                     return BlockCollisionType.Collision_Blocking;
                 }

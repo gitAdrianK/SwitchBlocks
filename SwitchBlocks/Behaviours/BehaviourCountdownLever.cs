@@ -18,7 +18,7 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Countdown data.</summary>
         private DataCountdown Data { get; }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
@@ -43,12 +43,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>();
             var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
             this.IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;

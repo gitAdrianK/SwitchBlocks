@@ -8,13 +8,13 @@ namespace SwitchBlocks.Blocks
         /// <summary>
         /// This blocks <see cref="Rectangle"/> used for collision.
         /// </summary>
-        protected Rectangle Ccollider { get; }
+        protected Rectangle Collider { get; }
 
         /// <summary>
         /// Ctor.
         /// </summary>
         /// <param name="collider">Collider to be used for this block.</param>
-        protected ModBlock(Rectangle collider) => this.Ccollider = collider;
+        protected ModBlock(Rectangle collider) => this.Collider = collider;
 
         /// <summary>
         /// <see cref="Color"/> this block is drawn as when in debug.

@@ -19,9 +19,9 @@ namespace SwitchBlocks.Data
         {
             var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_RESETS}{ModStrings.GROUP}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_RESETS}{ModConsts.GROUP}{ModConsts.SUFFIX_SAV}");
             if (!File.Exists(file))
             {
                 return new ResetsGroup();
@@ -34,11 +34,11 @@ namespace SwitchBlocks.Data
 
                 XElement xel;
                 // Legacy data saves the seed as <_seed><item>, new saves it as <_resets><_reset>
-                if ((xel = root.Element(ModStrings.SAVE_RESETS)) != null)
+                if ((xel = root.Element(ModConsts.SAVE_RESETS)) != null)
                 {
-                    return GetNewDict(xel.Elements(ModStrings.SAVE_RESET));
+                    return GetNewDict(xel.Elements(ModConsts.SAVE_RESET));
                 }
-                else if ((xel = root.Element(ModStrings.SAVE_SEED)) != null)
+                else if ((xel = root.Element(ModConsts.SAVE_SEED)) != null)
                 {
                     return GetLegacyDict(xel.Elements("item"));
                 }
@@ -49,8 +49,8 @@ namespace SwitchBlocks.Data
         private static ResetsGroup GetNewDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
             Resets = xels.ToDictionary(
-                key => int.Parse(key.Element(ModStrings.SAVE_POSITION).Value),
-                value => value.Elements(ModStrings.SAVE_ID).Select(id => int.Parse(id.Value)).ToArray())
+                key => int.Parse(key.Element(ModConsts.SAVE_POSITION).Value),
+                value => value.Elements(ModConsts.SAVE_ID).Select(id => int.Parse(id.Value)).ToArray())
         };
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -81,18 +81,18 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("ResetsGroup",
-                    new XElement(ModStrings.SAVE_RESETS,
+                    new XElement(ModConsts.SAVE_RESETS,
                         this.Resets.Count() != 0
                         ? this.Resets.OrderBy(kv => kv.Key).Select(kv =>
-                            new XElement(ModStrings.SAVE_RESET,
-                                new XElement(ModStrings.SAVE_POSITION, kv.Key),
-                                kv.Value.Select(id => new XElement(ModStrings.SAVE_ID, id))))
+                            new XElement(ModConsts.SAVE_RESET,
+                                new XElement(ModConsts.SAVE_POSITION, kv.Key),
+                                kv.Value.Select(id => new XElement(ModConsts.SAVE_ID, id))))
                         : null)));
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_RESETS}{ModStrings.GROUP}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_RESETS}{ModConsts.GROUP}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))

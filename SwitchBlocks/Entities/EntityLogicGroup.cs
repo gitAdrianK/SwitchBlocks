@@ -2,7 +2,6 @@ namespace SwitchBlocks.Entities
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using SwitchBlocks.Data;
     using SwitchBlocks.Patching;
     using SwitchBlocks.Settings;
@@ -28,40 +27,32 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             var tick = AchievementManager.GetTick();
-            var multiplier = this.Multiplier;
-            var finished = new List<int>();
-            _ = Parallel.ForEach(this.Data.Active, group =>
+            var finishedIds = new List<int>();
+            foreach (var groupId in this.Active)
             {
-                if (!this.Data.Groups.TryGetValue(group, out var blockGroup))
-                {
-                    return;
-                }
-                this.UpdateProgress(blockGroup, deltaTime);
-                this.TrySwitch(blockGroup, tick);
-                if (blockGroup.Progress == Convert.ToInt32(blockGroup.State))
-                {
-                    // if the group is "finished", but the switch is planned in the near future,
-                    // dont add it to finished just yet.
-                    if (!(tick <= blockGroup.ActivatedTick && tick + this.Duration >= blockGroup.ActivatedTick))
-                    {
-                        lock (finished)
-                        {
-                            finished.Add(group);
-                        }
-                    }
-                }
-            });
-            foreach (var i in finished)
-            {
-                if (!this.Data.Groups.TryGetValue(i, out var blockGroup1))
+                if (!this.Groups.TryGetValue(groupId, out var group))
                 {
                     continue;
                 }
-                if (!blockGroup1.State && blockGroup1.Progress == 0.0f)
+                this.UpdateProgress(group, deltaTime);
+                this.TrySwitch(group, tick);
+                if (group.Progress == Convert.ToInt32(group.State))
                 {
-                    _ = this.Data.Finished.Add(i);
+                    // if the group is "finished", but the switch is planned in the near future,
+                    // dont add it to finished just yet.
+                    if (!(tick <= group.ActivatedTick && tick + this.Duration >= group.ActivatedTick))
+                    {
+                        finishedIds.Add(groupId);
+                        if (!group.State && group.Progress == 0.0f)
+                        {
+                            _ = this.Finished.Add(groupId);
+                        }
+                    }
                 }
-                _ = this.Data.Active.Remove(i);
+            }
+            foreach (var groupId in finishedIds)
+            {
+                _ = this.Active.Remove(groupId);
             }
         }
 

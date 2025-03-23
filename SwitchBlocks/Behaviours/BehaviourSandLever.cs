@@ -17,7 +17,7 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Sand data.</summary>
         private DataSand Data { get; }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
@@ -42,12 +42,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockSandLever>();
             var collidingWithLeverOn = advCollisionInfo.IsCollidingWith<BlockSandLeverOn>();
             var collidingWithLeverOff = advCollisionInfo.IsCollidingWith<BlockSandLeverOff>();

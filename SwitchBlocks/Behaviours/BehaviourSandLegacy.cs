@@ -12,19 +12,19 @@ namespace SwitchBlocks.Behaviours
     /// <summary>
     /// Behaviour attached to the sand platform block.
     /// </summary>
-    public class BehaviourSandPlatform : IBlockBehaviour
+    public class BehaviourSandLegacy : IBlockBehaviour
     {
         /// <summary>Sand data.</summary>
         private DataSand Data { get; }
         /// <inheritdoc/>
-        public float BlockPriority => 1.0f;
+        public float BlockPriority => ModConsts.PRIO_LATE;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
         public bool IsPlayerOnBlockOn { get; set; }
         public bool IsPlayerOnBlockOff { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourSandPlatform() => this.Data = DataSand.Instance;
+        public BehaviourSandLegacy() => this.Data = DataSand.Instance;
 
         /// <inheritdoc/>
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext)
@@ -102,12 +102,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var bodyComp = behaviourContext.BodyComp;
 
             this.IsPlayerOnBlockOn = advCollisionInfo.IsCollidingWith<BlockSandOn>();

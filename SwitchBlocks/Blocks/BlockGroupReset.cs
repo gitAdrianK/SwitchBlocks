@@ -21,14 +21,14 @@ namespace SwitchBlocks.Blocks
         public override Color DebugColor => ModBlocks.GROUP_RESET;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => this.Ccollider;
+        public override Rectangle GetRect() => this.Collider;
 
         /// <inheritdoc/>
         public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
-            if (this.Ccollider.Intersects(hitbox))
+            if (this.Collider.Intersects(hitbox))
             {
-                intersection = Rectangle.Intersect(hitbox, this.Ccollider);
+                intersection = Rectangle.Intersect(hitbox, this.Collider);
                 return BlockCollisionType.Collision_NonBlocking;
             }
             intersection = Rectangle.Empty;

@@ -51,7 +51,10 @@ namespace SwitchBlocks.Setups
 
             if (instance.Touched == 0)
             {
-                instance.SetTick(1, int.MaxValue);
+                if (instance.Groups.TryGetValue(1, out var group))
+                {
+                    group.ActivatedTick = int.MaxValue;
+                }
                 _ = instance.Active.Add(1);
             }
 

@@ -27,9 +27,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.SAND}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.SAND}{ModConsts.SUFFIX_SAV}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataSand();
@@ -42,9 +42,9 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataSand
                     {
-                        State = bool.Parse(root.Element(ModStrings.SAVE_STATE).Value),
-                        HasSwitched = bool.Parse(root.Element(ModStrings.SAVE_HAS_SWITCHED).Value),
-                        HasEntered = bool.Parse(root.Element(ModStrings.SAVE_HAS_ENTERED).Value),
+                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
+                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
+                        HasEntered = bool.Parse(root.Element(ModConsts.SAVE_HAS_ENTERED).Value),
                     };
                 }
                 return instance;
@@ -73,8 +73,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -82,16 +82,16 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataSand",
-                    new XElement(ModStrings.SAVE_STATE, this.State),
-                    new XElement(ModStrings.SAVE_HAS_SWITCHED, this.HasSwitched),
-                    new XElement(ModStrings.SAVE_HAS_ENTERED, this.HasEntered)
+                    new XElement(ModConsts.SAVE_STATE, this.State),
+                    new XElement(ModConsts.SAVE_HAS_SWITCHED, this.HasSwitched),
+                    new XElement(ModConsts.SAVE_HAS_ENTERED, this.HasEntered)
                 )
             );
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.SAND}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.SAND}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))

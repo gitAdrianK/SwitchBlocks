@@ -21,31 +21,31 @@ namespace SwitchBlocks.Data
             // The new seeds file is called seeds_sequence.sav
             var file = Path.Combine(
                     contentManagerRoot,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_SEEDS}{ModStrings.SEQUENCE}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_SEEDS}{ModConsts.SEQUENCE}{ModConsts.SUFFIX_SAV}");
             if (File.Exists(file))
             {
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    return GetNewDict(root.Element(ModStrings.SAVE_SEEDS).Elements(ModStrings.SAVE_SEED));
+                    return GetNewDict(root.Element(ModConsts.SAVE_SEEDS).Elements(ModConsts.SAVE_SEED));
                 };
             }
             // The legacy seeds file is called cache_sequence.sav
             file = Path.Combine(
                     contentManagerRoot,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_CACHE}{ModStrings.SEQUENCE}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_CACHE}{ModConsts.SEQUENCE}{ModConsts.SUFFIX_SAV}");
             if (File.Exists(file))
             {
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    return GetLegacyDict(root.Element(ModStrings.SAVE_SEED).Elements("item"));
+                    return GetLegacyDict(root.Element(ModConsts.SAVE_SEED).Elements("item"));
                 };
             }
             return new SeedsSequence();
@@ -54,8 +54,8 @@ namespace SwitchBlocks.Data
         private static SeedsSequence GetNewDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
             Seeds = xels.ToDictionary(
-                key => int.Parse(key.Element(ModStrings.SAVE_POSITION).Value),
-                value => int.Parse(value.Element(ModStrings.SAVE_ID).Value))
+                key => int.Parse(key.Element(ModConsts.SAVE_POSITION).Value),
+                value => int.Parse(value.Element(ModConsts.SAVE_ID).Value))
         };
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -86,18 +86,18 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("SeedsSequence",
-                    new XElement(ModStrings.SAVE_SEEDS,
+                    new XElement(ModConsts.SAVE_SEEDS,
                         this.Seeds.Count() != 0
                         ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
-                            new XElement(ModStrings.SAVE_SEED,
-                                new XElement(ModStrings.SAVE_POSITION, kv.Key),
-                                new XElement(ModStrings.SAVE_ID, kv.Value)))
+                            new XElement(ModConsts.SAVE_SEED,
+                                new XElement(ModConsts.SAVE_POSITION, kv.Key),
+                                new XElement(ModConsts.SAVE_ID, kv.Value)))
                         : null)));
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_SEEDS}{ModStrings.SEQUENCE}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_SEEDS}{ModConsts.SEQUENCE}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))

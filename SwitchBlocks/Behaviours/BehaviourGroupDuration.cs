@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Generic;
     using System.Linq;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
@@ -15,15 +16,25 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourGroupDuration : IBlockBehaviour
     {
-        /// <summary>Group data.</summary>
-        private DataGroup Data { get; }
+        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
+        private Dictionary<int, BlockGroup> Groups { get; set; }
+        /// <summary>Cached ids considered active./// </summary>
+        private HashSet<int> Active { get; set; }
+        /// <summary>Cached ids considered touched./// </summary>
+        private HashSet<int> Touched { get; set; }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourGroupDuration() => this.Data = DataGroup.Instance;
+        public BehaviourGroupDuration()
+        {
+            var data = DataGroup.Instance;
+            this.Groups = data.Groups;
+            this.Active = data.Active;
+            this.Touched = data.Touched;
+        }
 
         /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
@@ -43,23 +54,23 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockGroupA>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupIceA>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupB>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupIceB>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupC>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupIceC>()
-                || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceA>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupIceC>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupIceD>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowA>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowB>()
+                || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
             if (!this.IsPlayerOnBlock)
@@ -72,32 +83,38 @@ namespace SwitchBlocks.Behaviours
             {
                 var type = b.GetType();
                 return type == typeof(BlockGroupA)
-                || type == typeof(BlockGroupIceA)
-                || type == typeof(BlockGroupSnowA)
                 || type == typeof(BlockGroupB)
-                || type == typeof(BlockGroupIceB)
-                || type == typeof(BlockGroupSnowB)
                 || type == typeof(BlockGroupC)
-                || type == typeof(BlockGroupIceC)
-                || type == typeof(BlockGroupSnowC)
                 || type == typeof(BlockGroupD)
+                || type == typeof(BlockGroupIceA)
+                || type == typeof(BlockGroupIceB)
+                || type == typeof(BlockGroupIceC)
                 || type == typeof(BlockGroupIceD)
+                || type == typeof(BlockGroupSnowA)
+                || type == typeof(BlockGroupSnowB)
+                || type == typeof(BlockGroupSnowC)
                 || type == typeof(BlockGroupSnowD);
             });
+
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 var groupId = block.GroupId;
-                if (!this.Data.GetState(groupId)
-                    || this.Data.Touched.Contains(groupId)
-                    || !Directions.ResolveCollisionDirection(behaviourContext,
-                    SettingsGroup.PlatformDirections,
-                    (IBlock)block))
+                if (!this.Groups.TryGetValue(groupId, out var group))
                 {
                     continue;
                 }
-                this.Data.SetTick(groupId, tick + SettingsGroup.Duration);
-                _ = this.Data.Active.Add(groupId);
-                _ = this.Data.Touched.Add(groupId);
+                if (!group.State
+                    || this.Touched.Contains(groupId)
+                    || !Directions.ResolveCollisionDirection(
+                        behaviourContext,
+                        SettingsGroup.PlatformDirections,
+                        (IBlock)block))
+                {
+                    continue;
+                }
+                group.ActivatedTick = tick + SettingsGroup.Duration;
+                _ = this.Active.Add(groupId);
+                _ = this.Touched.Add(groupId);
             }
 
             return true;

@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Generic;
     using System.Linq;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
@@ -16,15 +17,28 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourSequencePlatform : IBlockBehaviour
     {
-        /// <summary>Sequence data.</summary>
-        private DataSequence Data { get; }
+        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
+        private Dictionary<int, BlockGroup> Groups { get; set; }
+        /// <summary>Cached ids considered active./// </summary>
+        private HashSet<int> Active { get; set; }
+        /// <summary>Id considered touched./// </summary>
+        private int Touched
+        {
+            get => DataSequence.Instance.Touched;
+            set => DataSequence.Instance.Touched = value;
+        }
         /// <inheritdoc/>
-        public float BlockPriority => 2.0f;
+        public float BlockPriority => ModConsts.PRIO_NORMAL;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourSequencePlatform() => this.Data = DataSequence.Instance;
+        public BehaviourSequencePlatform()
+        {
+            var data = DataSequence.Instance;
+            this.Groups = data.Groups;
+            this.Active = data.Active;
+        }
 
         /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
@@ -44,33 +58,37 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceA>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceA>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceB>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceB>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowB>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceC>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceC>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceD>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceIceA>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceIceB>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceIceC>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceIceD>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowA>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowB>()
+                || advCollisionInfo.IsCollidingWith<BlockSequenceSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockSequenceSnowD>();
-
             if (!this.IsPlayerOnBlock)
             {
+                var touched = this.Touched;
                 if (SettingsSequence.DisableOnLeave
                     && SettingsSequence.Duration == 0
-                    && this.Data.Touched > 0)
+                    && touched > 0)
                 {
-                    this.Data.SetTick(this.Data.Touched, int.MinValue);
-                    _ = this.Data.Active.Add(this.Data.Touched);
+                    if (!this.Groups.TryGetValue(touched, out var group))
+                    {
+                        return true;
+                    }
+                    group.ActivatedTick = int.MinValue;
+                    _ = this.Active.Add(touched);
                 }
                 return true;
             }
@@ -79,23 +97,27 @@ namespace SwitchBlocks.Behaviours
             {
                 var type = b.GetType();
                 return type == typeof(BlockSequenceA)
-                || type == typeof(BlockSequenceIceA)
-                || type == typeof(BlockSequenceSnowA)
                 || type == typeof(BlockSequenceB)
-                || type == typeof(BlockSequenceIceB)
-                || type == typeof(BlockSequenceSnowB)
                 || type == typeof(BlockSequenceC)
-                || type == typeof(BlockSequenceIceC)
-                || type == typeof(BlockSequenceSnowC)
                 || type == typeof(BlockSequenceD)
+                || type == typeof(BlockSequenceIceA)
+                || type == typeof(BlockSequenceIceB)
+                || type == typeof(BlockSequenceIceC)
                 || type == typeof(BlockSequenceIceD)
+                || type == typeof(BlockSequenceSnowA)
+                || type == typeof(BlockSequenceSnowB)
+                || type == typeof(BlockSequenceSnowC)
                 || type == typeof(BlockSequenceSnowD);
             });
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
                 var groupId = block.GroupId;
-                if (!this.Data.GetState(groupId)
-                    || this.Data.Touched != (groupId - 1)
+                if (!this.Groups.TryGetValue(groupId, out var group))
+                {
+                    continue;
+                }
+                if (!group.State
+                    || this.Touched != (groupId - 1)
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                         SettingsSequence.PlatformDirections,
                         (IBlock)block))
@@ -107,22 +129,31 @@ namespace SwitchBlocks.Behaviours
                 {
                     if (groupId > 1)
                     {
-                        this.Data.SetTick(groupId - 1, int.MinValue);
-                        _ = this.Data.Active.Add(groupId - 1);
+                        if (!this.Groups.TryGetValue(groupId - 1, out var prevGroup))
+                        {
+                            continue;
+                        }
+                        prevGroup.ActivatedTick = int.MinValue;
+                        _ = this.Active.Add(groupId - 1);
                     }
                 }
                 else
                 {
                     var tick = AchievementManager.GetTick();
-                    this.Data.SetTick(groupId, tick + SettingsSequence.Duration);
-                    _ = this.Data.Active.Add(groupId);
+                    group.ActivatedTick = tick + SettingsSequence.Duration;
+                    _ = this.Active.Add(groupId);
                 }
+
                 if (groupId < SetupSequence.SequenceCount)
                 {
-                    this.Data.SetTick(groupId + 1, int.MaxValue);
-                    _ = this.Data.Active.Add(groupId + 1);
+                    if (!this.Groups.TryGetValue(groupId + 1, out var nextGroup))
+                    {
+                        continue;
+                    }
+                    nextGroup.ActivatedTick = int.MaxValue;
+                    _ = this.Active.Add(groupId + 1);
                 }
-                this.Data.Touched = groupId;
+                this.Touched = groupId;
                 break;
             }
 

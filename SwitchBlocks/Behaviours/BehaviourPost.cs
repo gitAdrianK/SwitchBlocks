@@ -15,13 +15,15 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourPost : IBlockBehaviour
     {
         // Documentation is false, higher numbers are run first!
-        public float BlockPriority => 1.0f;
+        public float BlockPriority => ModConsts.PRIO_LAST;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
         /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
         /// <summary>If the player is on any snow block.</summary>
         public static bool IsPlayerOnSnow { get; set; }
+        ///<summary>If the player is on any sand block.</summary>
+        public static bool IsPlayerOnSand { get; set; }
         /// <summary>The velocity of the previous time this behaviour has run.</summary>
         public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 
@@ -43,12 +45,12 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc/>
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
+            if (advCollisionInfo == null)
             {
                 return true;
             }
 
-            var advCollisionInfo = behaviourContext.CollisionInfo.PreResolutionCollisionInfo;
             var isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
             if (IsPlayerOnIce
                 && !advCollisionInfo.Ice

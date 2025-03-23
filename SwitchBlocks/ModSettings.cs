@@ -19,7 +19,7 @@ namespace SwitchBlocks
         {
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
+                ModConsts.FOLDER,
                 "blocks.xml");
             if (!File.Exists(file))
             {

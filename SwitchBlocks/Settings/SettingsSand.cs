@@ -6,6 +6,8 @@ namespace SwitchBlocks.Settings
 
     public static class SettingsSand
     {
+        /// <summary>If the v2 of sand is being used.</summary>
+        public static bool IsV2 { get; set; } = false;
         /// <summary>Multiplier of the deltaTime used in the animation of the sand block type.</summary>
         public static float Multiplier { get; private set; } = 1.0f;
         /// <summary>Directions the sand lever can be activated from.</summary>
@@ -17,6 +19,7 @@ namespace SwitchBlocks.Settings
         /// <param name="element"><see cref="XElement"/> settings are to be taken from.</param>
         public static void Parse(XElement element)
         {
+            IsV2 = element.Element("v2") != null;
             Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
             LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
         }
@@ -26,6 +29,7 @@ namespace SwitchBlocks.Settings
         /// </summary>
         public static void Reset()
         {
+            IsV2 = false;
             Multiplier = 1.0f;
             LeverDirections = new BitVector32((int)Direction.All);
         }

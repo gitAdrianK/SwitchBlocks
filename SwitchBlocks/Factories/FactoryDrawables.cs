@@ -53,7 +53,7 @@ namespace SwitchBlocks.Factories
 
             var path = Path.Combine(
                 contentManager.root,
-                ModStrings.FOLDER,
+                ModConsts.FOLDER,
                 drawType.ToString(),
                 blockType.ToString());
             if (!Directory.Exists(path))
@@ -138,7 +138,7 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;
@@ -253,7 +253,7 @@ namespace SwitchBlocks.Factories
                     foreach (var platformElement in root.Elements("Platform"))
                     {
                         // Texture
-                        var textureFolder = Path.Combine(path, ModStrings.TEXTURES);
+                        var textureFolder = Path.Combine(path, ModConsts.TEXTURES);
                         string texturePath;
                         Texture2D background = null;
                         Texture2D scrolling = null;
@@ -280,7 +280,7 @@ namespace SwitchBlocks.Factories
                         // Foregorund
                         if ((xel = platformElement.Element("Foreground")) != null)
                         {
-                            texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                            texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
                             if (File.Exists(texturePath + ".xnb"))
                             {
                                 foreground = Game1.instance.contentManager.Load<Texture2D>(texturePath);
@@ -363,7 +363,7 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;

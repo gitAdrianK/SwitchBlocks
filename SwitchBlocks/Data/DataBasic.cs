@@ -28,9 +28,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModStrings.FOLDER,
-                    ModStrings.SAVES,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.BASIC}{ModStrings.SUFFIX_SAV}");
+                    ModConsts.FOLDER,
+                    ModConsts.SAVES,
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.BASIC}{ModConsts.SUFFIX_SAV}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataBasic();
@@ -44,9 +44,9 @@ namespace SwitchBlocks.Data
 
                     instance = new DataBasic
                     {
-                        State = bool.Parse(root.Element(ModStrings.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModStrings.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        HasSwitched = bool.Parse(root.Element(ModStrings.SAVE_HAS_SWITCHED).Value),
+                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
+                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
                     };
                 }
                 return instance;
@@ -75,8 +75,8 @@ namespace SwitchBlocks.Data
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModStrings.FOLDER,
-                ModStrings.SAVES);
+                ModConsts.FOLDER,
+                ModConsts.SAVES);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -84,16 +84,16 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataBasic",
-                    new XElement(ModStrings.SAVE_STATE, this.State),
-                    new XElement(ModStrings.SAVE_PROGRESS, this.Progress),
-                    new XElement(ModStrings.SAVE_HAS_SWITCHED, this.HasSwitched)
+                    new XElement(ModConsts.SAVE_STATE, this.State),
+                    new XElement(ModConsts.SAVE_PROGRESS, this.Progress),
+                    new XElement(ModConsts.SAVE_HAS_SWITCHED, this.HasSwitched)
                 )
             );
 
             using (var fs = new FileStream(
                 Path.Combine(
                     path,
-                    $"{ModStrings.PREFIX_SAVE}{ModStrings.BASIC}{ModStrings.SUFFIX_SAV}"),
+                    $"{ModConsts.PREFIX_SAVE}{ModConsts.BASIC}{ModConsts.SUFFIX_SAV}"),
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.None))

@@ -49,7 +49,7 @@ namespace SwitchBlocks
         public static void Setup()
         {
             var contentManager = Game1.instance.contentManager;
-            var path = Path.Combine(contentManager.root, ModStrings.FOLDER, "audio");
+            var path = Path.Combine(contentManager.root, ModConsts.FOLDER, "audio");
             if (!Directory.Exists(path))
             {
                 return;

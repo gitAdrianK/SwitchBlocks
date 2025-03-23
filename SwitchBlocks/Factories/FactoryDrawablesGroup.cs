@@ -43,7 +43,7 @@ namespace SwitchBlocks.Factories
 
             var path = Path.Combine(
             contentManager.root,
-                ModStrings.FOLDER,
+                ModConsts.FOLDER,
                 "platforms",
                 blockType.ToString());
             if (!Directory.Exists(path))
@@ -108,7 +108,7 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModStrings.TEXTURES, xel.Value);
+                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;
