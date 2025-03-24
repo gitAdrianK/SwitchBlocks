@@ -1,6 +1,6 @@
 namespace SwitchBlocks.Setups
 {
-    using JumpKing.Level;
+    using JumpKing.API;
     using JumpKing.Player;
     using SwitchBlocks.Behaviours;
     using SwitchBlocks.Blocks;
@@ -21,7 +21,7 @@ namespace SwitchBlocks.Setups
         /// Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(PlayerEntity player, ICollisionQuery collisionQuery)
         {
             if (!IsUsed)
             {
@@ -42,7 +42,6 @@ namespace SwitchBlocks.Setups
 
             if (SettingsSand.IsV2)
             {
-                var collisionQuery = LevelManager.Instance;
                 // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.
                 _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), new BehaviourSandOn(collisionQuery));
                 _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), new BehaviourSandOff(collisionQuery));

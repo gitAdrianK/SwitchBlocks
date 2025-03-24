@@ -16,7 +16,7 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Collision query.</summary>
         private ICollisionQuery CollisionQuery { get; }
         /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_LAST;
+        public float BlockPriority => ModConsts.PRIO_LATE;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 

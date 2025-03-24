@@ -24,7 +24,7 @@ namespace SwitchBlocks.Blocks
         /// <summary>
         /// <see cref="Rectangle"/> this block is drawn as when in debug.
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="Rectangle"/> of this block.</returns>
         public abstract Rectangle GetRect();
 
         /// <summary>

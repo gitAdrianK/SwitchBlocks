@@ -113,9 +113,9 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>Current state.</summary>
+        /// <inheritdoc/>
         public bool State { get; set; }
-        /// <summary>Animation progress.</summary>
+        /// <inheritdoc/>
         public float Progress { get; set; }
         /// <summary>
         /// Whether the state has switched touching a lever.<br />

@@ -17,7 +17,7 @@ namespace SwitchBlocks
     public static class ModEntry
     {
         /// <summary>
-        /// Called by Jump King before the level loads
+        /// Called by Jump King before the level loads.
         /// -> OnGameStart
         /// </summary>
         [BeforeLevelLoad]
@@ -40,7 +40,7 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Called by Jump King when the level starts
+        /// Called by Jump King when the level starts.
         /// </summary>
         [OnLevelStart]
         public static void OnLevelStart()
@@ -59,14 +59,7 @@ namespace SwitchBlocks
             SetupJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
             SetupSand.IsUsed = levelID == FactorySand.LastUsedMapId;
             SetupSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
-
-            if (!SetupAuto.IsUsed
-                && !SetupBasic.IsUsed
-                && !SetupCountdown.IsUsed
-                && !SetupGroup.IsUsed
-                && !SetupJump.IsUsed
-                && !SetupSand.IsUsed
-                && !SetupSequence.IsUsed)
+            if (!IsUsed())
             {
                 return;
             }
@@ -93,7 +86,7 @@ namespace SwitchBlocks
             SetupCountdown.Setup(player);
             SetupGroup.Setup(player);
             SetupJump.Setup(player);
-            SetupSand.Setup(player);
+            SetupSand.Setup(player, LevelManager.Instance);
             SetupSequence.Setup(player);
 
             // DoIf is a Harmony extension (that also does extra, for us unneeded, checks).
@@ -110,39 +103,42 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Called by Jump King when the level ends
+        /// Called by Jump King when the level ends.
         /// </summary>
         [OnLevelEnd]
         public static void OnLevelEnd()
         {
             var contentManager = Game1.instance.contentManager;
-            if (contentManager.level == null)
+            if (contentManager.level == null || !IsUsed())
             {
                 return;
             }
 
-            if (!SetupAuto.IsUsed
-                && !SetupBasic.IsUsed
-                && !SetupCountdown.IsUsed
-                && !SetupGroup.IsUsed
-                && !SetupJump.IsUsed
-                && !SetupSand.IsUsed
-                && !SetupSequence.IsUsed)
-            {
-                return;
-            }
-
-            ModSettings.Cleanup();
+            SetupSequence.Cleanup();
+            SetupSand.Cleanup();
+            SetupJump.Cleanup();
+            SetupGroup.Cleanup();
+            SetupCountdown.Cleanup();
+            SetupBasic.Cleanup();
+            SetupAuto.Cleanup();
 
             ModSounds.Cleanup();
 
-            SetupAuto.Cleanup();
-            SetupBasic.Cleanup();
-            SetupCountdown.Cleanup();
-            SetupGroup.Cleanup();
-            SetupJump.Cleanup();
-            SetupSand.Cleanup();
-            SetupSequence.Cleanup();
+            ModSettings.Cleanup();
         }
+
+        /// <summary>
+        /// Checks if any of the blocks are used and loading settings, loading saves, registering behaviours etc.
+        /// can continue or if the mod should not insert itself into the current level played.
+        /// The block types themselves check if they are used too.
+        /// </summary>
+        /// <returns><c>true</c> if any block type is used, <c>false</c> otherwise.</returns>
+        private static bool IsUsed() => SetupAuto.IsUsed
+                || SetupBasic.IsUsed
+                || SetupCountdown.IsUsed
+                || SetupGroup.IsUsed
+                || SetupJump.IsUsed
+                || SetupSand.IsUsed
+                || SetupSequence.IsUsed;
     }
 }

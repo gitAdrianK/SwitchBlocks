@@ -21,7 +21,7 @@ namespace SwitchBlocks.Blocks
         /// </summary>
         /// <param name="hitbox">Hitbx to check against</param>
         /// <param name="intersection"><see cref="BlockCollisionType.NoCollision"/>.</param>
-        /// <returns></returns>
+        /// <returns><see cref="BlockCollisionType.NoCollision"/></returns>
         public BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
         {
             intersection = Rectangle.Empty;

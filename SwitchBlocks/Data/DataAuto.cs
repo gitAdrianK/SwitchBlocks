@@ -112,9 +112,9 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>Current state.</summary>
+        /// <inheritdoc/>
         public bool State { get; set; }
-        /// <summary>Animation progress.</summary>
+        /// <inheritdoc/>
         public float Progress { get; set; }
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
