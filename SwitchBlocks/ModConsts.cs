@@ -1,13 +1,17 @@
 namespace SwitchBlocks
 {
+    using HarmonyLib;
+    using JumpKing.API;
+    using SwitchBlocks.Behaviours;
+
     /// <summary>
-    /// Collection of string that are used by the mod. Strings that are used exclusively in a single class may not appear here.
+    /// Constants that are used by the mod. Constants that are used exclusively in a single class may not appear here.
     /// </summary>
     public static class ModConsts
     {
         /// <summary>Modname.</summary>
         public const string MODNAME = "Zebra.SwitchBlocksMod";
-        /// <summary>Harmony instance name.</summary>
+        /// <summary><see cref="Harmony"/> instance name.</summary>
         public const string HARMONY = MODNAME + ".Harmony";
 
         /// <summary>Root folder name.</summary>
@@ -84,15 +88,15 @@ namespace SwitchBlocks
         /// <summary>Sequence folder name.</summary>
         public const string SEQUENCE = "sequence";
 
-        /// <summary>Behaviour priority run before all other behaviours. Used for BehaviourPre.</summary>
+        /// <summary><see cref="IBlockBehaviour"/> priority run before all other behaviours. Used for <see cref="BehaviourPre"/>.</summary>
         public const float PRIO_FIRST = 3.0f;
-        /// <summary>Behaviour priority run before normal behaviours but after the one run first.</summary>
+        /// <summary><see cref="IBlockBehaviour"/> priority run before normal behaviours but after the one run first.</summary>
         public const float PRIO_EARLY = 2.5f;
-        /// <summary>Behaviour priority run "normally", this is the priority for most.</summary>
+        /// <summary><see cref="IBlockBehaviour"/> priority run "normally", this is the priority for most.</summary>
         public const float PRIO_NORMAL = 2.0f;
-        /// <summary>Behaviour priority run after normal behaviours but before the one run last.</summary>
+        /// <summary><see cref="IBlockBehaviour"/> priority run after normal behaviours but before the one run last.</summary>
         public const float PRIO_LATE = 1.5f;
-        /// <summary>Behaviour priority run after all other behaviours. Used for BehaviourPost.</summary>
+        /// <summary><see cref="IBlockBehaviour"/> priority run after all other behaviours. Used for <see cref="BehaviourPost"/>.</summary>
         public const float PRIO_LAST = 1.0f;
     }
 }

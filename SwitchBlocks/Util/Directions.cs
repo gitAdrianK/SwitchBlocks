@@ -28,6 +28,9 @@ namespace SwitchBlocks.Util
         public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, BitVector32 validDirections, IBlock block)
         {
             var prevVelocity = BehaviourPost.PrevVelocity;
+            // The behaviour to save the prev velocity runs before any behaviour requiring the previous velocy.
+            // A different name would be "CurrentVelocity".
+            //var prevVelocity = behaviourContext.BodyComp.LastVelocity;
             var playerRect = behaviourContext.BodyComp.GetHitbox();
             var blockRect = block.GetRect();
             if (playerRect.Bottom - blockRect.Top == 0 && prevVelocity.Y > 0.0f && validDirections[(int)Direction.Up])

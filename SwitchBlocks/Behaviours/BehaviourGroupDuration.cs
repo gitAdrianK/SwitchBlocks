@@ -7,7 +7,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
@@ -78,7 +78,7 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var tick = AchievementManager.GetTick();
+            var tick = PatchAchievementManager.GetTick();
             var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
             {
                 var type = b.GetType();

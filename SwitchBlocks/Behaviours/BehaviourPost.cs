@@ -24,6 +24,8 @@ namespace SwitchBlocks.Behaviours
         public static bool IsPlayerOnSnow { get; set; }
         ///<summary>If the player is on any sand block.</summary>
         public static bool IsPlayerOnSand { get; set; }
+        ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
+        public static bool IsPlayerOnSandUp { get; set; }
         /// <summary>The velocity of the previous time this behaviour has run.</summary>
         public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 

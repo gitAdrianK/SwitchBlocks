@@ -13,7 +13,7 @@ namespace SwitchBlocks
     {
         /// <summary>
         /// Loads the settings for blocks with such fields from a blocks.xml file
-        /// that is places inside the mods root folder.
+        /// placed inside the mods root folder.
         /// </summary>
         public static void Setup()
         {

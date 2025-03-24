@@ -7,7 +7,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Setups;
     using SwitchBlocks.Util;
@@ -139,7 +139,7 @@ namespace SwitchBlocks.Behaviours
                 }
                 else
                 {
-                    var tick = AchievementManager.GetTick();
+                    var tick = PatchAchievementManager.GetTick();
                     group.ActivatedTick = tick + SettingsSequence.Duration;
                     _ = this.Active.Add(groupId);
                 }

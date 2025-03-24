@@ -7,7 +7,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
@@ -73,7 +73,7 @@ namespace SwitchBlocks.Behaviours
                 || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
                 || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
-            var tick = AchievementManager.GetTick();
+            var tick = PatchAchievementManager.GetTick();
             if (!this.IsPlayerOnBlock)
             {
                 if (this.Touched.Count == 0)

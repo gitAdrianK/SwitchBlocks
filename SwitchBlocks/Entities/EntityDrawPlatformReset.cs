@@ -2,7 +2,7 @@ namespace SwitchBlocks.Entities
 {
     using JumpKing;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Util.Deserialization;
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace SwitchBlocks.Entities
         /// </summary>
         protected override void Update(float p_delta)
         {
-            if (AchievementManager.GetTick() == this.Data.ActivatedTick)
+            if (PatchAchievementManager.GetTick() == this.Data.ActivatedTick)
             {
                 this.Timer = 0;
                 this.FrameIndex.Index = 0;
@@ -42,7 +42,7 @@ namespace SwitchBlocks.Entities
         /// <inheritdoc/>
         public override void Draw()
         {
-            if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
+            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
             {
                 return;
             }

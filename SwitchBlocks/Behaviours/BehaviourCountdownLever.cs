@@ -6,7 +6,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
     using SwitchBlocks.Util;
 
@@ -67,7 +67,7 @@ namespace SwitchBlocks.Behaviours
                     }
                 }
 
-                this.Data.ActivatedTick = AchievementManager.GetTick();
+                this.Data.ActivatedTick = PatchAchievementManager.GetTick();
 
                 if (this.Data.HasSwitched)
                 {

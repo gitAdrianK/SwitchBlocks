@@ -7,11 +7,11 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class BlockGroup : IDataProvider
     {
-        /// <summary>State.</summary>
+        /// <inheritdoc/>
         public bool State { get; set; }
-        /// <summary>Progress.</summary>
+        /// <inheritdoc/>
         public float Progress { get; set; }
-        /// <summary>ActivatedTick.</summary>
+        /// <summary>The current tick this block group has been actived.</summary>
         public int ActivatedTick { get; set; }
 
         /// <summary>

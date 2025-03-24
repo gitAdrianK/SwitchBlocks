@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
 
     /// <summary>
@@ -42,7 +42,7 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            var currentTick = AchievementManager.GetTick();
+            var currentTick = PatchAchievementManager.GetTick();
             if (this.IsActiveOnCurrentScreen)
             {
                 this.TryWarn(this.Duration - (currentTick - this.Data.ActivatedTick));

@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
 
     /// <summary>
@@ -49,7 +49,7 @@ namespace SwitchBlocks.Entities
         {
             this.UpdateProgress(this.Data.State, deltaTime);
 
-            var adjustedTick = (AchievementManager.GetTick() + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
+            var adjustedTick = (PatchAchievementManager.GetTick() + this.DurationCycle - this.Data.ResetTick) % this.DurationCycle;
             this.TrySound(adjustedTick);
             this.TrySwitch(adjustedTick);
         }

@@ -107,6 +107,11 @@ namespace SwitchBlocks.Data
         }
 
         /// <summary>
+        /// Private ctor.
+        /// </summary>
+        private SeedsSequence() => this.Seeds = new Dictionary<int, int>();
+
+        /// <summary>
         /// Groups belonging to the respective id.
         /// A group has the data related to a platform.
         /// </summary>

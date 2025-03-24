@@ -55,6 +55,7 @@ namespace SwitchBlocks.Behaviours
             BehaviourPost.IsPlayerOnIce = false;
             BehaviourPost.IsPlayerOnSnow = false;
             BehaviourPost.IsPlayerOnSand = false;
+            BehaviourPost.IsPlayerOnSandUp = false;
 
             return true;
         }

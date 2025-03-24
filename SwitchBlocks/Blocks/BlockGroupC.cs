@@ -38,7 +38,8 @@ namespace SwitchBlocks.Blocks
             if (this.Collider.Intersects(hitbox))
             {
                 intersection = Rectangle.Intersect(hitbox, this.Collider);
-                if (DataGroup.Instance.Groups.TryGetValue(this.GroupId, out var group) && group.State)
+                if (DataGroup.Instance.Groups.TryGetValue(this.GroupId, out var group)
+                    && group.State)
                 {
                     return BlockCollisionType.Collision_Blocking;
                 }

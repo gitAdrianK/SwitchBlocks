@@ -1,18 +1,19 @@
-namespace SwitchBlocks.Patching
+namespace SwitchBlocks.Patches
 {
     using HarmonyLib;
     using JumpKing.MiscSystems.Achievements;
 
     /// <summary>
-    /// Adds a function for the vanilla AchievementManager.
+    /// Adds the function GetTick, giving access to the current gametick
+    /// from the vanilla AchievementManager.
     /// </summary>
-    public class AchievementManager
+    public class PatchAchievementManager
     {
         /// <summary>The <see cref="Traverse"/> instance of the vanilla AchievementManager.</summary>
         private static readonly Traverse TraverseAM;
 
         /// <summary>Static ctor. Variable setup.</summary>
-        static AchievementManager()
+        static PatchAchievementManager()
         {
             var achievemementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance");
             TraverseAM = Traverse.Create(achievemementManager.GetValue(null));

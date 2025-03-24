@@ -179,7 +179,8 @@
     <Compile Include="Factories\FactoryDrawablesGroup.cs" />
     <Compile Include="Factories\FactoryDrawables.cs" />
     <Compile Include="Factories\FactorySequence.cs" />
-    <Compile Include="Patching\WindManager.cs" />
+    <Compile Include="Patches\PatchWalk.cs" />
+    <Compile Include="Patches\PatchWindManager.cs" />
     <Compile Include="Util\BlockGroupId.cs" />
     <Compile Include="Util\Deserialization\Lever.cs" />
     <Compile Include="Util\Deserialization\Platform.cs" />
@@ -196,9 +197,9 @@
     <Compile Include="Factories\FactoryJump.cs" />
     <Compile Include="ModSettings.cs" />
     <Compile Include="ModConsts.cs" />
-    <Compile Include="Patching\AchievementManager.cs" />
-    <Compile Include="Patching\BodyComp.cs" />
-    <Compile Include="Patching\EndingManager.cs" />
+    <Compile Include="Patches\PatchAchievementManager.cs" />
+    <Compile Include="Patches\PatchBodyComp.cs" />
+    <Compile Include="Patches\PatchEndingManager.cs" />
     <Compile Include="Settings\SettingsSequence.cs" />
     <Compile Include="Settings\SettingsSand.cs" />
     <Compile Include="Settings\SettingsGroup.cs" />

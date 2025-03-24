@@ -5,9 +5,9 @@ namespace SwitchBlocks.Data
     /// </summary>
     public interface IDataProvider
     {
-        /// <summary>State.</summary>
+        /// <summary>The current state.</summary>
         bool State { get; set; }
-        /// <summary>Progress.</summary>
+        /// <summary>The current progress.</summary>
         float Progress { get; set; }
     }
 }

@@ -101,6 +101,15 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>
+        /// Private ctor.
+        /// </summary>
+        private ResetsGroup() => this.Resets = new Dictionary<int, int[]>();
+
+        /// <summary>
+        /// Mapping of the position and the ids a reset block is supposed to be able to reset,
+        /// should a single 0 be the only id this block can reset, reset all.
+        /// </summary>
         public Dictionary<int, int[]> Resets { get; set; }
     }
 }

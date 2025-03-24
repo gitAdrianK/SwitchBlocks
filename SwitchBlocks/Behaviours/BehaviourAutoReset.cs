@@ -5,7 +5,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using SwitchBlocks.Blocks;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace SwitchBlocks.Behaviours
             }
 
             this.Data.WarnCount = 0;
-            this.Data.ResetTick = AchievementManager.GetTick();
+            this.Data.ResetTick = PatchAchievementManager.GetTick();
             if (isReset && !this.Data.State)
             {
                 this.Data.ResetTick += SettingsAuto.DurationOff;

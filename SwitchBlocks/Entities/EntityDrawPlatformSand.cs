@@ -5,7 +5,7 @@ namespace SwitchBlocks.Entities
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Util.Deserialization;
 
     public class EntityDrawPlatformSand : EntityDraw
@@ -55,7 +55,7 @@ namespace SwitchBlocks.Entities
         /// </summary>
         public override void Draw()
         {
-            if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
+            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
             {
                 return;
             }

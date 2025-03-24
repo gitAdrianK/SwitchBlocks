@@ -16,7 +16,7 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Collision query.</summary>
         private ICollisionQuery CollisionQuery { get; }
         /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_LAST;
+        public float BlockPriority => ModConsts.PRIO_LATE;
         /// <inheritdoc/>
         public bool IsPlayerOnBlock { get; set; }
 
@@ -94,10 +94,11 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            BehaviourPost.IsPlayerOnSand = true;
+            BehaviourPost.IsPlayerOnSand |= true;
 
             if (this.Data.State)
             {
+                BehaviourPost.IsPlayerOnSandUp |= true;
                 bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
             }
             else

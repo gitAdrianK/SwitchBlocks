@@ -100,7 +100,7 @@ namespace SwitchBlocks.Data
             }
         }
 
-        /// <summary>Current state.</summary>
+        /// <inheritdoc/>
         public bool State { get; set; }
         /// <summary>Progress is not being saved between play sessions as it is unnecessary.</summary>
         public float Progress { get; set; }

@@ -4,7 +4,7 @@ namespace SwitchBlocks.Entities
     using JumpKing;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Util.Deserialization;
 
     /// <summary>
@@ -37,7 +37,7 @@ namespace SwitchBlocks.Entities
         /// </summary>
         public override void Draw()
         {
-            if (Camera.CurrentScreen != this.Screen || EndingManager.HasFinished)
+            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
             {
                 return;
             }

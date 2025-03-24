@@ -3,7 +3,7 @@ namespace SwitchBlocks.Entities
     using System;
     using System.Collections.Concurrent;
     using SwitchBlocks.Data;
-    using SwitchBlocks.Patching;
+    using SwitchBlocks.Patches;
     using SwitchBlocks.Settings;
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace SwitchBlocks.Entities
         /// <param name="deltaTime">deltaTime.</param>
         protected override void Update(float deltaTime)
         {
-            var tick = AchievementManager.GetTick();
+            var tick = PatchAchievementManager.GetTick();
             var finishedIds = new ConcurrentBag<int>();
             foreach (var groupId in this.Active)
             {
