@@ -10,7 +10,7 @@ namespace SwitchBlocks
     public static class ModConsts
     {
         /// <summary>Modname.</summary>
-        public const string MODNAME = "Zebra.SwitchBlocksMod";
+        public const string MODNAME = "Zebra.SwitchBlocks";
         /// <summary><see cref="Harmony"/> instance name.</summary>
         public const string HARMONY = MODNAME + ".Harmony";
 

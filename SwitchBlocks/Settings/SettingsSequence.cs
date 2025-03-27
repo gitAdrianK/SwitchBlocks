@@ -27,7 +27,7 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
             LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
             PlatformDirections = ParseSettings.ParseSideDisable(element.Element("PlatformSideDisable"));
-            DisableOnLeave = element.Element("DisableOnLeave") != null;
+            DisableOnLeave = element.Element("DisableOnLeaving") != null;
         }
 
         /// <summary>

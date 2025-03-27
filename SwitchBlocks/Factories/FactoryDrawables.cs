@@ -272,7 +272,7 @@ namespace SwitchBlocks.Factories
                         if ((xel = platformElement.Element("Scrolling")) != null)
                         {
                             texturePath = Path.Combine(textureFolder, xel.Value);
-                            if (!File.Exists(texturePath + ".xnb"))
+                            if (File.Exists(texturePath + ".xnb"))
                             {
                                 scrolling = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                             }

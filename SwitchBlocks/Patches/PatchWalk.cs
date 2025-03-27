@@ -57,17 +57,21 @@ namespace SwitchBlocks.Patches
             }
 
             var insert = new List<CodeInstruction>
-                {
-                    new CodeInstruction(
-                        OpCodes.Call,
-                        AccessTools.PropertyGetter(typeof(BehaviourPost), nameof(BehaviourPost.IsPlayerOnSandUp))),
-                    new CodeInstruction(OpCodes.Brtrue_S, continueLabel),
-                };
+            {
+                new CodeInstruction(
+                    OpCodes.Call,
+                    AccessTools.PropertyGetter(typeof(BehaviourPost), nameof(BehaviourPost.IsPlayerOnSandUp))),
+                new CodeInstruction(OpCodes.Brtrue_S, continueLabel),
+            };
             code.InsertRange(insertionIndex, insert);
+
             return code.AsEnumerable();
         }
 
         // The original IL instructions of the check that returns BTresult.Failure.
+        // .
+        // .
+        // .
         // Check for velocity being under 0.0f.
         // /* 0x0000BE18 02           */ IL_0000: ldarg.0
         // /* 0x0000BE19 28EC020006   */ IL_0001: call      instance class JumpKing.Player.BodyComp JumpKing.Player.PlayerNode::get_body()
@@ -91,8 +95,14 @@ namespace SwitchBlocks.Patches
         // Continue with function.
         // /* 0x0000BE48 02           */ IL_0030: ldarg.0
         // /* 0x0000BE49 28ED020006   */ IL_0031: call      instance class JumpKing.Player.InputComponent JumpKing.Player.PlayerNode::get_input()
+        // .
+        // .
+        // .
 
         // Modified method to not early return should the player be on sand up.
+        // .
+        // .
+        // .
         // OLD: Check for velocity being under 0.0f.
         // /* 0x00000000 02           */ IL_0000: ldarg.0
         // /* 0x00000001 28EC020006   */ IL_0001: call      instance class JumpKing.Player.BodyComp JumpKing.Player.PlayerNode::get_body()
@@ -122,6 +132,8 @@ namespace SwitchBlocks.Patches
         // /* (21,4)-(21,55) main.cs */
         // /* 0x00000037 02           */ IL_0037: ldarg.0
         // /* 0x00000038 28ED020006   */ IL_0038: call      instance class JumpKing.Player.InputComponent JumpKing.Player.PlayerNode::get_input()
-
+        // .
+        // .
+        // .
     }
 }
