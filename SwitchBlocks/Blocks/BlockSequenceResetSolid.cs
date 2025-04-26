@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Blocks
 {
-    using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -9,26 +8,12 @@ namespace SwitchBlocks.Blocks
     public class BlockSequenceResetSolid : ModBlock
     {
         /// <inheritdoc/>
-        public BlockSequenceResetSolid(Rectangle collider) : base(collider)
-        {
-        }
+        public BlockSequenceResetSolid(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc/>
         public override Color DebugColor => ModBlocks.SEQUENCE_RESET_SOLID;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => this.Collider;
-
-        /// <inheritdoc/>
-        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
-        {
-            if (this.Collider.Intersects(hitbox))
-            {
-                intersection = Rectangle.Intersect(hitbox, this.Collider);
-                return BlockCollisionType.Collision_Blocking;
-            }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
-        }
+        public override bool CanBlockPlayer => true;
     }
 }

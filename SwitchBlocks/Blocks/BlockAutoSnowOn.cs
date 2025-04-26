@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Blocks
 {
-    using JumpKing.Level;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Data;
 
@@ -10,30 +9,12 @@ namespace SwitchBlocks.Blocks
     public class BlockAutoSnowOn : ModBlock
     {
         /// <inheritdoc/>
-        public BlockAutoSnowOn(Rectangle collider) : base(collider)
-        {
-        }
+        public BlockAutoSnowOn(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.AUTO_SNOW_ON;
+        public override Color DebugColor => DataAuto.Instance.State ? ModBlocks.AUTO_SNOW_ON : Color.Transparent;
 
         /// <inheritdoc/>
-        public override Rectangle GetRect() => DataAuto.Instance.State ? this.Collider : Rectangle.Empty;
-
-        /// <inheritdoc/>
-        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
-        {
-            if (this.Collider.Intersects(hitbox))
-            {
-                intersection = Rectangle.Intersect(hitbox, this.Collider);
-                if (DataAuto.Instance.State)
-                {
-                    return BlockCollisionType.Collision_Blocking;
-                }
-                return BlockCollisionType.Collision_NonBlocking;
-            }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
-        }
+        public override bool CanBlockPlayer => DataAuto.Instance.State;
     }
 }

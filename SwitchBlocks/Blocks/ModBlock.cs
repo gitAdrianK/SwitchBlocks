@@ -3,18 +3,13 @@ namespace SwitchBlocks.Blocks
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
-    public abstract class ModBlock : IBlock, IBlockDebugColor
+    public abstract class ModBlock : BoxBlock, IBlockDebugColor
     {
-        /// <summary>
-        /// This blocks <see cref="Rectangle"/> used for collision.
-        /// </summary>
-        protected Rectangle Collider { get; }
-
         /// <summary>
         /// Ctor.
         /// </summary>
         /// <param name="collider">Collider to be used for this block.</param>
-        protected ModBlock(Rectangle collider) => this.Collider = collider;
+        protected ModBlock(Rectangle collider) : base(collider) { }
 
         /// <summary>
         /// <see cref="Color"/> this block is drawn as when in debug.
@@ -22,17 +17,14 @@ namespace SwitchBlocks.Blocks
         public abstract Color DebugColor { get; }
 
         /// <summary>
-        /// <see cref="Rectangle"/> this block is drawn as when in debug.
+        /// If this block is solid.
         /// </summary>
-        /// <returns><see cref="Rectangle"/> of this block.</returns>
-        public abstract Rectangle GetRect();
+        public abstract bool CanBlockPlayer { get; }
 
         /// <summary>
-        /// Type of collision this collider intersects with another (the players) <see cref="Rectangle"/>.
+        /// Override of the <see cref="BoxBlock"/> property,
+        /// To force mod blocks to implement it, naming, and documentation.
         /// </summary>
-        /// <param name="hitbox"><see cref="Rectangle"/> to check against.</param>
-        /// <param name="intersection">Overlap of the two <see cref="Rectangle"/>s.</param>
-        /// <returns><see cref="BlockCollisionType"/> depending on the type of collision.</returns>
-        public abstract BlockCollisionType Intersects(Rectangle p_hitbox, out Rectangle p_intersection);
+        protected override bool canBlockPlayer => this.CanBlockPlayer;
     }
 }

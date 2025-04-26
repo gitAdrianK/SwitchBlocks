@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Blocks
 {
-    using JumpKing.Level;
     using Microsoft.Xna.Framework;
     using SwitchBlocks.Data;
     using SwitchBlocks.Util;
@@ -14,39 +13,33 @@ namespace SwitchBlocks.Blocks
         public int GroupId { get; set; } = 0;
 
         /// <inheritdoc/>
-        public BlockGroupD(Rectangle collider) : base(collider)
-        {
-        }
+        public BlockGroupD(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.GROUP_D;
-
-        /// <inheritdoc/>
-        public override Rectangle GetRect()
+        public override Color DebugColor
         {
-            if (DataGroup.Instance.Groups.TryGetValue(this.GroupId, out var group)
-                && group.State)
+            get
             {
-                return this.Collider;
-            }
-            return Rectangle.Empty;
-        }
-
-        /// <inheritdoc/>
-        public override BlockCollisionType Intersects(Rectangle hitbox, out Rectangle intersection)
-        {
-            if (this.Collider.Intersects(hitbox))
-            {
-                intersection = Rectangle.Intersect(hitbox, this.Collider);
                 if (DataGroup.Instance.Groups.TryGetValue(this.GroupId, out var group)
                     && group.State)
                 {
-                    return BlockCollisionType.Collision_Blocking;
+                    return ModBlocks.GROUP_D;
                 }
-                return BlockCollisionType.Collision_NonBlocking;
+                return Color.Transparent;
             }
-            intersection = Rectangle.Empty;
-            return BlockCollisionType.NoCollision;
+        }
+
+        /// <inheritdoc/>
+        public override bool CanBlockPlayer
+        {
+            get
+            {
+                if (DataGroup.Instance.Groups.TryGetValue(this.GroupId, out var group))
+                {
+                    return group.State;
+                }
+                return false;
+            }
         }
     }
 }
