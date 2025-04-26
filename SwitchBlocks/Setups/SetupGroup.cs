@@ -58,17 +58,18 @@ namespace SwitchBlocks.Setups
             var entityLogic = new EntityLogicGroup();
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
+            var body = player.m_body;
             if (SettingsGroup.Duration == 0)
             {
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving());
+                _ = body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving());
             }
             else
             {
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
+                _ = body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
             }
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
         }
 
         /// <summary>

@@ -37,9 +37,10 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Auto,
                 entityLogic);
 
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
+            var body = player.m_body;
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
         }
 
         /// <summary>

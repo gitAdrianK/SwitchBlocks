@@ -68,8 +68,12 @@ namespace SwitchBlocks
         public static readonly Color COUNTDOWN_SNOW_OFF = new Color(32, 124, 238);
         /// <summary><see cref="Color"/> that represents the <see cref="BlockCountdownLever"/>.</summary>
         public static readonly Color COUNTDOWN_LEVER = new Color(238, 31, 124);
+        /// <summary><see cref="Color"/> that represents the <see cref="BlockCountdownSingleUse"/>.</summary>
+        public static readonly Color COUNTDOWN_SINGLE_USE = new Color(238, 32, 124);
         /// <summary><see cref="Color"/> that represents the <see cref="BlockCountdownLeverSolid"/>.</summary>
         public static readonly Color COUNTDOWN_LEVER_SOLID = new Color(238, 34, 124);
+        /// <summary><see cref="Color"/> that represents the <see cref="BlockCountdownSingleUseSolid"/>.</summary>
+        public static readonly Color COUNTDOWN_SINGLE_USE_SOLID = new Color(238, 35, 124);
         /// <summary><see cref="Color"/> that represents the <see cref="BlockWind"/>. Enabling wind on the screen its placed.</summary>
         public static readonly Color COUNTDOWN_WIND_ENABLE = new Color(238, 37, 124);
 

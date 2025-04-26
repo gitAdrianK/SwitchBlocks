@@ -43,10 +43,10 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataJump
                     {
-                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        CanSwitchSafely = bool.Parse(root.Element(ModConsts.SAVE_CSS).Value),
-                        SwitchOnceSafe = bool.Parse(root.Element(ModConsts.SAVE_SOS).Value),
+                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
+                        Progress = float.TryParse(root.Element(ModConsts.SAVE_PROGRESS)?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatResult) ? floatResult : 0.0f,
+                        CanSwitchSafely = bool.TryParse(root.Element(ModConsts.SAVE_CSS)?.Value, out boolResult) && boolResult,
+                        SwitchOnceSafe = bool.TryParse(root.Element(ModConsts.SAVE_SOS)?.Value, out boolResult) && boolResult,
                     };
                 }
                 return instance;

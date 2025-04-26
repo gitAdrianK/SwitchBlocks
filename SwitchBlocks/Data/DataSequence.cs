@@ -59,16 +59,16 @@ namespace SwitchBlocks.Data
                     instance = new DataSequence
                     {
                         Groups = groupsDict ?? new Dictionary<int, BlockGroup>(),
-                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
-                        Touched = int.Parse(root.Element(ModConsts.SAVE_TOUCHED).Value),
+                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out var boolResult) && boolResult,
+                        Touched = int.TryParse(root.Element(ModConsts.SAVE_TOUCHED)?.Value, out var intResult) ? intResult : 0,
                         Active = new HashSet<int>(
                             root.Element(ModConsts.SAVE_ACTIVE)?
-                                .Elements(ModConsts.SAVE_POSITION)
+                                .Elements(ModConsts.SAVE_ID)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Finished = new HashSet<int>(
                             root.Element(ModConsts.SAVE_FINISHED)?
-                                .Elements(ModConsts.SAVE_POSITION)
+                                .Elements(ModConsts.SAVE_ID)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>())
                     };
@@ -83,14 +83,23 @@ namespace SwitchBlocks.Data
         /// <param name="xels"><see cref="XElement"/> root of the new data format.</param>
         /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetNewDict(IEnumerable<XElement> xels)
-            => xels.ToDictionary(
-                key => int.Parse(key.Element(ModConsts.SAVE_ID).Value),
-                value => new BlockGroup
-                {
-                    State = bool.Parse(value.Element(ModConsts.SAVE_STATE).Value),
-                    Progress = float.Parse(value.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                    ActivatedTick = int.Parse(value.Element(ModConsts.SAVE_ACTIVATED).Value),
-                });
+        {
+            try
+            {
+                return xels.ToDictionary(
+                    key => int.Parse(key.Element(ModConsts.SAVE_ID).Value),
+                    value => new BlockGroup
+                    {
+                        State = bool.Parse(value.Element(ModConsts.SAVE_STATE).Value),
+                        Progress = float.Parse(value.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                        ActivatedTick = int.Parse(value.Element(ModConsts.SAVE_ACTIVATED).Value),
+                    });
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets block groups from the legacy file format.
@@ -98,14 +107,23 @@ namespace SwitchBlocks.Data
         /// <param name="xels"><see cref="XElement"/> root of the legacy data format.</param>
         /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetLegacyDict(IEnumerable<XElement> xels)
-            => xels.ToDictionary(
-                key => int.Parse(key.Element("key").Element("int").Value),
-                value => new BlockGroup
-                {
-                    State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
-                    Progress = float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value, CultureInfo.InvariantCulture),
-                    ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup").Element("ActivatedTick").Value),
-                });
+        {
+            try
+            {
+                return xels.ToDictionary(
+                    key => int.Parse(key.Element("key").Element("int").Value),
+                    value => new BlockGroup
+                    {
+                        State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
+                        Progress = float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value, CultureInfo.InvariantCulture),
+                        ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup").Element("ActivatedTick").Value),
+                    });
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Sets the singleton instance to null.
@@ -153,11 +171,11 @@ namespace SwitchBlocks.Data
                     new XElement(ModConsts.SAVE_TOUCHED, this.Touched),
                     new XElement(ModConsts.SAVE_ACTIVE,
                         this.Active.Count() != 0
-                        ? new List<XElement>(this.Active.Select(id => new XElement(ModConsts.SAVE_POSITION, id)))
+                        ? new List<XElement>(this.Active.Select(id => new XElement(ModConsts.SAVE_ID, id)))
                         : null),
                     new XElement(ModConsts.SAVE_FINISHED,
                         this.Finished.Count() != 0
-                        ? new List<XElement>(this.Finished.Select(id => new XElement(ModConsts.SAVE_POSITION, id)))
+                        ? new List<XElement>(this.Finished.Select(id => new XElement(ModConsts.SAVE_ID, id)))
                         : null)));
 
             using (var fs = new FileStream(

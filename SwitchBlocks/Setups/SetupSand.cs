@@ -40,11 +40,12 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Sand,
                 entityLogic);
 
+            var body = player.m_body;
             if (SettingsSand.IsV2)
             {
                 // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), new BehaviourSandOn(collisionQuery));
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), new BehaviourSandOff(collisionQuery));
+                _ = body.RegisterBlockBehaviour(typeof(BlockSandOn), new BehaviourSandOn(collisionQuery));
+                _ = body.RegisterBlockBehaviour(typeof(BlockSandOff), new BehaviourSandOff(collisionQuery));
             }
             else
             {
@@ -52,11 +53,11 @@ namespace SwitchBlocks.Setups
                 // velocity or position! This technically needs updating, but I have to consider
                 // Ghost of the Immortal Babe breaking!
                 var behaviourSandPlatform = new BehaviourSandLegacy();
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
-                _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
+                _ = body.RegisterBlockBehaviour(typeof(BlockSandOn), behaviourSandPlatform);
+                _ = body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
             }
 
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever());
         }
 
         /// <summary>

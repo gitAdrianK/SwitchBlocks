@@ -41,16 +41,14 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    // The files are auto generated, we skip null checks etc.,
-                    // because it should never fail.
                     instance = new DataAuto
                     {
-                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        CanSwitchSafely = bool.Parse(root.Element(ModConsts.SAVE_CSS).Value),
-                        SwitchOnceSafe = bool.Parse(root.Element(ModConsts.SAVE_SOS).Value),
-                        WarnCount = int.Parse(root.Element(ModConsts.SAVE_WARN_COUNT).Value),
-                        ResetTick = int.Parse(root.Element(ModConsts.SAVE_RESET_TICK).Value),
+                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
+                        Progress = float.TryParse(root.Element(ModConsts.SAVE_PROGRESS)?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatResult) ? floatResult : 0.0f,
+                        CanSwitchSafely = bool.TryParse(root.Element(ModConsts.SAVE_CSS)?.Value, out boolResult) && boolResult,
+                        SwitchOnceSafe = bool.TryParse(root.Element(ModConsts.SAVE_SOS)?.Value, out boolResult) && boolResult,
+                        WarnCount = int.TryParse(root.Element(ModConsts.SAVE_WARN_COUNT)?.Value, out var intResult) ? intResult : 0,
+                        ResetTick = int.TryParse(root.Element(ModConsts.SAVE_RESET_TICK)?.Value, out intResult) ? intResult : 0,
                     };
                 }
                 return instance;

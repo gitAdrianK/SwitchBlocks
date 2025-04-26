@@ -44,9 +44,9 @@ namespace SwitchBlocks.Data
 
                     instance = new DataBasic
                     {
-                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
+                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
+                        Progress = float.TryParse(root.Element(ModConsts.SAVE_PROGRESS)?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatResult) ? floatResult : 0.0f,
+                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out boolResult) && boolResult,
                     };
                 }
                 return instance;

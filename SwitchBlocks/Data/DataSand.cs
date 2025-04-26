@@ -42,9 +42,9 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataSand
                     {
-                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
-                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
-                        HasEntered = bool.Parse(root.Element(ModConsts.SAVE_HAS_ENTERED).Value),
+                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
+                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out boolResult) && boolResult,
+                        HasEntered = bool.TryParse(root.Element(ModConsts.SAVE_HAS_ENTERED)?.Value, out boolResult) && boolResult,
                     };
                 }
                 return instance;

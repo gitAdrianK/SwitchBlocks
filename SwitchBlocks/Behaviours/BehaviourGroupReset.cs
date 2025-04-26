@@ -83,7 +83,7 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                var solid = advCollisionInfo.GetCollidedBlocks().First(b => b.GetType() == typeof(BlockGroupResetSolid));
+                var solid = advCollisionInfo.GetCollidedBlocks<BlockGroupResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                     SettingsGroup.LeverDirections,
                     solid))

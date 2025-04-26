@@ -49,33 +49,36 @@ namespace SwitchBlocks.Data
                     // Both legacy and new data saves all groups as <_groups>
                     var xel = root.Element(ModConsts.SAVE_GROUPS);
                     // Legacy data then saves a group as <item>, new saves it as <_group>
-                    var xels = xel.Elements(ModConsts.SAVE_GROUP);
-                    if (xels.Count() != 0)
+                    var xels = xel?.Elements(ModConsts.SAVE_GROUP);
+                    if (xels != null)
                     {
-                        groupsDict = GetNewDict(xels);
-                    }
-                    else if ((xels = xel.Elements("item")).Count() != 0)
-                    {
-                        groupsDict = GetLegacyDict(xels);
+                        if (xels.Count() != 0)
+                        {
+                            groupsDict = GetNewDict(xels);
+                        }
+                        else if ((xels = xel.Elements("item")).Count() != 0)
+                        {
+                            groupsDict = GetLegacyDict(xels);
+                        }
                     }
 
                     instance = new DataGroup
                     {
                         Groups = groupsDict ?? new Dictionary<int, BlockGroup>(),
-                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
+                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out var boolResult) && boolResult,
                         Touched = new HashSet<int>(
                             root.Element(ModConsts.SAVE_TOUCHED)?
-                                .Elements(ModConsts.SAVE_POSITION)
+                                .Elements(ModConsts.SAVE_ID)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Active = new HashSet<int>(
                             root.Element(ModConsts.SAVE_ACTIVE)?
-                                .Elements(ModConsts.SAVE_POSITION)
+                                .Elements(ModConsts.SAVE_ID)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Finished = new HashSet<int>(
                             root.Element(ModConsts.SAVE_FINISHED)?
-                                .Elements(ModConsts.SAVE_POSITION)
+                                .Elements(ModConsts.SAVE_ID)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>())
                     };
@@ -90,30 +93,46 @@ namespace SwitchBlocks.Data
         /// <param name="xels"><see cref="XElement"/> root of the new data format.</param>
         /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetNewDict(IEnumerable<XElement> xels)
-            => xels.ToDictionary(
-                key => int.Parse(key.Element(ModConsts.SAVE_ID).Value),
-                value => new BlockGroup
-                {
-                    State = bool.Parse(value.Element(ModConsts.SAVE_STATE).Value),
-                    Progress = float.Parse(value.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                    ActivatedTick = int.Parse(value.Element(ModConsts.SAVE_ACTIVATED).Value),
-                });
-
+        {
+            try
+            {
+                return xels.ToDictionary(
+                    key => int.Parse(key.Element(ModConsts.SAVE_ID).Value),
+                    value => new BlockGroup
+                    {
+                        State = bool.Parse(value.Element(ModConsts.SAVE_STATE).Value),
+                        Progress = float.Parse(value.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
+                        ActivatedTick = int.Parse(value.Element(ModConsts.SAVE_ACTIVATED).Value),
+                    });
+            }
+            catch
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Gets block groups from the legacy file format.
         /// </summary>
         /// <param name="xels"><see cref="XElement"/> root of the legacy data format.</param>
         /// <returns>Parsed <see cref="BlockGroup"/>.</returns>
         private static Dictionary<int, BlockGroup> GetLegacyDict(IEnumerable<XElement> xels)
-            => xels.ToDictionary(
-                key => int.Parse(key.Element("key").Element("int").Value),
-                value => new BlockGroup
-                {
-                    State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
-                    Progress = float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value, CultureInfo.InvariantCulture),
-                    ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup").Element("ActivatedTick").Value),
-                });
-
+        {
+            try
+            {
+                return xels.ToDictionary(
+                   key => int.Parse(key.Element("key").Element("int").Value),
+                   value => new BlockGroup
+                   {
+                       State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
+                       Progress = float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value, CultureInfo.InvariantCulture),
+                       ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup").Element("ActivatedTick").Value),
+                   });
+            }
+            catch
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Sets the singleton instance to null.
         /// </summary>

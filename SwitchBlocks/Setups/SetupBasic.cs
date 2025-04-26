@@ -41,9 +41,10 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Basic,
                 entityLogic);
 
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever());
+            var body = player.m_body;
+            _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
+            _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
+            _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever());
         }
 
         /// <summary>

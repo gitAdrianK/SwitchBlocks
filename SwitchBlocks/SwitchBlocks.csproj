@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs" />
     <Compile Include="Behaviours\BehaviourGroupIce.cs" />
     <Compile Include="Behaviours\BehaviourJumpOff.cs" />
     <Compile Include="Behaviours\BehaviourJumpOn.cs" />
@@ -96,6 +97,8 @@
     <Compile Include="Blocks\BlockBasicSnowOn.cs" />
     <Compile Include="Blocks\BlockCountdownIceOff.cs" />
     <Compile Include="Blocks\BlockCountdownIceOn.cs" />
+    <Compile Include="Blocks\BlockCountdownSingleUseSolid.cs" />
+    <Compile Include="Blocks\BlockCountdownSingleUse.cs" />
     <Compile Include="Blocks\BlockCountdownLever.cs" />
     <Compile Include="Blocks\BlockCountdownLeverSolid.cs" />
     <Compile Include="Blocks\BlockCountdownOff.cs" />
@@ -156,6 +159,7 @@
     <Compile Include="Blocks\BlockSandOn.cs" />
     <Compile Include="Blocks\BlockWind.cs" />
     <Compile Include="Blocks\ModBlock.cs" />
+    <Compile Include="Data\SeedsCountdown.cs" />
     <Compile Include="Data\SeedsSequence.cs" />
     <Compile Include="Data\DataSequence.cs" />
     <Compile Include="Data\IDataProvider.cs" />

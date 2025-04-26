@@ -27,6 +27,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.COUNTDOWN_SNOW_OFF,
             ModBlocks.COUNTDOWN_LEVER,
             ModBlocks.COUNTDOWN_LEVER_SOLID,
+            ModBlocks.COUNTDOWN_SINGLE_USE,
+            ModBlocks.COUNTDOWN_SINGLE_USE_SOLID,
             ModBlocks.COUNTDOWN_WIND_ENABLE,
         };
 
@@ -45,6 +47,7 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_ON:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_SNOW_OFF:
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SINGLE_USE_SOLID:
                     return true;
                 default:
                     break;
@@ -57,6 +60,7 @@ namespace SwitchBlocks.Factories
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
+                SetupCountdown.SingleUseLevers.Clear();
                 SetupCountdown.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
@@ -78,6 +82,14 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.COUNTDOWN_LEVER_SOLID:
                     return new BlockCountdownLeverSolid(blockRect);
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SINGLE_USE:
+                    var blockSingleUse = new BlockCountdownSingleUse(blockRect);
+                    SetupCountdown.SingleUseLevers[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSingleUse;
+                    return blockSingleUse;
+                case var _ when blockCode == ModBlocks.COUNTDOWN_SINGLE_USE_SOLID:
+                    var blockSingleUseSolid = new BlockCountdownSingleUseSolid(blockRect);
+                    SetupCountdown.SingleUseLevers[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSingleUseSolid;
+                    return blockSingleUseSolid;
                 case var _ when blockCode == ModBlocks.COUNTDOWN_WIND_ENABLE:
                     _ = SetupCountdown.WindEnabled.Add(currentScreen);
                     return new BlockWind();

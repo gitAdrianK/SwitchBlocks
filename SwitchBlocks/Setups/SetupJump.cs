@@ -40,8 +40,9 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Jump,
                 EntityLogic);
 
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
+            var body = player.m_body;
+            _ = body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
+            _ = body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
 
             if (SettingsJump.ForceSwitch)
             {

@@ -17,6 +17,8 @@ namespace SwitchBlocks.Entities
         private int WarnDuration { get; set; }
         /// <summary>If the state is forced to switch regardless of player intersection.</summary>
         private bool ForceSwitch { get; set; }
+        ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
+        private bool SingleUseReset { get; set; }
 
         /// <summary>
         /// Ctor.
@@ -27,6 +29,7 @@ namespace SwitchBlocks.Entities
             this.WarnCount = SettingsCountdown.WarnCount;
             this.WarnDuration = SettingsCountdown.WarnDuration;
             this.ForceSwitch = SettingsCountdown.ForceSwitch;
+            this.SingleUseReset = SettingsCountdown.SingleUseReset;
         }
 
         /// <summary>
@@ -88,6 +91,10 @@ namespace SwitchBlocks.Entities
                 this.Data.State = false;
                 this.Data.SwitchOnceSafe = false;
                 this.Data.WarnCount = 0;
+                if (this.SingleUseReset)
+                {
+                    this.Data.Touched.Clear();
+                }
                 return;
             }
 
@@ -101,6 +108,10 @@ namespace SwitchBlocks.Entities
                     }
                     this.Data.State = false;
                     this.Data.WarnCount = 0;
+                    if (this.SingleUseReset)
+                    {
+                        this.Data.Touched.Clear();
+                    }
                 }
                 else
                 {

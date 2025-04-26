@@ -11,9 +11,9 @@ namespace SwitchBlocks.Behaviours
     using SwitchBlocks.Util;
 
     /// <summary>
-    /// Behaviour attached to the countdown lever block.
+    /// Behaviour attached to the countdown single use lever block.
     /// </summary>
-    public class BehaviourCountdownLever : IBlockBehaviour
+    public class BehaviourCountdownSingleUse : IBlockBehaviour
     {
         /// <summary>Countdown data.</summary>
         private DataCountdown Data { get; }
@@ -23,7 +23,7 @@ namespace SwitchBlocks.Behaviours
         public bool IsPlayerOnBlock { get; set; }
 
         /// <inheritdoc/>
-        public BehaviourCountdownLever() => this.Data = DataCountdown.Instance;
+        public BehaviourCountdownSingleUse() => this.Data = DataCountdown.Instance;
 
         /// <inheritdoc/>
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
@@ -49,43 +49,44 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>();
-            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
+            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownSingleUse>();
+            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownSingleUseSolid>();
             this.IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;
-
-            if (this.IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
-                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
-                if (collidingWithLeverSolid)
-                {
-                    var block = advCollisionInfo.GetCollidedBlocks<BlockCountdownLeverSolid>().First();
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsCountdown.LeverDirections,
-                        block))
-                    {
-                        return true;
-                    }
-                }
+                return true;
+            }
 
-                this.Data.ActivatedTick = PatchAchievementManager.GetTick();
-
-                if (this.Data.HasSwitched)
+            IBlock block;
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (collidingWithLeverSolid)
+            {
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownSingleUseSolid>().First();
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                    SettingsCountdown.LeverDirections,
+                    block))
                 {
                     return true;
                 }
-
-                if (!this.Data.State)
-                {
-                    ModSounds.CountdownFlip?.PlayOneShot();
-                }
-
-                this.Data.HasSwitched = true;
-                this.Data.State = true;
             }
             else
             {
-                this.Data.HasSwitched = false;
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownSingleUse>().First();
             }
+
+            var blockGroupId = (IBlockGroupId)block;
+            if (!this.Data.Touched.Contains(blockGroupId.GroupId))
+            {
+                this.Data.ActivatedTick = PatchAchievementManager.GetTick();
+                _ = this.Data.Touched.Add(blockGroupId.GroupId);
+            }
+
+            if (!this.Data.State)
+            {
+                ModSounds.CountdownFlip?.PlayOneShot();
+            }
+
+            this.Data.State = true;
             return true;
         }
     }

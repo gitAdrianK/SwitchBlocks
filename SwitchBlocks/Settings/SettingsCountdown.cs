@@ -18,6 +18,8 @@ namespace SwitchBlocks.Settings
         public static int WarnCount { get; private set; } = 2;
         /// <summary>Duration between countdown warn sounds.</summary>
         public static int WarnDuration { get; private set; } = 60;
+        ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
+        public static bool SingleUseReset { get; private set; } = false;
 
         /// <summary>
         /// Parse the <see cref="XElement"/> to set the settings.
@@ -35,6 +37,7 @@ namespace SwitchBlocks.Settings
                 WarnCount = ParseSettings.ParseCount(warnElement.Element("Count"), 2);
                 WarnDuration = ParseSettings.ParseDuration(warnElement.Element("Duration"), 1.0f);
             }
+            SingleUseReset = element.Element("SingleUseReset") != null;
         }
 
         /// <summary>
@@ -48,6 +51,7 @@ namespace SwitchBlocks.Settings
             ForceSwitch = false;
             WarnCount = 2;
             WarnDuration = 60;
+            SingleUseReset = false;
         }
     }
 }

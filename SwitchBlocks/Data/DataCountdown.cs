@@ -1,7 +1,9 @@
 namespace SwitchBlocks.Data
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
@@ -43,13 +45,18 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataCountdown
                     {
-                        State = bool.Parse(root.Element(ModConsts.SAVE_STATE).Value),
-                        Progress = float.Parse(root.Element(ModConsts.SAVE_PROGRESS).Value, CultureInfo.InvariantCulture),
-                        HasSwitched = bool.Parse(root.Element(ModConsts.SAVE_HAS_SWITCHED).Value),
-                        CanSwitchSafely = bool.Parse(root.Element(ModConsts.SAVE_CSS).Value),
-                        SwitchOnceSafe = bool.Parse(root.Element(ModConsts.SAVE_SOS).Value),
-                        WarnCount = int.Parse(root.Element(ModConsts.SAVE_WARN_COUNT).Value),
-                        ActivatedTick = int.Parse(root.Element(ModConsts.SAVE_ACTIVATED).Value),
+                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
+                        Progress = float.TryParse(root.Element(ModConsts.SAVE_PROGRESS)?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatResult) ? floatResult : 0.0f,
+                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out boolResult) && boolResult,
+                        CanSwitchSafely = bool.TryParse(root.Element(ModConsts.SAVE_CSS)?.Value, out boolResult) && boolResult,
+                        SwitchOnceSafe = bool.TryParse(root.Element(ModConsts.SAVE_SOS)?.Value, out boolResult) && boolResult,
+                        WarnCount = int.TryParse(root.Element(ModConsts.SAVE_WARN_COUNT)?.Value, out var intResult) ? intResult : 0,
+                        ActivatedTick = int.TryParse(root.Element(ModConsts.SAVE_ACTIVATED)?.Value, out intResult) ? intResult : 0,
+                        Touched = new HashSet<int>(
+                            root.Element(ModConsts.SAVE_TOUCHED)?
+                                .Elements(ModConsts.SAVE_ID)
+                                .Select(id => int.Parse(id.Value))
+                            ?? Enumerable.Empty<int>()),
                     };
                 }
                 return instance;
@@ -73,6 +80,7 @@ namespace SwitchBlocks.Data
             this.SwitchOnceSafe = false;
             this.WarnCount = 0;
             this.ActivatedTick = int.MinValue;
+            this.Touched = new HashSet<int>();
         }
 
         /// <summary>
@@ -97,9 +105,11 @@ namespace SwitchBlocks.Data
                     new XElement(ModConsts.SAVE_CSS, this.CanSwitchSafely),
                     new XElement(ModConsts.SAVE_SOS, this.SwitchOnceSafe),
                     new XElement(ModConsts.SAVE_WARN_COUNT, this.WarnCount),
-                    new XElement(ModConsts.SAVE_ACTIVATED, this.ActivatedTick)
-                )
-            );
+                    new XElement(ModConsts.SAVE_ACTIVATED, this.ActivatedTick),
+                    new XElement(ModConsts.SAVE_TOUCHED,
+                        this.Touched.Count() != 0
+                        ? new List<XElement>(this.Touched.Select(id => new XElement(ModConsts.SAVE_ID, id)))
+                        : null)));
 
             using (var fs = new FileStream(
                 Path.Combine(
@@ -130,5 +140,7 @@ namespace SwitchBlocks.Data
         public int WarnCount { get; set; }
         /// <summary>Tick the countdown block has been activated.</summary>
         public int ActivatedTick { get; set; }
+        /// <summary>Single use lever block group ids that have been touched/activated.</summary>
+        public HashSet<int> Touched { get; set; }
     }
 }

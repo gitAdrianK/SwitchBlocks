@@ -61,10 +61,11 @@ namespace SwitchBlocks.Setups
             var entityLogic = new EntityLogicSequence();
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
+            var body = player.m_body;
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
         }
 
         /// <summary>
