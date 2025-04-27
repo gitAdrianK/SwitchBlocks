@@ -66,10 +66,15 @@ namespace SwitchBlocks.Data
         };
 
         /// <summary>
-        /// Saves the data to file.
+        /// Saves the data to file. Given there is something to save.
         /// </summary>
         public void SaveToFile()
         {
+            if (this.Resets.Count == 0)
+            {
+                return;
+            }
+
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
                 ModConsts.FOLDER,

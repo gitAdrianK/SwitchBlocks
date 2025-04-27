@@ -75,11 +75,12 @@ namespace SwitchBlocks.Behaviours
             }
 
             var blockGroupId = (IBlockGroupId)block;
-            if (!this.Data.Touched.Contains(blockGroupId.GroupId))
+            if (this.Data.Touched.Contains(blockGroupId.GroupId))
             {
-                this.Data.ActivatedTick = PatchAchievementManager.GetTick();
-                _ = this.Data.Touched.Add(blockGroupId.GroupId);
+                return true;
             }
+            this.Data.ActivatedTick = PatchAchievementManager.GetTick();
+            _ = this.Data.Touched.Add(blockGroupId.GroupId);
 
             if (!this.Data.State)
             {
