@@ -33,19 +33,27 @@ namespace SwitchBlocks.Util
             //var prevVelocity = behaviourContext.BodyComp.LastVelocity;
             var playerRect = behaviourContext.BodyComp.GetHitbox();
             var blockRect = block.GetRect();
-            if (playerRect.Bottom - blockRect.Top == 0 && prevVelocity.Y > 0.0f && validDirections[(int)Direction.Up])
+            if (playerRect.Bottom - blockRect.Top == 0
+                && prevVelocity.Y > 0.0f
+                && validDirections[(int)Direction.Up])
             {
                 return true;
             }
-            else if (blockRect.Bottom - playerRect.Top == 0 && prevVelocity.Y < 0.0f && validDirections[(int)Direction.Down])
+            else if (blockRect.Bottom - playerRect.Top == 0
+                && prevVelocity.Y < 0.0f
+                && validDirections[(int)Direction.Down])
             {
                 return true;
             }
-            else if (playerRect.Right - blockRect.Left == 0 && prevVelocity.X > 0.0f && validDirections[(int)Direction.Left])
+            else if (playerRect.Right - blockRect.Left == 0
+                && prevVelocity.X >= 0.0f
+                && validDirections[(int)Direction.Left])
             {
                 return true;
             }
-            else if (blockRect.Right - playerRect.Left == 0 && prevVelocity.X < 0.0f && validDirections[(int)Direction.Right])
+            else if (blockRect.Right - playerRect.Left == 0
+                && prevVelocity.X <= 0.0f
+                && validDirections[(int)Direction.Right])
             {
                 return true;
             }
