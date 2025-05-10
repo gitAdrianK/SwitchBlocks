@@ -40,7 +40,7 @@ namespace SwitchBlocks.Util
                 return true;
             }
             else if (blockRect.Bottom - playerRect.Top == 0
-                && prevVelocity.Y < 0.0f
+                && prevVelocity.Y <= 0.0f
                 && validDirections[(int)Direction.Down])
             {
                 return true;
