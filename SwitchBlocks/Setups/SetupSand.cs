@@ -1,26 +1,27 @@
 namespace SwitchBlocks.Setups
 {
+    using Behaviours;
+    using Blocks;
+    using Data;
+    using Entities;
+    using Factories;
     using JumpKing.API;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Factories;
-    using SwitchBlocks.Settings;
+    using Settings;
 
     /// <summary>
-    /// Setup and cleanup as well as setup related fields.
+    ///     Setup and cleanup as well as setup related fields.
     /// </summary>
     public static class SetupSand
     {
         /// <summary>Whether the sand block appears inside the hitbox file and counts as used.</summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
 
         /// <summary>
-        /// Sets up data, entities, block behaviours and does other required actions.
+        ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
-        /// <param name="player">Player to register block behaviours to.</param>
+        /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to.</param>
+        /// <param name="collisionQuery">An implementor of <see cref="ICollisionQuery" /></param>
         public static void Setup(PlayerEntity player, ICollisionQuery collisionQuery)
         {
             if (!IsUsed)
@@ -61,7 +62,7 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>
-        /// Cleans up saving data, resetting fields and does other required actions.
+        ///     Cleans up saving data, resetting fields and does other required actions.
         /// </summary>
         public static void Cleanup()
         {
@@ -71,7 +72,7 @@ namespace SwitchBlocks.Setups
             }
 
             DataSand.Instance.SaveToFile();
-            DataSand.Instance.Reset();
+            DataSand.Reset();
 
             IsUsed = false;
         }

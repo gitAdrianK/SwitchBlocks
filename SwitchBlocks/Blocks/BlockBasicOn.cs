@@ -1,20 +1,20 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// The basic on block.
+    ///     The basic on block.
     /// </summary>
     public class BlockBasicOn : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockBasicOn(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BASIC_ON : Color.Transparent;
+        /// <inheritdoc />
+        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BasicOn : Color.Transparent;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => DataBasic.Instance.State;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => DataBasic.Instance.State;
     }
 }

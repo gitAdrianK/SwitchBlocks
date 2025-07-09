@@ -1,45 +1,47 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Linq;
+    using Blocks;
+    using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Settings;
-    using SwitchBlocks.Util;
+    using Settings;
+    using Util;
 
     /// <summary>
-    /// Behaviour attached to the basic lever block.
+    ///     Behaviour attached to the <see cref="BlockBasicLever" />.
     /// </summary>
     public class BehaviourBasicLever : IBlockBehaviour
     {
-        /// <summary>Basic data.</summary>
-        private DataBasic Data { get; }
-        /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_NORMAL;
-        /// <inheritdoc/>
-        public bool IsPlayerOnBlock { get; set; }
-
-        /// <inheritdoc/>
+        /// <summary>Ctor.</summary>
         public BehaviourBasicLever() => this.Data = DataBasic.Instance;
 
-        /// <inheritdoc/>
+        /// <summary>Basic data.</summary>
+        private DataBasic Data { get; }
+
+        /// <inheritdoc />
+        public float BlockPriority => ModConstants.PrioNormal;
+
+        /// <inheritdoc />
+        public bool IsPlayerOnBlock { get; set; }
+
+        /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
@@ -58,8 +60,8 @@ namespace SwitchBlocks.Behaviours
             var collidingWithAnyLeverOn = collidingWithLeverOn || collidingWithLeverSolidOn;
             var collidingWithAnyLeverOff = collidingWithLeverOff || collidingWithLeverSolidOff;
             this.IsPlayerOnBlock = collidingWithAnyLever
-                || collidingWithAnyLeverOn
-                || collidingWithAnyLeverOff;
+                                   || collidingWithAnyLeverOn
+                                   || collidingWithAnyLeverOff;
 
             if (this.IsPlayerOnBlock)
             {
@@ -67,6 +69,7 @@ namespace SwitchBlocks.Behaviours
                 {
                     return true;
                 }
+
                 this.Data.HasSwitched = true;
 
                 // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
@@ -85,9 +88,10 @@ namespace SwitchBlocks.Behaviours
                     {
                         block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolidOff>().First();
                     }
+
                     if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsBasic.LeverDirections,
-                        block))
+                            SettingsBasic.LeverDirections,
+                            block))
                     {
                         return true;
                     }
@@ -116,6 +120,7 @@ namespace SwitchBlocks.Behaviours
             {
                 this.Data.HasSwitched = false;
             }
+
             return true;
         }
     }

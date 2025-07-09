@@ -1,20 +1,21 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// The countdown snow off block.
+    ///     The countdown snow off block.
     /// </summary>
     public class BlockCountdownSnowOff : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockCountdownSnowOff(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => !DataCountdown.Instance.State ? ModBlocks.COUNTDOWN_SNOW_OFF : Color.Transparent;
+        /// <inheritdoc />
+        public override Color DebugColor =>
+            !DataCountdown.Instance.State ? ModBlocks.CountdownSnowOff : Color.Transparent;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => !DataCountdown.Instance.State;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => !DataCountdown.Instance.State;
     }
 }

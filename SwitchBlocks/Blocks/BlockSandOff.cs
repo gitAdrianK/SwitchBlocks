@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The sand off block.
+    ///     The sand off block.
     /// </summary>
     public class BlockSandOff : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockSandOff(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.SAND_OFF;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.SandOff;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => false;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => false;
     }
 }

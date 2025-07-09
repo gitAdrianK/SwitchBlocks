@@ -1,23 +1,23 @@
 namespace SwitchBlocks.Blocks
 {
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Util;
+    using Util;
 
     /// <summary>
-    /// The countdown solid single use lever block.
+    ///     The countdown solid single use lever block.
     /// </summary>
     public class BlockCountdownSingleUseSolid : ModBlock, IBlockGroupId
     {
-        /// <inheritdoc/>
-        public int GroupId { get; set; } = 0;
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockCountdownSingleUseSolid(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.COUNTDOWN_SINGLE_USE_SOLID;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.CountdownSingleUseSolid;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => true;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => true;
+
+        /// <inheritdoc />
+        public int GroupId { get; set; } = 0;
     }
 }

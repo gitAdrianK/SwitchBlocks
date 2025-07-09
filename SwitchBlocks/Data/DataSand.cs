@@ -6,15 +6,26 @@ namespace SwitchBlocks.Data
     using JumpKing.SaveThread;
 
     /// <summary>
-    /// Contains data relevant for the sand block.
+    ///     Contains data relevant for the sand block.
     /// </summary>
     public class DataSand : IDataProvider
     {
         /// <summary>Singleton instance.</summary>
         private static DataSand instance;
+
         /// <summary>
-        /// Returns the instance should it already exist.
-        /// If it doesn't exist loads it from file.
+        ///     Private ctor.
+        /// </summary>
+        private DataSand()
+        {
+            this.State = false;
+            this.HasSwitched = false;
+            this.HasEntered = false;
+        }
+
+        /// <summary>
+        ///     Returns the instance should it already exist.
+        ///     If it doesn't exist loads it from file.
         /// </summary>
         public static DataSand Instance
         {
@@ -27,9 +38,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModConsts.FOLDER,
-                    ModConsts.SAVES,
-                    $"{ModConsts.PREFIX_SAVE}{ModConsts.SAND}{ModConsts.SUFFIX_SAV}");
+                    ModConstants.Folder,
+                    ModConstants.Saves,
+                    $"{ModConstants.PrefixSave}{ModConstants.Sand}{ModConstants.SuffixSav}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataSand();
@@ -42,39 +53,51 @@ namespace SwitchBlocks.Data
                     var root = doc.Root;
                     instance = new DataSand
                     {
-                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
-                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out boolResult) && boolResult,
-                        HasEntered = bool.TryParse(root.Element(ModConsts.SAVE_HAS_ENTERED)?.Value, out boolResult) && boolResult,
+                        State =
+                            bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
+                            boolResult,
+                        HasSwitched =
+                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
+                            boolResult,
+                        HasEntered =
+                            bool.TryParse(root.Element(ModConstants.SaveHasEntered)?.Value, out boolResult) &&
+                            boolResult
                     };
                 }
+
                 return instance;
             }
         }
 
         /// <summary>
-        /// Sets the singleton instance to null.
+        ///     Whether the state has switched touching a lever.<br />
+        ///     One time touching the lever = one switch
         /// </summary>
-        public void Reset() => instance = null;
+        public bool HasSwitched { get; set; }
+
+        /// <summary>Whether the player is currently inside the block.</summary>
+        public bool HasEntered { get; set; }
+
+        /// <inheritdoc />
+        public bool State { get; set; }
+
+        /// <summary>Progress is not being saved between play sessions as it is unnecessary.</summary>
+        public float Progress { get; set; }
 
         /// <summary>
-        /// Private ctor.
+        ///     Sets the singleton instance to null.
         /// </summary>
-        private DataSand()
-        {
-            this.State = false;
-            this.HasSwitched = false;
-            this.HasEntered = false;
-        }
+        public static void Reset() => instance = null;
 
         /// <summary>
-        /// Saves the data to file.
+        ///     Saves the data to file.
         /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModConsts.FOLDER,
-                ModConsts.SAVES);
+                ModConstants.Folder,
+                ModConstants.Saves);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -82,34 +105,22 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataSand",
-                    new XElement(ModConsts.SAVE_STATE, this.State),
-                    new XElement(ModConsts.SAVE_HAS_SWITCHED, this.HasSwitched),
-                    new XElement(ModConsts.SAVE_HAS_ENTERED, this.HasEntered)
+                    new XElement(ModConstants.SaveState, this.State),
+                    new XElement(ModConstants.SaveHasSwitched, this.HasSwitched),
+                    new XElement(ModConstants.SaveHasEntered, this.HasEntered)
                 )
             );
 
             using (var fs = new FileStream(
-                Path.Combine(
-                    path,
-                    $"{ModConsts.PREFIX_SAVE}{ModConsts.SAND}{ModConsts.SUFFIX_SAV}"),
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.None))
+                       Path.Combine(
+                           path,
+                           $"{ModConstants.PrefixSave}{ModConstants.Sand}{ModConstants.SuffixSav}"),
+                       FileMode.Create,
+                       FileAccess.Write,
+                       FileShare.None))
             {
                 doc.Save(fs);
             }
         }
-
-        /// <inheritdoc/>
-        public bool State { get; set; }
-        /// <summary>Progress is not being saved between play sessions as it is unnecessary.</summary>
-        public float Progress { get; set; }
-        /// <summary>
-        /// Whether the state has switched touching a lever.<br />
-        /// One time touching the lever = one switch
-        /// </summary>
-        public bool HasSwitched { get; set; }
-        /// <summary>Whether the player is currently inside the block.</summary>
-        public bool HasEntered { get; set; }
     }
 }

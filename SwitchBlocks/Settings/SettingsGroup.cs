@@ -2,23 +2,26 @@ namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
     using System.Xml.Linq;
-    using SwitchBlocks.Util;
+    using Util;
 
     public static class SettingsGroup
     {
         /// <summary>How long the blocks stay in their state before switching.</summary>
-        public static int Duration { get; private set; } = 0;
+        public static int Duration { get; private set; }
+
         /// <summary>Multiplier of the deltaTime used in the animation of the group block type.</summary>
         public static float Multiplier { get; private set; } = 1.0f;
+
         /// <summary>Directions the group lever can be activated from.</summary>
         public static BitVector32 LeverDirections { get; private set; } = new BitVector32((int)Direction.All);
+
         /// <summary>Directions the group platform can be activated from.</summary>
         public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
 
         /// <summary>
-        /// Parse the <see cref="XElement"/> to set the settings.
+        ///     Parse the <see cref="XElement" /> to set the settings.
         /// </summary>
-        /// <param name="element"><see cref="XElement"/> settings are to be taken from.</param>
+        /// <param name="element"><see cref="XElement" /> settings are to be taken from.</param>
         public static void Parse(XElement element)
         {
             Duration = ParseSettings.ParseDuration(element.Element("Duration"), 0);
@@ -28,7 +31,7 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>
-        /// Resets all settings to their default values.
+        ///     Resets all settings to their default values.
         /// </summary>
         public static void Reset()
         {

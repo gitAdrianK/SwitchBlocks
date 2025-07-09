@@ -1,20 +1,20 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// The basic ice on block.
+    ///     The basic ice on block.
     /// </summary>
     public class BlockBasicIceOn : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockBasicIceOn(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BASIC_ICE_ON : Color.Transparent;
+        /// <inheritdoc />
+        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BasicIceOn : Color.Transparent;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => DataBasic.Instance.State;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => DataBasic.Instance.State;
     }
 }

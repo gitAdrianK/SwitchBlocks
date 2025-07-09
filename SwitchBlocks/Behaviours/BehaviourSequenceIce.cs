@@ -2,44 +2,46 @@ namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Blocks;
+    using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Util;
+    using Util;
 
     /// <summary>
-    /// Behaviour attached to the sequence A ice block.
+    ///     Behaviour attached to the <see cref="BlockSequenceIceA" />.
     /// </summary>
     public class BehaviourSequenceIce : IBlockBehaviour
     {
-        /// <summary>Cached mappings of <see cref="BlockGroup"/>s to their id.</summary>
-        private Dictionary<int, BlockGroup> Groups { get; set; }
-        /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_NORMAL;
-        /// <inheritdoc/>
-        public bool IsPlayerOnBlock { get; set; }
-
-        /// <inheritdoc/>
+        /// <summary>Ctor.</summary>
         public BehaviourSequenceIce() => this.Groups = DataSequence.Instance.Groups;
 
-        /// <inheritdoc/>
+        /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
+        private Dictionary<int, BlockGroup> Groups { get; }
+
+        /// <inheritdoc />
+        public float BlockPriority => ModConstants.PrioNormal;
+
+        /// <inheritdoc />
+        public bool IsPlayerOnBlock { get; set; }
+
+        /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
@@ -49,9 +51,9 @@ namespace SwitchBlocks.Behaviours
             }
 
             this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockSequenceIceA>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceB>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceC>()
-                || advCollisionInfo.IsCollidingWith<BlockSequenceIceD>();
+                                   || advCollisionInfo.IsCollidingWith<BlockSequenceIceB>()
+                                   || advCollisionInfo.IsCollidingWith<BlockSequenceIceC>()
+                                   || advCollisionInfo.IsCollidingWith<BlockSequenceIceD>();
             if (!this.IsPlayerOnBlock || BehaviourPost.IsPlayerOnIce)
             {
                 return true;
@@ -61,21 +63,19 @@ namespace SwitchBlocks.Behaviours
             {
                 var type = b.GetType();
                 return type == typeof(BlockSequenceIceA)
-                || type == typeof(BlockSequenceIceB)
-                || type == typeof(BlockSequenceIceC)
-                || type == typeof(BlockSequenceIceD);
+                       || type == typeof(BlockSequenceIceB)
+                       || type == typeof(BlockSequenceIceC)
+                       || type == typeof(BlockSequenceIceD);
             });
             foreach (var block in blocks.Cast<IBlockGroupId>())
             {
-                if (!this.Groups.TryGetValue(block.GroupId, out var group))
+                if (!this.Groups.TryGetValue(block.GroupId, out var group) || !group.State)
                 {
                     continue;
                 }
-                if (group.State)
-                {
-                    BehaviourPost.IsPlayerOnIce = true;
-                    break;
-                }
+
+                BehaviourPost.IsPlayerOnIce = true;
+                break;
             }
 
             return true;

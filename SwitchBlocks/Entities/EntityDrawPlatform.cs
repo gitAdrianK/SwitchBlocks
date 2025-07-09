@@ -1,38 +1,29 @@
 namespace SwitchBlocks.Entities
 {
     using System;
+    using Data;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Patches;
-    using SwitchBlocks.Util;
-    using SwitchBlocks.Util.Deserialization;
+    using Patches;
+    using Util;
+    using Util.Deserialization;
     using Curve = Util.Curve;
 
     /// <summary>
-    /// Platform drawn based on data.
+    ///     Platform drawn based on data.
     /// </summary>
     public class EntityDrawPlatform : EntityDraw
     {
-        /// <summary>Half of <see cref="Math.PI"/> used for animations.</summary>
-        private const double HALF_PI = Math.PI / 2.0d;
-        /// <summary>Start state.</summary>
-        protected bool StartState { get; }
-        /// <summary>Animation.</summary>
-        protected Animation Animation { get; }
-        /// <summary>Out animation.</summary>
-        protected Animation AnimationOut { get; }
-
-        /// <summary><see cref="IDataProvider"/>.</summary>
-        protected IDataProvider Data { get; }
+        /// <summary>Half of <see cref="Math.PI" /> used for animations.</summary>
+        private const double HalfPi = Math.PI / 2.0d;
 
         /// <summary>
-        /// Ctor.
+        ///     Ctor.
         /// </summary>
-        /// <param name="platform">Deserialization helper <see cref="Platform"/>.</param>
+        /// <param name="platform">Deserialization helper <see cref="Platform" />.</param>
         /// <param name="screen">Screen this entity is on.</param>
-        /// <param name="data"><see cref="IDataProvider"/>.</param>
+        /// <param name="data"><see cref="IDataProvider" />.</param>
         public EntityDrawPlatform(
             Platform platform,
             int screen,
@@ -44,8 +35,20 @@ namespace SwitchBlocks.Entities
             this.Data = data;
         }
 
+        /// <summary>Start state.</summary>
+        private bool StartState { get; }
+
+        /// <summary>Animation.</summary>
+        private Animation Animation { get; }
+
+        /// <summary>Out animation.</summary>
+        private Animation AnimationOut { get; }
+
+        /// <summary><see cref="IDataProvider" />.</summary>
+        private IDataProvider Data { get; }
+
         /// <summary>
-        /// Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
+        ///     Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
         /// </summary>
         public override void Draw()
         {
@@ -53,29 +56,29 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
+
             this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
         }
 
         /// <summary>
-        /// Draws the entity with a given rectangle to limit the <see cref="Texture2D"/> to.
+        ///     Draws the entity with a given rectangle to limit the <see cref="Texture2D" /> to.
         /// </summary>
-        /// <param name="rect"><see cref="Rectangle"/> to limit the texture to.</param>
+        /// <param name="rect"><see cref="Rectangle" /> to limit the texture to.</param>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
             var progressAdjusted = this.StartState ? 1.0f - this.Data.Progress : this.Data.Progress;
-            if (progressAdjusted == 0.0f)
+            switch (progressAdjusted)
             {
-                return;
-            }
-            if (progressAdjusted == 1.0f)
-            {
-                Game1.spriteBatch.Draw(
-                    texture: this.Texture,
-                    position: this.Position,
-                    sourceRectangle: rect,
-                    color: Color.White);
-                return;
+                case 0.0f:
+                    return;
+                case 1.0f:
+                    Game1.spriteBatch.Draw(
+                        this.Texture,
+                        this.Position,
+                        rect,
+                        Color.White);
+                    return;
             }
 
             float progressActual;
@@ -86,13 +89,13 @@ namespace SwitchBlocks.Entities
                     progressActual = progressAdjusted;
                     break;
                 case Curve.EaseIn:
-                    progressActual = (float)Math.Sin((progressAdjusted * HALF_PI) - HALF_PI) + 1.0f;
+                    progressActual = (float)Math.Sin((progressAdjusted * HalfPi) - HalfPi) + 1.0f;
                     break;
                 case Curve.EaseOut:
-                    progressActual = (float)Math.Sin(progressAdjusted * HALF_PI);
+                    progressActual = (float)Math.Sin(progressAdjusted * HalfPi);
                     break;
                 case Curve.EaseInOut:
-                    progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HALF_PI) + 1.0f) / 2.0f;
+                    progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HalfPi) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
                     progressActual = this.StartState == this.Data.State ? 0.0f : 1.0f;
@@ -100,6 +103,7 @@ namespace SwitchBlocks.Entities
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
             }
+
             if (progressActual == 0.0f)
             {
                 return;
@@ -139,12 +143,12 @@ namespace SwitchBlocks.Entities
                 default:
                     throw new NotImplementedException("Unknown Animation Style, cannot draw!");
             }
+
             Game1.spriteBatch.Draw(
-                texture: this.Texture,
-                position: pos,
-                sourceRectangle: rect,
-                color: color);
+                this.Texture,
+                pos,
+                rect,
+                color);
         }
     }
 }
-

@@ -6,25 +6,25 @@ namespace SwitchBlocks.Blocks
     public abstract class ModBlock : BoxBlock, IBlockDebugColor
     {
         /// <summary>
-        /// Ctor.
+        ///     Ctor.
         /// </summary>
         /// <param name="collider">Collider to be used for this block.</param>
         protected ModBlock(Rectangle collider) : base(collider) { }
 
         /// <summary>
-        /// <see cref="Color"/> this block is drawn as when in debug.
+        ///     If this block is solid.
         /// </summary>
-        public abstract Color DebugColor { get; }
+        protected abstract bool CanBlockPlayer { get; }
 
         /// <summary>
-        /// If this block is solid.
-        /// </summary>
-        public abstract bool CanBlockPlayer { get; }
-
-        /// <summary>
-        /// Override of the <see cref="BoxBlock"/> property,
-        /// To force mod blocks to implement it, naming, and documentation.
+        ///     Override of the <see cref="BoxBlock" /> property,
+        ///     To force mod blocks to implement it, naming, and documentation.
         /// </summary>
         protected override bool canBlockPlayer => this.CanBlockPlayer;
+
+        /// <summary>
+        ///     <see cref="Color" /> this block is drawn as when in debug.
+        /// </summary>
+        public abstract Color DebugColor { get; }
     }
 }

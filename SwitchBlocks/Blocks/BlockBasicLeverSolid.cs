@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The basic solid lever block.
+    ///     The basic solid lever block.
     /// </summary>
     public class BlockBasicLeverSolid : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockBasicLeverSolid(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.BASIC_LEVER_SOLID;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.BasicLeverSolid;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => true;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => true;
     }
 }

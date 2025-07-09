@@ -1,20 +1,20 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// The auto snow off block.
+    ///     The auto snow off block.
     /// </summary>
     public class BlockAutoSnowOff : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockAutoSnowOff(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => !DataAuto.Instance.State ? ModBlocks.AUTO_SNOW_OFF : Color.Transparent;
+        /// <inheritdoc />
+        public override Color DebugColor => !DataAuto.Instance.State ? ModBlocks.AutoSnowOff : Color.Transparent;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => !DataAuto.Instance.State;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => !DataAuto.Instance.State;
     }
 }

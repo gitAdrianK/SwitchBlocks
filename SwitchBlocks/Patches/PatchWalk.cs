@@ -4,24 +4,27 @@ namespace SwitchBlocks.Patches
     using System.Linq;
     using System.Reflection.Emit;
     using BehaviorTree;
+    using Behaviours;
     using HarmonyLib;
+    using JetBrains.Annotations;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
 
     /// <summary>
-    /// Adds a transpiler to the vanilla <see cref="Walk"/>.
+    ///     Adds a transpiler to the vanilla <see cref="Walk" />.
     /// </summary>
     [HarmonyPatch(typeof(Walk), "MyRun")]
     public static class PatchWalk
     {
         /// <summary>
-        /// Add instructions to not early return <see cref="BTresult.Failure"/>
-        /// should the <see cref="PlayerEntity"/> be on a sand block moving upwards
-        /// under the additional condition that the reason for moving up is not
-        /// one of the custom sand types that is currently moving the player up.
+        ///     Add instructions to not early return <see cref="BTresult.Failure" />
+        ///     should the <see cref="PlayerEntity" /> be on a sand block moving upwards
+        ///     under the additional condition that the reason for moving up is not
+        ///     one of the custom sand types that is currently moving the player up.
         /// </summary>
         /// <param name="instructions">Original IL instructions.</param>
-        /// <returns>Modified IL instructions adding our additional condition.</returns>
+        /// <param name="il"><see cref="ILGenerator" /> provided</param>
+        /// <returns>Modified <see cref="CodeInstruction" />s adding our additional condition.</returns>
+        [UsedImplicitly]
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
         {
             var code = new List<CodeInstruction>(instructions);
@@ -34,21 +37,26 @@ namespace SwitchBlocks.Patches
             // Find the first part, that is where we want to insert out own IL instructions.
             for (i = 0; i < code.Count - 1; i++)
             {
-                if (code[i].opcode == OpCodes.Ldc_I4_2 && code[i + 1].opcode == OpCodes.Ret)
+                if (code[i].opcode != OpCodes.Ldc_I4_2 || code[i + 1].opcode != OpCodes.Ret)
                 {
-                    insertionIndex = i;
-                    break;
+                    continue;
                 }
+
+                insertionIndex = i;
+                break;
             }
+
             // Find the second part, that is where we want to jump to in case of success.
             for (; i < code.Count - 1; i++)
             {
-                if (code[i].opcode == OpCodes.Ldarg_0 && code[i + 1].opcode == OpCodes.Call)
+                if (code[i].opcode != OpCodes.Ldarg_0 || code[i + 1].opcode != OpCodes.Call)
                 {
-                    continueFound = true;
-                    code[i].labels.Add(continueLabel);
-                    break;
+                    continue;
                 }
+
+                continueFound = true;
+                code[i].labels.Add(continueLabel);
+                break;
             }
 
             if (insertionIndex == -1 || !continueFound)
@@ -61,7 +69,7 @@ namespace SwitchBlocks.Patches
                 new CodeInstruction(
                     OpCodes.Call,
                     AccessTools.PropertyGetter(typeof(BehaviourPost), nameof(BehaviourPost.IsPlayerOnSandUp))),
-                new CodeInstruction(OpCodes.Brtrue_S, continueLabel),
+                new CodeInstruction(OpCodes.Brtrue_S, continueLabel)
             };
             code.InsertRange(insertionIndex, insert);
 

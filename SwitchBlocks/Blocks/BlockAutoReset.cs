@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The auto reset block.
+    ///     The auto reset block.
     /// </summary>
     public class BlockAutoReset : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockAutoReset(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.AUTO_RESET;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.AutoReset;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => false;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => false;
     }
 }

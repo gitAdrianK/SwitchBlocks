@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The sequence solid reset block.
+    ///     The sequence solid reset block.
     /// </summary>
     public class BlockSequenceResetSolid : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockSequenceResetSolid(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.SEQUENCE_RESET_SOLID;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.SequenceResetSolid;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => true;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => true;
     }
 }

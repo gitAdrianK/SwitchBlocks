@@ -1,31 +1,31 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using Behaviours;
+    using Blocks;
+    using Data;
+    using Entities;
+    using Factories;
     using JumpKing;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Factories;
-    using SwitchBlocks.Util;
+    using Util;
 
     /// <summary>
-    /// Setup and cleanup as well as setup related fields.
+    ///     Setup and cleanup as well as setup related fields.
     /// </summary>
     public static class SetupCountdown
     {
         /// <summary>Whether the countdown block appears inside the hitbox file and counts as used.</summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
 
         /// <summary>Screens that contain a wind enable block.</summary>
-        public static HashSet<int> WindEnabled { get; set; } = new HashSet<int>();
+        public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
+
         /// <summary>Countdown single use lever blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> SingleUseLevers { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> SingleUseLevers { get; } = new Dictionary<int, IBlockGroupId>();
 
         /// <summary>
-        /// Sets up data, entities, block behaviours and does other required actions.
+        ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="player">Player to register block behaviours to.</param>
         public static void Setup(PlayerEntity player)
@@ -62,7 +62,7 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>
-        /// Cleans up saving data, resetting fields and does other required actions.
+        ///     Cleans up saving data, resetting fields and does other required actions.
         /// </summary>
         public static void Cleanup()
         {
@@ -72,26 +72,27 @@ namespace SwitchBlocks.Setups
             }
 
             DataCountdown.Instance.SaveToFile();
-            DataCountdown.Instance.Reset();
+            DataCountdown.Reset();
 
             IsUsed = false;
         }
 
         /// <summary>
-        /// Assigns group ids to all single use blocks.
+        ///     Assigns group IDs to all single use blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
         private static void AssignGroupIds(Dictionary<int, int> seeds)
         {
             var groupId = 1;
 
-            if (seeds.Count() != 0)
+            if (seeds.Count != 0)
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
                     ref groupId,
                     SingleUseLevers);
             }
+
             BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
         }
     }

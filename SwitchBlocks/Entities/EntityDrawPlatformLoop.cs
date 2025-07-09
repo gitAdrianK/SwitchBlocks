@@ -1,45 +1,25 @@
 namespace SwitchBlocks.Entities
 {
+    using System;
+    using Data;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Patches;
-    using SwitchBlocks.Util;
-    using SwitchBlocks.Util.Deserialization;
+    using Patches;
+    using Util;
+    using Util.Deserialization;
 
     /// <summary>
-    /// Looping animated platform drawn based on data.
+    ///     Looping animated platform drawn based on data.
     /// </summary>
     public class EntityDrawPlatformLoop : EntityDrawPlatform
     {
         /// <summary>
-        /// Rectangles for all sectors of the <see cref="Texture2D"/>
+        ///     Ctor.
         /// </summary>
-        protected Rectangle[] Rects { get; }
-        /// <summary>Duration of every frame.</summary>
-        protected float[] Frames { get; }
-        /// <summary>Timer counting deltaTime.</summary>
-        protected float Timer { get; set; }
-        /// <summary>Frames per second, ignored if Frames is not null.</summary>
-        protected float TimeStep { get; }
-        /// <summary><see cref="WrappedIndex"/> providing the index of the Timer limited to its length.</summary>
-        protected WrappedIndex FrameIndex { get; set; }
-        /// <summary>Index limited to Rects length.</summary>
-        protected int Index
-        {
-            get => this.InternalIndex;
-            set => this.InternalIndex = value % this.Rects.Length;
-        }
-        /// <summary>InternalIndex.</summary>
-        protected int InternalIndex { get; set; }
-
-        /// <summary>
-        /// Ctor.
-        /// </summary>
-        /// <param name="platform">Deserialization helper <see cref="Platform"/>.</param>
+        /// <param name="platform">Deserialization helper <see cref="Platform" />.</param>
         /// <param name="screen">Screen this entity is on.</param>
-        /// <param name="data"><see cref="IDataProvider"/>.</param>
+        /// <param name="data"><see cref="IDataProvider" />.</param>
         public EntityDrawPlatformLoop(
             Platform platform,
             int screen,
@@ -61,8 +41,9 @@ namespace SwitchBlocks.Entities
                         this.Height);
                 }
             }
+
             this.Rects = rects;
-            this.TimeStep = 1.0f / sprites.FPS;
+            this.TimeStep = 1.0f / sprites.Fps;
             if (sprites.Frames == null)
             {
                 this.Frames = new float[this.Rects.Length];
@@ -75,6 +56,7 @@ namespace SwitchBlocks.Entities
             {
                 this.Frames = sprites.Frames;
             }
+
             this.FrameIndex = new WrappedIndex(this.Frames.Length);
             if (sprites.RandomOffset)
             {
@@ -83,29 +65,65 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary>
-        /// Updates Timer and Index.
+        ///     Rectangles for all sectors of the <see cref="Texture2D" />
         /// </summary>
-        /// <param name="p_delta">Amount timer is increased by.</param>
-        protected override void Update(float p_delta)
+        protected Rectangle[] Rects { get; }
+
+        /// <summary>Duration of every frame.</summary>
+        private float[] Frames { get; }
+
+        /// <summary>Timer counting deltaTime.</summary>
+        protected float Timer { get; set; }
+
+        /// <summary>Frames per second, ignored if Frames is not null.</summary>
+        private float TimeStep { get; }
+
+        /// <summary><see cref="WrappedIndex" /> providing the index of the Timer limited to its length.</summary>
+        protected WrappedIndex FrameIndex { get; }
+
+        /// <summary>Index limited to Rects length.</summary>
+        protected int Index
         {
-            this.Timer += p_delta;
+            get => this.InternalIndex;
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                }
+
+                this.InternalIndex = value % this.Rects.Length;
+            }
+        }
+
+        /// <summary>InternalIndex.</summary>
+        private int InternalIndex { get; set; }
+
+        /// <summary>
+        ///     Updates Timer and Index.
+        /// </summary>
+        /// <param name="pDelta">Amount timer is increased by.</param>
+        protected override void Update(float pDelta)
+        {
+            this.Timer += pDelta;
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {
                 this.Timer -= this.Frames[this.FrameIndex.Index];
-                var frameIndex = this.FrameIndex;
-                var index = frameIndex.Index;
-                frameIndex.Index = index + 1;
+                var index = this.FrameIndex.Index;
+                this.FrameIndex.Index = index + 1;
             }
+
             if (this.Timer < 0f)
             {
                 this.Timer = 0f;
             }
+
             this.Index = this.FrameIndex.Index;
         }
 
         /// <summary>
-        /// <inheritdoc/>
-        /// Draws only the part of the texture given by the index.
+        ///     <inheritdoc />
+        ///     Draws only the part of the texture given by the index.
         /// </summary>
         public override void Draw()
         {
@@ -113,6 +131,7 @@ namespace SwitchBlocks.Entities
             {
                 return;
             }
+
             this.DrawWithRectangle(this.Rects[this.Index]);
         }
     }

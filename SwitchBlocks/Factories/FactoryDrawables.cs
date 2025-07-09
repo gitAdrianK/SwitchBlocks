@@ -6,28 +6,21 @@ namespace SwitchBlocks.Factories
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
+    using Data;
+    using Entities;
     using EntityComponent;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Util;
-    using SwitchBlocks.Util.Deserialization;
+    using Util;
+    using Util.Deserialization;
     using Curve = Util.Curve;
 
     /// <summary>
-    /// Factory for drawable entities.
+    ///     Factory for drawable entities.
     /// </summary>
-    public class FactoryDrawables
+    public static class FactoryDrawables
     {
-        /// <summary>Draw types.</summary>
-        public enum DrawType
-        {
-            Platforms,
-            Levers,
-        }
-
         /// <summary>Block types.</summary>
         public enum BlockType
         {
@@ -35,25 +28,35 @@ namespace SwitchBlocks.Factories
             Basic,
             Countdown,
             Jump,
-            Sand,
+            Sand
+        }
+
+        /// <summary>Draw types.</summary>
+        public enum DrawType
+        {
+            Platforms,
+            Levers
         }
 
         /// <summary>
-        /// Creates all drawbles for a given <see cref="DrawType"/> and <see cref="BlockType"/>.
-        /// Created entities are added to the <see cref="EntityManager"/> automatically.
+        ///     Creates all drawbles for a given <see cref="DrawType" /> and <see cref="BlockType" />.
+        ///     Created entities are added to the <see cref="EntityManager" /> automatically.
         /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
-        /// <param name="drawType"><see cref="DrawType"/>.</param>
-        /// <param name="blockType"><see cref="BlockType"/>.</param>
-        /// <param name="entityLogic"><see cref="EntityLogic{T}"/></param>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
+        /// <param name="drawType"><see cref="DrawType" />.</param>
+        /// <param name="blockType"><see cref="BlockType" />.</param>
+        /// <param name="entityLogic">
+        ///     <see cref="EntityLogic{T}" />
+        /// </param>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
-        public static void CreateDrawables<T>(DrawType drawType, BlockType blockType, EntityLogic<T> entityLogic) where T : IDataProvider
+        public static void CreateDrawables<T>(DrawType drawType, BlockType blockType, EntityLogic<T> entityLogic)
+            where T : class, IDataProvider
         {
             var contentManager = Game1.instance.contentManager;
 
             var path = Path.Combine(
                 contentManager.root,
-                ModConsts.FOLDER,
+                ModConstants.Folder,
                 drawType.ToString(),
                 blockType.ToString());
             if (!Directory.Exists(path))
@@ -62,7 +65,7 @@ namespace SwitchBlocks.Factories
             }
 
             var files = Directory.GetFiles(path);
-            if (files.Count() == 0)
+            if (files.Length == 0)
             {
                 return;
             }
@@ -85,6 +88,7 @@ namespace SwitchBlocks.Factories
                         default:
                             throw new NotImplementedException("Unknown Block Type, cannot create entities!");
                     }
+
                     break;
                 case DrawType.Levers:
                     CreateLevers(path, files, data);
@@ -95,21 +99,24 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Creates <see cref="EntityDrawPlatform"/>, <see cref="EntityDrawPlatformLoop"/> and <see cref="EntityDrawPlatformReset"/>.
+        ///     Creates <see cref="EntityDrawPlatform" />, <see cref="EntityDrawPlatformLoop" /> and
+        ///     <see cref="EntityDrawPlatformReset" />.
         /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
         /// <param name="path">Path to the files containing platform definitions.</param>
         /// <param name="files">Files inside the given path.</param>
         /// <param name="data">Data provider.</param>
-        /// <param name="entityLogic"><see cref="EntityLogic{T}">.</param>
+        /// <param name="entityLogic">
+        ///     <see cref="EntityLogic{T}" />.
+        /// </param>
         private static void CreatePlatforms<T>(
             string path,
             string[] files,
             IDataProvider data,
             EntityLogic<T> entityLogic)
-            where T : IDataProvider
+            where T : class, IDataProvider
         {
-            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            var regex = new Regex("^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
             foreach (var file in files)
             {
@@ -138,27 +145,31 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
+
+                        var texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;
                         }
+
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
                         if ((xel = platformElement.Element("Position")) == null)
                         {
                             continue;
                         }
+
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
                         if (x == null || y == null)
                         {
                             continue;
                         }
+
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
                         };
                         // Platform
                         var platform = new Platform
@@ -168,15 +179,34 @@ namespace SwitchBlocks.Factories
                             StartState = platformElement.Element("StartState")?.Value == "on",
                             Animation = new Animation
                             {
-                                Curve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
-                                Style = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
+                                Curve =
+                                    Enum.TryParse<Curve>(
+                                        platformElement.Element("Animation")?.Element("Curve")?.Value, true,
+                                        out var curve)
+                                        ? curve
+                                        : Curve.Linear,
+                                Style =
+                                    Enum.TryParse<Style>(
+                                        platformElement.Element("Animation")?.Element("Style")?.Value, true,
+                                        out var style)
+                                        ? style
+                                        : Style.Fade
                             },
                             AnimationOut = new Animation
                             {
-                                Curve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
-                                Style = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
+                                Curve =
+                                    Enum.TryParse<Curve>(
+                                        platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true,
+                                        out var curve2)
+                                        ? curve2
+                                        : curve,
+                                Style = Enum.TryParse<Style>(
+                                    platformElement.Element("AnimationOut")?.Element("Style")?.Value, true,
+                                    out var style2)
+                                    ? style2
+                                    : style
                             },
-                            Sprites = null,
+                            Sprites = null
                         };
                         // Sprites
                         if ((xel = platformElement.Element("Sprites")) != null)
@@ -185,51 +215,63 @@ namespace SwitchBlocks.Factories
                             {
                                 Cells = new Point
                                 {
-                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value, out var parsedInt) ? parsedInt : 1,
-                                    Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt) ? parsedInt : 1,
+                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value,
+                                        out var parsedInt)
+                                        ? parsedInt
+                                        : 1,
+                                    Y =
+                                        int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt)
+                                            ? parsedInt
+                                            : 1
                                 },
-                                FPS = float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var fps) ? fps : 1.0f,
-                                Frames = xel.Element("Frames")?.Elements("float").Select(f => float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
-                                RandomOffset = bool.TryParse(xel.Element("RandomOffset")?.Value, out var parsedBool) && parsedBool,
-                                ResetWithLever = bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) && parsedBool,
+                                Fps =
+                                    float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float,
+                                        CultureInfo.InvariantCulture, out var fps)
+                                        ? fps
+                                        : 1.0f,
+                                Frames =
+                                    xel.Element("Frames")?.Elements("float").Select(f =>
+                                        float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
+                                RandomOffset =
+                                    bool.TryParse(xel.Element("RandomOffset")?.Value, out var parsedBool) &&
+                                    parsedBool,
+                                ResetWithLever =
+                                    bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
+                                    parsedBool
                             };
                             // Entity
-                            if (platform.Sprites.ResetWithLever)
-                            {
-                                // Specially hardcoded to work with countdown blocks only.
-                                _ = new EntityDrawPlatformReset(platform, screen);
-                            }
-                            else
-                            {
-                                _ = new EntityDrawPlatformLoop(platform, screen, data);
-                            }
+                            // Specially hardcoded to work with countdown blocks only.
+                            _ = platform.Sprites.ResetWithLever
+                                ? new EntityDrawPlatformReset(platform, screen)
+                                : (EntityDrawPlatformReset)new EntityDrawPlatformLoop(platform, screen, data);
                         }
                         else
                         {
                             _ = new EntityDrawPlatform(platform, screen, data);
                         }
+
                         entityLogic.AddScreen(screen);
-                    };
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Creates <see cref="EntityDrawPlatformSand"/>.
+        ///     Creates <see cref="EntityDrawPlatformSand" />.
         /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IDataProvider"/>.</typeparam>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
         /// <param name="path">Path to the files containing platform definitions.</param>
         /// <param name="files">Files inside the given path.</param>
-        /// <param name="data"><see cref="IDataProvider"/>.</param>
-        /// <param name="entityLogic"><see cref="EntityLogic{T}"/>.</param>
+        /// <param name="data"><see cref="IDataProvider" />.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
         private static void CreatePlatformsSand<T>(
             string path,
             string[] files,
             IDataProvider data,
             EntityLogic<T> entityLogic)
-            where T : IDataProvider
+            where T : class, IDataProvider
         {
-            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            var regex = new Regex("^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
             foreach (var file in files)
             {
@@ -253,7 +295,7 @@ namespace SwitchBlocks.Factories
                     foreach (var platformElement in root.Elements("Platform"))
                     {
                         // Texture
-                        var textureFolder = Path.Combine(path, ModConsts.TEXTURES);
+                        var textureFolder = Path.Combine(path, ModConstants.Textures);
                         string texturePath;
                         Texture2D background = null;
                         Texture2D scrolling = null;
@@ -268,6 +310,7 @@ namespace SwitchBlocks.Factories
                                 background = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                             }
                         }
+
                         // Scrolling
                         if ((xel = platformElement.Element("Scrolling")) != null)
                         {
@@ -277,35 +320,40 @@ namespace SwitchBlocks.Factories
                                 scrolling = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                             }
                         }
+
                         // Foregorund
                         if ((xel = platformElement.Element("Foreground")) != null)
                         {
-                            texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
+                            texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
                             if (File.Exists(texturePath + ".xnb"))
                             {
                                 foreground = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                             }
                         }
+
                         // Min one size giving texture
                         if (background == null && foreground == null)
                         {
                             continue;
                         }
+
                         // Position
                         if ((xel = platformElement.Element("Position")) == null)
                         {
                             continue;
                         }
+
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
                         if (x == null || y == null)
                         {
                             continue;
                         }
+
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
                         };
                         // Platform
                         var platform = new PlatformSand
@@ -314,27 +362,27 @@ namespace SwitchBlocks.Factories
                             Scrolling = scrolling,
                             Foreground = foreground,
                             Position = position,
-                            StartState = platformElement.Element("StartState")?.Value == "on",
+                            StartState = platformElement.Element("StartState")?.Value == "on"
                         };
                         _ = new EntityDrawPlatformSand(platform, screen, data);
                         entityLogic.AddScreen(screen);
-                    };
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Creates <see cref="EntityDrawLever"/>.
+        ///     Creates <see cref="EntityDrawLever" />.
         /// </summary>
         /// <param name="path">Path to the files containing platform definitions.</param>
         /// <param name="files">Files inside the given path.</param>
-        /// <param name="data"><see cref="IDataProvider"/>.</param>
+        /// <param name="data"><see cref="IDataProvider" />.</param>
         private static void CreateLevers(
             string path,
             string[] files,
             IDataProvider data)
         {
-            var regex = new Regex(@"^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            var regex = new Regex("^levers(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
             foreach (var file in files)
             {
@@ -363,11 +411,13 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
+
+                        var texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;
                         }
+
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
                         xel = leverElement.Element("Position");
@@ -375,34 +425,32 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
+
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
                         if (x == null || y == null)
                         {
                             continue;
                         }
+
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
                         };
                         // Lever
-                        var lever = new Lever
-                        {
-                            Texture = texture,
-                            Position = position,
-                        };
+                        var lever = new Lever { Texture = texture, Position = position };
                         _ = new EntityDrawLever(lever, screen, data);
-                    };
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Get the <see cref="IDataProvider"/> based on the <see cref="BlockType"/>.
+        ///     Get the <see cref="IDataProvider" /> based on the <see cref="BlockType" />.
         /// </summary>
-        /// <param name="blockType"><see cref="BlockType"/>.</param>
-        /// <returns><see cref="IDataProvider"/>.</returns>
+        /// <param name="blockType"><see cref="BlockType" />.</param>
+        /// <returns><see cref="IDataProvider" />.</returns>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         private static IDataProvider GetData(BlockType blockType)
         {

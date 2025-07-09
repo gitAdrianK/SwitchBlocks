@@ -1,21 +1,18 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Util;
+    using Util;
 
     /// <summary>
-    /// The sequence snow A block.
+    ///     The sequence snow A block.
     /// </summary>
     public class BlockSequenceSnowA : ModBlock, IBlockGroupId
     {
-        /// <inheritdoc/>
-        public int GroupId { get; set; } = 0;
-
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockSequenceSnowA(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override Color DebugColor
         {
             get
@@ -23,23 +20,18 @@ namespace SwitchBlocks.Blocks
                 if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group)
                     && group.State)
                 {
-                    return ModBlocks.SEQUENCE_SNOW_A;
+                    return ModBlocks.SequenceSnowA;
                 }
+
                 return Color.Transparent;
             }
         }
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer
-        {
-            get
-            {
-                if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group))
-                {
-                    return group.State;
-                }
-                return false;
-            }
-        }
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer =>
+            DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group) && group.State;
+
+        /// <inheritdoc />
+        public int GroupId { get; set; } = 0;
     }
 }

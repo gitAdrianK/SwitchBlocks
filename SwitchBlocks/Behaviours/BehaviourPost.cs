@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using Blocks;
     using ErikMaths;
     using JumpKing;
     using JumpKing.API;
@@ -10,41 +11,47 @@ namespace SwitchBlocks.Behaviours
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// Behaviour attached to the post block.
+    ///     Behaviour attached to the <see cref="BlockPost" />.
     /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
-        // Documentation is false, higher numbers are run first!
-        public float BlockPriority => ModConsts.PRIO_LAST;
-        /// <inheritdoc/>
-        public bool IsPlayerOnBlock { get; set; }
         /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
+
         /// <summary>If the player is on any snow block.</summary>
         public static bool IsPlayerOnSnow { get; set; }
+
         ///<summary>If the player is on any sand block.</summary>
         public static bool IsPlayerOnSand { get; set; }
+
         ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
         public static bool IsPlayerOnSandUp { get; set; }
-        /// <summary>The velocity of the previous time this behaviour has run.</summary>
-        public static Vector2 PrevVelocity { get; set; } = new Vector2(0, 0);
 
-        /// <inheritdoc/>
+        /// <summary>The velocity of the previous time this behaviour has run.</summary>
+        public static Vector2 PrevVelocity { get; private set; } = new Vector2(0, 0);
+
+        // Documentation is false, higher numbers are run first!
+        public float BlockPriority => ModConstants.PrioLast;
+
+        /// <inheritdoc />
+        public bool IsPlayerOnBlock { get; set; }
+
+        /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;

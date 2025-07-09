@@ -2,30 +2,36 @@ namespace SwitchBlocks
 {
     using System.Linq;
     using System.Reflection;
+    using Behaviours;
+    using Blocks;
+    using Entities;
     using EntityComponent;
+    using Factories;
     using HarmonyLib;
+    using JetBrains.Annotations;
     using JumpKing;
     using JumpKing.Level;
     using JumpKing.Mods;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Factories;
-    using SwitchBlocks.Setups;
+    using Setups;
+#if DEBUG
+    using System.Diagnostics;
+#endif
 
-    [JumpKingMod(ModConsts.MODNAME)]
+    [JumpKingMod(ModConstants.Modname)]
     public static class ModEntry
     {
         /// <summary>
-        /// Called by Jump King before the level loads.
-        /// -> OnGameStart
+        ///     Called by Jump King before the level loads.
+        ///     -> OnGameStart
         /// </summary>
         [BeforeLevelLoad]
+        [UsedImplicitly]
         public static void BeforeLevelLoad()
         {
-            //_ = Debugger.Launch();
-
+#if DEBUG
+            _ = Debugger.Launch();
+#endif
             _ = LevelManager.RegisterBlockFactory(new FactoryAuto());
             _ = LevelManager.RegisterBlockFactory(new FactoryBasic());
             _ = LevelManager.RegisterBlockFactory(new FactoryCountdown());
@@ -34,14 +40,15 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactorySand());
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
 
-            var harmony = new Harmony(ModConsts.HARMONY);
+            var harmony = new Harmony(ModConstants.Harmony);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
         /// <summary>
-        /// Called by Jump King when the level starts.
+        ///     Called by Jump King when the level starts.
         /// </summary>
         [OnLevelStart]
+        [UsedImplicitly]
         public static void OnLevelStart()
         {
             var contentManager = Game1.instance.contentManager;
@@ -102,9 +109,10 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Called by Jump King when the level ends.
+        ///     Called by Jump King when the level ends.
         /// </summary>
         [OnLevelEnd]
+        [UsedImplicitly]
         public static void OnLevelEnd()
         {
             var contentManager = Game1.instance.contentManager;
@@ -127,17 +135,17 @@ namespace SwitchBlocks
         }
 
         /// <summary>
-        /// Checks if any of the blocks are used and loading settings, loading saves, registering behaviours etc.
-        /// can continue or if the mod should not insert itself into the current level played.
-        /// The block types themselves check if they are used too.
+        ///     Checks if any of the blocks are used and loading settings, loading saves, registering behaviours etc.
+        ///     can continue or if the mod should not insert itself into the current level played.
+        ///     The block types themselves check if they are used too.
         /// </summary>
         /// <returns><c>true</c> if any block type is used, <c>false</c> otherwise.</returns>
         private static bool IsUsed() => SetupAuto.IsUsed
-                || SetupBasic.IsUsed
-                || SetupCountdown.IsUsed
-                || SetupGroup.IsUsed
-                || SetupJump.IsUsed
-                || SetupSand.IsUsed
-                || SetupSequence.IsUsed;
+                                        || SetupBasic.IsUsed
+                                        || SetupCountdown.IsUsed
+                                        || SetupGroup.IsUsed
+                                        || SetupJump.IsUsed
+                                        || SetupSand.IsUsed
+                                        || SetupSequence.IsUsed;
     }
 }

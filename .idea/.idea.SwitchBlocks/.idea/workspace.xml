@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/12/977c07a7/IBlockBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourAutoOff.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/SwitchBlocks/Data/SeedsSequence.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="SWEA" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2zd3XQP7GEC9gmvUvHyR43BkUKp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "rover",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "rider.code.cleanup.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="" />
+      <created>1752047162794</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1752047162794</updated>
+      <workItem from="1752047165693" duration="1766000" />
+      <workItem from="1752049010349" duration="6848000" />
+      <workItem from="1752056052400" duration="23000" />
+      <workItem from="1752058028984" duration="22000" />
+      <workItem from="1752058665048" duration="644000" />
+      <workItem from="1752059375911" duration="31000" />
+      <workItem from="1752076928386" duration="6090000" />
+    </task>
+    <task id="LOCAL-00001" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752055592180</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1752055592180</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752055630271</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1752055630271</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752056071394</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1752056071394</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752082706066</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1752082706066</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752082748592</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1752082748592</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752082948583</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1752082948583</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752082994638</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1752082994638</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
+      <option name="closed" value="true" />
+      <created>1752083051288</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1752083051288</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

@@ -1,46 +1,48 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Linq;
+    using Blocks;
+    using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Patches;
-    using SwitchBlocks.Settings;
-    using SwitchBlocks.Util;
+    using Patches;
+    using Settings;
+    using Util;
 
     /// <summary>
-    /// Behaviour attached to the countdown single use lever block.
+    ///     Behaviour attached to the <see cref="BlockCountdownSingleUse" />.
     /// </summary>
     public class BehaviourCountdownSingleUse : IBlockBehaviour
     {
-        /// <summary>Countdown data.</summary>
-        private DataCountdown Data { get; }
-        /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_NORMAL;
-        /// <inheritdoc/>
-        public bool IsPlayerOnBlock { get; set; }
-
-        /// <inheritdoc/>
+        /// <summary>Ctor.</summary>
         public BehaviourCountdownSingleUse() => this.Data = DataCountdown.Instance;
 
-        /// <inheritdoc/>
+        /// <summary>Countdown data.</summary>
+        private DataCountdown Data { get; }
+
+        /// <inheritdoc />
+        public float BlockPriority => ModConstants.PrioNormal;
+
+        /// <inheritdoc />
+        public bool IsPlayerOnBlock { get; set; }
+
+        /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
@@ -63,8 +65,8 @@ namespace SwitchBlocks.Behaviours
             {
                 block = advCollisionInfo.GetCollidedBlocks<BlockCountdownSingleUseSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                    SettingsCountdown.LeverDirections,
-                    block))
+                        SettingsCountdown.LeverDirections,
+                        block))
                 {
                     return true;
                 }
@@ -79,6 +81,7 @@ namespace SwitchBlocks.Behaviours
             {
                 return true;
             }
+
             this.Data.ActivatedTick = PatchAchievementManager.GetTick();
             _ = this.Data.Touched.Add(blockGroupId.GroupId);
 

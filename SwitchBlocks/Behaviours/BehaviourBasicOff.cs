@@ -1,42 +1,44 @@
 namespace SwitchBlocks.Behaviours
 {
+    using Blocks;
+    using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// Behaviour attached to the basic off block.
+    ///     Behaviour attached to the <see cref="BlockBasicOff" />.
     /// </summary>
     public class BehaviourBasicOff : IBlockBehaviour
     {
-        /// <summary>Basic data.</summary>
-        private DataBasic Data { get; }
-        /// <inheritdoc/>
-        public float BlockPriority => ModConsts.PRIO_NORMAL;
-        /// <inheritdoc/>
-        public bool IsPlayerOnBlock { get; set; }
-
-        /// <inheritdoc/>
+        /// <summary>Ctor.</summary>
         public BehaviourBasicOff() => this.Data = DataBasic.Instance;
 
-        /// <inheritdoc/>
+        /// <summary>Basic data.</summary>
+        private DataBasic Data { get; }
+
+        /// <inheritdoc />
+        public float BlockPriority => ModConstants.PrioNormal;
+
+        /// <inheritdoc />
+        public bool IsPlayerOnBlock { get; set; }
+
+        /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
@@ -54,11 +56,13 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            if (!this.Data.State)
+            if (this.Data.State)
             {
-                BehaviourPost.IsPlayerOnIce |= isOnIce;
-                BehaviourPost.IsPlayerOnSnow |= isOnSnow;
+                return true;
             }
+
+            BehaviourPost.IsPlayerOnIce |= isOnIce;
+            BehaviourPost.IsPlayerOnSnow |= isOnSnow;
 
             return true;
         }

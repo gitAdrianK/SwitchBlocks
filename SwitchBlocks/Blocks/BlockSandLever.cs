@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The sand lever block.
+    ///     The sand lever block.
     /// </summary>
     public class BlockSandLever : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockSandLever(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.SAND_LEVER;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.SandLever;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => false;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => false;
     }
 }

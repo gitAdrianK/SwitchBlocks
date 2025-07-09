@@ -1,20 +1,20 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Data;
 
     /// <summary>
-    /// The jump snow off block.
+    ///     The jump snow off block.
     /// </summary>
     public class BlockJumpSnowOff : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockJumpSnowOff(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => !DataJump.Instance.State ? ModBlocks.JUMP_SNOW_OFF : Color.Transparent;
+        /// <inheritdoc />
+        public override Color DebugColor => !DataJump.Instance.State ? ModBlocks.JumpSnowOff : Color.Transparent;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => !DataJump.Instance.State;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => !DataJump.Instance.State;
     }
 }

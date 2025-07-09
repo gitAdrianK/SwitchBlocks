@@ -7,20 +7,20 @@ namespace SwitchBlocks.Factories
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Linq;
+    using Data;
+    using Entities;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Setups;
-    using SwitchBlocks.Util;
-    using SwitchBlocks.Util.Deserialization;
+    using Setups;
+    using Util;
+    using Util.Deserialization;
     using Curve = Util.Curve;
 
     /// <summary>
-    /// Factory for drawable group entities.
+    ///     Factory for drawable group entities.
     /// </summary>
-    public class FactoryDrawablesGroup
+    public static class FactoryDrawablesGroup
     {
         // There are no levers for both group types
 
@@ -28,22 +28,25 @@ namespace SwitchBlocks.Factories
         public enum BlockType
         {
             Group,
-            Sequence,
+            Sequence
         }
 
         /// <summary>
-        /// Creates all drawbles for a given <see cref="BlockType"/>.
+        ///     Creates all drawables for a given <see cref="BlockType" />.
         /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IGroupDataProvider"/>.</typeparam>
-        /// <param name="blockType"><see cref="BlockType"/>.</param>
-        /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}"/></param>
-        public static void CreateDrawables<T>(BlockType blockType, EntityGroupLogic<T> entityGroupLogic) where T : IGroupDataProvider
+        /// <typeparam name="T">A class implementing <see cref="IGroupDataProvider" />.</typeparam>
+        /// <param name="blockType"><see cref="BlockType" />.</param>
+        /// <param name="entityGroupLogic">
+        ///     <see cref="EntityGroupLogic{T}" />
+        /// </param>
+        public static void CreateDrawables<T>(BlockType blockType, EntityGroupLogic<T> entityGroupLogic)
+            where T : IGroupDataProvider
         {
             var contentManager = Game1.instance.contentManager;
 
             var path = Path.Combine(
-            contentManager.root,
-                ModConsts.FOLDER,
+                contentManager.root,
+                ModConstants.Folder,
                 "platforms",
                 blockType.ToString());
             if (!Directory.Exists(path))
@@ -52,7 +55,7 @@ namespace SwitchBlocks.Factories
             }
 
             var files = Directory.GetFiles(path);
-            if (files.Count() == 0)
+            if (files.Length == 0)
             {
                 return;
             }
@@ -62,14 +65,15 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Creates <see cref="EntityDrawPlatform"/>, <see cref="EntityDrawPlatformLoop"/> and <see cref="EntityDrawPlatformReset"/>.
+        ///     Creates <see cref="EntityDrawPlatform" />, <see cref="EntityDrawPlatformLoop" /> and
+        ///     <see cref="EntityDrawPlatformReset" />.
         /// </summary>
-        /// <typeparam name="T">>A class implementing <see cref="IGroupDataProvider"/>.</typeparam>
+        /// <typeparam name="T">>A class implementing <see cref="IGroupDataProvider" />.</typeparam>
         /// <param name="path">Path to the files containing platform definitions.</param>
         /// <param name="files"></param>
         /// <param name="blockType">Files inside the given path.</param>
         /// <param name="groups">Collection of BlockGroups.</param>
-        /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}"/>.</param>
+        /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}" />.</param>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         private static void CreatePlatforms<T>(
             string path,
@@ -79,7 +83,7 @@ namespace SwitchBlocks.Factories
             EntityGroupLogic<T> entityGroupLogic)
             where T : IGroupDataProvider
         {
-            var regex = new Regex(@"^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            var regex = new Regex("^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
 
             foreach (var file in files)
             {
@@ -108,27 +112,31 @@ namespace SwitchBlocks.Factories
                         {
                             continue;
                         }
-                        var texturePath = Path.Combine(path, ModConsts.TEXTURES, xel.Value);
+
+                        var texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
                         if (!File.Exists(texturePath + ".xnb"))
                         {
                             continue;
                         }
+
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
                         if ((xel = platformElement.Element("Position")) == null)
                         {
                             continue;
                         }
+
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
                         if (x == null || y == null)
                         {
                             continue;
                         }
+
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
                         };
                         // Platform
                         var platform = new Platform
@@ -138,15 +146,34 @@ namespace SwitchBlocks.Factories
                             StartState = platformElement.Element("StartState")?.Value == "on",
                             Animation = new Animation
                             {
-                                Curve = Enum.TryParse<Curve>(platformElement.Element("Animation")?.Element("Curve")?.Value, true, out var curve) ? curve : Curve.Linear,
-                                Style = Enum.TryParse<Style>(platformElement.Element("Animation")?.Element("Style")?.Value, true, out var style) ? style : Style.Fade,
+                                Curve =
+                                    Enum.TryParse<Curve>(
+                                        platformElement.Element("Animation")?.Element("Curve")?.Value, true,
+                                        out var curve)
+                                        ? curve
+                                        : Curve.Linear,
+                                Style =
+                                    Enum.TryParse<Style>(
+                                        platformElement.Element("Animation")?.Element("Style")?.Value, true,
+                                        out var style)
+                                        ? style
+                                        : Style.Fade
                             },
                             AnimationOut = new Animation
                             {
-                                Curve = Enum.TryParse<Curve>(platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true, out var curve2) ? curve2 : curve,
-                                Style = Enum.TryParse<Style>(platformElement.Element("AnimationOut")?.Element("Style")?.Value, true, out var style2) ? style2 : style,
+                                Curve =
+                                    Enum.TryParse<Curve>(
+                                        platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true,
+                                        out var curve2)
+                                        ? curve2
+                                        : curve,
+                                Style = Enum.TryParse<Style>(
+                                    platformElement.Element("AnimationOut")?.Element("Style")?.Value, true,
+                                    out var style2)
+                                    ? style2
+                                    : style
                             },
-                            Sprites = null,
+                            Sprites = null
                         };
                         // Sprites
                         if ((xel = platformElement.Element("Sprites")) != null)
@@ -155,15 +182,27 @@ namespace SwitchBlocks.Factories
                             {
                                 Cells = new Point
                                 {
-                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value, out var parsedInt) ? parsedInt : 1,
-                                    Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt) ? parsedInt : 1,
+                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value,
+                                        out var parsedInt)
+                                        ? parsedInt
+                                        : 1,
+                                    Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt)
+                                        ? parsedInt
+                                        : 1
                                 },
-                                FPS = float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var parsedFloat) ? parsedFloat : 1.0f,
-                                Frames = xel.Element("Frames")?.Elements("float").Select(f => float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
+                                Fps =
+                                    float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float,
+                                        CultureInfo.InvariantCulture, out var parsedFloat)
+                                        ? parsedFloat
+                                        : 1.0f,
+                                Frames =
+                                    xel.Element("Frames")?.Elements("float").Select(f =>
+                                        float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
                                 RandomOffset = xel.Element("RandomOffset")?.Value == "true",
-                                ResetWithLever = xel.Element("ResetWithLever")?.Value == "true",
+                                ResetWithLever = xel.Element("ResetWithLever")?.Value == "true"
                             };
-                        };
+                        }
+
                         // Group
                         int groupId;
                         switch (blockType)
@@ -191,23 +230,22 @@ namespace SwitchBlocks.Factories
                             default:
                                 throw new NotImplementedException("Unknown Block Type, cannot get group ID!");
                         }
+
                         if (groupId == 0)
                         {
                             continue;
                         }
+
                         if (!groups.TryGetValue(groupId, out var group))
                         {
                             continue;
                         }
+
                         // Entity
-                        if (platform.Sprites == null)
-                        {
-                            _ = new EntityDrawPlatform(platform, screen, group);
-                        }
-                        else
-                        {
-                            _ = new EntityDrawPlatformLoop(platform, screen, group);
-                        }
+                        _ = platform.Sprites == null
+                            ? new EntityDrawPlatform(platform, screen, group)
+                            : new EntityDrawPlatformLoop(platform, screen, group);
+
                         entityGroupLogic.AddScreen(screen);
                     }
                 }
@@ -215,10 +253,10 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Gets the groups data of the given <see cref="BlockType"/>.
+        ///     Gets the groups data of the given <see cref="BlockType" />.
         /// </summary>
-        /// <param name="blockType"><see cref="BlockType"/>.</param>
-        /// <returns>The groups data.</returns>
+        /// <param name="blockType"><see cref="BlockType" />.</param>
+        /// <returns>The "groups" data.</returns>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         private static Dictionary<int, BlockGroup> GetGroups(BlockType blockType)
         {
@@ -234,23 +272,24 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        /// Get the group id of the block that is at the position of the entity,
-        /// or specified link position.
+        ///     Get the group id of the block that is at the position of the entity,
+        ///     or specified link position.
         /// </summary>
-        /// <param name="root">Root <see cref="XElement"/> specified link may be taken from.</param>
+        /// <param name="root">Root <see cref="XElement" /> specified link may be taken from.</param>
         /// <param name="screen">Screen this entity is to be created on.</param>
         /// <param name="position">Position this entity is to be created at.</param>
-        /// <param name="blockGroups">Collection of <see cref="IBlockGroupId"/>.</param>
-        /// <returns>Id of the block at the position. 0 if no block exists at that the position.</returns>
-        private static int GetGroupId(XElement root, int screen, Vector2 position, params Dictionary<int, IBlockGroupId>[] blockGroups)
+        /// <param name="blockGroups">Collection of <see cref="IBlockGroupId" />.</param>
+        /// <returns>ID of the block at the position. 0 if no block exists at that the position.</returns>
+        private static int GetGroupId(XElement root, int screen, Vector2 position,
+            params Dictionary<int, IBlockGroupId>[] blockGroups)
         {
             var xel = root.Element("Link");
             int link;
             if (xel != null)
             {
-                link = (int.Parse(xel.Element("Screen").Value) * 10000)
-                    + (int.Parse(xel.Element("X").Value) * 100)
-                    + int.Parse(xel.Element("Y").Value);
+                link = (int.TryParse(xel.Element("Screen")?.Value, out var screenResult) ? screenResult * 10000 : 0)
+                       + (int.TryParse(xel.Element("X")?.Value, out var xResult) ? xResult * 100 : 0)
+                       + (int.TryParse(xel.Element("Y")?.Value, out var yResult) ? yResult : 0);
             }
             else
             {
@@ -264,6 +303,7 @@ namespace SwitchBlocks.Factories
                     return value.GroupId;
                 }
             }
+
             return 0;
         }
     }

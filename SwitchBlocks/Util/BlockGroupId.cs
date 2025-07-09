@@ -11,7 +11,7 @@ namespace SwitchBlocks.Util
     }
 
     /// <summary>
-    /// Methods related to the block group id.
+    ///     Methods related to the block group id.
     /// </summary>
     public static class BlockGroupId
     {
@@ -24,40 +24,44 @@ namespace SwitchBlocks.Util
         // Bottom right is (59, 44)
 
         /// <summary>Value representing that a block was not assigned an id.</summary>
-        private const int NOT_ASSIGNED = 0;
-        /// <summary>
-        /// To move 1 up or down is to change the integer by 1.
-        /// - is up, + is down.
-        /// </summary>
-        public const int VERTICAL = 1;
-        /// <summary>
-        /// To move 1 left or right is to change the integer by 100.
-        /// - is left, + is right.
-        /// </summary>
-        public const int HORIZONTAL = 100;
-        /// <summary>
-        /// To move 1 screen is to change the integer by 10044.
-        /// - is previous, + is next.
-        /// </summary>
-        public const int SCREEN = 10044;
+        private const int NotAssigned = 0;
 
         /// <summary>
-        /// Assigns the group id to the block and looks for neighbors of this block that are contained
-        /// in the blocks dictionary and propagates the group id to those neighbor blocks.
+        ///     To move 1 up or down is to change the integer by 1.
+        ///     - is up, + is down.
+        /// </summary>
+        public const int Vertical = 1;
+
+        /// <summary>
+        ///     To move 1 left or right is to change the integer by 100.
+        ///     - is left, + is right.
+        /// </summary>
+        public const int Horizontal = 100;
+
+        /// <summary>
+        ///     To move 1 screen is to change the integer by 10044.
+        ///     - is previous, + is next.
+        /// </summary>
+        public const int Screen = 10044;
+
+        /// <summary>
+        ///     Assigns the group id to the block and looks for neighbors of this block that are contained
+        ///     in the blocks dictionary and propagates the group id to those neighbor blocks.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="startPosition">Position from which the propagation is supposed to start.</param>
         /// <param name="groupId">Id that is to be assigned to all blocks of the group.</param>
         /// <returns><c>true</c> if at least one block was assigned an id, <c>false</c> otherwise.</returns>
-        public static bool PropagateGroupId(
+        private static bool PropagateGroupId(
             Dictionary<int, IBlockGroupId> blocks,
             int startPosition,
             int groupId)
         {
-            if (!blocks.TryGetValue(startPosition, out var value) || value.GroupId != NOT_ASSIGNED)
+            if (!blocks.TryGetValue(startPosition, out var value) || value.GroupId != NotAssigned)
             {
                 return false;
             }
+
             var toVisit = new Queue<int>();
             toVisit.Enqueue(startPosition);
             while (toVisit.Count() != 0)
@@ -66,36 +70,40 @@ namespace SwitchBlocks.Util
                 blocks[currentPos].GroupId = groupId;
 
                 // Left
-                var left = currentPos - HORIZONTAL;
-                if (blocks.TryGetValue(left, out value) && value.GroupId == NOT_ASSIGNED)
+                var left = currentPos - Horizontal;
+                if (blocks.TryGetValue(left, out value) && value.GroupId == NotAssigned)
                 {
                     toVisit.Enqueue(left);
                 }
+
                 // Right
-                var right = currentPos + HORIZONTAL;
-                if (blocks.TryGetValue(right, out value) && value.GroupId == NOT_ASSIGNED)
+                var right = currentPos + Horizontal;
+                if (blocks.TryGetValue(right, out value) && value.GroupId == NotAssigned)
                 {
                     toVisit.Enqueue(right);
                 }
+
                 // Up
-                var up = currentPos % 100 == 0 ? currentPos + SCREEN : currentPos - VERTICAL;
-                if (blocks.TryGetValue(up, out value) && value.GroupId == NOT_ASSIGNED)
+                var up = currentPos % 100 == 0 ? currentPos + Screen : currentPos - Vertical;
+                if (blocks.TryGetValue(up, out value) && value.GroupId == NotAssigned)
                 {
                     toVisit.Enqueue(up);
                 }
+
                 // Down
-                var down = currentPos % 100 == 44 ? currentPos - SCREEN : currentPos + VERTICAL;
-                if (blocks.TryGetValue(down, out value) && value.GroupId == NOT_ASSIGNED)
+                var down = currentPos % 100 == 44 ? currentPos - Screen : currentPos + Vertical;
+                if (blocks.TryGetValue(down, out value) && value.GroupId == NotAssigned)
                 {
                     toVisit.Enqueue(down);
                 }
             }
+
             return true;
         }
 
         /// <summary>
-        /// Assigns group ids to unassigned blocks counting up the id for every created
-        /// block group. Successfully created groups are added to the seeds dictionary.
+        ///     Assigns group IDs to unassigned blocks counting up the id for every created
+        ///     block group. Successfully created groups are added to the seeds dictionary.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
@@ -105,20 +113,21 @@ namespace SwitchBlocks.Util
             Dictionary<int, int> seeds,
             ref int groupId)
         {
-            foreach (var kv in blocks)
+            foreach (var position in blocks.Select(kv => kv.Key))
             {
-                var position = kv.Key;
-                if (PropagateGroupId(blocks, position, groupId))
+                if (!PropagateGroupId(blocks, position, groupId))
                 {
-                    seeds.Add(position, groupId);
-                    groupId++;
+                    continue;
                 }
+
+                seeds.Add(position, groupId);
+                groupId++;
             }
         }
 
         /// <summary>
-        /// Assigns group ids to unassigned blocks setting the id to be larger than every created
-        /// block group. Failures to create groups are removed from the seeds dictionary.
+        ///     Assigns group IDs to unassigned blocks setting the id to be larger than every created
+        ///     block group. Failures to create groups are removed from the seeds dictionary.
         /// </summary>
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="groupId">Id set to be larger than every seed Id.</param>
@@ -137,20 +146,15 @@ namespace SwitchBlocks.Util
                 {
                     groupId = currentId + 1;
                 }
-                var found = false;
-                foreach (var blocks in allBlocks)
-                {
-                    if (PropagateGroupId(blocks, currentPos, currentId))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
+
+                var found = allBlocks.Any(blocks => PropagateGroupId(blocks, currentPos, currentId));
+
                 if (!found)
                 {
                     misses.Add(currentPos);
                 }
             }
+
             foreach (var miss in misses)
             {
                 _ = seeds.Remove(miss);

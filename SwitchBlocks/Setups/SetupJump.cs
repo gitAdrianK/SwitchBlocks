@@ -1,28 +1,30 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using Behaviours;
+    using Blocks;
+    using Data;
+    using Entities;
+    using Factories;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Factories;
-    using SwitchBlocks.Settings;
+    using Settings;
 
     /// <summary>
-    /// Setup and cleanup as well as setup related fields.
+    ///     Setup and cleanup as well as setup related fields.
     /// </summary>
     public static class SetupJump
     {
         /// <summary>Whether the jump block appears inside the hitbox file and counts as used.</summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
+
         /// <summary>Screens that contain a wind enable block.</summary>
-        public static HashSet<int> WindEnabled { get; set; } = new HashSet<int>();
+        public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
+
         /// <summary>Logic entity of the jump blck type.</summary>
         private static EntityLogicJump EntityLogic { get; set; }
 
         /// <summary>
-        /// Sets up data, entities, block behaviours and does other required actions.
+        ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="player">Player to register block behaviours to.</param>
         public static void Setup(PlayerEntity player)
@@ -55,7 +57,7 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>
-        /// Cleans up saving data, resetting fields and does other required actions.
+        ///     Cleans up saving data, resetting fields and does other required actions.
         /// </summary>
         public static void Cleanup()
         {
@@ -74,7 +76,7 @@ namespace SwitchBlocks.Setups
             }
 
             DataJump.Instance.SaveToFile();
-            DataJump.Instance.Reset();
+            DataJump.Reset();
 
             IsUsed = false;
         }
@@ -86,6 +88,7 @@ namespace SwitchBlocks.Setups
             {
                 ModSounds.JumpFlip?.PlayOneShot();
             }
+
             DataJump.Instance.State = !DataJump.Instance.State;
         }
 

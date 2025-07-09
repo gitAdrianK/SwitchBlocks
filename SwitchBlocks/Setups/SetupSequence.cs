@@ -1,36 +1,40 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using Behaviours;
+    using Blocks;
+    using Data;
+    using Entities;
+    using Factories;
     using JumpKing;
     using JumpKing.Player;
-    using SwitchBlocks.Behaviours;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Data;
-    using SwitchBlocks.Entities;
-    using SwitchBlocks.Factories;
-    using SwitchBlocks.Util;
+    using Util;
 
     /// <summary>
-    /// Setup and cleanup as well as setup related fields.
+    ///     Setup and cleanup as well as setup related fields.
     /// </summary>
     public static class SetupSequence
     {
         /// <summary>Whether the sequence block appears inside the hitbox file and counts as used.</summary>
-        public static bool IsUsed { get; set; } = false;
+        public static bool IsUsed { get; set; }
+
         /// <summary>The amount of groups created.</summary>
         public static int SequenceCount { get; private set; }
+
         /// <summary>Sequence A blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; } = new Dictionary<int, IBlockGroupId>();
+
         /// <summary>Sequence B blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; } = new Dictionary<int, IBlockGroupId>();
+
         /// <summary>Sequence C blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; } = new Dictionary<int, IBlockGroupId>();
+
         /// <summary>Sequence D blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; private set; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; } = new Dictionary<int, IBlockGroupId>();
 
         /// <summary>
-        /// Sets up data, entities, block behaviours and does other required actions.
+        ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="player">Player to register block behaviours to.</param>
         public static void Setup(PlayerEntity player)
@@ -55,6 +59,7 @@ namespace SwitchBlocks.Setups
                 {
                     group.ActivatedTick = int.MaxValue;
                 }
+
                 _ = instance.Active.Add(1);
             }
 
@@ -69,7 +74,7 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>
-        /// Cleans up saving data, resetting fields and does other required actions.
+        ///     Cleans up saving data, resetting fields and does other required actions.
         /// </summary>
         public static void Cleanup()
         {
@@ -79,13 +84,13 @@ namespace SwitchBlocks.Setups
             }
 
             DataSequence.Instance.SaveToFile();
-            DataSequence.Instance.Reset();
+            DataSequence.Reset();
 
             IsUsed = false;
         }
 
         /// <summary>
-        /// Assigns sequence ids to all sequence blocks.
+        ///     Assigns sequence IDs to all sequence blocks.
         /// </summary>
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
@@ -93,7 +98,7 @@ namespace SwitchBlocks.Setups
         {
             var sequenceId = 1;
 
-            if (seeds.Count() != 0)
+            if (seeds.Count != 0)
             {
                 BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,

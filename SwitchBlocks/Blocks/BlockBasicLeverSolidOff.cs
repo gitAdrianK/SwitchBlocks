@@ -3,17 +3,17 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    /// The basic solid lever block, capable of only turning the state off.
+    ///     The basic solid lever block, capable of only turning the state off.
     /// </summary>
     public class BlockBasicLeverSolidOff : ModBlock
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public BlockBasicLeverSolidOff(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc/>
-        public override Color DebugColor => ModBlocks.BASIC_LEVER_SOLID_OFF;
+        /// <inheritdoc />
+        public override Color DebugColor => ModBlocks.BasicLeverSolidOff;
 
-        /// <inheritdoc/>
-        public override bool CanBlockPlayer => true;
+        /// <inheritdoc />
+        protected override bool CanBlockPlayer => true;
     }
 }

@@ -7,15 +7,26 @@ namespace SwitchBlocks.Data
     using JumpKing.SaveThread;
 
     /// <summary>
-    /// Contains data relevant for the basic block.
+    ///     Contains data relevant for the basic block.
     /// </summary>
     public class DataBasic : IDataProvider
     {
         /// <summary>Singleton instance.</summary>
         private static DataBasic instance;
+
         /// <summary>
-        /// Returns the instance should it already exist.
-        /// If it doesn't exist loads it from file.
+        ///     Private ctor.
+        /// </summary>
+        private DataBasic()
+        {
+            this.State = false;
+            this.Progress = 0.0f;
+            this.HasSwitched = false;
+        }
+
+        /// <summary>
+        ///     Returns the instance should it already exist.
+        ///     If it doesn't exist loads it from file.
         /// </summary>
         public static DataBasic Instance
         {
@@ -28,9 +39,9 @@ namespace SwitchBlocks.Data
 
                 var file = Path.Combine(
                     Game1.instance.contentManager.root,
-                    ModConsts.FOLDER,
-                    ModConsts.SAVES,
-                    $"{ModConsts.PREFIX_SAVE}{ModConsts.BASIC}{ModConsts.SUFFIX_SAV}");
+                    ModConstants.Folder,
+                    ModConstants.Saves,
+                    $"{ModConstants.PrefixSave}{ModConstants.Basic}{ModConstants.SuffixSav}");
                 if (SaveManager.instance.IsNewGame || !File.Exists(file))
                 {
                     instance = new DataBasic();
@@ -44,39 +55,50 @@ namespace SwitchBlocks.Data
 
                     instance = new DataBasic
                     {
-                        State = bool.TryParse(root.Element(ModConsts.SAVE_STATE)?.Value, out var boolResult) && boolResult,
-                        Progress = float.TryParse(root.Element(ModConsts.SAVE_PROGRESS)?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var floatResult) ? floatResult : 0.0f,
-                        HasSwitched = bool.TryParse(root.Element(ModConsts.SAVE_HAS_SWITCHED)?.Value, out boolResult) && boolResult,
+                        State =
+                            bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
+                            boolResult,
+                        Progress =
+                            float.TryParse(root.Element(ModConstants.SaveProgress)?.Value, NumberStyles.Float,
+                                CultureInfo.InvariantCulture, out var floatResult)
+                                ? floatResult
+                                : 0.0f,
+                        HasSwitched =
+                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
+                            boolResult
                     };
                 }
+
                 return instance;
             }
         }
 
         /// <summary>
-        /// Sets the singleton instance to null.
+        ///     Whether the state has switched touching a lever.<br />
+        ///     One time touching the lever = one switch
         /// </summary>
-        public void Reset() => instance = null;
+        public bool HasSwitched { get; set; }
+
+        /// <inheritdoc />
+        public bool State { get; set; }
+
+        /// <inheritdoc />
+        public float Progress { get; set; }
 
         /// <summary>
-        /// Private ctor.
+        ///     Sets the singleton instance to null.
         /// </summary>
-        private DataBasic()
-        {
-            this.State = false;
-            this.Progress = 0.0f;
-            this.HasSwitched = false;
-        }
+        public static void Reset() => instance = null;
 
         /// <summary>
-        /// Saves the data to file.
+        ///     Saves the data to file.
         /// </summary>
         public void SaveToFile()
         {
             var path = Path.Combine(
                 Game1.instance.contentManager.root,
-                ModConsts.FOLDER,
-                ModConsts.SAVES);
+                ModConstants.Folder,
+                ModConstants.Saves);
             if (!Directory.Exists(path))
             {
                 _ = Directory.CreateDirectory(path);
@@ -84,32 +106,22 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataBasic",
-                    new XElement(ModConsts.SAVE_STATE, this.State),
-                    new XElement(ModConsts.SAVE_PROGRESS, this.Progress),
-                    new XElement(ModConsts.SAVE_HAS_SWITCHED, this.HasSwitched)
+                    new XElement(ModConstants.SaveState, this.State),
+                    new XElement(ModConstants.SaveProgress, this.Progress),
+                    new XElement(ModConstants.SaveHasSwitched, this.HasSwitched)
                 )
             );
 
             using (var fs = new FileStream(
-                Path.Combine(
-                    path,
-                    $"{ModConsts.PREFIX_SAVE}{ModConsts.BASIC}{ModConsts.SUFFIX_SAV}"),
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.None))
+                       Path.Combine(
+                           path,
+                           $"{ModConstants.PrefixSave}{ModConstants.Basic}{ModConstants.SuffixSav}"),
+                       FileMode.Create,
+                       FileAccess.Write,
+                       FileShare.None))
             {
                 doc.Save(fs);
             }
         }
-
-        /// <inheritdoc/>
-        public bool State { get; set; }
-        /// <inheritdoc/>
-        public float Progress { get; set; }
-        /// <summary>
-        /// Whether the state has switched touching a lever.<br />
-        /// One time touching the lever = one switch
-        /// </summary>
-        public bool HasSwitched { get; set; }
     }
 }

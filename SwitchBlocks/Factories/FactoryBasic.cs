@@ -2,101 +2,105 @@ namespace SwitchBlocks.Factories
 {
     using System;
     using System.Collections.Generic;
+    using Blocks;
     using JumpKing.API;
     using JumpKing.Level;
     using JumpKing.Level.Sampler;
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
-    using SwitchBlocks.Blocks;
-    using SwitchBlocks.Setups;
+    using Setups;
 
     /// <summary>
-    /// Factory for basic blocks.
+    ///     Factory for basic blocks.
     /// </summary>
     public class FactoryBasic : IBlockFactory
     {
-        /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
-        public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
         /// <summary>Supported Block Codes.</summary>
-        private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color> {
-            ModBlocks.BASIC_ON,
-            ModBlocks.BASIC_OFF,
-            ModBlocks.BASIC_ICE_ON,
-            ModBlocks.BASIC_ICE_OFF,
-            ModBlocks.BASIC_SNOW_ON,
-            ModBlocks.BASIC_SNOW_OFF,
-            ModBlocks.BASIC_LEVER,
-            ModBlocks.BASIC_LEVER_ON,
-            ModBlocks.BASIC_LEVER_OFF,
-            ModBlocks.BASIC_LEVER_SOLID,
-            ModBlocks.BASIC_LEVER_SOLID_ON,
-            ModBlocks.BASIC_LEVER_SOLID_OFF,
-            ModBlocks.BASIC_WIND_ENABLE,
+        private static readonly HashSet<Color> SupportedBlockCodes = new HashSet<Color>
+        {
+            ModBlocks.BasicOn,
+            ModBlocks.BasicOff,
+            ModBlocks.BasicIceOn,
+            ModBlocks.BasicIceOff,
+            ModBlocks.BasicSnowOn,
+            ModBlocks.BasicSnowOff,
+            ModBlocks.BasicLever,
+            ModBlocks.BasicLeverOn,
+            ModBlocks.BasicLeverOff,
+            ModBlocks.BasicLeverSolid,
+            ModBlocks.BasicLeverSolidOn,
+            ModBlocks.BasicLeverSolidOff,
+            ModBlocks.BasicWindEnable
         };
 
-        /// <inheritdoc/>
+        /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
+        public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
+
+        /// <inheritdoc />
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool IsSolidBlock(Color blockCode)
         {
             switch (blockCode)
             {
-                case var _ when blockCode == ModBlocks.BASIC_ON:
-                case var _ when blockCode == ModBlocks.BASIC_OFF:
-                case var _ when blockCode == ModBlocks.BASIC_ICE_ON:
-                case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
-                case var _ when blockCode == ModBlocks.BASIC_SNOW_ON:
-                case var _ when blockCode == ModBlocks.BASIC_SNOW_OFF:
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID:
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_ON:
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
+                case var _ when blockCode == ModBlocks.BasicOn:
+                case var _ when blockCode == ModBlocks.BasicOff:
+                case var _ when blockCode == ModBlocks.BasicIceOn:
+                case var _ when blockCode == ModBlocks.BasicIceOff:
+                case var _ when blockCode == ModBlocks.BasicSnowOn:
+                case var _ when blockCode == ModBlocks.BasicSnowOff:
+                case var _ when blockCode == ModBlocks.BasicLeverSolid:
+                case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
+                case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
                     return true;
-                default:
-                    break;
             }
+
             return false;
         }
 
-        /// <inheritdoc/>
-        public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc, int currentScreen, int x, int y)
+        /// <inheritdoc />
+        public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
+            int currentScreen, int x, int y)
         {
             if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
             {
                 SetupBasic.WindEnabled.Clear();
                 LastUsedMapId = level.ID;
             }
+
             switch (blockCode)
             {
-                case var _ when blockCode == ModBlocks.BASIC_ON:
+                case var _ when blockCode == ModBlocks.BasicOn:
                     return new BlockBasicOn(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_OFF:
+                case var _ when blockCode == ModBlocks.BasicOff:
                     return new BlockBasicOff(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_ICE_ON:
+                case var _ when blockCode == ModBlocks.BasicIceOn:
                     return new BlockBasicIceOn(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_ICE_OFF:
+                case var _ when blockCode == ModBlocks.BasicIceOff:
                     return new BlockBasicIceOff(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_SNOW_ON:
+                case var _ when blockCode == ModBlocks.BasicSnowOn:
                     return new BlockBasicSnowOn(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_SNOW_OFF:
+                case var _ when blockCode == ModBlocks.BasicSnowOff:
                     return new BlockBasicSnowOff(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER:
+                case var _ when blockCode == ModBlocks.BasicLever:
                     return new BlockBasicLever(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_ON:
+                case var _ when blockCode == ModBlocks.BasicLeverOn:
                     return new BlockBasicLeverOn(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_OFF:
+                case var _ when blockCode == ModBlocks.BasicLeverOff:
                     return new BlockBasicLeverOff(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID:
+                case var _ when blockCode == ModBlocks.BasicLeverSolid:
                     return new BlockBasicLeverSolid(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_ON:
+                case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
                     return new BlockBasicLeverSolidOn(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_LEVER_SOLID_OFF:
+                case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
                     return new BlockBasicLeverSolidOff(blockRect);
-                case var _ when blockCode == ModBlocks.BASIC_WIND_ENABLE:
+                case var _ when blockCode == ModBlocks.BasicWindEnable:
                     _ = SetupBasic.WindEnabled.Add(currentScreen);
                     return new BlockWind();
                 default:
-                    throw new InvalidOperationException($"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                    throw new InvalidOperationException(
+                        $"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
             }
         }
     }
