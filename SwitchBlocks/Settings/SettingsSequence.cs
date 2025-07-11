@@ -47,7 +47,7 @@ namespace SwitchBlocks.Settings
             LeverDirections = new BitVector32((int)Direction.All);
             PlatformDirections = new BitVector32((int)Direction.All);
             DisableOnLeaving = false;
-            DefaultActive = new[] { 0 };
+            DefaultActive = new[] { 1 };
         }
     }
 }
