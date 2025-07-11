@@ -22,6 +22,7 @@ namespace SwitchBlocks.Behaviours
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
+            this.Finished = data.Finished;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -29,6 +30,8 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Cached IDs considered active.</summary>
         private HashSet<int> Active { get; }
+
+        private HashSet<int> Finished { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -113,6 +116,7 @@ namespace SwitchBlocks.Behaviours
                     var tick = PatchAchievementManager.GetTick();
                     group.ActivatedTick = tick + SettingsSequence.Duration;
                     _ = this.Active.Add(groupId);
+                    _ = this.Finished.Remove(groupId);
                 }
 
                 if (!this.Groups.TryGetValue(groupId + 1, out var nextGroup))

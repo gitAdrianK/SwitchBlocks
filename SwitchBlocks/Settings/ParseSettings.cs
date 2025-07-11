@@ -88,10 +88,11 @@ namespace SwitchBlocks.Settings
 
         /// <summary>
         ///     Parses a comma seperated list to an array of integers.
+        ///     If the element doesn't exist an array with the only entry being 1 is returned.
         /// </summary>
         /// <param name="element"><see cref="XElement" />.</param>
         /// <returns>Integer array.</returns>
         public static int[] ParseIntArray(XElement element) =>
-            element == null ? new[] { 0 } : element.Value.Split(',').Select(int.Parse).ToArray();
+            element == null ? new[] { 1 } : element.Value.Split(',').Select(int.Parse).ToArray();
     }
 }

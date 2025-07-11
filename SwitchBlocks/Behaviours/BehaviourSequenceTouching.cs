@@ -111,9 +111,11 @@ namespace SwitchBlocks.Behaviours
                     continue;
                 }
 
-                if (SettingsSequence.DisableOnLeave)
+                if (SettingsSequence.DisableOnLeaving)
                 {
-                    group.ActivatedTick = PatchAchievementManager.GetTick() + 1;
+                    group.ActivatedTick = PatchAchievementManager.GetTick() + 2;
+                    _ = this.Active.Add(groupId);
+                    _ = this.Finished.Remove(groupId);
                 }
 
                 if (this.Groups.TryGetValue(groupId - 1, out group))

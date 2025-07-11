@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchEndingManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchEndingManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchWindManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchWindManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourSequenceDuration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourSequenceDuration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourSequenceTouching.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourSequenceTouching.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Settings/ParseSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Settings/ParseSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Setups/SetupSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Setups/SetupSequence.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +42,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/12/977c07a7/IBlockBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/56/fb200bfd/AdvCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/b2/eaa407c7/BehaviourContextCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/c6/3400de18/BodyComp.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourAutoOff.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Data/SeedsSequence.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/Setups/SetupSequence.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -91,7 +96,8 @@
       <workItem from="1752164577802" duration="4660000" />
       <workItem from="1752174248462" duration="6000" />
       <workItem from="1752216909340" duration="669000" />
-      <workItem from="1752226018884" duration="9428000" />
+      <workItem from="1752226018884" duration="9529000" />
+      <workItem from="1752238755519" duration="6141000" />
     </task>
     <task id="LOCAL-00001" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
       <option name="closed" value="true" />
@@ -205,7 +211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752234352797</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752238671562</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1752238671562</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

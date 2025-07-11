@@ -3,7 +3,7 @@
 namespace SwitchBlocks.Entities
 {
     using System;
-    using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using Data;
     using Patches;
     using Settings;
@@ -17,10 +17,16 @@ namespace SwitchBlocks.Entities
         ///     Ctor.
         /// </summary>
         public EntityLogicSequence() : base(DataSequence.Instance, SettingsSequence.Multiplier)
-            => this.Duration = SettingsGroup.Duration;
+        {
+            this.Duration = SettingsSequence.Duration;
+            this.DisableOnLeaving = SettingsSequence.DisableOnLeaving;
+        }
 
         /// <summary>Duration the state lasts for.</summary>
         private int Duration { get; }
+
+        /// <summary> If the platform switches when left.</summary>
+        private bool DisableOnLeaving { get; }
 
         /// <summary>
         ///     Updates progress and state of groups that are marked as active.
@@ -29,7 +35,7 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             var tick = PatchAchievementManager.GetTick();
-            var finishedIds = new ConcurrentBag<int>();
+            var finishedIds = new List<int>();
             foreach (var groupId in this.Active)
             {
                 if (!this.Groups.TryGetValue(groupId, out var group))
@@ -46,7 +52,8 @@ namespace SwitchBlocks.Entities
 
                 // if the group is "finished", but the switch is planned in the near future,
                 // don't add it to finished just yet.
-                if (tick <= group.ActivatedTick && tick + this.Duration >= group.ActivatedTick)
+                if (tick <= group.ActivatedTick &&
+                    (tick + this.Duration >= group.ActivatedTick || this.DisableOnLeaving))
                 {
                     continue;
                 }

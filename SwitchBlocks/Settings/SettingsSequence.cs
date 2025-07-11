@@ -19,7 +19,7 @@ namespace SwitchBlocks.Settings
         public static BitVector32 PlatformDirections { get; private set; } = new BitVector32((int)Direction.All);
 
         /// <summary>If the platform should be disabled when left.</summary>
-        public static bool DisableOnLeave { get; private set; }
+        public static bool DisableOnLeaving { get; private set; }
 
         public static int[] DefaultActive { get; private set; } = { 1 };
 
@@ -33,7 +33,7 @@ namespace SwitchBlocks.Settings
             Multiplier = ParseSettings.ParseMultiplier(element.Element("Multiplier"));
             LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
             PlatformDirections = ParseSettings.ParseSideDisable(element.Element("PlatformSideDisable"));
-            DisableOnLeave = element.Element("DisableOnLeaving") != null;
+            DisableOnLeaving = element.Element("DisableOnLeaving") != null;
             DefaultActive = ParseSettings.ParseIntArray(element.Element("DefaultActive"));
         }
 
@@ -46,7 +46,7 @@ namespace SwitchBlocks.Settings
             Multiplier = 1.0f;
             LeverDirections = new BitVector32((int)Direction.All);
             PlatformDirections = new BitVector32((int)Direction.All);
-            DisableOnLeave = false;
+            DisableOnLeaving = false;
             DefaultActive = new[] { 0 };
         }
     }

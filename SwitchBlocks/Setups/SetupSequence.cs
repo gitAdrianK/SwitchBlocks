@@ -74,7 +74,7 @@ namespace SwitchBlocks.Setups
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
             var body = player.m_body;
-            _ = SettingsGroup.Duration == 0
+            _ = SettingsSequence.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceTouching())
                 : body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceDuration());
 
