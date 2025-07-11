@@ -59,15 +59,16 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            var collided = new[]
             {
-                var type = b.GetType();
-                return type == typeof(BlockGroupIceA)
-                       || type == typeof(BlockGroupIceB)
-                       || type == typeof(BlockGroupIceC)
-                       || type == typeof(BlockGroupIceD);
-            });
-            foreach (var block in blocks.Cast<IBlockGroupId>())
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceD>()
+            }.SelectMany(block => block);
+            var blocks = collided.Cast<IBlockGroupId>();
+
+            foreach (var block in blocks)
             {
                 if (!this.Groups.TryGetValue(block.GroupId, out var group) || !group.State)
                 {

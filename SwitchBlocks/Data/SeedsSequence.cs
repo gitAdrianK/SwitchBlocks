@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -39,9 +40,8 @@ namespace SwitchBlocks.Data
             {
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var doc = XDocument.Load(fs);
-                    var root = doc.Root;
-                    return GetNewDict(root.Element(ModConstants.SaveSeeds).Elements(ModConstants.SaveSeed));
+                    return GetNewDict(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)
+                        ?.Elements(ModConstants.SaveSeed));
                 }
             }
 
@@ -58,17 +58,16 @@ namespace SwitchBlocks.Data
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var doc = XDocument.Load(fs);
-                var root = doc.Root;
-                return GetLegacyDict(root.Element(ModConstants.SaveSeed).Elements("item"));
+                return GetLegacyDict(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeed)?.Elements("item"));
             }
         }
 
         private static SeedsSequence GetNewDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
             Seeds = xels.ToDictionary(
-                key => int.Parse(key.Element(ModConstants.SavePosition).Value),
-                value => int.Parse(value.Element(ModConstants.SaveId).Value))
+                key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
+                                 throw new InvalidOperationException()),
+                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException()))
         };
 
         /// <summary>
@@ -79,8 +78,9 @@ namespace SwitchBlocks.Data
         private static SeedsSequence GetLegacyDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
             Seeds = xels.ToDictionary(
-                key => int.Parse(key.Element("key").Element("int").Value),
-                value => int.Parse(value.Element("value").Element("int").Value))
+                key => int.Parse(key.Element("key")?.Element("int")?.Value ?? throw new InvalidOperationException()),
+                value => int.Parse(value.Element("value")?.Element("int")?.Value ??
+                                   throw new InvalidOperationException()))
         };
 
         /// <summary>

@@ -33,12 +33,6 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Cached IDs considered finished.</summary>
         private HashSet<int> Finished { get; }
 
-        /// <summary>Get or set the sequence data's Touched.</summary>
-        private static int Touched
-        {
-            set => DataSequence.Instance.Touched = value;
-        }
-
         /// <summary>Get or set the sequence data's HasSwitched.</summary>
         private static bool HasSwitched
         {
@@ -92,48 +86,86 @@ namespace SwitchBlocks.Behaviours
 
             HasSwitched = true;
 
+            IBlock block;
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                var block = advCollisionInfo.GetCollidedBlocks<BlockSequenceResetSolid>().First();
+                var solid = advCollisionInfo.GetCollidedBlocks<BlockSequenceResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                         SettingsSequence.LeverDirections,
-                        block))
+                        solid))
                 {
                     return true;
                 }
+
+                block = solid;
+            }
+            else
+            {
+                block = advCollisionInfo
+                    .GetCollidedBlocks<BlockSequenceReset>().First();
             }
 
-            foreach (var groupId in this.Active)
+            // If the only reset id is 0, reset to default.
+            var resetIds = ((IResetGroupIds)block).ResetIDs;
+            if (resetIds.Length == 1 && resetIds[0] == 0)
             {
-                if (!this.Groups.TryGetValue(groupId, out var activeGroup))
+                foreach (var groupId in this.Active)
                 {
-                    continue;
+                    if (!this.Groups.TryGetValue(groupId, out var activeGroup))
+                    {
+                        continue;
+                    }
+
+                    activeGroup.ActivatedTick = int.MinValue;
                 }
 
-                activeGroup.ActivatedTick = int.MinValue;
-            }
-
-            foreach (var groupId in this.Finished)
-            {
-                if (!this.Groups.TryGetValue(groupId, out var finishedGroup))
+                foreach (var groupId in this.Finished)
                 {
-                    continue;
+                    if (!this.Groups.TryGetValue(groupId, out var finishedGroup))
+                    {
+                        continue;
+                    }
+
+                    finishedGroup.ActivatedTick = int.MinValue;
+                    _ = this.Active.Add(groupId);
                 }
 
-                finishedGroup.ActivatedTick = int.MinValue;
-                _ = this.Active.Add(groupId);
+                this.Finished.Clear();
+
+                foreach (var defaultId in SettingsSequence.DefaultActive)
+                {
+                    if (!this.Groups.TryGetValue(defaultId, out var group))
+                    {
+                        continue;
+                    }
+
+                    group.ActivatedTick = int.MaxValue;
+                    _ = this.Active.Add(defaultId);
+                }
             }
-
-            this.Finished.Clear();
-
-            if (this.Groups.TryGetValue(1, out var group))
+            else
             {
-                group.ActivatedTick = int.MaxValue;
-                _ = this.Active.Add(1);
-            }
+                var first = resetIds[0];
+                if (this.Groups.TryGetValue(first, out var group))
+                {
+                    group.ActivatedTick = int.MaxValue;
+                    _ = this.Active.Add(first);
+                    _ = this.Finished.Remove(first);
+                }
 
-            Touched = 0;
+                foreach (var resetId in resetIds.Skip(1))
+                {
+                    if (!this.Groups.TryGetValue(resetId, out group))
+                    {
+                        continue;
+                    }
+
+                    group.ActivatedTick = int.MinValue;
+                    _ = this.Active.Add(resetId);
+                    _ = this.Finished.Remove(resetId);
+                }
+            }
 
             return true;
         }

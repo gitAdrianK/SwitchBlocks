@@ -55,25 +55,31 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataAuto();
+                        return instance;
+                    }
+
                     instance = new DataAuto
                     {
                         State =
-                            bool.TryParse(root?.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
+                            bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
                             boolResult,
                         Progress =
-                            float.TryParse(root?.Element(ModConstants.SaveProgress)?.Value, NumberStyles.Float,
+                            float.TryParse(root.Element(ModConstants.SaveProgress)?.Value, NumberStyles.Float,
                                 CultureInfo.InvariantCulture, out var floatResult)
                                 ? floatResult
                                 : 0.0f,
                         CanSwitchSafely =
-                            bool.TryParse(root?.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
+                            bool.TryParse(root.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
                         SwitchOnceSafe =
-                            bool.TryParse(root?.Element(ModConstants.SaveSos)?.Value, out boolResult) && boolResult,
+                            bool.TryParse(root.Element(ModConstants.SaveSos)?.Value, out boolResult) && boolResult,
                         WarnCount =
-                            int.TryParse(root?.Element(ModConstants.SaveWarnCount)?.Value, out var intResult)
+                            int.TryParse(root.Element(ModConstants.SaveWarnCount)?.Value, out var intResult)
                                 ? intResult
                                 : 0,
-                        ResetTick = int.TryParse(root?.Element(ModConstants.SaveResetTick)?.Value, out intResult)
+                        ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out intResult)
                             ? intResult
                             : 0
                     };

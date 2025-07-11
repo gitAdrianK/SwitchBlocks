@@ -53,6 +53,12 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataJump();
+                        return instance;
+                    }
+
                     instance = new DataJump
                     {
                         State =

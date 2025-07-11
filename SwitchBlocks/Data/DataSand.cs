@@ -51,6 +51,12 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataSand();
+                        return instance;
+                    }
+
                     instance = new DataSand
                     {
                         State =

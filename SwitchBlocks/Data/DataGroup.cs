@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -56,11 +57,16 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataGroup();
+                        return instance;
+                    }
 
                     Dictionary<int, BlockGroup> groupsDict = null;
 
                     // Both legacy and new data saves all groups as <_groups>
-                    var xel = root?.Element(ModConstants.SaveGroups);
+                    var xel = root.Element(ModConstants.SaveGroups);
                     // Legacy data then saves a group as <item>, new saves it as <_group>
                     var xels = xel?.Elements(ModConstants.SaveGroup);
                     if (xels != null)
@@ -80,20 +86,20 @@ namespace SwitchBlocks.Data
                     {
                         Groups = groupsDict ?? new Dictionary<int, BlockGroup>(),
                         HasSwitched =
-                            bool.TryParse(root?.Element(ModConstants.SaveHasSwitched)?.Value, out var boolResult) &&
+                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out var boolResult) &&
                             boolResult,
                         Touched = new HashSet<int>(
-                            root?.Element(ModConstants.SaveTouched)?
+                            root.Element(ModConstants.SaveTouched)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Active = new HashSet<int>(
-                            root?.Element(ModConstants.SaveActive)?
+                            root.Element(ModConstants.SaveActive)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Finished = new HashSet<int>(
-                            root?.Element(ModConstants.SaveFinished)?
+                            root.Element(ModConstants.SaveFinished)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>())
@@ -116,13 +122,13 @@ namespace SwitchBlocks.Data
         public bool HasSwitched { get; set; }
 
         /// <inheritdoc />
-        public Dictionary<int, BlockGroup> Groups { get; set; }
+        public Dictionary<int, BlockGroup> Groups { get; private set; }
 
         /// <inheritdoc />
-        public HashSet<int> Active { get; set; }
+        public HashSet<int> Active { get; private set; }
 
         /// <inheritdoc />
-        public HashSet<int> Finished { get; set; }
+        public HashSet<int> Finished { get; private set; }
 
         /// <summary>
         ///     Gets block groups from the new file format.
@@ -134,13 +140,17 @@ namespace SwitchBlocks.Data
             try
             {
                 return xels.ToDictionary(
-                    key => int.Parse(key.Element(ModConstants.SaveId).Value),
+                    key => int.Parse(key.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException()),
                     value => new BlockGroup
                     {
-                        State = bool.Parse(value.Element(ModConstants.SaveState).Value),
-                        Progress = float.Parse(value.Element(ModConstants.SaveProgress).Value,
+                        State =
+                            bool.Parse(value.Element(ModConstants.SaveState)?.Value ??
+                                       throw new InvalidOperationException()),
+                        Progress = float.Parse(
+                            value.Element(ModConstants.SaveProgress)?.Value ?? throw new InvalidOperationException(),
                             CultureInfo.InvariantCulture),
-                        ActivatedTick = int.Parse(value.Element(ModConstants.SaveActivated).Value)
+                        ActivatedTick = int.Parse(value.Element(ModConstants.SaveActivated)?.Value ??
+                                                  throw new InvalidOperationException())
                     });
             }
             catch
@@ -159,15 +169,21 @@ namespace SwitchBlocks.Data
             try
             {
                 return xels.ToDictionary(
-                    key => int.Parse(key.Element("key").Element("int").Value),
+                    key => int.Parse(key.Element("key")?.Element("int")?.Value ??
+                                     throw new InvalidOperationException()),
                     value => new BlockGroup
                     {
-                        State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
+                        State = bool.Parse(value.Element("value")?.Element("BlockGroup")?.Element("State")?.Value ??
+                                           throw new InvalidOperationException()),
                         Progress =
-                            float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value,
+                            float.Parse(
+                                value.Element("value")?.Element("BlockGroup")?.Element("Progress")?.Value ??
+                                throw new InvalidOperationException(),
                                 CultureInfo.InvariantCulture),
-                        ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup")
-                            .Element("ActivatedTick").Value)
+                        ActivatedTick = int.Parse(value.Element("value")
+                            ?.Element("BlockGroup")
+                            ?.Element("ActivatedTick")
+                            ?.Value ?? throw new InvalidOperationException())
                     });
             }
             catch

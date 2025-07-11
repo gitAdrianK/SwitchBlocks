@@ -68,12 +68,13 @@ namespace SwitchBlocks.Factories
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
             int currentScreen, int x, int y)
         {
-            if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
+            if (LastUsedMapId != level.ID)
             {
                 SetupSequence.BlocksSequenceA.Clear();
                 SetupSequence.BlocksSequenceB.Clear();
                 SetupSequence.BlocksSequenceC.Clear();
                 SetupSequence.BlocksSequenceD.Clear();
+                SetupSequence.Resets.Clear();
                 LastUsedMapId = level.ID;
             }
 
@@ -132,9 +133,13 @@ namespace SwitchBlocks.Factories
                     SetupSequence.BlocksSequenceD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSnowD;
                     return blockSequenceSnowD;
                 case var _ when blockCode == ModBlocks.SequenceReset:
-                    return new BlockSequenceReset(blockRect);
+                    var blockSequenceReset = new BlockSequenceReset(blockRect);
+                    SetupSequence.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceReset;
+                    return blockSequenceReset;
                 case var _ when blockCode == ModBlocks.SequenceResetSolid:
-                    return new BlockSequenceResetSolid(blockRect);
+                    var blockSequenceResetSolid = new BlockSequenceResetSolid(blockRect);
+                    SetupSequence.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceResetSolid;
+                    return blockSequenceResetSolid;
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactorySequence)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

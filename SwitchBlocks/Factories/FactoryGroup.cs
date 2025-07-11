@@ -68,7 +68,7 @@ namespace SwitchBlocks.Factories
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
             int currentScreen, int x, int y)
         {
-            if (LastUsedMapId != level.ID && SupportedBlockCodes.Contains(blockCode))
+            if (LastUsedMapId != level.ID)
             {
                 SetupGroup.BlocksGroupA.Clear();
                 SetupGroup.BlocksGroupB.Clear();

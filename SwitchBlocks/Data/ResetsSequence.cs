@@ -11,12 +11,12 @@ namespace SwitchBlocks.Data
     /// <summary>
     ///     Contains resets relevant for the group block.
     /// </summary>
-    public class ResetsGroup
+    public class ResetsSequence
     {
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private ResetsGroup() => this.Resets = new Dictionary<int, int[]>();
+        private ResetsSequence() => this.Resets = new Dictionary<int, int[]>();
 
         /// <summary>
         ///     Mapping of the position and the IDs a reset block is supposed to be able to reset,
@@ -28,63 +28,37 @@ namespace SwitchBlocks.Data
         ///     Tries to load resets from file. Default otherwise.
         /// </summary>
         /// <returns>Resets.</returns>
-        public static ResetsGroup TryDeserialize()
+        public static ResetsSequence TryDeserialize()
         {
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
                 ModConstants.Folder,
                 ModConstants.Saves,
-                $"{ModConstants.PrefixResets}{ModConstants.Group}{ModConstants.SuffixSav}");
+                $"{ModConstants.PrefixResets}{ModConstants.Sequence}{ModConstants.SuffixSav}");
             if (!File.Exists(file))
             {
-                return new ResetsGroup();
+                return new ResetsSequence();
             }
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var doc = XDocument.Load(fs);
-                var root = doc.Root;
-                if (root == null)
+                var xel = doc.Root?.Element(ModConstants.SaveResets);
+                if (xel != null)
                 {
-                    return new ResetsGroup();
-                }
-
-                XElement xel;
-                // Legacy data saves the seed as <_seed><item>, new saves it as <_resets><_reset>
-                if ((xel = root.Element(ModConstants.SaveResets)) != null)
-                {
-                    return GetNewDict(xel.Elements(ModConstants.SaveReset));
-                }
-
-                if ((xel = root.Element(ModConstants.SaveSeed)) != null)
-                {
-                    return GetLegacyDict(xel.Elements("item"));
+                    return new ResetsSequence
+                    {
+                        Resets = xel.Elements(ModConstants.SaveReset).ToDictionary(
+                            key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result)
+                                ? result
+                                : 0,
+                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())
+                    };
                 }
             }
 
-            return new ResetsGroup();
+            return new ResetsSequence();
         }
-
-        private static ResetsGroup GetNewDict(IEnumerable<XElement> xels) => new ResetsGroup
-        {
-            Resets = xels.ToDictionary(
-                key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result) ? result : 0,
-                value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())
-        };
-
-        /// <summary>
-        ///     Gets ResetsGroup from the legacy file format.
-        /// </summary>
-        /// <param name="xels"><see cref="XElement" /> root of the legacy data format.</param>
-        /// <returns>Parsed <see cref="BlockGroup" />.</returns>
-        private static ResetsGroup GetLegacyDict(IEnumerable<XElement> xels) => new ResetsGroup
-        {
-            Resets = xels.ToDictionary(
-                key => int.TryParse(key.Element("key")?.Element("int")?.Value, out var result) ? result : 0,
-                value => value.Element("value")?.Element("ArrayOfInt")?.Elements("int")
-                    .Select(id => int.Parse(id.Value))
-                    .ToArray())
-        };
 
         /// <summary>
         ///     Saves the data to file. Given there is something to save.
@@ -106,7 +80,7 @@ namespace SwitchBlocks.Data
             }
 
             var doc = new XDocument(
-                new XElement("ResetsGroup",
+                new XElement("ResetsSequence",
                     new XElement(ModConstants.SaveResets,
                         this.Resets.Count != 0
                             ? this.Resets.OrderBy(kv => kv.Key).Select(kv =>
@@ -118,7 +92,7 @@ namespace SwitchBlocks.Data
             using (var fs = new FileStream(
                        Path.Combine(
                            path,
-                           $"{ModConstants.PrefixResets}{ModConstants.Group}{ModConstants.SuffixSav}"),
+                           $"{ModConstants.PrefixResets}{ModConstants.Sequence}{ModConstants.SuffixSav}"),
                        FileMode.Create,
                        FileAccess.Write,
                        FileShare.None))

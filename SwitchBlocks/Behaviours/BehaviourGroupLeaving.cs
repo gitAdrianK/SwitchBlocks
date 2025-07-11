@@ -77,7 +77,6 @@ namespace SwitchBlocks.Behaviours
                                    || advCollisionInfo.IsCollidingWith<BlockGroupSnowC>()
                                    || advCollisionInfo.IsCollidingWith<BlockGroupSnowD>();
 
-            var tick = PatchAchievementManager.GetTick();
             if (!this.IsPlayerOnBlock)
             {
                 if (this.Touched.Count == 0)
@@ -92,35 +91,33 @@ namespace SwitchBlocks.Behaviours
                         continue;
                     }
 
-                    group.ActivatedTick = tick;
-                    lock (this.Active)
-                    {
-                        _ = this.Active.Add(groupId);
-                    }
+                    group.ActivatedTick = PatchAchievementManager.GetTick();
+                    _ = this.Active.Add(groupId);
                 }
 
                 this.Touched.Clear();
                 return true;
             }
 
-            var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            var collided = new[]
             {
-                var type = b.GetType();
-                return type == typeof(BlockGroupA)
-                       || type == typeof(BlockGroupB)
-                       || type == typeof(BlockGroupC)
-                       || type == typeof(BlockGroupD)
-                       || type == typeof(BlockGroupIceA)
-                       || type == typeof(BlockGroupIceB)
-                       || type == typeof(BlockGroupIceC)
-                       || type == typeof(BlockGroupIceD)
-                       || type == typeof(BlockGroupSnowA)
-                       || type == typeof(BlockGroupSnowB)
-                       || type == typeof(BlockGroupSnowC)
-                       || type == typeof(BlockGroupSnowD);
-            });
+                advCollisionInfo.GetCollidedBlocks<BlockGroupA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupD>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceD>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowD>()
+            }.SelectMany(block => block);
+            var blocks = collided.Cast<IBlockGroupId>();
+
             var currentlyTouched = new HashSet<int>();
-            foreach (var block in blocks.Cast<IBlockGroupId>())
+            foreach (var block in blocks)
             {
                 var groupId = block.GroupId;
                 if (!this.Groups.TryGetValue(groupId, out var group))
@@ -146,7 +143,7 @@ namespace SwitchBlocks.Behaviours
                     continue;
                 }
 
-                group.ActivatedTick = tick;
+                group.ActivatedTick = PatchAchievementManager.GetTick();
                 _ = this.Active.Add(groupId);
             }
 

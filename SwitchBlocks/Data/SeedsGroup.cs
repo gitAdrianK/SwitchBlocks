@@ -2,6 +2,7 @@
 
 namespace SwitchBlocks.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -41,9 +42,8 @@ namespace SwitchBlocks.Data
             {
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var doc = XDocument.Load(fs);
-                    var root = doc.Root;
-                    return GetNewSeeds(root?.Element(ModConstants.SaveSeeds)?.Elements(ModConstants.SaveSeed));
+                    return GetNewSeeds(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)
+                        ?.Elements(ModConstants.SaveSeed));
                 }
             }
 
@@ -60,9 +60,7 @@ namespace SwitchBlocks.Data
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var doc = XDocument.Load(fs);
-                var root = doc.Root;
-                return GetLegacySeeds(root?.Element(ModConstants.SaveSeed)?.Elements("item"));
+                return GetLegacySeeds(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeed)?.Elements("item"));
             }
         }
 
@@ -77,8 +75,10 @@ namespace SwitchBlocks.Data
             return new SeedsGroup
             {
                 Seeds = xElements.ToDictionary(
-                    key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ?? string.Empty),
-                    value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? string.Empty))
+                    key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
+                                     throw new InvalidOperationException()),
+                    value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
+                                       throw new InvalidOperationException()))
             };
         }
 

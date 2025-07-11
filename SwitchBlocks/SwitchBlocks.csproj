@@ -75,8 +75,8 @@
     <Compile Include="Behaviours\BehaviourBasicLever.cs"/>
     <Compile Include="Behaviours\BehaviourSandOff.cs"/>
     <Compile Include="Behaviours\BehaviourSandOn.cs"/>
+    <Compile Include="Behaviours\BehaviourSequenceDuration.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceIce.cs"/>
-    <Compile Include="Behaviours\BehaviourSequencePlatform.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceSnow.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceReset.cs"/>
     <Compile Include="Behaviours\BehaviourGroupReset.cs"/>
@@ -86,6 +86,7 @@
     <Compile Include="Behaviours\BehaviourCountdownLever.cs"/>
     <Compile Include="Behaviours\BehaviourSandLegacy.cs"/>
     <Compile Include="Behaviours\BehaviourSandLever.cs"/>
+    <Compile Include="Behaviours\BehaviourSequenceTouching.cs"/>
     <Compile Include="Blocks\BlockAutoIceOff.cs"/>
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
@@ -162,6 +163,7 @@
     <Compile Include="Blocks\BlockSandOn.cs"/>
     <Compile Include="Blocks\BlockWind.cs"/>
     <Compile Include="Blocks\ModBlock.cs"/>
+    <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>
     <Compile Include="Data\SeedsSequence.cs"/>
     <Compile Include="Data\DataSequence.cs"/>

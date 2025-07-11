@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 namespace SwitchBlocks.Patches
 {
     using System.Diagnostics.CodeAnalysis;
@@ -16,9 +18,9 @@ namespace SwitchBlocks.Patches
         /// <summary>
         ///     Sets <see cref="HasFinished" /> to the same result as the CheckWin function.
         /// </summary>
-        /// <param name="result">Result of the original function.</param>
+        /// <param name="__result">Result of the original function.</param>
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         [UsedImplicitly]
-        public static void Postfix(bool result) => HasFinished = result;
+        public static void Postfix(bool __result) => HasFinished = __result;
     }
 }

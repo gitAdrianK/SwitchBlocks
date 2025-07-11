@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="" />
+    <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchEndingManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchEndingManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchWindManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchWindManager.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,52 +23,57 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "gitAdrianK"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;gitAdrianK&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/gitAdrianK/SwitchBlocksMod.git",
-    "accountId": "accc8f35-94a4-4466-a59f-5b786deda4fe"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/gitAdrianK/SwitchBlocksMod.git&quot;,
+    &quot;accountId&quot;: &quot;accc8f35-94a4-4466-a59f-5b786deda4fe&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/12/977c07a7/IBlockBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/56/fb200bfd/AdvCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/b2/eaa407c7/BehaviourContextCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourAutoOff.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Data/SeedsSequence.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="SWEA" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2zd3XQP7GEC9gmvUvHyR43BkUKp" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "rover",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "rider.code.cleanup.on.save": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;rover&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;rider.code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="" />
@@ -78,6 +88,10 @@
       <workItem from="1752058665048" duration="644000" />
       <workItem from="1752059375911" duration="31000" />
       <workItem from="1752076928386" duration="6328000" />
+      <workItem from="1752164577802" duration="4660000" />
+      <workItem from="1752174248462" duration="6000" />
+      <workItem from="1752216909340" duration="669000" />
+      <workItem from="1752226018884" duration="9428000" />
     </task>
     <task id="LOCAL-00001" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
       <option name="closed" value="true" />
@@ -151,7 +165,47 @@
       <option name="project" value="LOCAL" />
       <updated>1752083114539</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752232951877</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1752232951877</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752233007660</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1752233007660</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752233080302</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1752233080302</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752233852184</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1752233852184</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Improve sequence behaviour.&#10;&#10;Also, more Rider changes">
+      <option name="closed" value="true" />
+      <created>1752234352797</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1752234352797</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,7 +227,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)" />
+    <MESSAGE value="Improve sequence behaviour.&#10;&#10;Also, more Rider changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improve sequence behaviour.&#10;&#10;Also, more Rider changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -83,24 +83,24 @@ namespace SwitchBlocks.Behaviours
             }
 
             var tick = PatchAchievementManager.GetTick();
-            var blocks = advCollisionInfo.GetCollidedBlocks().Where(b =>
+            var collided = new[]
             {
-                var type = b.GetType();
-                return type == typeof(BlockGroupA)
-                       || type == typeof(BlockGroupB)
-                       || type == typeof(BlockGroupC)
-                       || type == typeof(BlockGroupD)
-                       || type == typeof(BlockGroupIceA)
-                       || type == typeof(BlockGroupIceB)
-                       || type == typeof(BlockGroupIceC)
-                       || type == typeof(BlockGroupIceD)
-                       || type == typeof(BlockGroupSnowA)
-                       || type == typeof(BlockGroupSnowB)
-                       || type == typeof(BlockGroupSnowC)
-                       || type == typeof(BlockGroupSnowD);
-            });
+                advCollisionInfo.GetCollidedBlocks<BlockGroupA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupD>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupIceD>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowA>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowB>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowC>(),
+                advCollisionInfo.GetCollidedBlocks<BlockGroupSnowD>()
+            }.SelectMany(block => block);
+            var blocks = collided.Cast<IBlockGroupId>();
 
-            foreach (var block in blocks.Cast<IBlockGroupId>())
+            foreach (var block in blocks)
             {
                 var groupId = block.GroupId;
                 if (!this.Groups.TryGetValue(groupId, out var group))

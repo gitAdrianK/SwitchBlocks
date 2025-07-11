@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 namespace SwitchBlocks.Patches
 {
     using System;
@@ -21,24 +23,24 @@ namespace SwitchBlocks.Patches
         ///     in the IsOnBlock function when asked if the <see cref="BodyComp" /> is on a custom block imitating the vanilla
         ///     blocks behaviour.
         /// </summary>
-        /// <param name="result">Result of the original function, returning <c>true</c> if the player is on a custom block.</param>
+        /// <param name="__result">Result of the original function, returning <c>true</c> if the player is on a custom block.</param>
         /// <param name="blockType">Original <see cref="Type" /> the function is called with.</param>
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         [UsedImplicitly]
-        public static void Postfix(ref bool result, Type blockType)
+        public static void Postfix(ref bool __result, Type blockType)
         {
             if (blockType == typeof(SandBlock))
             {
-                result |= DataSand.Instance.HasEntered;
-                result |= BehaviourPost.IsPlayerOnSand;
+                __result |= DataSand.Instance.HasEntered;
+                __result |= BehaviourPost.IsPlayerOnSand;
             }
             else if (blockType == typeof(IceBlock))
             {
-                result |= BehaviourPost.IsPlayerOnIce;
+                __result |= BehaviourPost.IsPlayerOnIce;
             }
             else if (blockType == typeof(SnowBlock))
             {
-                result |= BehaviourPost.IsPlayerOnSnow;
+                __result |= BehaviourPost.IsPlayerOnSnow;
             }
         }
     }

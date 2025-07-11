@@ -2,6 +2,7 @@ namespace SwitchBlocks.Settings
 {
     using System.Collections.Specialized;
     using System.Globalization;
+    using System.Linq;
     using System.Xml.Linq;
     using Util;
 
@@ -84,5 +85,13 @@ namespace SwitchBlocks.Settings
 
             return directions;
         }
+
+        /// <summary>
+        ///     Parses a comma seperated list to an array of integers.
+        /// </summary>
+        /// <param name="element"><see cref="XElement" />.</param>
+        /// <returns>Integer array.</returns>
+        public static int[] ParseIntArray(XElement element) =>
+            element == null ? new[] { 0 } : element.Value.Split(',').Select(int.Parse).ToArray();
     }
 }

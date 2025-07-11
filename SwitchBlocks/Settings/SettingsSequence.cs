@@ -21,6 +21,8 @@ namespace SwitchBlocks.Settings
         /// <summary>If the platform should be disabled when left.</summary>
         public static bool DisableOnLeave { get; private set; }
 
+        public static int[] DefaultActive { get; private set; } = { 1 };
+
         /// <summary>
         ///     Parse the <see cref="XElement" /> to set the settings.
         /// </summary>
@@ -32,6 +34,7 @@ namespace SwitchBlocks.Settings
             LeverDirections = ParseSettings.ParseSideDisable(element.Element("LeverSideDisable"));
             PlatformDirections = ParseSettings.ParseSideDisable(element.Element("PlatformSideDisable"));
             DisableOnLeave = element.Element("DisableOnLeaving") != null;
+            DefaultActive = ParseSettings.ParseIntArray(element.Element("DefaultActive"));
         }
 
         /// <summary>
@@ -44,6 +47,7 @@ namespace SwitchBlocks.Settings
             LeverDirections = new BitVector32((int)Direction.All);
             PlatformDirections = new BitVector32((int)Direction.All);
             DisableOnLeave = false;
+            DefaultActive = new[] { 0 };
         }
     }
 }

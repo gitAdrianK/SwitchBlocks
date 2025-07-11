@@ -8,6 +8,8 @@ namespace SwitchBlocks.Setups
     using Factories;
     using JumpKing;
     using JumpKing.Player;
+    using JumpKing.SaveThread;
+    using Settings;
     using Util;
 
     /// <summary>
@@ -17,9 +19,6 @@ namespace SwitchBlocks.Setups
     {
         /// <summary>Whether the sequence block appears inside the hitbox file and counts as used.</summary>
         public static bool IsUsed { get; set; }
-
-        /// <summary>The amount of groups created.</summary>
-        public static int SequenceCount { get; private set; }
 
         /// <summary>Sequence A blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; } = new Dictionary<int, IBlockGroupId>();
@@ -32,6 +31,9 @@ namespace SwitchBlocks.Setups
 
         /// <summary>Sequence D blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; } = new Dictionary<int, IBlockGroupId>();
+
+        /// <summary>Group Reset blocks.</summary>
+        public static Dictionary<int, IResetGroupIds> Resets { get; } = new Dictionary<int, IResetGroupIds>();
 
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
@@ -46,28 +48,36 @@ namespace SwitchBlocks.Setups
 
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
-            AssignSequenceIds(instance.Groups, seeds.Seeds);
+            var resets = ResetsSequence.TryDeserialize();
+            AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets);
 
             if (LevelDebugState.instance != null)
             {
                 seeds.SaveToFile();
+                resets.SaveToFile();
             }
 
-            if (instance.Touched == 0)
+            if (SaveManager.instance.IsNewGame)
             {
-                if (instance.Groups.TryGetValue(1, out var group))
+                foreach (var defaultId in SettingsSequence.DefaultActive)
                 {
-                    group.ActivatedTick = int.MaxValue;
-                }
+                    if (instance.Groups.TryGetValue(defaultId, out var group))
+                    {
+                        group.ActivatedTick = int.MaxValue;
+                    }
 
-                _ = instance.Active.Add(1);
+                    _ = instance.Active.Add(defaultId);
+                }
             }
 
             var entityLogic = new EntityLogicSequence();
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
             var body = player.m_body;
-            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequencePlatform());
+            _ = SettingsGroup.Duration == 0
+                ? body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceTouching())
+                : body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceDuration());
+
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
@@ -94,7 +104,9 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        private static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds)
+        /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
+        private static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
+            Dictionary<int, int[]> resets)
         {
             var sequenceId = 1;
 
@@ -116,8 +128,12 @@ namespace SwitchBlocks.Setups
 
             BlockGroup.CreateGroupData(sequenceId, groups, false);
 
-            // Increased one more time at the end and is thus one too high.
-            SequenceCount = sequenceId - 1;
+            if (resets.Count != 0)
+            {
+                ResetGroupIds.AssignResetIdsFromSeed(Resets, resets);
+            }
+
+            ResetGroupIds.AssignOtherResets(Resets, resets);
         }
     }
 }

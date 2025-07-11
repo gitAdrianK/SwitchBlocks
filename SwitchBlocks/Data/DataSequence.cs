@@ -26,7 +26,6 @@ namespace SwitchBlocks.Data
         {
             this.Groups = new Dictionary<int, BlockGroup>();
             this.HasSwitched = false;
-            this.Touched = 0;
             this.Active = new HashSet<int>();
             this.Finished = new HashSet<int>();
         }
@@ -59,15 +58,20 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataSequence();
+                        return instance;
+                    }
 
                     Dictionary<int, BlockGroup> groupsDict = null;
 
                     XElement xel;
-                    if ((xel = root?.Element(ModConstants.SaveGroups)) != null)
+                    if ((xel = root.Element(ModConstants.SaveGroups)) != null)
                     {
                         groupsDict = GetNewDict(xel.Elements(ModConstants.SaveGroup));
                     }
-                    else if ((xel = root?.Element("Groups")) != null)
+                    else if ((xel = root.Element("Groups")) != null)
                     {
                         groupsDict = GetLegacyDict(xel.Elements("item"));
                     }
@@ -76,18 +80,15 @@ namespace SwitchBlocks.Data
                     {
                         Groups = groupsDict ?? new Dictionary<int, BlockGroup>(),
                         HasSwitched =
-                            bool.TryParse(root?.Element(ModConstants.SaveHasSwitched)?.Value, out var boolResult) &&
+                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out var boolResult) &&
                             boolResult,
-                        Touched = int.TryParse(root?.Element(ModConstants.SaveTouched)?.Value, out var intResult)
-                            ? intResult
-                            : 0,
                         Active = new HashSet<int>(
-                            root?.Element(ModConstants.SaveActive)?
+                            root.Element(ModConstants.SaveActive)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>()),
                         Finished = new HashSet<int>(
-                            root?.Element(ModConstants.SaveFinished)?
+                            root.Element(ModConstants.SaveFinished)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
                             ?? Enumerable.Empty<int>())
@@ -104,21 +105,14 @@ namespace SwitchBlocks.Data
         /// </summary>
         public bool HasSwitched { get; set; }
 
-        /// <summary>
-        ///     ID of the currently touched group.
-        ///     Since the active groups are always n and n+1 we don't need to keep track of multiple Ids
-        ///     like the group type.
-        /// </summary>
-        public int Touched { get; set; }
+        /// <inheritdoc />
+        public Dictionary<int, BlockGroup> Groups { get; private set; }
 
         /// <inheritdoc />
-        public Dictionary<int, BlockGroup> Groups { get; set; }
+        public HashSet<int> Active { get; private set; }
 
         /// <inheritdoc />
-        public HashSet<int> Active { get; set; }
-
-        /// <inheritdoc />
-        public HashSet<int> Finished { get; set; }
+        public HashSet<int> Finished { get; private set; }
 
         /// <summary>
         ///     Gets block groups from the new file format.
@@ -161,15 +155,20 @@ namespace SwitchBlocks.Data
             try
             {
                 return xels.ToDictionary(
-                    key => int.Parse(key.Element("key").Element("int").Value),
+                    key => int.Parse(key.Element("key")?.Element("int")?.Value ?? string.Empty),
                     value => new BlockGroup
                     {
-                        State = bool.Parse(value.Element("value").Element("BlockGroup").Element("State").Value),
+                        State = bool.Parse(value.Element("value")?.Element("BlockGroup")?.Element("State")?.Value ??
+                                           throw new InvalidOperationException()),
                         Progress =
-                            float.Parse(value.Element("value").Element("BlockGroup").Element("Progress").Value,
+                            float.Parse(
+                                value.Element("value")?.Element("BlockGroup")?.Element("Progress")?.Value ??
+                                throw new InvalidOperationException(),
                                 CultureInfo.InvariantCulture),
-                        ActivatedTick = int.Parse(value.Element("value").Element("BlockGroup")
-                            .Element("ActivatedTick").Value)
+                        ActivatedTick = int.Parse(value.Element("value")
+                            ?.Element("BlockGroup")
+                            ?.Element("ActivatedTick")
+                            ?.Value ?? throw new InvalidOperationException())
                     });
             }
             catch (NullReferenceException)
@@ -209,7 +208,6 @@ namespace SwitchBlocks.Data
                                     new XElement(ModConstants.SaveActivated, kv.Value.ActivatedTick)))
                             : null),
                     new XElement(ModConstants.SaveHasSwitched, this.HasSwitched),
-                    new XElement(ModConstants.SaveTouched, this.Touched),
                     new XElement(ModConstants.SaveActive,
                         this.Active.Count != 0
                             ? new List<XElement>(this.Active.Select(id => new XElement(ModConstants.SaveId, id)))

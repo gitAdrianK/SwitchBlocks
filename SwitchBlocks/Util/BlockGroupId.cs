@@ -16,8 +16,8 @@ namespace SwitchBlocks.Util
     public static class BlockGroupId
     {
         // Position stored in a single integer.
-        // X and Y can never be a three digit number.
-        // Screen can never be a four digit number.
+        // X and Y can never be a three-digit number.
+        // Screen can never be a four-digit number.
         // As such the integers form is 00...00SSSXXYY.
 
         // Top left is (0, 0)

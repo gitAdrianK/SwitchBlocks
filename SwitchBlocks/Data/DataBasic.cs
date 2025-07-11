@@ -52,6 +52,11 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
+                    if (root == null)
+                    {
+                        instance = new DataBasic();
+                        return instance;
+                    }
 
                     instance = new DataBasic
                     {

@@ -33,8 +33,8 @@ namespace SwitchBlocks.Util
         /// </summary>
         private const int Screen = BlockGroupId.Screen;
 
-        /// <summary>Value representing that a reset block resets all IDs.</summary>
-        private static readonly int[] ResetAll = { 0 };
+        /// <summary>Value representing that a reset block resets all IDs to default.</summary>
+        private static readonly int[] ResetDefault = { 0 };
 
         /// <summary>
         ///     Assigns the ResetIDs to the block and looks for neighbors of this block that are contained
@@ -117,7 +117,7 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
-        ///     Assigns the ResetIDs to "reset all" to unassigned blocks.
+        ///     Assigns the ResetIDs to "reset to default" to unassigned blocks.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign to.</param>
         /// <param name="resets">Resets to add unassigned reset blocks positions to.</param>
@@ -126,9 +126,9 @@ namespace SwitchBlocks.Util
             Dictionary<int, int[]> resets)
         {
             foreach (var position in blocks.Select(kv => kv.Key)
-                         .Where(position => PropagateResetIds(blocks, position, ResetAll)))
+                         .Where(position => PropagateResetIds(blocks, position, ResetDefault)))
             {
-                resets.Add(position, ResetAll);
+                resets.Add(position, ResetDefault);
             }
         }
     }

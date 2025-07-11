@@ -30,6 +30,10 @@ namespace SwitchBlocks
             {
                 var doc = XDocument.Load(fs);
                 var root = doc.Root;
+                if (root == null)
+                {
+                    return;
+                }
 
                 XElement xel;
                 if (SetupAuto.IsUsed && (xel = root.Element("Auto")) != null)

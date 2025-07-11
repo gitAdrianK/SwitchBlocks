@@ -4,7 +4,7 @@ namespace SwitchBlocks.Util
     using System.Linq;
     using JumpKing.BodyCompBehaviours;
 
-    /// <summary>Contains a way to determine if the playeris intersecting blocks.</summary>
+    /// <summary>Contains a way to determine if the player is intersecting blocks.</summary>
     public static class Intersecting
     {
         /// <summary>

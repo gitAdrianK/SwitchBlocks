@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -40,14 +41,19 @@ namespace SwitchBlocks.Data
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                var doc = XDocument.Load(fs);
-                var root = doc.Root;
-                var xels = root.Element(ModConstants.SaveSeeds).Elements(ModConstants.SaveSeed);
+                var xels = XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)?.Elements(ModConstants.SaveSeed);
+                if (xels == null)
+                {
+                    return new SeedsCountdown();
+                }
+
                 return new SeedsCountdown
                 {
                     Seeds = xels.ToDictionary(
-                        key => int.Parse(key.Element(ModConstants.SavePosition).Value),
-                        value => int.Parse(value.Element(ModConstants.SaveId).Value))
+                        key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
+                                         throw new InvalidOperationException()),
+                        value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
+                                           throw new InvalidOperationException()))
                 };
             }
         }

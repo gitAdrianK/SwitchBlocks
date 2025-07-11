@@ -1,5 +1,7 @@
 // ReSharper disable InvertIf
 
+// ReSharper disable InconsistentNaming
+
 namespace SwitchBlocks.Patches
 {
     using System.Diagnostics.CodeAnalysis;
@@ -19,17 +21,17 @@ namespace SwitchBlocks.Patches
         ///     Flips the sign of the wind velocity if the player is on a screen that has wind enabled if the state
         ///     for that block type is <c>true</c>.
         /// </summary>
-        /// <param name="result">Result of the original function.</param>
+        /// <param name="__result">Result of the original function.</param>
         [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         [UsedImplicitly]
-        public static void Postfix(ref float result)
+        public static void Postfix(ref float __result)
         {
             if (SetupAuto.IsUsed
                 && SetupAuto.WindEnabled.Contains(Camera.CurrentScreen))
             {
                 if (DataAuto.Instance.State)
                 {
-                    result = -result;
+                    __result = -__result;
                     return;
                 }
             }
@@ -39,7 +41,7 @@ namespace SwitchBlocks.Patches
             {
                 if (DataBasic.Instance.State)
                 {
-                    result = -result;
+                    __result = -__result;
                     return;
                 }
             }
@@ -49,7 +51,7 @@ namespace SwitchBlocks.Patches
             {
                 if (DataCountdown.Instance.State)
                 {
-                    result = -result;
+                    __result = -__result;
                     return;
                 }
             }
@@ -59,7 +61,7 @@ namespace SwitchBlocks.Patches
             {
                 if (DataJump.Instance.State)
                 {
-                    result = -result;
+                    __result = -__result;
                 }
             }
         }

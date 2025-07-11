@@ -87,27 +87,25 @@ namespace SwitchBlocks.Behaviours
 
             HasSwitched = true;
 
+            IBlock block;
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                var solid = advCollisionInfo.GetCollidedBlocks<BlockGroupResetSolid>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockGroupResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                         SettingsGroup.LeverDirections,
-                        solid))
+                        block))
                 {
                     return true;
                 }
             }
-
-            var block = (IResetGroupIds)advCollisionInfo.GetCollidedBlocks().First(b =>
+            else
             {
-                var type = b.GetType();
-                return type == typeof(BlockGroupReset)
-                       || type == typeof(BlockGroupResetSolid);
-            });
+                block = advCollisionInfo.GetCollidedBlocks<BlockGroupReset>().First();
+            }
 
             // If the only reset id is 0, reset all groups.
-            var resetIds = block.ResetIDs;
+            var resetIds = ((IResetGroupIds)block).ResetIDs;
             if (resetIds.Length == 1 && resetIds[0] == 0)
             {
                 foreach (var groupId in this.Active)

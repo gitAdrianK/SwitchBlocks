@@ -81,7 +81,7 @@ namespace SwitchBlocks
 
             ModSounds.Setup();
 
-            // These behaviours are used as a way to create pre and post behaviour points
+            // These behaviours are used as a way to create pre- and post-behaviour points
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
             // want to run the sliding function multiple times.
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
