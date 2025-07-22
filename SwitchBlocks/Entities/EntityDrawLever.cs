@@ -33,7 +33,7 @@ namespace SwitchBlocks.Entities
 
         /// <summary>
         ///     Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
-        ///     Based on state given by the <see cref="IDataProvider" /> the left of right halfof the texture is drawn.
+        ///     Based on state given by the <see cref="IDataProvider" /> the left of right half of the texture is drawn.
         /// </summary>
         public override void Draw()
         {

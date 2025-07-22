@@ -35,7 +35,7 @@ namespace SwitchBlocks.Entities
         /// <summary>Screens platform entities appear on.</summary>
         private HashSet<int> Screens { get; }
 
-        /// <summary>If the current screen contains platform entites.</summary>
+        /// <summary>If the current screen contains platform entities.</summary>
         public bool IsActiveOnCurrentScreen => this.Screens.Contains(Camera.CurrentScreen);
 
         /// <summary>

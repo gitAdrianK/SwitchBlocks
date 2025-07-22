@@ -19,7 +19,7 @@ namespace SwitchBlocks.Util
     public static class Directions
     {
         /// <summary>
-        ///     Checks from with <see cref="Direction" /> the collision took place and if its a valid direction.
+        ///     Checks from with <see cref="Direction" /> the collision took place and if it is a valid direction.
         /// </summary>
         /// <param name="behaviourContext"><see cref="BehaviourContext" />.</param>
         /// <param name="validDirections">Valid directions.</param>
@@ -32,7 +32,7 @@ namespace SwitchBlocks.Util
             IBlock block)
         {
             var prevVelocity = BehaviourPost.PrevVelocity;
-            // The behaviour to save the prev velocity runs before any behaviour requiring the previous velocy.
+            // The behaviour to save the prev velocity runs before any behaviour requiring the previous velocity.
             // A different name would be "CurrentVelocity".
             //var prevVelocity = behaviourContext.BodyComp.LastVelocity;
             var playerRect = behaviourContext.BodyComp.GetHitbox();

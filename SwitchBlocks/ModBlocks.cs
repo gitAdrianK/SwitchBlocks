@@ -4,7 +4,7 @@ namespace SwitchBlocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    ///     Collection of blockcolors that are used by the mod.
+    ///     Collection of block-colors that are used by the mod.
     /// </summary>
     public static class ModBlocks
     {

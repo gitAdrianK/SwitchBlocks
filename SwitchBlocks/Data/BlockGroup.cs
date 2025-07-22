@@ -25,7 +25,7 @@ namespace SwitchBlocks.Data
             this.ActivatedTick = isEnabled ? int.MaxValue : int.MinValue;
         }
 
-        /// <summary>The current tick this block group has been actived.</summary>
+        /// <summary>The current tick this block group has been activated.</summary>
         public int ActivatedTick { get; set; }
 
         /// <inheritdoc />

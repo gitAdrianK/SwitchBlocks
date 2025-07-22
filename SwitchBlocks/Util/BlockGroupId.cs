@@ -50,7 +50,7 @@ namespace SwitchBlocks.Util
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="startPosition">Position from which the propagation is supposed to start.</param>
-        /// <param name="groupId">Id that is to be assigned to all blocks of the group.</param>
+        /// <param name="groupId">ID that is to be assigned to all blocks of the group.</param>
         /// <returns><c>true</c> if at least one block was assigned an id, <c>false</c> otherwise.</returns>
         private static bool PropagateGroupId(
             Dictionary<int, IBlockGroupId> blocks,
@@ -107,7 +107,7 @@ namespace SwitchBlocks.Util
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
-        /// <param name="groupId">Id assigned to the groups, counted up for every group created.</param>
+        /// <param name="groupId">ID assigned to the groups, counted up for every group created.</param>
         public static void AssignGroupIdsConsecutively(
             Dictionary<int, IBlockGroupId> blocks,
             Dictionary<int, int> seeds,
@@ -130,7 +130,7 @@ namespace SwitchBlocks.Util
         ///     block group. Failures to create groups are removed from the seeds dictionary.
         /// </summary>
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
-        /// <param name="groupId">Id set to be larger than every seed Id.</param>
+        /// <param name="groupId">ID set to be larger than every seed ID.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
         public static void AssignGroupIdsFromSeed(
             Dictionary<int, int> seeds,

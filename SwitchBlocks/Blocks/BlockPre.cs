@@ -4,7 +4,7 @@ namespace SwitchBlocks.Blocks
     using Microsoft.Xna.Framework;
 
     /// <summary>
-    ///     Uncreateable dummy block to attach a behaviour to.
+    ///     Uncreate-able dummy block to attach a behaviour to.
     ///     Specifically to attach the behaviour to that runs with a low priority number
     ///     and as such earlier then the other block behaviours.
     /// </summary>
@@ -19,7 +19,7 @@ namespace SwitchBlocks.Blocks
         /// <summary>
         ///     This block cannot intersect.
         /// </summary>
-        /// <param name="hitbox">Hitbx to check against</param>
+        /// <param name="hitbox">Hitbox to check against</param>
         /// <param name="intersection"><see cref="BlockCollisionType.NoCollision" />.</param>
         /// <returns>
         ///     <see cref="BlockCollisionType.NoCollision" />

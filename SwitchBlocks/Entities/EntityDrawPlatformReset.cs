@@ -26,7 +26,7 @@ namespace SwitchBlocks.Entities
         private DataCountdown Data { get; }
 
         /// <summary>
-        ///     <inheritdoc />.
+        ///     <inheritdoc />
         ///     Resets them should a lever be touched.
         /// </summary>
         protected override void Update(float pDelta)

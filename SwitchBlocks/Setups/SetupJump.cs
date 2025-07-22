@@ -20,7 +20,7 @@ namespace SwitchBlocks.Setups
         /// <summary>Screens that contain a wind enable block.</summary>
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
 
-        /// <summary>Logic entity of the jump blck type.</summary>
+        /// <summary>Logic entity of the jump block type.</summary>
         private static EntityLogicJump EntityLogic { get; set; }
 
         /// <summary>

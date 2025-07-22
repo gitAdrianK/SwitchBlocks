@@ -68,7 +68,7 @@ namespace SwitchBlocks.Entities
         ///     Tries to switch the state if it should do so.
         /// </summary>
         /// <param name="group">Group that is trying to switch state.</param>
-        /// <param name="tick">Current gametick.</param>
+        /// <param name="tick">Current game-tick.</param>
         private void TrySwitch(BlockGroup group, int tick)
         {
             // A platform is solid if the activated tick is larger than the current tick.

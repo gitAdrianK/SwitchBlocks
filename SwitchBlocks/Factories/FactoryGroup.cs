@@ -81,8 +81,8 @@ namespace SwitchBlocks.Factories
             switch (blockCode)
             {
                 // Position stored in a single integer.
-                // X and Y can never be a three digit number.
-                // Screen can never be a four digit number.
+                // X and Y can never be a three-digit number.
+                // Screen can never be a four-digit number.
                 // As such the integers form is 00...00SSSXXYY.
                 case var _ when blockCode == ModBlocks.GroupA:
                     var blockGroupA = new BlockGroupA(blockRect);

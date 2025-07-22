@@ -1,5 +1,3 @@
-// ReSharper disable InvertIf
-
 namespace SwitchBlocks
 {
     using System.Collections.Generic;

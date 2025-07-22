@@ -4,7 +4,7 @@ namespace SwitchBlocks.Patches
     using JumpKing.MiscSystems.Achievements;
 
     /// <summary>
-    ///     Adds the function GetTick, giving access to the current gametick
+    ///     Adds the function GetTick, giving access to the current game-tick
     ///     from the vanilla AchievementManager.
     /// </summary>
     public static class PatchAchievementManager

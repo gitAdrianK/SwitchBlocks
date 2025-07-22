@@ -39,7 +39,7 @@ namespace SwitchBlocks.Factories
         }
 
         /// <summary>
-        ///     Creates all drawbles for a given <see cref="DrawType" /> and <see cref="BlockType" />.
+        ///     Creates all drawables for a given <see cref="DrawType" /> and <see cref="BlockType" />.
         ///     Created entities are added to the <see cref="EntityManager" /> automatically.
         /// </summary>
         /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
@@ -239,7 +239,6 @@ namespace SwitchBlocks.Factories
                                     bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
                                     parsedBool
                             };
-                            // Entity
                             // Specially hardcoded to work with countdown blocks only.
                             _ = platform.Sprites.ResetWithLever
                                 ? new EntityDrawPlatformReset(platform, screen)
@@ -321,7 +320,7 @@ namespace SwitchBlocks.Factories
                             }
                         }
 
-                        // Foregorund
+                        // Foreground
                         if ((xel = platformElement.Element("Foreground")) != null)
                         {
                             texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);

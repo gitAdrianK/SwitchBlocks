@@ -17,7 +17,7 @@ namespace SwitchBlocks.Blocks
         /// <summary>
         ///     This block cannot intersect.
         /// </summary>
-        /// <param name="hitbox">Hitbx to check against</param>
+        /// <param name="hitbox">Hitbox to check against</param>
         /// <param name="intersection"><see cref="BlockCollisionType.NoCollision" />.</param>
         /// <returns>
         ///     <see cref="BlockCollisionType.NoCollision" />

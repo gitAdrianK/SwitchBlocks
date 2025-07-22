@@ -75,7 +75,7 @@ namespace SwitchBlocks.Entities
 
             var soundAdjust = (this.WarnCount - this.Data.WarnCount) * this.WarnDuration;
             var soundTick = (adjustedTick + soundAdjust) % this.DurationCycle;
-            // Its not yet time to make a sound
+            // It's not yet time to make a sound
             if (soundTick != 0)
             {
                 return;
