@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModSounds.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModSounds.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,14 +35,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/05/806277cb/JKContentManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/12/977c07a7/IBlockBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/56/fb200bfd/AdvCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/b2/eaa407c7/BehaviourContextCollisionInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/c6/3400de18/BodyComp.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/cf/5233c349/JKSound.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourAutoOff.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/Behaviours/BehaviourSequenceDuration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Data/SeedsSequence.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/Setups/SetupSequence.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -94,6 +95,7 @@
       <workItem from="1752216909340" duration="669000" />
       <workItem from="1752226018884" duration="9529000" />
       <workItem from="1752238755519" duration="6568000" />
+      <workItem from="1753204114360" duration="1284000" />
     </task>
     <task id="LOCAL-00001" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
       <option name="closed" value="true" />

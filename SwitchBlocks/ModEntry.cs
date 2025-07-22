@@ -79,7 +79,7 @@ namespace SwitchBlocks
 
             ModSettings.Setup();
 
-            ModSounds.Setup();
+            ModSounds.Setup(levelID);
 
             // These behaviours are used as a way to create pre- and post-behaviour points
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
