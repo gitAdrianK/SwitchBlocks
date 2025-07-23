@@ -121,6 +121,11 @@ namespace SwitchBlocks
                 return;
             }
 
+            ModSettings.Cleanup();
+
+            ModSounds.Cleanup();
+
+            // IsUsed is false after Setup Cleanup.
             SetupSequence.Cleanup();
             SetupSand.Cleanup();
             SetupJump.Cleanup();
@@ -128,10 +133,6 @@ namespace SwitchBlocks
             SetupCountdown.Cleanup();
             SetupBasic.Cleanup();
             SetupAuto.Cleanup();
-
-            ModSounds.Cleanup();
-
-            ModSettings.Cleanup();
         }
 
         /// <summary>

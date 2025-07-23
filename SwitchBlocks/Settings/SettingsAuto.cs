@@ -13,7 +13,7 @@ namespace SwitchBlocks.Settings
         public static int DurationOff { get; private set; } = 180;
 
         /// <summary>How long a full on off cycle takes. </summary>
-        public static int DurationCycle { get; private set; } = 360;
+        public static int DurationCycle { get; private set; } = 360; // DurationOn + DurationOff
 
         /// <summary>Multiplier of the deltaTime used in the animation of the auto block type.</summary>
         public static float Multiplier { get; private set; } = 1.0f;
@@ -61,7 +61,7 @@ namespace SwitchBlocks.Settings
         {
             DurationOn = 180;
             DurationOff = 180;
-            DurationCycle = 360;
+            DurationCycle = DurationOn + DurationOff;
             Multiplier = 1.0f;
             ForceSwitch = false;
             WarnCount = 2;

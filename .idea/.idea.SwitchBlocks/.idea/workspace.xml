@@ -6,25 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7d679378-1678-45ec-bc4d-11139c5244cc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SwitchBlocks/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockPost.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockPost.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockPre.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockPre.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockWind.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Blocks/BlockWind.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Data/BlockGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Data/BlockGroup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityDrawLever.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityDrawLever.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityDrawPlatformReset.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityDrawPlatformReset.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogic.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicAuto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicAuto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Entities/EntityLogicGroup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Factories/FactoryDrawables.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Factories/FactoryDrawables.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Factories/FactoryGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Factories/FactoryGroup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Factories/FactorySequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Factories/FactorySequence.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModBlocks.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModBlocks.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModSounds.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModSounds.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchAchievementManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchAchievementManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Patches/PatchBodyComp.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Setups/SetupJump.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Setups/SetupJump.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Util/BlockGroupId.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Util/BlockGroupId.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Util/Directions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Util/Directions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/ModEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Properties/AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsAuto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SwitchBlocks/Settings/SettingsAuto.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,10 +44,13 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/120611e03054417a87a6d1bfe0288579baa00/cf/5233c349/JKSound.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Behaviours/BehaviourAutoOff.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SwitchBlocks/Data/SeedsSequence.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/Entities/EntityLogicAuto.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/ModEntry.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Dokumente/Projekte/jk/SwitchBlocks/SwitchBlocks/Settings/SettingsAuto.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="SWEA" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -89,7 +76,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;rider.code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CodeInspectionSettingsId&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -113,7 +100,8 @@
       <workItem from="1752226018884" duration="9529000" />
       <workItem from="1752238755519" duration="6568000" />
       <workItem from="1753204114360" duration="2179000" />
-      <workItem from="1753215926041" duration="1200000" />
+      <workItem from="1753215926041" duration="1697000" />
+      <workItem from="1753261796304" duration="294000" />
     </task>
     <task id="LOCAL-00001" summary="Move from VisualStudio to Rider&#10;&#10;Implement the majority of suggestions and improvements (don't invert some ifs retaining extendability)">
       <option name="closed" value="true" />
@@ -251,7 +239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753205492889</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Various documentation changes">
+      <option name="closed" value="true" />
+      <created>1753217245404</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1753217245404</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,7 +272,8 @@
     <MESSAGE value="Improve sequence behaviour.&#10;&#10;Also, more Rider changes" />
     <MESSAGE value="Add support for multiple sequences are specific resets" />
     <MESSAGE value="Clean up mod sounds.&#10;&#10;This does not solve the problem that sometimes sounds are corrupted/missing. It really is just a clean-up." />
-    <option name="LAST_COMMIT_MESSAGE" value="Clean up mod sounds.&#10;&#10;This does not solve the problem that sometimes sounds are corrupted/missing. It really is just a clean-up." />
+    <MESSAGE value="Various documentation changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
