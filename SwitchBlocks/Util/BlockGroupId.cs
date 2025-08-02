@@ -120,7 +120,7 @@ namespace SwitchBlocks.Util
                     continue;
                 }
 
-                seeds.Add(position, groupId);
+                seeds[position] = groupId;
                 groupId++;
             }
         }
