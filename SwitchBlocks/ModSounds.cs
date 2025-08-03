@@ -55,7 +55,6 @@ namespace SwitchBlocks
             var path = Path.Combine(contentManager.root, ModConstants.Folder, "audio");
             var isReload = !LoadedMaps.Add(levelId);
 
-
             if (!Directory.Exists(path))
             {
                 return;
@@ -75,16 +74,6 @@ namespace SwitchBlocks
         /// <summary>Sets all sounds to null.</summary>
         public static void Cleanup()
         {
-            AutoFlip?.Dispose();
-            AutoWarn?.Dispose();
-            BasicFlip?.Dispose();
-            CountdownFlip?.Dispose();
-            CountdownWarn?.Dispose();
-            GroupFlip?.Dispose();
-            JumpFlip?.Dispose();
-            SandFlip?.Dispose();
-            SequenceFlip?.Dispose();
-
             AutoFlip = null;
             AutoWarn = null;
             BasicFlip = null;
