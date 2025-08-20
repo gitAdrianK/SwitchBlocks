@@ -83,17 +83,22 @@ namespace SwitchBlocks.Factories
             EntityGroupLogic<T> entityGroupLogic)
             where T : IGroupDataProvider
         {
-            var regex = new Regex("^platforms(?:[1-9]|[1-9][0-9]|1[0-6][0-9]).xml$");
+            var regex = new Regex(@"^platforms(\d+).xml$");
 
             foreach (var file in files)
             {
                 var fileName = Path.GetFileName(file);
-                if (!regex.IsMatch(fileName))
+                var match = regex.Match(fileName);
+                if (!match.Success)
                 {
                     continue;
                 }
 
-                var screen = int.Parse(Regex.Replace(fileName, @"[^\d]", "")) - 1;
+                var screen = int.Parse(match.Groups[1].Value) - 1;
+                if (screen < 0)
+                {
+                    continue;
+                }
 
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
