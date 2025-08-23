@@ -126,7 +126,7 @@ namespace SwitchBlocks
         // public const float PrioEarly = 2.5f;
 
         /// <summary><see cref="IBlockBehaviour" /> priority run "normally", this is the priority for most.</summary>
-        public const float PrioNormal = 2.0f;
+        public const float PrioNormal = 2.01f;
 
         /// <summary><see cref="IBlockBehaviour" /> priority run after normal behaviours but before the one run last.</summary>
         public const float PrioLate = 1.5f;

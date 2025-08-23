@@ -21,7 +21,7 @@ namespace SwitchBlocks.Patches
         ///     Patches the IsOnBlock method of the <see cref="BodyComp" />, adds the custom blocks from this mod to also return
         ///     <c>true</c>
         ///     in the IsOnBlock function when asked if the <see cref="BodyComp" /> is on a custom block imitating the vanilla
-        ///     block's behaviour.
+        ///     block's sounds and other functionality tied to it. Does NOT run behaviours if they are based on IsPlayerOnBlock.
         /// </summary>
         /// <param name="__result">Result of the original function, returning <c>true</c> if the player is on a custom block.</param>
         /// <param name="blockType">Original <see cref="Type" /> the function is called with.</param>
@@ -33,10 +33,6 @@ namespace SwitchBlocks.Patches
             {
                 __result |= DataSand.Instance.HasEntered;
                 __result |= BehaviourPost.IsPlayerOnSand;
-            }
-            else if (blockType == typeof(IceBlock))
-            {
-                __result |= BehaviourPost.IsPlayerOnIce;
             }
             else if (blockType == typeof(SnowBlock))
             {

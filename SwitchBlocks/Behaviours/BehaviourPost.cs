@@ -1,8 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using Blocks;
-    using ErikMaths;
-    using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
@@ -60,16 +58,7 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var isSnakeringEnabled = InventoryManager.HasItemEnabled(Items.SnakeRing);
-            if (IsPlayerOnIce
-                && !advCollisionInfo.Ice
-                && !isSnakeringEnabled)
-            {
-                var bodyComp = behaviourContext.BodyComp;
-                bodyComp.Velocity.X = ErikMath.MoveTowards(bodyComp.Velocity.X, 0f, PlayerValues.ICE_FRICTION);
-            }
-
-            if (isSnakeringEnabled)
+            if (InventoryManager.HasItemEnabled(Items.SnakeRing))
             {
                 IsPlayerOnSnow = false;
             }
