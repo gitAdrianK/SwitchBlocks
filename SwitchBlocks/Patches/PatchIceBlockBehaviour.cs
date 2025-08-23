@@ -11,6 +11,6 @@ namespace SwitchBlocks.Patches
     {
         [UsedImplicitly]
         public static void Postfix(ref bool __result)
-            => __result = BehaviourPost.IsPlayerOnIce;
+            => __result |= BehaviourPost.IsPlayerOnIce;
     }
 }
