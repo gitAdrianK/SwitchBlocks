@@ -35,6 +35,7 @@ namespace SwitchBlocks.Entities
             {
                 this.Timer = 0;
                 this.FrameIndex.Index = 0;
+                this.PrevTick = PatchAchievementManager.GetTick() - this.Data.Tick - 1;
             }
 
             base.Update(delta);

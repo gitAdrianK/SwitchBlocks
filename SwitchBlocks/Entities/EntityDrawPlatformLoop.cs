@@ -102,14 +102,17 @@ namespace SwitchBlocks.Entities
         /// <summary>InternalIndex.</summary>
         private int InternalIndex { get; set; }
 
+        protected int PrevTick { get; set; }
+
         /// <summary>
         ///     Updates Timer and Index.
         /// </summary>
         /// <param name="delta">Amount timer is increased by.</param>
         protected override void Update(float delta)
         {
-            // Technically it is required to get the delta properly, technically.
-            this.Timer += 1;
+            var tick = PatchAchievementManager.GetTick()  -  this.Data.Tick;
+            this.Timer += tick - this.PrevTick;
+            this.PrevTick = tick;
 
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {
