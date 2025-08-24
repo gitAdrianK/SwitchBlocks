@@ -90,6 +90,9 @@ namespace SwitchBlocks.Data
         /// <summary>Progress is not being saved between play sessions as it is unnecessary.</summary>
         public float Progress { get; set; }
 
+        /// <inheritdoc />
+        public int Tick => 0;
+
         /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>

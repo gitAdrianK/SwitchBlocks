@@ -22,7 +22,7 @@ namespace SwitchBlocks.Data
         {
             this.State = isEnabled;
             this.Progress = isEnabled ? 1.0f : 0.0f;
-            this.ActivatedTick = isEnabled ? int.MaxValue : int.MinValue;
+            this.ActivatedTick = isEnabled ? int.MaxValue : 0;
         }
 
         /// <summary>The current tick this block group has been activated.</summary>
@@ -33,6 +33,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public float Progress { get; set; }
+
+        /// <inheritdoc />
+        public int Tick => this.ActivatedTick;
 
         /// <summary>
         ///     Ensures that there is group data for all IDs up to the given group ID.

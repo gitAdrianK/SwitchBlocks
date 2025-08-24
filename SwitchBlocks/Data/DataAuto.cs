@@ -107,6 +107,9 @@ namespace SwitchBlocks.Data
         /// <inheritdoc />
         public float Progress { get; set; }
 
+        /// <inheritdoc />
+        public int Tick => this.ResetTick;
+
         /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>

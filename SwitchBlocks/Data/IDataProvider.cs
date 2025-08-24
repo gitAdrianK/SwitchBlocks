@@ -10,5 +10,8 @@ namespace SwitchBlocks.Data
 
         /// <summary>The current progress.</summary>
         float Progress { get; set; }
+
+        /// <summary> Tick that relates to the function of the block type </summary>
+        int Tick { get;}
     }
 }

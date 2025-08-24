@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Factories
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -244,10 +245,9 @@ namespace SwitchBlocks.Factories
                                     bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
                                     parsedBool
                             };
-                            // Specially hardcoded to work with countdown blocks only.
                             _ = platform.Sprites.ResetWithLever
-                                ? new EntityDrawPlatformReset(platform, screen)
-                                : (EntityDrawPlatformReset)new EntityDrawPlatformLoop(platform, screen, data);
+                                ? new EntityDrawPlatformReset(platform, screen, data)
+                                : new EntityDrawPlatformLoop(platform, screen, data);
                         }
                         else
                         {

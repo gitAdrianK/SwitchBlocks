@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using System;
+    using System.Linq;
     using Data;
     using JumpKing;
     using Microsoft.Xna.Framework;
@@ -34,7 +35,7 @@ namespace SwitchBlocks.Entities
             {
                 for (var j = 0; j < cells.X; j++)
                 {
-                    rects[(i * cells.Y) + j] = new Rectangle(
+                    rects[(i * cells.X) + j] = new Rectangle(
                         this.Width * j,
                         this.Height * i,
                         this.Width,
@@ -43,10 +44,10 @@ namespace SwitchBlocks.Entities
             }
 
             this.Rects = rects;
-            this.TimeStep = 1.0f / sprites.Fps;
+            this.TimeStep = (int)((1.0f / sprites.Fps / ModConstants.DeltaTime) + 0.5f);
             if (sprites.Frames == null)
             {
-                this.Frames = new float[this.Rects.Length];
+                this.Frames = new int[this.Rects.Length];
                 for (var i = 0; i < this.Frames.Length; i++)
                 {
                     this.Frames[i] = this.TimeStep;
@@ -54,13 +55,15 @@ namespace SwitchBlocks.Entities
             }
             else
             {
-                this.Frames = sprites.Frames;
+                this.Frames = sprites.Frames
+                    .Select(f => (int)((f/ ModConstants.DeltaTime) + 0.5f))
+                    .ToArray();
             }
 
             this.FrameIndex = new WrappedIndex(this.Frames.Length);
             if (sprites.RandomOffset)
             {
-                this.Timer = (float)Game1.random.NextDouble() * 100.0f;
+                this.Timer = Game1.random.Next(100);
             }
         }
 
@@ -70,13 +73,13 @@ namespace SwitchBlocks.Entities
         protected Rectangle[] Rects { get; }
 
         /// <summary>Duration of every frame.</summary>
-        private float[] Frames { get; }
+        private int[] Frames { get; }
 
         /// <summary>Timer counting deltaTime.</summary>
-        protected float Timer { get; set; }
+        protected int Timer { get; set; }
 
         /// <summary>Frames per second, ignored if Frames is not null.</summary>
-        private float TimeStep { get; }
+        private int TimeStep { get; }
 
         /// <summary><see cref="WrappedIndex" /> providing the index of the Timer limited to its length.</summary>
         protected WrappedIndex FrameIndex { get; }
@@ -102,10 +105,12 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Updates Timer and Index.
         /// </summary>
-        /// <param name="pDelta">Amount timer is increased by.</param>
-        protected override void Update(float pDelta)
+        /// <param name="delta">Amount timer is increased by.</param>
+        protected override void Update(float delta)
         {
-            this.Timer += pDelta;
+            // Technically it is required to get the delta properly, technically.
+            this.Timer += 1;
+
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {
                 this.Timer -= this.Frames[this.FrameIndex.Index];
@@ -113,9 +118,9 @@ namespace SwitchBlocks.Entities
                 this.FrameIndex.Index = index + 1;
             }
 
-            if (this.Timer < 0f)
+            if (this.Timer < 0)
             {
-                this.Timer = 0f;
+                this.Timer = 0;
             }
 
             this.Index = this.FrameIndex.Index;

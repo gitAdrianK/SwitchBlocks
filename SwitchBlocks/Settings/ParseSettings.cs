@@ -8,9 +8,6 @@ namespace SwitchBlocks.Settings
 
     public static class ParseSettings
     {
-        /// <summary>Used to convert time seconds to ticks.</summary>
-        private const float DeltaTime = 0.01666667f;
-
         /// <summary>
         ///     Parses the <see cref="XElement" />s value to its duration in ticks.
         /// </summary>
@@ -19,7 +16,7 @@ namespace SwitchBlocks.Settings
         /// <returns>Duration in ticks.</returns>
         public static int ParseDuration(XElement element, int defaultDuration)
             => float.TryParse(element?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result)
-                ? (int)((result / DeltaTime) + 0.5f)
+                ? (int)((result / ModConstants.DeltaTime) + 0.5f)
                 : defaultDuration;
 
         /// <summary>
@@ -29,7 +26,7 @@ namespace SwitchBlocks.Settings
         /// <param name="defaultDuration">Default duration if the <see cref="XElement" /> cannot be parsed in seconds.</param>
         /// <returns>Duration in ticks.</returns>
         public static int ParseDuration(XElement element, float defaultDuration)
-            => ParseDuration(element, (int)((defaultDuration / DeltaTime) + 0.5f));
+            => ParseDuration(element, (int)((defaultDuration / ModConstants.DeltaTime) + 0.5f));
 
         /// <summary>
         ///     Parses the <see cref="XElement" />s value to a multiplier.

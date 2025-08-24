@@ -120,7 +120,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (this.Groups.TryGetValue(groupId - 1, out group))
                 {
-                    group.ActivatedTick = int.MinValue;
+                    group.ActivatedTick = 0;
                     _ = this.Active.Add(groupId - 1);
                     _ = this.Finished.Remove(groupId - 1);
                 }

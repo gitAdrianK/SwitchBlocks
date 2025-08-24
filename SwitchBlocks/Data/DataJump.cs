@@ -5,6 +5,7 @@ namespace SwitchBlocks.Data
     using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
+    using Patches;
 
     /// <summary>
     ///     Contains data relevant for the jump block.
@@ -91,6 +92,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public float Progress { get; set; }
+
+        /// <inheritdoc />
+        public int Tick => PatchAchievementManager.GetTick();
 
         /// <summary>
         ///     Sets the singleton instance to null.

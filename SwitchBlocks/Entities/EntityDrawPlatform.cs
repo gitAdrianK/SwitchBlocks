@@ -45,7 +45,7 @@ namespace SwitchBlocks.Entities
         private Animation AnimationOut { get; }
 
         /// <summary><see cref="IDataProvider" />.</summary>
-        private IDataProvider Data { get; }
+        protected IDataProvider Data { get; }
 
         /// <summary>
         ///     Draws the entity if the current screen is the screen it appears on or the game has not finished yet.

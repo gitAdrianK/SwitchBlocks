@@ -16,28 +16,28 @@ namespace SwitchBlocks.Entities
         /// </summary>
         /// <param name="platform">Deserialization helper <see cref="Platform" />.</param>
         /// <param name="screen">Screen this entity is on.</param>
+        /// <param name="data"><see cref="IDataProvider" />.</param>
         public EntityDrawPlatformReset(
             Platform platform,
-            int screen)
-            : base(platform, screen, DataCountdown.Instance)
-            => this.Data = DataCountdown.Instance;
-
-        /// <summary><see cref="DataCountdown" />.</summary>
-        private DataCountdown Data { get; }
+            int screen,
+            IDataProvider data)
+            : base(platform, screen, data)
+        {
+        }
 
         /// <summary>
         ///     <inheritdoc />
         ///     Resets them should a lever be touched.
         /// </summary>
-        protected override void Update(float pDelta)
+        protected override void Update(float delta)
         {
-            if (PatchAchievementManager.GetTick() == this.Data.ActivatedTick)
+            if (PatchAchievementManager.GetTick() == this.Data.Tick)
             {
                 this.Timer = 0;
                 this.FrameIndex.Index = 0;
             }
 
-            base.Update(pDelta);
+            base.Update(delta);
         }
 
         /// <inheritdoc />

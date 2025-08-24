@@ -27,7 +27,7 @@ namespace SwitchBlocks.Data
             this.CanSwitchSafely = true;
             this.SwitchOnceSafe = false;
             this.WarnCount = 0;
-            this.ActivatedTick = int.MinValue;
+            this.ActivatedTick = 0;
             this.Touched = new HashSet<int>();
         }
 
@@ -128,6 +128,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public float Progress { get; set; }
+
+        /// <inheritdoc />
+        public int Tick => this.ActivatedTick;
 
         /// <summary>
         ///     Sets the singleton instance to null.

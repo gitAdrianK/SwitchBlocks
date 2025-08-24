@@ -117,7 +117,7 @@ namespace SwitchBlocks.Behaviours
                         continue;
                     }
 
-                    activeGroup.ActivatedTick = int.MinValue;
+                    activeGroup.ActivatedTick = 0;
                 }
 
                 foreach (var groupId in this.Finished)
@@ -127,7 +127,7 @@ namespace SwitchBlocks.Behaviours
                         continue;
                     }
 
-                    finishedGroup.ActivatedTick = int.MinValue;
+                    finishedGroup.ActivatedTick = 0;
                     _ = this.Active.Add(groupId);
                 }
 
@@ -161,7 +161,7 @@ namespace SwitchBlocks.Behaviours
                         continue;
                     }
 
-                    group.ActivatedTick = int.MinValue;
+                    group.ActivatedTick = 0;
                     _ = this.Active.Add(resetId);
                     _ = this.Finished.Remove(resetId);
                 }
