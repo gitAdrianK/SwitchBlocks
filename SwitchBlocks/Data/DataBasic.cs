@@ -94,6 +94,9 @@ namespace SwitchBlocks.Data
         /// <inheritdoc />
         public int Tick => PatchAchievementManager.GetTick();
 
+        /// <inheritdoc />
+        public bool SwitchOnceSafe => true;
+
         /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>

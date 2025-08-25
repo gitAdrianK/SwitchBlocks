@@ -93,6 +93,9 @@ namespace SwitchBlocks.Data
         /// <inheritdoc />
         public int Tick => 0;
 
+        /// <inheritdoc />
+        public bool SwitchOnceSafe => true;
+
         /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>

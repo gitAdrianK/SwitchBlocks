@@ -114,11 +114,11 @@ namespace SwitchBlocks.Entities
             // I would have thought it's ==, but apparently not?
             // It might be because start state "on" means it starts visible,
             // and the default state is false, so visible("on") == false
-            if (this.StartState != this.Data.State)
+            if (this.StartState != this.Data.State && !this.Data.SwitchOnceSafe)
             {
                 this.Timer += tick - this.PrevTick;
+                this.PrevTick = tick;
             }
-            this.PrevTick = tick;
 
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {

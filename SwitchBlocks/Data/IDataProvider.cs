@@ -12,6 +12,9 @@ namespace SwitchBlocks.Data
         float Progress { get; set; }
 
         /// <summary> Tick that relates to the function of the block type </summary>
-        int Tick { get;}
+        int Tick { get; }
+
+        /// <summary> If the switch should have happened </summary>
+        bool SwitchOnceSafe { get; }
     }
 }

@@ -37,6 +37,9 @@ namespace SwitchBlocks.Data
         /// <inheritdoc />
         public int Tick => this.ActivatedTick;
 
+        /// <inheritdoc />
+        public bool SwitchOnceSafe => true;
+
         /// <summary>
         ///     Ensures that there is group data for all IDs up to the given group ID.
         /// </summary>
