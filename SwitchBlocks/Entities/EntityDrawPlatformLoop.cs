@@ -111,7 +111,13 @@ namespace SwitchBlocks.Entities
         protected override void Update(float delta)
         {
             var tick = PatchAchievementManager.GetTick()  -  this.Data.Tick;
-            this.Timer += tick - this.PrevTick;
+            // I would have thought it's ==, but apparently not?
+            // It might be because start state "on" means it starts visible,
+            // and the default state is false, so visible("on") == false
+            if (this.StartState != this.Data.State)
+            {
+                this.Timer += tick - this.PrevTick;
+            }
             this.PrevTick = tick;
 
             while (this.Timer > this.Frames[this.FrameIndex.Index])

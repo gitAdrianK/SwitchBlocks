@@ -36,7 +36,7 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary>Start state.</summary>
-        private bool StartState { get; }
+        protected bool StartState { get; }
 
         /// <summary>Animation.</summary>
         private Animation Animation { get; }
