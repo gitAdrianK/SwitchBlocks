@@ -110,15 +110,16 @@ namespace SwitchBlocks.Entities
         /// <param name="delta">Amount timer is increased by.</param>
         protected override void Update(float delta)
         {
-            var tick = PatchAchievementManager.GetTick()  -  this.Data.Tick;
-            // I would have thought it's ==, but apparently not?
-            // It might be because start state "on" means it starts visible,
-            // and the default state is false, so visible("on") == false
-            if (this.StartState != this.Data.State && !this.Data.SwitchOnceSafe)
+            // Remember that when a platform starts "on" it is visible, and since the default state is false
+            // a platform that starts "on" is visible when the state is "false"
+            if (this.StartState == this.Data.State || this.Data.SwitchOnceSafe)
             {
-                this.Timer += tick - this.PrevTick;
-                this.PrevTick = tick;
+                return;
             }
+
+            var tick = PatchAchievementManager.GetTick()  -  this.Data.Tick;
+            this.Timer += tick - this.PrevTick;
+            this.PrevTick = tick;
 
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {
