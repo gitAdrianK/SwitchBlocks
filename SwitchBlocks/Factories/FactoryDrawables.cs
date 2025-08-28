@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Factories
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -243,6 +242,9 @@ namespace SwitchBlocks.Factories
                                     parsedBool,
                                 ResetWithLever =
                                     bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
+                                    parsedBool,
+                                IgnoreState =
+                                    bool.TryParse(xel.Element("IgnoreState")?.Value, out parsedBool) &&
                                     parsedBool
                             };
                             _ = platform.Sprites.ResetWithLever

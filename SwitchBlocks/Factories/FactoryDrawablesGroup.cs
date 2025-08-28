@@ -203,8 +203,15 @@ namespace SwitchBlocks.Factories
                                 Frames =
                                     xel.Element("Frames")?.Elements("float").Select(f =>
                                         float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
-                                RandomOffset = xel.Element("RandomOffset")?.Value == "true",
-                                ResetWithLever = xel.Element("ResetWithLever")?.Value == "true"
+                                RandomOffset =
+                                    bool.TryParse(xel.Element("RandomOffset")?.Value, out var parsedBool) &&
+                                    parsedBool,
+                                ResetWithLever =
+                                    bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
+                                    parsedBool,
+                                IgnoreState =
+                                    bool.TryParse(xel.Element("IgnoreState")?.Value, out parsedBool) &&
+                                    parsedBool
                             };
                         }
 

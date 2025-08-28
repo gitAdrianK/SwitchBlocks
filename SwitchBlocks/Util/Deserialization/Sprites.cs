@@ -20,7 +20,10 @@ namespace SwitchBlocks.Util.Deserialization
         /// <summary>Random offset.</summary>
         public bool RandomOffset { get; set; }
 
-        /// <summary>Reset with lever. Hardcoded to work properly ONLY with the Countdown type.</summary>
+        /// <summary>Reset the animation when a lever is activated.</summary>
         public bool ResetWithLever { get; set; }
+
+        /// <summary>Have the animation play even when the platform is non-solid</summary>
+        public bool IgnoreState { get; set; }
     }
 }

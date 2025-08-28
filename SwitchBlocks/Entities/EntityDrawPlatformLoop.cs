@@ -56,15 +56,17 @@ namespace SwitchBlocks.Entities
             else
             {
                 this.Frames = sprites.Frames
-                    .Select(f => (int)((f/ ModConstants.DeltaTime) + 0.5f))
+                    .Select(f => (int)((f / ModConstants.DeltaTime) + 0.5f))
                     .ToArray();
             }
 
             this.FrameIndex = new WrappedIndex(this.Frames.Length);
             if (sprites.RandomOffset)
             {
-                this.Timer = Game1.random.Next(100);
+                this.Timer = Game1.random.Next(this.Frames.Sum());
             }
+
+            this.IgnoreState = sprites.IgnoreState;
         }
 
         /// <summary>
@@ -102,7 +104,10 @@ namespace SwitchBlocks.Entities
         /// <summary>InternalIndex.</summary>
         private int InternalIndex { get; set; }
 
+        /// <summary>The previous tick the animation was updated.</summary>
         protected int PrevTick { get; set; }
+
+        private bool IgnoreState { get; }
 
         /// <summary>
         ///     Updates Timer and Index.
@@ -112,20 +117,19 @@ namespace SwitchBlocks.Entities
         {
             // Remember that when a platform starts "on" it is visible, and since the default state is false
             // a platform that starts "on" is visible when the state is "false"
-            if (this.StartState == this.Data.State || this.Data.SwitchOnceSafe)
+            if (!this.IgnoreState && (this.StartState == this.Data.State || this.Data.SwitchOnceSafe))
             {
                 return;
             }
 
-            var tick = PatchAchievementManager.GetTick()  -  this.Data.Tick;
+            var tick = PatchAchievementManager.GetTick() - this.Data.Tick;
             this.Timer += tick - this.PrevTick;
             this.PrevTick = tick;
 
             while (this.Timer > this.Frames[this.FrameIndex.Index])
             {
                 this.Timer -= this.Frames[this.FrameIndex.Index];
-                var index = this.FrameIndex.Index;
-                this.FrameIndex.Index = index + 1;
+                this.FrameIndex.Index += 1;
             }
 
             if (this.Timer < 0)

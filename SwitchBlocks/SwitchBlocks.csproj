@@ -188,7 +188,7 @@
     <Compile Include="Factories\FactoryDrawablesGroup.cs"/>
     <Compile Include="Factories\FactoryDrawables.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
-    <Compile Include="Patches\PatchIceBlockBehaviour.cs" />
+    <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWalk.cs"/>
     <Compile Include="Patches\PatchWindManager.cs"/>
     <Compile Include="Util\BlockGroupId.cs"/>

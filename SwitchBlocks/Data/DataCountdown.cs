@@ -111,9 +111,6 @@ namespace SwitchBlocks.Data
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
 
-        /// <summary>If the block should switch next opportunity.</summary>
-        public bool SwitchOnceSafe { get; set; }
-
         /// <summary>The amount of times the warning sound has been played.</summary>
         public int WarnCount { get; set; }
 
@@ -122,6 +119,9 @@ namespace SwitchBlocks.Data
 
         /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
         public HashSet<int> Touched { get; private set; }
+
+        /// <summary>If the block should switch next opportunity.</summary>
+        public bool SwitchOnceSafe { get; set; }
 
         /// <inheritdoc />
         public bool State { get; set; }

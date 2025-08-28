@@ -13,6 +13,7 @@ namespace SwitchBlocks.Util
     /// <summary><see cref="Animation" /> curves.</summary>
     public enum Curve : byte
     {
+        None = 0,
         Linear,
         EaseIn,
         EaseOut,

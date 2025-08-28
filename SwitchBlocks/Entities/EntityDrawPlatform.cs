@@ -67,6 +67,17 @@ namespace SwitchBlocks.Entities
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
+            var animation = this.StartState == this.Data.State ? this.Animation : this.AnimationOut;
+            if (animation.Curve == Curve.None)
+            {
+                Game1.spriteBatch.Draw(
+                    this.Texture,
+                    this.Position,
+                    rect,
+                    Color.White);
+                return;
+            }
+
             var progressAdjusted = this.StartState ? 1.0f - this.Data.Progress : this.Data.Progress;
             switch (progressAdjusted)
             {
@@ -82,9 +93,11 @@ namespace SwitchBlocks.Entities
             }
 
             float progressActual;
-            var animation = this.StartState == this.Data.State ? this.Animation : this.AnimationOut;
             switch (animation.Curve)
             {
+                case Curve.None:
+                    progressActual = 1.0f;
+                    break;
                 case Curve.Linear:
                     progressActual = progressAdjusted;
                     break;
