@@ -181,7 +181,11 @@ namespace SwitchBlocks.Factories
                         {
                             Texture = texture,
                             Position = position,
-                            StartState = platformElement.Element("StartState")?.Value == "on",
+                            StartState = Enum.TryParse<StartState>(
+                                platformElement.Element("StartState")?.Value, true,
+                                out var startState)
+                                ? startState
+                                : StartState.Off,
                             Animation = new Animation
                             {
                                 Curve =
@@ -373,7 +377,11 @@ namespace SwitchBlocks.Factories
                             Scrolling = scrolling,
                             Foreground = foreground,
                             Position = position,
-                            StartState = platformElement.Element("StartState")?.Value == "on"
+                            StartState = Enum.TryParse<StartState>(
+                                platformElement.Element("StartState")?.Value, true,
+                                out var startState)
+                                ? startState
+                                : StartState.On,
                         };
                         _ = new EntityDrawPlatformSand(platform, screen, data);
                         entityLogic.AddScreen(screen);

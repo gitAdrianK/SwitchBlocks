@@ -6,6 +6,7 @@ namespace SwitchBlocks.Entities
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Patches;
+    using Util;
     using Util.Deserialization;
 
     public class EntityDrawPlatformSand : EntityDraw
@@ -47,7 +48,7 @@ namespace SwitchBlocks.Entities
         private Texture2D Foreground { get; }
 
         /// <summary>Start state.</summary>
-        private bool StartState { get; }
+        private StartState StartState { get; }
 
         /// <summary><see cref="IDataProvider" />.</summary>
         private IDataProvider Data { get; }
@@ -88,7 +89,7 @@ namespace SwitchBlocks.Entities
                 texture,
                 this.Position,
                 new Rectangle(
-                    this.Width * Convert.ToInt32(this.StartState != this.Data.State),
+                    this.Width * Convert.ToInt32(this.StartState == StartState.On != this.Data.State),
                     0,
                     this.Width,
                     this.Height),
@@ -100,7 +101,7 @@ namespace SwitchBlocks.Entities
         private void DrawScrolling()
         {
             var actualOffset = (int)(this.Data.Progress % this.Scrolling.Height);
-            actualOffset = this.StartState == this.Data.State ? actualOffset : this.Scrolling.Height - actualOffset;
+            actualOffset = this.StartState == StartState.On == this.Data.State ? actualOffset : this.Scrolling.Height - actualOffset;
 
             // Depending on if the offset would make it so we go past the texture.
             if (actualOffset + this.Height > this.Scrolling.Height)

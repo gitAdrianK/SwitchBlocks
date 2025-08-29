@@ -9,7 +9,7 @@ namespace SwitchBlocks.Util.Deserialization
     public class Platform : Lever
     {
         /// <summary>Start state.</summary>
-        public bool StartState { get; set; }
+        public StartState StartState { get; set; }
 
         /// <summary><see cref="Util.Animation" />.</summary>
         public Animation Animation { get; set; }

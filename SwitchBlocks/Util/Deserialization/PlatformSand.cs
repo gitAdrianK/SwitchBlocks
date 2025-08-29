@@ -22,6 +22,6 @@ namespace SwitchBlocks.Util.Deserialization
         public Vector2 Position { get; set; }
 
         /// <summary>Start state.</summary>
-        public bool StartState { get; set; }
+        public StartState StartState { get; set; }
     }
 }

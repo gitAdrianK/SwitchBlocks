@@ -36,7 +36,7 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary>Start state.</summary>
-        protected bool StartState { get; }
+        protected StartState StartState { get; }
 
         /// <summary>Animation.</summary>
         private Animation Animation { get; }
@@ -67,8 +67,8 @@ namespace SwitchBlocks.Entities
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
-            var animation = this.StartState == this.Data.State ? this.Animation : this.AnimationOut;
-            if (animation.Curve == Curve.None)
+
+            if (this.StartState == StartState.Always)
             {
                 Game1.spriteBatch.Draw(
                     this.Texture,
@@ -78,7 +78,7 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            var progressAdjusted = this.StartState ? 1.0f - this.Data.Progress : this.Data.Progress;
+            var progressAdjusted = this.StartState == StartState.On ? 1.0f - this.Data.Progress : this.Data.Progress;
             switch (progressAdjusted)
             {
                 case 0.0f:
@@ -93,11 +93,9 @@ namespace SwitchBlocks.Entities
             }
 
             float progressActual;
+            var animation = this.StartState == StartState.On == this.Data.State ? this.Animation : this.AnimationOut;
             switch (animation.Curve)
             {
-                case Curve.None:
-                    progressActual = 1.0f;
-                    break;
                 case Curve.Linear:
                     progressActual = progressAdjusted;
                     break;
@@ -111,7 +109,7 @@ namespace SwitchBlocks.Entities
                     progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HalfPi) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
-                    progressActual = this.StartState == this.Data.State ? 0.0f : 1.0f;
+                    progressActual = this.StartState == StartState.Off == this.Data.State ? 0.0f : 1.0f;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");

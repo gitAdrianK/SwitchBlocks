@@ -107,6 +107,7 @@ namespace SwitchBlocks.Entities
         /// <summary>The previous tick the animation was updated.</summary>
         protected int PrevTick { get; set; }
 
+        /// <summary>If the animation should ignore state and continue playing regardless</summary>
         private bool IgnoreState { get; }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace SwitchBlocks.Entities
         {
             // Remember that when a platform starts "on" it is visible, and since the default state is false
             // a platform that starts "on" is visible when the state is "false"
-            if (!this.IgnoreState && (this.StartState == this.Data.State || this.Data.SwitchOnceSafe))
+            if (!this.IgnoreState && (this.StartState == StartState.On == this.Data.State || this.Data.SwitchOnceSafe))
             {
                 return;
             }

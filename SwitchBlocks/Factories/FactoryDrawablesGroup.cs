@@ -148,7 +148,11 @@ namespace SwitchBlocks.Factories
                         {
                             Texture = texture,
                             Position = position,
-                            StartState = platformElement.Element("StartState")?.Value == "on",
+                            StartState = Enum.TryParse<StartState>(
+                                platformElement.Element("StartState")?.Value, true,
+                                out var startState)
+                                ? startState
+                                : StartState.Off,
                             Animation = new Animation
                             {
                                 Curve =
