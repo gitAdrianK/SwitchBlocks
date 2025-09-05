@@ -5,7 +5,6 @@ namespace SwitchBlocks.Data
     using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
-    using Patches;
 
     /// <summary>
     ///     Contains data relevant for the basic block.
@@ -23,6 +22,7 @@ namespace SwitchBlocks.Data
             this.State = false;
             this.Progress = 0.0f;
             this.HasSwitched = false;
+            this.Tick = 0;
         }
 
         /// <summary>
@@ -71,7 +71,11 @@ namespace SwitchBlocks.Data
                                 : 0.0f,
                         HasSwitched =
                             bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
-                            boolResult
+                            boolResult,
+                        Tick =
+                            int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
+                                ? intResult
+                                : 0
                     };
                 }
 
@@ -92,7 +96,7 @@ namespace SwitchBlocks.Data
         public float Progress { get; set; }
 
         /// <inheritdoc />
-        public int Tick => PatchAchievementManager.GetTick();
+        public int Tick { get; set; }
 
         /// <inheritdoc />
         public bool SwitchOnceSafe => true;
@@ -120,7 +124,8 @@ namespace SwitchBlocks.Data
                 new XElement("DataBasic",
                     new XElement(ModConstants.SaveState, this.State),
                     new XElement(ModConstants.SaveProgress, this.Progress),
-                    new XElement(ModConstants.SaveHasSwitched, this.HasSwitched)
+                    new XElement(ModConstants.SaveHasSwitched, this.HasSwitched),
+                    new XElement(ModConstants.SaveActivated, this.Tick)
                 )
             );
 

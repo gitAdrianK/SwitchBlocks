@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Entities
 {
     using Data;
-    using JumpKing;
     using Patches;
     using Util.Deserialization;
 
@@ -35,21 +34,10 @@ namespace SwitchBlocks.Entities
             {
                 this.Timer = 0;
                 this.FrameIndex.Index = 0;
-                this.PrevTick = PatchAchievementManager.GetTick() - this.Data.Tick - 1;
+                this.PrevTick = this.Data.Tick - 1;
             }
 
             base.Update(delta);
-        }
-
-        /// <inheritdoc />
-        public override void Draw()
-        {
-            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
-            {
-                return;
-            }
-
-            this.DrawWithRectangle(this.Rects[this.Index]);
         }
     }
 }

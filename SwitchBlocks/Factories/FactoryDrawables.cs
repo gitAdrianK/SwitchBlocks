@@ -381,7 +381,7 @@ namespace SwitchBlocks.Factories
                                 platformElement.Element("StartState")?.Value, true,
                                 out var startState)
                                 ? startState
-                                : StartState.On,
+                                : StartState.On
                         };
                         _ = new EntityDrawPlatformSand(platform, screen, data);
                         entityLogic.AddScreen(screen);

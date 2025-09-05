@@ -7,6 +7,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories;
     using JumpKing.Player;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -90,6 +91,7 @@ namespace SwitchBlocks.Setups
             }
 
             DataJump.Instance.State = !DataJump.Instance.State;
+            DataJump.Instance.Tick = PatchAchievementManager.GetTick();
         }
 
         /// <summary>Function to add to the OnJumpCall switching the state safely.</summary>

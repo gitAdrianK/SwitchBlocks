@@ -67,7 +67,6 @@ namespace SwitchBlocks.Entities
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
-
             if (this.StartState == StartState.Always)
             {
                 Game1.spriteBatch.Draw(

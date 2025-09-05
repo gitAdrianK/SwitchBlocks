@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using Data;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -42,6 +43,7 @@ namespace SwitchBlocks.Entities
 
             this.Data.State = !this.Data.State;
             this.Data.SwitchOnceSafe = false;
+            this.Data.Tick = PatchAchievementManager.GetTick();
         }
     }
 }

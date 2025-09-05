@@ -1,3 +1,5 @@
+// ReSharper disable ArrangeTypeMemberModifiers
+
 namespace SwitchBlocks.Data
 {
     /// <summary>

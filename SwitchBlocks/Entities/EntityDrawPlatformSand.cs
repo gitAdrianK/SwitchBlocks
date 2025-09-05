@@ -101,7 +101,9 @@ namespace SwitchBlocks.Entities
         private void DrawScrolling()
         {
             var actualOffset = (int)(this.Data.Progress % this.Scrolling.Height);
-            actualOffset = this.StartState == StartState.On == this.Data.State ? actualOffset : this.Scrolling.Height - actualOffset;
+            actualOffset = this.StartState == StartState.On == this.Data.State
+                ? actualOffset
+                : this.Scrolling.Height - actualOffset;
 
             // Depending on if the offset would make it so we go past the texture.
             if (actualOffset + this.Height > this.Scrolling.Height)

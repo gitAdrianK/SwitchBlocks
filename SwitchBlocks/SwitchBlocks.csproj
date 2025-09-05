@@ -237,7 +237,7 @@
     <Compile Include="ModBlocks.cs"/>
     <Compile Include="ModEntry.cs"/>
     <Compile Include="Util\ResetGroupIds.cs"/>
-    <Compile Include="Util\StartState.cs" />
+    <Compile Include="Util\StartState.cs"/>
     <Compile Include="Util\WrappedIndex.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
   </ItemGroup>

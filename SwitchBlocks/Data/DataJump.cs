@@ -5,7 +5,6 @@ namespace SwitchBlocks.Data
     using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
-    using Patches;
 
     /// <summary>
     ///     Contains data relevant for the jump block.
@@ -24,6 +23,7 @@ namespace SwitchBlocks.Data
             this.Progress = 0.0f;
             this.CanSwitchSafely = true;
             this.SwitchOnceSafe = false;
+            this.Tick = 0;
         }
 
         /// <summary>
@@ -73,7 +73,11 @@ namespace SwitchBlocks.Data
                         CanSwitchSafely =
                             bool.TryParse(root.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
                         SwitchOnceSafe = bool.TryParse(root.Element(ModConstants.SaveSos)?.Value, out boolResult) &&
-                                         boolResult
+                                         boolResult,
+                        Tick =
+                            int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
+                                ? intResult
+                                : 0
                     };
                 }
 
@@ -94,7 +98,7 @@ namespace SwitchBlocks.Data
         public float Progress { get; set; }
 
         /// <inheritdoc />
-        public int Tick => PatchAchievementManager.GetTick();
+        public int Tick { get; set; }
 
         /// <summary>
         ///     Sets the singleton instance to null.
@@ -120,7 +124,8 @@ namespace SwitchBlocks.Data
                     new XElement(ModConstants.SaveState, this.State),
                     new XElement(ModConstants.SaveProgress, this.Progress),
                     new XElement(ModConstants.SaveCss, this.CanSwitchSafely),
-                    new XElement(ModConstants.SaveSos, this.SwitchOnceSafe)
+                    new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
+                    new XElement(ModConstants.SaveActivated, this.Tick)
                 )
             );
 

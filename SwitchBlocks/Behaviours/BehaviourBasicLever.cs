@@ -6,6 +6,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using Patches;
     using Settings;
     using Util;
 
@@ -63,63 +64,65 @@ namespace SwitchBlocks.Behaviours
                                    || collidingWithAnyLeverOn
                                    || collidingWithAnyLeverOff;
 
-            if (this.IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
-                if (this.Data.HasSwitched)
+                this.Data.HasSwitched = false;
+                return true;
+            }
+
+            if (this.Data.HasSwitched)
+            {
+                return true;
+            }
+
+            this.Data.HasSwitched = true;
+
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
+            {
+                IBlock block;
+                if (collidingWithLeverSolid)
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolid>().First();
+                }
+                else if (collidingWithLeverSolidOn)
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolidOn>().First();
+                }
+                else
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolidOff>().First();
+                }
+
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        SettingsBasic.LeverDirections,
+                        block))
                 {
                     return true;
                 }
-
-                this.Data.HasSwitched = true;
-
-                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
-                if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
-                {
-                    IBlock block;
-                    if (collidingWithLeverSolid)
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolid>().First();
-                    }
-                    else if (collidingWithLeverSolidOn)
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolidOn>().First();
-                    }
-                    else
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockBasicLeverSolidOff>().First();
-                    }
-
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                            SettingsBasic.LeverDirections,
-                            block))
-                    {
-                        return true;
-                    }
-                }
-
-                var stateBefore = this.Data.State;
-                if (collidingWithAnyLever)
-                {
-                    this.Data.State = !this.Data.State;
-                }
-                else if (collidingWithAnyLeverOn)
-                {
-                    this.Data.State = true;
-                }
-                else if (collidingWithAnyLeverOff)
-                {
-                    this.Data.State = false;
-                }
-
-                if (stateBefore != this.Data.State)
-                {
-                    ModSounds.BasicFlip?.PlayOneShot();
-                }
             }
-            else
+
+            var stateBefore = this.Data.State;
+            if (collidingWithAnyLever)
             {
-                this.Data.HasSwitched = false;
+                this.Data.State = !this.Data.State;
             }
+            else if (collidingWithAnyLeverOn)
+            {
+                this.Data.State = true;
+            }
+            else if (collidingWithAnyLeverOff)
+            {
+                this.Data.State = false;
+            }
+
+            if (stateBefore == this.Data.State)
+            {
+                return true;
+            }
+
+            this.Data.Tick = PatchAchievementManager.GetTick();
+            ModSounds.BasicFlip?.PlayOneShot();
 
             return true;
         }
