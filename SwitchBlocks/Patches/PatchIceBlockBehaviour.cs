@@ -7,7 +7,7 @@ namespace SwitchBlocks.Patches
     using JetBrains.Annotations;
     using JumpKing.BlockBehaviours;
 
-    [HarmonyPatch(typeof(IceBlockBehaviour), "get_IsPlayerOnBlock")]
+    [HarmonyPatch(typeof(IceBlockBehaviour), nameof(IceBlockBehaviour.IsPlayerOnBlock), MethodType.Getter)]
     public static class PatchIceBlockBehaviour
     {
         [UsedImplicitly]

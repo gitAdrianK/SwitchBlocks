@@ -14,7 +14,7 @@ namespace SwitchBlocks.Patches
     /// <summary>
     ///     Adds a postfix to the vanilla <see cref="BodyComp" />.
     /// </summary>
-    [HarmonyPatch(typeof(BodyComp), "IsOnBlock", typeof(Type))]
+    [HarmonyPatch(typeof(BodyComp), nameof(BodyComp.IsOnBlock), typeof(Type))]
     public static class PatchBodyComp
     {
         /// <summary>

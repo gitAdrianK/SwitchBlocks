@@ -14,7 +14,7 @@ namespace SwitchBlocks.Patches
     /// <summary>
     ///     Adds a postfix to the vanilla <see cref="WindManager" />.
     /// </summary>
-    [HarmonyPatch(typeof(WindManager), "get_CurrentVelocityRaw")]
+    [HarmonyPatch(typeof(WindManager), nameof(WindManager.CurrentVelocityRaw), MethodType.Getter)]
     public static class PatchWindManager
     {
         /// <summary>
