@@ -63,7 +63,7 @@ namespace SwitchBlocks.Settings
             var directions = new BitVector32((int)Direction.All);
             foreach (var split in element.Value.Split(','))
             {
-                switch (split.Trim().ToLower())
+                switch (split.Trim().ToLower(CultureInfo.InvariantCulture))
                 {
                     case "up":
                         directions[(int)Direction.Up] = false;
