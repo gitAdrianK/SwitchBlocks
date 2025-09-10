@@ -52,7 +52,7 @@ namespace SwitchBlocks
         public static void OnLevelStart()
         {
             var contentManager = Game1.instance.contentManager;
-            if (contentManager.level == null)
+            if (contentManager.level is null)
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace SwitchBlocks
 
             var entityManager = EntityManager.instance;
             var player = entityManager.Find<PlayerEntity>();
-            if (player == null)
+            if (player is null)
             {
                 return;
             }
@@ -116,7 +116,7 @@ namespace SwitchBlocks
         public static void OnLevelEnd()
         {
             var contentManager = Game1.instance.contentManager;
-            if (contentManager.level == null || !IsUsed())
+            if (contentManager.level is null || !IsUsed())
             {
                 return;
             }

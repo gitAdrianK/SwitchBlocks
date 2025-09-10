@@ -45,7 +45,7 @@ namespace SwitchBlocks.Entities
 
             this.Rects = rects;
             this.TimeStep = (int)((1.0f / sprites.Fps / ModConstants.DeltaTime) + 0.5f);
-            if (sprites.Frames == null)
+            if (sprites.Frames is null)
             {
                 this.Frames = new int[this.Rects.Length];
                 for (var i = 0; i < this.Frames.Length; i++)
@@ -72,7 +72,7 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Rectangles for all sectors of the <see cref="Texture2D" />
         /// </summary>
-        protected Rectangle[] Rects { get; }
+        private Rectangle[] Rects { get; }
 
         /// <summary>Duration of every frame.</summary>
         private int[] Frames { get; }
@@ -87,10 +87,10 @@ namespace SwitchBlocks.Entities
         protected WrappedIndex FrameIndex { get; }
 
         /// <summary>Index limited to Rects length.</summary>
-        protected int Index
+        private int Index
         {
             get => this.InternalIndex;
-            private set
+            set
             {
                 if (value < 0)
                 {

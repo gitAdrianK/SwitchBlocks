@@ -41,7 +41,7 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
-            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo == null)
+            if (behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo is null)
             {
                 return inputYVelocity;
             }
@@ -116,7 +116,7 @@ namespace SwitchBlocks.Behaviours
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
-            if (advCollisionInfo == null)
+            if (advCollisionInfo is null)
             {
                 return true;
             }

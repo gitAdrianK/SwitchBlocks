@@ -1,4 +1,5 @@
 // ReSharper disable ArrangeTypeMemberModifiers
+
 namespace SwitchBlocks.Util
 {
     using System.Collections.Generic;

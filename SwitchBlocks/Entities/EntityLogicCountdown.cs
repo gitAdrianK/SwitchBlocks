@@ -64,7 +64,7 @@ namespace SwitchBlocks.Entities
         /// <param name="adjustedTick">Tick adjusted for tick activated.</param>
         private void TryWarn(int adjustedTick)
         {
-            if (ModSounds.CountdownWarn == null || this.Data.WarnCount == this.WarnCount)
+            if (ModSounds.CountdownWarn is null || this.Data.WarnCount == this.WarnCount)
             {
                 return;
             }

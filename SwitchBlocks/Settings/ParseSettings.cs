@@ -55,7 +55,7 @@ namespace SwitchBlocks.Settings
         /// <returns><see cref="BitVector32" /> with not disabled <see cref="Direction" />s.</returns>
         public static BitVector32 ParseSideDisable(XElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 return new BitVector32((int)Direction.All);
             }
@@ -90,6 +90,6 @@ namespace SwitchBlocks.Settings
         /// <param name="element"><see cref="XElement" />.</param>
         /// <returns>Integer array.</returns>
         public static int[] ParseIntArray(XElement element) =>
-            element == null ? new[] { 1 } : element.Value.Split(',').Select(int.Parse).ToArray();
+            element?.Value.Split(',').Select(int.Parse).ToArray() ?? new[] { 1 };
     }
 }

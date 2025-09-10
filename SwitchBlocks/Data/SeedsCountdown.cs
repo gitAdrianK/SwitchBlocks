@@ -42,7 +42,7 @@ namespace SwitchBlocks.Data
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var xels = XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)?.Elements(ModConstants.SaveSeed);
-                if (xels == null)
+                if (xels is null)
                 {
                     return new SeedsCountdown();
                 }

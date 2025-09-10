@@ -146,7 +146,7 @@ namespace SwitchBlocks.Factories
                     {
                         // Texture
                         XElement xel;
-                        if ((xel = platformElement.Element("Texture")) == null)
+                        if ((xel = platformElement.Element("Texture")) is null)
                         {
                             continue;
                         }
@@ -159,14 +159,14 @@ namespace SwitchBlocks.Factories
 
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
-                        if ((xel = platformElement.Element("Position")) == null)
+                        if ((xel = platformElement.Element("Position")) is null)
                         {
                             continue;
                         }
 
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
-                        if (x == null || y == null)
+                        if (x is null || y is null)
                         {
                             continue;
                         }
@@ -347,20 +347,20 @@ namespace SwitchBlocks.Factories
                         }
 
                         // Min one size giving texture
-                        if (background == null && foreground == null)
+                        if (background is null && foreground is null)
                         {
                             continue;
                         }
 
                         // Position
-                        if ((xel = platformElement.Element("Position")) == null)
+                        if ((xel = platformElement.Element("Position")) is null)
                         {
                             continue;
                         }
 
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
-                        if (x == null || y == null)
+                        if (x is null || y is null)
                         {
                             continue;
                         }
@@ -431,7 +431,7 @@ namespace SwitchBlocks.Factories
                     {
                         // Texture
                         var xel = leverElement.Element("Texture");
-                        if (xel == null)
+                        if (xel is null)
                         {
                             continue;
                         }
@@ -445,14 +445,14 @@ namespace SwitchBlocks.Factories
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
                         xel = leverElement.Element("Position");
-                        if (xel == null)
+                        if (xel is null)
                         {
                             continue;
                         }
 
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
-                        if (x == null || y == null)
+                        if (x is null || y is null)
                         {
                             continue;
                         }
