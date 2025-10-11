@@ -62,6 +62,8 @@ namespace SwitchBlocks.Behaviours
             BehaviourPost.IsPlayerOnSand = false;
             BehaviourPost.IsPlayerOnSandUp = false;
 
+            BehaviourPost.IsPlayerOnMoveUp = false;
+
             return true;
         }
     }

@@ -53,6 +53,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSnowOff" />.</summary>
         public static readonly Color BasicSnowOff = new Color(22, 124, 238);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOn" />.</summary>
+        public static readonly Color BasicMoveUpOn = new Color(238, 125, 21);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOff" />.</summary>
+        public static readonly Color BasicMoveUpOff = new Color(21, 125, 238);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicLever" />.</summary>
         public static readonly Color BasicLever = new Color(238, 21, 124);
 

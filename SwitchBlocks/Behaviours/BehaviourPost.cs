@@ -6,6 +6,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using JumpKing.MiscEntities.WorldItems;
     using JumpKing.MiscEntities.WorldItems.Inventory;
+    using JumpKing.Player;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -21,6 +22,9 @@ namespace SwitchBlocks.Behaviours
 
         ///<summary>If the player is on any sand block.</summary>
         public static bool IsPlayerOnSand { get; set; }
+
+        ///<summary>If the player is on any move up block.</summary>
+        public static bool IsPlayerOnMoveUp { get; set; }
 
         ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
         public static bool IsPlayerOnSandUp { get; set; }
@@ -41,7 +45,15 @@ namespace SwitchBlocks.Behaviours
         public bool AdditionalYCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
         /// <inheritdoc />
-        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext) => inputGravity;
+        public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
+        {
+            if (IsPlayerOnMoveUp)
+            {
+                return behaviourContext.BodyComp.Velocity.Y < 0.0f ? 0.0f : inputGravity;
+            }
+
+            return inputGravity;
+        }
 
         /// <inheritdoc />
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;

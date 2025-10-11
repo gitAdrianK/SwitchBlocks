@@ -95,6 +95,8 @@
     <Compile Include="Blocks\BlockAutoSnowOn.cs"/>
     <Compile Include="Blocks\BlockBasicIceOff.cs"/>
     <Compile Include="Blocks\BlockBasicIceOn.cs"/>
+    <Compile Include="Blocks\BlockBasicMoveUpOff.cs" />
+    <Compile Include="Blocks\BlockBasicMoveUpOn.cs" />
     <Compile Include="Blocks\BlockBasicOff.cs"/>
     <Compile Include="Blocks\BlockBasicOn.cs"/>
     <Compile Include="Blocks\BlockBasicSnowOff.cs"/>
