@@ -23,5 +23,8 @@ namespace SwitchBlocks.Util.Deserialization
 
         /// <summary>Start state.</summary>
         public StartState StartState { get; set; }
+
+        /// <summary>Does the entity remain in front of the player.</summary>
+        public bool IsForeground { get; set; }
     }
 }

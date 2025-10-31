@@ -24,6 +24,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownIceOff,
             ModBlocks.CountdownSnowOn,
             ModBlocks.CountdownSnowOff,
+            ModBlocks.CountdownWaterOn,
+            ModBlocks.CountdownWaterOff,
             ModBlocks.CountdownLever,
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUse,
@@ -81,6 +83,10 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownSnowOn(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownSnowOff:
                     return new BlockCountdownSnowOff(blockRect);
+                case var _ when blockCode == ModBlocks.CountdownWaterOn:
+                    return new BlockCountdownWaterOn(blockRect);
+                case var _ when blockCode == ModBlocks.CountdownWaterOff:
+                    return new BlockCountdownWaterOff(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownLever:
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownLeverSolid:

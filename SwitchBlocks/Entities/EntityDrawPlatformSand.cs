@@ -21,7 +21,7 @@ namespace SwitchBlocks.Entities
             PlatformSand platform,
             int screen,
             IDataProvider data)
-            : base(platform.Background, platform.Position, screen)
+            : base(platform.Background, platform.Position, screen, platform.IsForeground)
         {
             this.Scrolling = platform.Scrolling;
             this.Foreground = platform.Foreground;

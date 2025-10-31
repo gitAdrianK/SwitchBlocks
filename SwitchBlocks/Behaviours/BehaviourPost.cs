@@ -6,7 +6,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using JumpKing.MiscEntities.WorldItems;
     using JumpKing.MiscEntities.WorldItems.Inventory;
-    using JumpKing.Player;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -19,6 +18,9 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>If the player is on any snow block.</summary>
         public static bool IsPlayerOnSnow { get; set; }
+
+        /// <summary>If the player is on any water block.</summary>
+        public static bool IsPlayerOnWater { get; set; }
 
         ///<summary>If the player is on any sand block.</summary>
         public static bool IsPlayerOnSand { get; set; }

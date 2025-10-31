@@ -215,6 +215,7 @@ namespace SwitchBlocks.Factories
                                     ? style2
                                     : style
                             },
+                            IsForeground = !(platformElement.Element("IsForeground") is null),
                             Sprites = null
                         };
                         // Sprites
@@ -381,7 +382,8 @@ namespace SwitchBlocks.Factories
                                 platformElement.Element("StartState")?.Value, true,
                                 out var startState)
                                 ? startState
-                                : StartState.On
+                                : StartState.On,
+                            IsForeground = !(platformElement.Element("IsForeground") is null)
                         };
                         _ = new EntityDrawPlatformSand(platform, screen, data);
                         entityLogic.AddScreen(screen);
@@ -463,7 +465,12 @@ namespace SwitchBlocks.Factories
                             Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
                         };
                         // Lever
-                        var lever = new Lever { Texture = texture, Position = position };
+                        var lever = new Lever
+                        {
+                            Texture = texture,
+                            Position = position,
+                            IsForeground = !(leverElement.Element("IsForeground") is null)
+                        };
                         _ = new EntityDrawLever(lever, screen, data);
                     }
                 }

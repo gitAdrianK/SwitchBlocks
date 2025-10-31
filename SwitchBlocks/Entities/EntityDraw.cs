@@ -15,13 +15,15 @@ namespace SwitchBlocks.Entities
         /// <param name="texture"><see cref="Texture2D" />.</param>
         /// <param name="position">Position.</param>
         /// <param name="screen">Screen this entity is on.</param>
-        protected EntityDraw(Texture2D texture, Vector2 position, int screen)
+        /// <param name="isForeground">Should this entity remain in front of the player.</param>
+        protected EntityDraw(Texture2D texture, Vector2 position, int screen, bool isForeground)
         {
             this.Texture = texture;
             this.Height = texture.Height;
             this.Width = texture.Width;
             this.Position = position;
             this.Screen = screen;
+            this.IsForeground = isForeground;
         }
 
         /// <summary><see cref="Texture2D" />.</summary>
@@ -38,5 +40,8 @@ namespace SwitchBlocks.Entities
 
         /// <summary>Screen this entity is on.</summary>
         protected int Screen { get; }
+
+        /// <summary>Does the entity remain in front of the player.</summary>
+        public bool IsForeground { get; }
     }
 }

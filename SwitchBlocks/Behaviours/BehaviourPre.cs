@@ -57,11 +57,16 @@ namespace SwitchBlocks.Behaviours
             this.Countdown.CanSwitchSafely = true;
             this.Jump.CanSwitchSafely = true;
 
+            // Vanilla related gimmick.
             BehaviourPost.IsPlayerOnIce = false;
             BehaviourPost.IsPlayerOnSnow = false;
+            BehaviourPost.IsPlayerOnWater = false;
+
+            // TODO: Rename to indicate this is not vanilla sand.
             BehaviourPost.IsPlayerOnSand = false;
             BehaviourPost.IsPlayerOnSandUp = false;
 
+            // Requested gimmick from another mod.
             BehaviourPost.IsPlayerOnMoveUp = false;
 
             return true;

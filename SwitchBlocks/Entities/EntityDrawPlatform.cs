@@ -27,7 +27,7 @@ namespace SwitchBlocks.Entities
         public EntityDrawPlatform(
             Platform platform,
             int screen,
-            IDataProvider data) : base(platform.Texture, platform.Position, screen)
+            IDataProvider data) : base(platform.Texture, platform.Position, screen, platform.IsForeground)
         {
             this.StartState = platform.StartState;
             this.Animation = platform.Animation;

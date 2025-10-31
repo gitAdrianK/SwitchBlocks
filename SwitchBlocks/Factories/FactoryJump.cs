@@ -21,6 +21,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpIceOff,
             ModBlocks.JumpSnowOn,
             ModBlocks.JumpSnowOff,
+            ModBlocks.JumpWaterOn,
+            ModBlocks.JumpWaterOff,
             ModBlocks.JumpWindEnable
         };
 
@@ -71,6 +73,10 @@ namespace SwitchBlocks.Factories
                     return new BlockJumpSnowOn(blockRect);
                 case var _ when blockCode == ModBlocks.JumpSnowOff:
                     return new BlockJumpSnowOff(blockRect);
+                case var _ when blockCode == ModBlocks.JumpWaterOn:
+                    return new BlockJumpWaterOn(blockRect);
+                case var _ when blockCode == ModBlocks.JumpWaterOff:
+                    return new BlockJumpWaterOff(blockRect);
                 case var _ when blockCode == ModBlocks.JumpWindEnable:
                     _ = SetupJump.WindEnabled.Add(currentScreen);
                     return new BlockWind();

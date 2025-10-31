@@ -182,6 +182,7 @@ namespace SwitchBlocks.Factories
                                     ? style2
                                     : style
                             },
+                            IsForeground = !(platformElement.Element("IsForeground") is null),
                             Sprites = null
                         };
                         // Sprites

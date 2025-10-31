@@ -101,9 +101,15 @@ namespace SwitchBlocks
                 .ToList();
             entities.ForEach(entity =>
             {
-                if (!(entity is EntityDraw))
+                if (!(entity is EntityDraw entityDraw))
                 {
                     entity.GoToFront();
+                } else
+                {
+                    if (entityDraw.IsForeground)
+                    {
+                        entityDraw.GoToFront();
+                    }
                 }
             });
         }

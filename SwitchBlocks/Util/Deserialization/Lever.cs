@@ -14,5 +14,8 @@ namespace SwitchBlocks.Util.Deserialization
 
         /// <summary>Position.</summary>
         public Vector2 Position { get; set; }
+
+        /// <summary>Does the entity remain in front of the player.</summary>
+        public bool IsForeground { get; set; }
     }
 }

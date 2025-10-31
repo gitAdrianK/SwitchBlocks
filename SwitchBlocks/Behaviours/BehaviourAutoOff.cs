@@ -51,7 +51,8 @@ namespace SwitchBlocks.Behaviours
             var isOnBasic = advCollisionInfo.IsCollidingWith<BlockAutoOff>();
             var isOnIce = advCollisionInfo.IsCollidingWith<BlockAutoIceOff>();
             var isOnSnow = advCollisionInfo.IsCollidingWith<BlockAutoSnowOff>();
-            this.IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow;
+            var isOnWater = advCollisionInfo.IsCollidingWith<BlockAutoWaterOff>();
+            this.IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow || isOnWater;
             if (!this.IsPlayerOnBlock)
             {
                 return true;
@@ -61,6 +62,7 @@ namespace SwitchBlocks.Behaviours
             {
                 BehaviourPost.IsPlayerOnIce |= isOnIce;
                 BehaviourPost.IsPlayerOnSnow |= isOnSnow;
+                BehaviourPost.IsPlayerOnWater |= isOnWater;
             }
             else
             {
