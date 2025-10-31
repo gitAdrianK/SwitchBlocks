@@ -78,21 +78,9 @@ namespace SwitchBlocks.Entities
             }
 
             var progressAdjusted = this.StartState == StartState.On ? 1.0f - this.Data.Progress : this.Data.Progress;
-            switch (progressAdjusted)
-            {
-                case 0.0f:
-                    return;
-                case 1.0f:
-                    Game1.spriteBatch.Draw(
-                        this.Texture,
-                        this.Position,
-                        rect,
-                        Color.White);
-                    return;
-            }
-
             float progressActual;
             var animation = this.StartState == StartState.On == this.Data.State ? this.Animation : this.AnimationOut;
+
             switch (animation.Curve)
             {
                 case Curve.Linear:
@@ -108,7 +96,7 @@ namespace SwitchBlocks.Entities
                     progressActual = (float)(Math.Sin((progressAdjusted * Math.PI) - HalfPi) + 1.0f) / 2.0f;
                     break;
                 case Curve.Stepped:
-                    progressActual = this.StartState == StartState.Off == this.Data.State ? 0.0f : 1.0f;
+                    progressActual = this.StartState == StartState.On == this.Data.State ? 0.0f : 1.0f;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
