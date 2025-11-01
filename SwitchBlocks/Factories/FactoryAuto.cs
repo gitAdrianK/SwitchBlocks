@@ -25,7 +25,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoSnowOn,
             ModBlocks.AutoSnowOff,
             ModBlocks.AutoWaterOn,
-            ModBlocks.AutoWaterOn,
+            ModBlocks.AutoWaterOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
             ModBlocks.AutoWindEnable
