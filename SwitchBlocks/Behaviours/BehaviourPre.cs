@@ -5,6 +5,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using Setups;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockPre" />.
@@ -14,9 +15,18 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Ctor.</summary>
         public BehaviourPre()
         {
-            this.Auto = DataAuto.Instance;
-            this.Countdown = DataCountdown.Instance;
-            this.Jump = DataJump.Instance;
+            if (SetupAuto.IsUsed)
+            {
+                this.Auto = DataAuto.Instance;
+            }
+            if (SetupCountdown.IsUsed)
+            {
+                this.Countdown = DataCountdown.Instance;
+            }
+            if (SetupJump.IsUsed)
+            {
+                this.Jump = DataJump.Instance;
+            }
         }
 
         /// <summary>Auto data.</summary>
@@ -53,16 +63,24 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            this.Auto.CanSwitchSafely = true;
-            this.Countdown.CanSwitchSafely = true;
-            this.Jump.CanSwitchSafely = true;
+            if (!(this.Auto is null))
+            {
+                this.Auto.CanSwitchSafely = true;
+            }
+            if (!(this.Countdown is null))
+            {
+                this.Countdown.CanSwitchSafely = true;
+            }
+            if (!(this.Jump is null))
+            {
+                this.Jump.CanSwitchSafely = true;
+            }
 
             // Vanilla related gimmick.
             BehaviourPost.IsPlayerOnIce = false;
             BehaviourPost.IsPlayerOnSnow = false;
             BehaviourPost.IsPlayerOnWater = false;
 
-            // TODO: Rename to indicate this is not vanilla sand.
             BehaviourPost.IsPlayerOnSand = false;
             BehaviourPost.IsPlayerOnSandUp = false;
 
