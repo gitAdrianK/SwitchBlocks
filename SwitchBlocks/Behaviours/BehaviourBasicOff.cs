@@ -53,8 +53,9 @@ namespace SwitchBlocks.Behaviours
             var isOnWater = advCollisionInfo.IsCollidingWith<BlockBasicWaterOff>();
 
             var isOnMoveUp = advCollisionInfo.IsCollidingWith<BlockBasicMoveUpOff>();
+            var isOnInfinityJump = advCollisionInfo.IsCollidingWith<BlockBasicInfinityJumpOff>();
 
-            this.IsPlayerOnBlock = !this.Data.State && (isOnBasic || isOnIce || isOnSnow || isOnWater || isOnMoveUp);
+            this.IsPlayerOnBlock = !this.Data.State && (isOnBasic || isOnIce || isOnSnow || isOnWater || isOnMoveUp || isOnInfinityJump);
             if (!this.IsPlayerOnBlock)
             {
                 return true;
@@ -70,6 +71,7 @@ namespace SwitchBlocks.Behaviours
             BehaviourPost.IsPlayerOnWater |= isOnWater;
 
             BehaviourPost.IsPlayerOnMoveUp |= isOnMoveUp;
+            BehaviourPost.IsPlayerOnInfinityJump |= isOnInfinityJump;
 
             return true;
         }

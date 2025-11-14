@@ -33,10 +33,12 @@ namespace SwitchBlocks.Patches
             {
                 __result |= DataSand.Instance.HasEntered;
                 __result |= BehaviourPost.IsPlayerOnSand;
+                __result |= BehaviourPost.IsPlayerOnInfinityJump;
             }
             else if (blockType == typeof(IceBlock))
             {
                 __result |= BehaviourPost.IsPlayerOnIce;
+                __result |= BehaviourPost.IsPlayerOnInfinityJump;
             }
             else if (blockType == typeof(SnowBlock))
             {

@@ -97,6 +97,8 @@
     <Compile Include="Blocks\BlockAutoWaterOn.cs" />
     <Compile Include="Blocks\BlockBasicIceOff.cs"/>
     <Compile Include="Blocks\BlockBasicIceOn.cs"/>
+    <Compile Include="Blocks\BlockBasicInfinityJumpOff.cs" />
+    <Compile Include="Blocks\BlockBasicInfinityJumpOn.cs" />
     <Compile Include="Blocks\BlockBasicMoveUpOff.cs" />
     <Compile Include="Blocks\BlockBasicMoveUpOn.cs" />
     <Compile Include="Blocks\BlockBasicOff.cs"/>

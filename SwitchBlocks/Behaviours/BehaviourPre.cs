@@ -86,6 +86,7 @@ namespace SwitchBlocks.Behaviours
 
             // Requested gimmick from another mod.
             BehaviourPost.IsPlayerOnMoveUp = false;
+            BehaviourPost.IsPlayerOnInfinityJump = false;
 
             return true;
         }

@@ -85,7 +85,7 @@ namespace SwitchBlocks
             // Mainly used to unify snow and ice behaviour, esp. ice behaviour since we don't
             // want to run the sliding function multiple times.
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
+            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost(player));
 
             SetupAuto.Setup(player);
             SetupBasic.Setup(player);

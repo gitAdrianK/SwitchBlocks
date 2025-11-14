@@ -1,11 +1,15 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System;
     using Blocks;
+    using HarmonyLib;
+    using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using JumpKing.MiscEntities.WorldItems;
     using JumpKing.MiscEntities.WorldItems.Inventory;
+    using JumpKing.Player;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -13,6 +17,9 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
+        /// <summary>Traverse of the knocked field of body comp.</summary>
+        private Traverse TraverseKnocked { get; }
+
         /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
 
@@ -28,6 +35,9 @@ namespace SwitchBlocks.Behaviours
         ///<summary>If the player is on any move up block.</summary>
         public static bool IsPlayerOnMoveUp { get; set; }
 
+        ///<summary>If the player is on any infinity jump block.</summary>
+        public static bool IsPlayerOnInfinityJump { get; set; }
+
         ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
         public static bool IsPlayerOnSandUp { get; set; }
 
@@ -40,6 +50,8 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public bool IsPlayerOnBlock { get; set; }
 
+        public BehaviourPost(PlayerEntity player) => this.TraverseKnocked = Traverse.Create(player.m_body).Field("_knocked");
+
         /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
 
@@ -49,9 +61,15 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public float ModifyGravity(float inputGravity, BehaviourContext behaviourContext)
         {
+            var bodyComp = behaviourContext.BodyComp;
             if (IsPlayerOnMoveUp)
             {
-                return behaviourContext.BodyComp.Velocity.Y < 0.0f ? 0.0f : inputGravity;
+                return bodyComp.Velocity.Y < 0.0f ? 0.0f : inputGravity;
+            }
+
+            if (IsPlayerOnInfinityJump && bodyComp.Velocity.Y > PlayerValues.MAX_FALL - 1.0f)
+            {
+                return 0.0f;
             }
 
             return inputGravity;
@@ -61,7 +79,16 @@ namespace SwitchBlocks.Behaviours
         public float ModifyXVelocity(float inputXVelocity, BehaviourContext behaviourContext) => inputXVelocity;
 
         /// <inheritdoc />
-        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext) => inputYVelocity;
+        public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
+        {
+            var bodyComp = behaviourContext.BodyComp;
+            if (IsPlayerOnInfinityJump && bodyComp.Velocity.Y > 0.0f)
+            {
+                return Math.Min(inputYVelocity * 0.4f, PlayerValues.MAX_FALL - 1.0f);
+            }
+
+            return inputYVelocity;
+        }
 
         /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
@@ -75,6 +102,11 @@ namespace SwitchBlocks.Behaviours
             if (InventoryManager.HasItemEnabled(Items.SnakeRing))
             {
                 IsPlayerOnSnow = false;
+            }
+
+            if (IsPlayerOnInfinityJump)
+            {
+                this.TraverseKnocked.SetValue(false);
             }
 
             PrevVelocity = behaviourContext.BodyComp.Velocity;
