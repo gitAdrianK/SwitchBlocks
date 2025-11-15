@@ -107,6 +107,7 @@ namespace SwitchBlocks.Behaviours
             if (IsPlayerOnInfinityJump)
             {
                 this.TraverseKnocked.SetValue(false);
+                Camera.UpdateCamera(behaviourContext.BodyComp.Position.ToPoint());
             }
 
             PrevVelocity = behaviourContext.BodyComp.Velocity;
