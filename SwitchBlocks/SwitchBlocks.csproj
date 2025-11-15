@@ -121,6 +121,8 @@
     <Compile Include="Blocks\BlockCountdownWaterOn.cs" />
     <Compile Include="Blocks\BlockJumpIceOff.cs"/>
     <Compile Include="Blocks\BlockJumpIceOn.cs"/>
+    <Compile Include="Blocks\BlockJumpInfinityJumpOff.cs" />
+    <Compile Include="Blocks\BlockJumpInfinityJumpOn.cs" />
     <Compile Include="Blocks\BlockJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpOn.cs"/>
     <Compile Include="Blocks\BlockJumpSnowOff.cs"/>

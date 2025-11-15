@@ -209,6 +209,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpWaterOff" />.</summary>
         public static readonly Color JumpWaterOff = new Color(95, 98, 95);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOn" />.</summary>
+        public static readonly Color JumpInfinityJumpOn = new Color(32, 31, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOff" />.</summary>
+        public static readonly Color JumpInfinityJumpOff = new Color(96, 95, 95);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color JumpWindEnable = new Color(95, 95, 96);
 
