@@ -104,7 +104,8 @@ namespace SwitchBlocks
                 if (!(entity is EntityDraw entityDraw))
                 {
                     entity.GoToFront();
-                } else
+                }
+                else
                 {
                     if (entityDraw.IsForeground)
                     {

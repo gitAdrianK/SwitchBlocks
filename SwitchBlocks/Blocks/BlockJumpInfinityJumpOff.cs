@@ -12,7 +12,8 @@ namespace SwitchBlocks.Blocks
         public BlockJumpInfinityJumpOff(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => !DataJump.Instance.State ? ModBlocks.JumpInfinityJumpOff : Color.Transparent;
+        public override Color DebugColor =>
+            !DataJump.Instance.State ? ModBlocks.JumpInfinityJumpOff : Color.Transparent;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;

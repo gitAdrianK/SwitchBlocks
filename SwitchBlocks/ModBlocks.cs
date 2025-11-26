@@ -71,10 +71,10 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOff" />.</summary>
         public static readonly Color BasicMoveUpOff = new Color(21, 125, 238);
 
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOn"/>.</summary>
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOn" />.</summary>
         public static readonly Color BasicInfinityJumpOn = new Color(238, 125, 22);
 
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOff"/>.</summary>
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOff" />.</summary>
         public static readonly Color BasicInfinityJumpOff = new Color(22, 125, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicLever" />.</summary>

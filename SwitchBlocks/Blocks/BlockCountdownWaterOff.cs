@@ -12,7 +12,8 @@ namespace SwitchBlocks.Blocks
         public BlockCountdownWaterOff(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => !DataCountdown.Instance.State ? ModBlocks.CountdownWaterOff : Color.Transparent;
+        public override Color DebugColor =>
+            !DataCountdown.Instance.State ? ModBlocks.CountdownWaterOff : Color.Transparent;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;

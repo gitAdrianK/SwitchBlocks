@@ -19,10 +19,12 @@ namespace SwitchBlocks.Behaviours
             {
                 this.Auto = DataAuto.Instance;
             }
+
             if (SetupCountdown.IsUsed)
             {
                 this.Countdown = DataCountdown.Instance;
             }
+
             if (SetupJump.IsUsed)
             {
                 this.Jump = DataJump.Instance;
@@ -67,10 +69,12 @@ namespace SwitchBlocks.Behaviours
             {
                 this.Auto.CanSwitchSafely = true;
             }
+
             if (!(this.Countdown is null))
             {
                 this.Countdown.CanSwitchSafely = true;
             }
+
             if (!(this.Jump is null))
             {
                 this.Jump.CanSwitchSafely = true;

@@ -23,10 +23,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpSnowOff,
             ModBlocks.JumpWaterOn,
             ModBlocks.JumpWaterOff,
-
             ModBlocks.JumpInfinityJumpOn,
             ModBlocks.JumpInfinityJumpOff,
-
             ModBlocks.JumpWindEnable
         };
 

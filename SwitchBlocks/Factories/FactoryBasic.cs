@@ -26,12 +26,10 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicSnowOff,
             ModBlocks.BasicWaterOn,
             ModBlocks.BasicWaterOff,
-
             ModBlocks.BasicMoveUpOn,
             ModBlocks.BasicMoveUpOff,
             ModBlocks.BasicInfinityJumpOn,
             ModBlocks.BasicInfinityJumpOff,
-
             ModBlocks.BasicLever,
             ModBlocks.BasicLeverOn,
             ModBlocks.BasicLeverOff,

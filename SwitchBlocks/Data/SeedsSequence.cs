@@ -122,6 +122,38 @@ namespace SwitchBlocks.Data
             {
                 doc.Save(fs);
             }
+
+            // Additionally, if the WS folder structure can be found, we also save to that folder,
+            // that way they should be included in steam uploads.
+            var root = new DirectoryInfo(Game1.instance.contentManager.root);
+            if (root.Name != "bin" || root.Parent == null)
+            {
+                return;
+            }
+
+            // The switchBlocksMod folder has to exist so we can be double sure.
+            path = Path.Combine(root.Parent.FullName, ModConstants.Folder);
+            if (!Directory.Exists(path))
+            {
+                return;
+            }
+
+            path = Path.Combine(path, ModConstants.Saves);
+            if (!Directory.Exists(path))
+            {
+                _ = Directory.CreateDirectory(path);
+            }
+
+            using (var fs = new FileStream(
+                       Path.Combine(
+                           path,
+                           $"{ModConstants.PrefixSeeds}{ModConstants.Sequence}{ModConstants.SuffixSav}"),
+                       FileMode.Create,
+                       FileAccess.Write,
+                       FileShare.None))
+            {
+                doc.Save(fs);
+            }
         }
     }
 }

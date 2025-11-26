@@ -17,6 +17,9 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
+        public BehaviourPost(PlayerEntity player) =>
+            this.TraverseKnocked = Traverse.Create(player.m_body).Field("_knocked");
+
         /// <summary>Traverse of the knocked field of body comp.</summary>
         private Traverse TraverseKnocked { get; }
 
@@ -49,8 +52,6 @@ namespace SwitchBlocks.Behaviours
 
         /// <inheritdoc />
         public bool IsPlayerOnBlock { get; set; }
-
-        public BehaviourPost(PlayerEntity player) => this.TraverseKnocked = Traverse.Create(player.m_body).Field("_knocked");
 
         /// <inheritdoc />
         public bool AdditionalXCollisionCheck(AdvCollisionInfo info, BehaviourContext behaviourContext) => false;
