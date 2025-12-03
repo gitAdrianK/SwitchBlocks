@@ -55,39 +55,38 @@ namespace SwitchBlocks.Behaviours
             var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
             this.IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;
 
-            if (this.IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
-                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
-                if (collidingWithLeverSolid)
-                {
-                    var block = advCollisionInfo.GetCollidedBlocks<BlockCountdownLeverSolid>().First();
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                            SettingsCountdown.LeverDirections,
-                            block))
-                    {
-                        return true;
-                    }
-                }
+                this.Data.HasSwitched = false;
+                return true;
+            }
 
-                this.Data.ActivatedTick = PatchAchievementManager.GetTick();
-
-                if (this.Data.HasSwitched)
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (collidingWithLeverSolid)
+            {
+                var block = advCollisionInfo.GetCollidedBlocks<BlockCountdownLeverSolid>().First();
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        SettingsCountdown.LeverDirections,
+                        block))
                 {
                     return true;
                 }
-
-                if (!this.Data.State)
-                {
-                    ModSounds.CountdownFlip?.PlayOneShot();
-                }
-
-                this.Data.HasSwitched = true;
-                this.Data.State = true;
             }
-            else
+
+            this.Data.ActivatedTick = PatchAchievementManager.GetTick();
+
+            if (this.Data.HasSwitched)
             {
-                this.Data.HasSwitched = false;
+                return true;
             }
+
+            if (!this.Data.State)
+            {
+                ModSounds.CountdownFlip?.PlayOneShot();
+            }
+
+            this.Data.HasSwitched = true;
+            this.Data.State = true;
 
             return true;
         }

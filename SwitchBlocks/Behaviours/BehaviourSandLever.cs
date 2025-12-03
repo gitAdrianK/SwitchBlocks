@@ -63,62 +63,61 @@ namespace SwitchBlocks.Behaviours
                                    || collidingWithAnyLeverOn
                                    || collidingWithAnyLeverOff;
 
-            if (this.IsPlayerOnBlock)
+            if (!this.IsPlayerOnBlock)
             {
-                if (this.Data.HasSwitched)
+                this.Data.HasSwitched = false;
+                return true;
+            }
+
+            if (this.Data.HasSwitched)
+            {
+                return true;
+            }
+
+            this.Data.HasSwitched = true;
+
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
+            {
+                IBlock block;
+                if (collidingWithLeverSolid)
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolid>().First();
+                }
+                else if (collidingWithLeverSolidOn)
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolidOn>().First();
+                }
+                else
+                {
+                    block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolidOff>().First();
+                }
+
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        SettingsSand.LeverDirections,
+                        block))
                 {
                     return true;
                 }
-
-                this.Data.HasSwitched = true;
-
-                // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
-                if (collidingWithLeverSolid || collidingWithLeverSolidOn || collidingWithLeverSolidOff)
-                {
-                    IBlock block;
-                    if (collidingWithLeverSolid)
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolid>().First();
-                    }
-                    else if (collidingWithLeverSolidOn)
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolidOn>().First();
-                    }
-                    else
-                    {
-                        block = advCollisionInfo.GetCollidedBlocks<BlockSandLeverSolidOff>().First();
-                    }
-
-                    if (!Directions.ResolveCollisionDirection(behaviourContext,
-                            SettingsSand.LeverDirections,
-                            block))
-                    {
-                        return true;
-                    }
-                }
-
-                var stateBefore = this.Data.State;
-                if (collidingWithAnyLever)
-                {
-                    this.Data.State = !this.Data.State;
-                }
-                else if (collidingWithAnyLeverOn)
-                {
-                    this.Data.State = true;
-                }
-                else if (collidingWithAnyLeverOff)
-                {
-                    this.Data.State = false;
-                }
-
-                if (stateBefore != this.Data.State)
-                {
-                    ModSounds.SandFlip?.PlayOneShot();
-                }
             }
-            else
+
+            var stateBefore = this.Data.State;
+            if (collidingWithAnyLever)
             {
-                this.Data.HasSwitched = false;
+                this.Data.State = !this.Data.State;
+            }
+            else if (collidingWithAnyLeverOn)
+            {
+                this.Data.State = true;
+            }
+            else if (collidingWithAnyLeverOff)
+            {
+                this.Data.State = false;
+            }
+
+            if (stateBefore != this.Data.State)
+            {
+                ModSounds.SandFlip?.PlayOneShot();
             }
 
             return true;
