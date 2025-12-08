@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Entities
 {
     using Data;
+    using JumpKing;
     using Patches;
     using Util.Deserialization;
 

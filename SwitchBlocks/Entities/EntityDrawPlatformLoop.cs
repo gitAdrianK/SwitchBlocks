@@ -116,6 +116,11 @@ namespace SwitchBlocks.Entities
         /// <param name="delta">Amount timer is increased by.</param>
         protected override void Update(float delta)
         {
+            if (Camera.CurrentScreen != this.Screen)
+            {
+                return;
+            }
+
             // Remember that when a platform starts "on" it is visible, and since the default state is false
             // a platform that starts "on" is visible when the state is "false"
             if (!this.IgnoreState && (this.StartState == StartState.On == this.Data.State || this.Data.SwitchOnceSafe))
