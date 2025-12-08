@@ -38,6 +38,7 @@ namespace SwitchBlocks.Patches
         ///     Get the current tick of the game.
         /// </summary>
         /// <returns>Current game tick.</returns>
-        public static int GetTick() => AllTimeStatsRef(AchievementManager)._ticks - SnapshotRef(AchievementManager)._ticks;
+        public static int GetTick() =>
+            AllTimeStatsRef(AchievementManager)._ticks - SnapshotRef(AchievementManager)._ticks;
     }
 }

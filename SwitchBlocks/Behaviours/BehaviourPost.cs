@@ -2,27 +2,20 @@ namespace SwitchBlocks.Behaviours
 {
     using System;
     using Blocks;
-    using HarmonyLib;
     using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using JumpKing.MiscEntities.WorldItems;
     using JumpKing.MiscEntities.WorldItems.Inventory;
-    using JumpKing.Player;
     using Microsoft.Xna.Framework;
+    using Patches;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockPost" />.
     /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
-        public BehaviourPost(PlayerEntity player) =>
-            this.TraverseKnocked = Traverse.Create(player.m_body).Field("_knocked");
-
-        /// <summary>Traverse of the knocked field of body comp.</summary>
-        private Traverse TraverseKnocked { get; }
-
         /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
 
@@ -107,7 +100,7 @@ namespace SwitchBlocks.Behaviours
 
             if (IsPlayerOnInfinityJump)
             {
-                this.TraverseKnocked.SetValue(false);
+                PatchBodyComp.SetKnocked(behaviourContext.BodyComp, false);
                 Camera.UpdateCamera(behaviourContext.BodyComp.Position.ToPoint());
             }
 

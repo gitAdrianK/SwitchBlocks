@@ -3,11 +3,11 @@ namespace SwitchBlocks.Behaviours
     using System;
     using Blocks;
     using Data;
-    using HarmonyLib;
     using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using Patches;
 
     /// <summary>
     ///     Behaviour attached to both sand platform blocks.
@@ -142,7 +142,7 @@ namespace SwitchBlocks.Behaviours
                 bodyComp.Position.Y -= 0.75f;
             }
 
-            _ = Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+            PatchBodyComp.SetKnocked(bodyComp, false);
             Camera.UpdateCamera(bodyComp.GetHitbox().Center);
             bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
 

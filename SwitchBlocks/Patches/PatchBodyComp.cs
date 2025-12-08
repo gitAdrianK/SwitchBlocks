@@ -17,6 +17,11 @@ namespace SwitchBlocks.Patches
     [HarmonyPatch(typeof(BodyComp), nameof(BodyComp.IsOnBlock), typeof(Type))]
     public static class PatchBodyComp
     {
+        /// <summary>FieldRef of the "_knocked" field.</summary>
+        private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
+            AccessTools.FieldRefAccess<BodyComp, bool>(
+                AccessTools.Field("JumpKing.Player.BodyComp:_knocked"));
+
         /// <summary>
         ///     Patches the IsOnBlock method of the <see cref="BodyComp" />, adds the custom blocks from this mod to also return
         ///     <c>true</c>
@@ -45,5 +50,7 @@ namespace SwitchBlocks.Patches
                 __result |= BehaviourPost.IsPlayerOnSnow;
             }
         }
+
+        public static void SetKnocked(BodyComp body, bool isKnocked) => KnockedRef(body) = isKnocked;
     }
 }

@@ -3,11 +3,11 @@ namespace SwitchBlocks.Behaviours
     using System;
     using Blocks;
     using Data;
-    using HarmonyLib;
     using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using Patches;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockSandOff" />.
@@ -118,7 +118,7 @@ namespace SwitchBlocks.Behaviours
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
 
-            _ = Traverse.Create(bodyComp).Field("_knocked").SetValue(false);
+            PatchBodyComp.SetKnocked(bodyComp, false);
             Camera.UpdateCamera(hitbox.Center);
             return true;
         }
