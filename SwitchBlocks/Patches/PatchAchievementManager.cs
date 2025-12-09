@@ -13,26 +13,18 @@ namespace SwitchBlocks.Patches
     public static class PatchAchievementManager
     {
         /// <summary>The achievement manager instance.</summary>
-        private static readonly object AchievementManager;
+        private static readonly object AchievementManager =
+            AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance").GetValue(null);
 
         /// <summary>FieldRef of the "all-time stats" field.</summary>
-        private static readonly AccessTools.FieldRef<object, PlayerStats> AllTimeStatsRef;
+        private static readonly AccessTools.FieldRef<object, PlayerStats> AllTimeStatsRef =
+            AccessTools.FieldRefAccess<object, PlayerStats>(
+                AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:m_all_time_stats"));
 
         /// <summary>FieldRef of the "snapshot" field.</summary>
-        private static readonly AccessTools.FieldRef<object, PlayerStats> SnapshotRef;
-
-
-        /// <summary>Static ctor. Variable setup.</summary>
-        static PatchAchievementManager()
-        {
-            AchievementManager = AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:instance")
-                .GetValue(null);
-            AllTimeStatsRef = AccessTools.FieldRefAccess<object, PlayerStats>(
-                AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:m_all_time_stats"));
-            SnapshotRef =
-                AccessTools.FieldRefAccess<object, PlayerStats>(
-                    AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:m_snapshot"));
-        }
+        private static readonly AccessTools.FieldRef<object, PlayerStats> SnapshotRef =
+            AccessTools.FieldRefAccess<object, PlayerStats>(
+                AccessTools.Field("JumpKing.MiscSystems.Achievements.AchievementManager:m_snapshot"));
 
         /// <summary>
         ///     Get the current tick of the game.
