@@ -6,7 +6,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockAutoReset" />.
@@ -14,10 +13,17 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourAutoReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourAutoReset() => this.Data = DataAuto.Instance;
+        public BehaviourAutoReset(int durationOff)
+        {
+            this.Data = DataAuto.Instance;
+            this.DurationOff = durationOff;
+        }
 
         /// <summary>Auto data.</summary>
         private DataAuto Data { get; }
+
+        /// <summary>Off duration.</summary>
+        private int DurationOff { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -62,7 +68,7 @@ namespace SwitchBlocks.Behaviours
             this.Data.ResetTick = PatchAchievementManager.GetTick();
             if (isReset && !this.Data.State)
             {
-                this.Data.ResetTick += SettingsAuto.DurationOff;
+                this.Data.ResetTick += this.DurationOff;
             }
 
             return true;

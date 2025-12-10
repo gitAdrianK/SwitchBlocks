@@ -41,8 +41,9 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="settings">Settings of the group type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsGroup settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -59,17 +60,19 @@ namespace SwitchBlocks.Setups
                 resets.SaveToFile();
             }
 
-            var entityLogic = new EntityLogicGroup();
+            var entityLogic = new EntityLogicGroup(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
             var body = player.m_body;
-            _ = SettingsGroup.Duration == 0
-                ? body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupLeaving())
-                : body.RegisterBlockBehaviour(typeof(BlockGroupA), new BehaviourGroupDuration());
+            _ = settings.Duration == 0
+                ? body.RegisterBlockBehaviour(typeof(BlockGroupA),
+                    new BehaviourGroupLeaving(settings.PlatformDirections))
+                : body.RegisterBlockBehaviour(typeof(BlockGroupA),
+                    new BehaviourGroupDuration(settings.Duration, settings.PlatformDirections));
 
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
-            _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset());
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset(settings.LeverDirections));
         }
 
         /// <summary>

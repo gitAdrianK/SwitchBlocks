@@ -77,8 +77,6 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModSettings.Setup();
-
             ModSounds.Setup(levelID);
 
             // These behaviours are used as a way to create pre- and post-behaviour points
@@ -87,13 +85,14 @@ namespace SwitchBlocks
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
             _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
 
-            SetupAuto.Setup(player);
-            SetupBasic.Setup(player);
-            SetupCountdown.Setup(player);
-            SetupGroup.Setup(player);
-            SetupJump.Setup(player);
-            SetupSand.Setup(player, LevelManager.Instance);
-            SetupSequence.Setup(player);
+            var settings = new ModSettings();
+            SetupAuto.Setup(settings.SettingsAuto, player);
+            SetupBasic.Setup(settings.SettingsBasic, player);
+            SetupCountdown.Setup(settings.SettingsCountdown, player);
+            SetupGroup.Setup(settings.SettingsGroup, player);
+            SetupJump.Setup(settings.SettingsJump, player);
+            SetupSand.Setup(settings.SettingsSand, player, LevelManager.Instance);
+            SetupSequence.Setup(settings.SettingsSequence, player);
 
             // DoIf is a Harmony extension (that also does extra, for us unneeded, checks).
             var entities = entityManager.Entities
@@ -127,8 +126,6 @@ namespace SwitchBlocks
             {
                 return;
             }
-
-            ModSettings.Cleanup();
 
             ModSounds.Cleanup();
 

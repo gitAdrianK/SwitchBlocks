@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -7,7 +8,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -16,10 +16,17 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourCountdownLever : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourCountdownLever() => this.Data = DataCountdown.Instance;
+        public BehaviourCountdownLever(BitVector32 leverDirections)
+        {
+            this.Data = DataCountdown.Instance;
+            this.LeverDirections = leverDirections;
+        }
 
         /// <summary>Countdown data.</summary>
         private DataCountdown Data { get; }
+
+        /// <summary>Lever directions.</summary>
+        private BitVector32 LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -66,7 +73,7 @@ namespace SwitchBlocks.Behaviours
             {
                 var block = advCollisionInfo.GetCollidedBlocks<BlockCountdownLeverSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsCountdown.LeverDirections,
+                        this.LeverDirections,
                         block))
                 {
                     return true;

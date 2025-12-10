@@ -38,8 +38,9 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="settings">Settings of the sequence type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsSequence settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -59,7 +60,7 @@ namespace SwitchBlocks.Setups
 
             if (SaveManager.instance.IsNewGame)
             {
-                foreach (var defaultId in SettingsSequence.DefaultActive)
+                foreach (var defaultId in settings.DefaultActive)
                 {
                     if (instance.Groups.TryGetValue(defaultId, out var group))
                     {
@@ -70,17 +71,20 @@ namespace SwitchBlocks.Setups
                 }
             }
 
-            var entityLogic = new EntityLogicSequence();
+            var entityLogic = new EntityLogicSequence(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
             var body = player.m_body;
-            _ = SettingsSequence.Duration == 0
-                ? body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceTouching())
-                : body.RegisterBlockBehaviour(typeof(BlockSequenceA), new BehaviourSequenceDuration());
+            _ = settings.Duration == 0
+                ? body.RegisterBlockBehaviour(typeof(BlockSequenceA),
+                    new BehaviourSequenceTouching(settings.DisableOnLeaving, settings.PlatformDirections))
+                : body.RegisterBlockBehaviour(typeof(BlockSequenceA),
+                    new BehaviourSequenceDuration(settings.Duration, settings.PlatformDirections));
 
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
-            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset), new BehaviourSequenceReset());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset),
+                new BehaviourSequenceReset(settings.DefaultActive, settings.LeverDirections));
         }
 
         /// <summary>

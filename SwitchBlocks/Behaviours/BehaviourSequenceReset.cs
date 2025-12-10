@@ -1,13 +1,13 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -16,12 +16,14 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceReset()
+        public BehaviourSequenceReset(int[] defaultActive, BitVector32 leverDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
+            this.DefaultActive = defaultActive;
+            this.LeverDirections = leverDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -39,6 +41,12 @@ namespace SwitchBlocks.Behaviours
             get => DataSequence.Instance.HasSwitched;
             set => DataSequence.Instance.HasSwitched = value;
         }
+
+        ///<summary>Default active.</summary>
+        private int[] DefaultActive { get; }
+
+        /// <summary>Lever directions.</summary>
+        private BitVector32 LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -92,7 +100,7 @@ namespace SwitchBlocks.Behaviours
             {
                 var solid = advCollisionInfo.GetCollidedBlocks<BlockSequenceResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsSequence.LeverDirections,
+                        this.LeverDirections,
                         solid))
                 {
                     return true;
@@ -133,7 +141,7 @@ namespace SwitchBlocks.Behaviours
 
                 this.Finished.Clear();
 
-                foreach (var defaultId in SettingsSequence.DefaultActive)
+                foreach (var defaultId in this.DefaultActive)
                 {
                     if (!this.Groups.TryGetValue(defaultId, out var group))
                     {

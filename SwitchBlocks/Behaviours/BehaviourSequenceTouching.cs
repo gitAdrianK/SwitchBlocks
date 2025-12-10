@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -8,7 +9,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -17,12 +17,14 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceTouching : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceTouching()
+        public BehaviourSequenceTouching(bool disableOnLeaving, BitVector32 platformDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
+            this.DisableOnLeaving = disableOnLeaving;
+            this.PlatformDirections = platformDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -33,6 +35,12 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Cached IDs considered finished.</summary>
         private HashSet<int> Finished { get; }
+
+        /// <summary>Disable on leaving.</summary>
+        private bool DisableOnLeaving { get; }
+
+        /// <summary>Platform directions.</summary>
+        private BitVector32 PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -105,13 +113,13 @@ namespace SwitchBlocks.Behaviours
                 if (!this.Groups.TryGetValue(groupId, out var group)
                     || !group.State
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsSequence.PlatformDirections,
+                        this.PlatformDirections,
                         (IBlock)block))
                 {
                     continue;
                 }
 
-                if (SettingsSequence.DisableOnLeaving)
+                if (this.DisableOnLeaving)
                 {
                     group.ActivatedTick = PatchAchievementManager.GetTick() + 2;
                     _ = this.Active.Add(groupId);

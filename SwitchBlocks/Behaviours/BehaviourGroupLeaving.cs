@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -8,7 +9,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -17,12 +17,13 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourGroupLeaving : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourGroupLeaving()
+        public BehaviourGroupLeaving(BitVector32 platformDirections)
         {
             var data = DataGroup.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Touched = data.Touched;
+            this.PlatformDirections = platformDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -33,6 +34,9 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Cached IDs considered touched./// </summary>
         private HashSet<int> Touched { get; set; }
+
+        /// <summary>Platform directions.</summary>
+        private BitVector32 PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -127,7 +131,7 @@ namespace SwitchBlocks.Behaviours
 
                 if (!group.State
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsGroup.PlatformDirections,
+                        this.PlatformDirections,
                         (IBlock)block))
                 {
                     continue;

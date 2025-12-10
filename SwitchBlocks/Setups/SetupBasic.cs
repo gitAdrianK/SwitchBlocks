@@ -7,6 +7,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories;
     using JumpKing.Player;
+    using Settings;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -22,8 +23,10 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// ///
+        /// <param name="settings">Settings of the basic type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsBasic settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -32,7 +35,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataBasic.Instance;
 
-            var entityLogic = new EntityLogicBasic();
+            var entityLogic = new EntityLogicBasic(settings);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Basic,
@@ -45,7 +48,7 @@ namespace SwitchBlocks.Setups
             var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever());
+            _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever(settings.LeverDirections));
         }
 
         /// <summary>

@@ -2,6 +2,7 @@ namespace SwitchBlocks
 {
     using System.Collections.Generic;
     using System.IO;
+    using JetBrains.Annotations;
     using JumpKing;
     using JumpKing.XnaWrappers;
     using Microsoft.Xna.Framework.Audio;
@@ -12,30 +13,39 @@ namespace SwitchBlocks
     public static class ModSounds
     {
         /// <summary><see cref="JKSound" /> played when the auto block flips state.</summary>
+        [CanBeNull]
         public static JKSound AutoFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the auto block warns of a certain amount of time passing.</summary>
+        [CanBeNull]
         public static JKSound AutoWarn { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the basic block flips state.</summary>
+        [CanBeNull]
         public static JKSound BasicFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the countdown block flips state.</summary>
+        [CanBeNull]
         public static JKSound CountdownFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the countdown block warns of a certain amount of time passing.</summary>
+        [CanBeNull]
         public static JKSound CountdownWarn { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the group block flips state.</summary>
+        [CanBeNull]
         public static JKSound GroupFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the jump block flips state.</summary>
+        [CanBeNull]
         public static JKSound JumpFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the sand block flips state.</summary>
+        [CanBeNull]
         public static JKSound SandFlip { get; private set; }
 
         /// <summary><see cref="JKSound" /> played when the sequence block flips state.</summary>
+        [CanBeNull]
         public static JKSound SequenceFlip { get; private set; }
 
         /// <summary>All maps that have been loaded with their ulong steam ID.</summary>

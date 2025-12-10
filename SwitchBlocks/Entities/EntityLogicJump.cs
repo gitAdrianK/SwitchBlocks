@@ -12,7 +12,7 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicJump() : base(DataJump.Instance, SettingsJump.Multiplier)
+        public EntityLogicJump(SettingsJump settings) : base(DataJump.Instance, settings.Multiplier)
         {
         }
 

@@ -8,6 +8,7 @@ namespace SwitchBlocks.Setups
     using Factories;
     using JumpKing;
     using JumpKing.Player;
+    using Settings;
     using Util;
 
     /// <summary>
@@ -27,8 +28,10 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// ///
+        /// <param name="settings">Settings of the countdown type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsCountdown settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -44,7 +47,7 @@ namespace SwitchBlocks.Setups
                 seeds.SaveToFile();
             }
 
-            var entityLogic = new EntityLogicCountdown();
+            var entityLogic = new EntityLogicCountdown(settings);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Countdown,
@@ -57,8 +60,10 @@ namespace SwitchBlocks.Setups
             var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever), new BehaviourCountdownLever());
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), new BehaviourCountdownSingleUse());
+            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever),
+                new BehaviourCountdownLever(settings.LeverDirections));
+            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse),
+                new BehaviourCountdownSingleUse(settings.LeverDirections));
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -8,7 +9,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -17,12 +17,14 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceDuration : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceDuration()
+        public BehaviourSequenceDuration(int duration, BitVector32 platformDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
+            this.Duration = duration;
+            this.PlatformDirections = platformDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -32,6 +34,12 @@ namespace SwitchBlocks.Behaviours
         private HashSet<int> Active { get; }
 
         private HashSet<int> Finished { get; }
+
+        /// <summary>Duration.</summary>
+        private int Duration { get; }
+
+        /// <summary>Platform directions.</summary>
+        private BitVector32 PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -105,7 +113,7 @@ namespace SwitchBlocks.Behaviours
                 if (!this.Groups.TryGetValue(groupId, out var group)
                     || !group.State
                     || !Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsSequence.PlatformDirections,
+                        this.PlatformDirections,
                         (IBlock)block))
                 {
                     continue;
@@ -114,7 +122,7 @@ namespace SwitchBlocks.Behaviours
                 if (group.ActivatedTick == int.MaxValue)
                 {
                     var tick = PatchAchievementManager.GetTick();
-                    group.ActivatedTick = tick + SettingsSequence.Duration;
+                    group.ActivatedTick = tick + this.Duration;
                     _ = this.Active.Add(groupId);
                     _ = this.Finished.Remove(groupId);
                 }

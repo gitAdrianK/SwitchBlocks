@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -7,7 +8,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -16,10 +16,17 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourBasicLever : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourBasicLever() => this.Data = DataBasic.Instance;
+        public BehaviourBasicLever(BitVector32 leverDirections)
+        {
+            this.Data = DataBasic.Instance;
+            this.LeverDirections = leverDirections;
+        }
 
         /// <summary>Basic data.</summary>
         private DataBasic Data { get; }
+
+        /// <summary>Lever directions.</summary>
+        private BitVector32 LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -95,7 +102,7 @@ namespace SwitchBlocks.Behaviours
                 }
 
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsBasic.LeverDirections,
+                        this.LeverDirections,
                         block))
                 {
                     return true;

@@ -27,8 +27,9 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="settings">Settings of the jump type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsJump settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -37,7 +38,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataJump.Instance;
 
-            EntityLogic = new EntityLogicJump();
+            EntityLogic = new EntityLogicJump(settings);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Jump,
@@ -47,7 +48,7 @@ namespace SwitchBlocks.Setups
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
 
-            if (SettingsJump.ForceSwitch)
+            if (settings.ForceSwitch)
             {
                 PlayerEntity.OnJumpCall += JumpSwitchUnsafe;
             }
@@ -67,14 +68,8 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            if (SettingsJump.ForceSwitch)
-            {
-                PlayerEntity.OnJumpCall -= JumpSwitchUnsafe;
-            }
-            else
-            {
-                PlayerEntity.OnJumpCall -= JumpSwitchSafe;
-            }
+            PlayerEntity.OnJumpCall -= JumpSwitchUnsafe;
+            PlayerEntity.OnJumpCall -= JumpSwitchSafe;
 
             DataJump.Instance.SaveToFile();
             DataJump.Reset();

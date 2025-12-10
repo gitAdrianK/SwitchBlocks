@@ -16,8 +16,8 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicGroup() : base(DataGroup.Instance, SettingsGroup.Multiplier)
-            => this.Duration = SettingsGroup.Duration;
+        public EntityLogicGroup(SettingsGroup settings) : base(DataGroup.Instance, settings.Multiplier)
+            => this.Duration = settings.Duration;
 
         /// <summary>Duration the state lasts for.</summary>
         private int Duration { get; }

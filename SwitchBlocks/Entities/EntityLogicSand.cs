@@ -11,7 +11,7 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicSand() : base(DataSand.Instance, SettingsSand.Multiplier)
+        public EntityLogicSand(SettingsSand settings) : base(DataSand.Instance, settings.Multiplier)
         {
         }
 

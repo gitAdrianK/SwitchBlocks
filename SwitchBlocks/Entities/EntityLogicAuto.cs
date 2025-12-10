@@ -12,16 +12,16 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicAuto() : base(DataAuto.Instance, SettingsAuto.Multiplier)
+        public EntityLogicAuto(SettingsAuto settings) : base(DataAuto.Instance, settings.Multiplier)
         {
-            this.DurationCycle = SettingsAuto.DurationCycle;
-            this.DurationOn = SettingsAuto.DurationOn;
-            this.DurationOff = SettingsAuto.DurationOff;
-            this.WarnCount = SettingsAuto.WarnCount;
-            this.WarnDuration = SettingsAuto.WarnDuration;
-            this.WarnDisableOn = SettingsAuto.WarnDisableOn;
-            this.WarnDisableOff = SettingsAuto.WarnDisableOff;
-            this.ForceSwitch = SettingsAuto.ForceSwitch;
+            this.DurationCycle = settings.DurationCycle;
+            this.DurationOn = settings.DurationOn;
+            this.DurationOff = settings.DurationOff;
+            this.WarnCount = settings.WarnCount;
+            this.WarnDuration = settings.WarnDuration;
+            this.WarnDisableOn = settings.WarnDisableOn;
+            this.WarnDisableOff = settings.WarnDisableOff;
+            this.ForceSwitch = settings.ForceSwitch;
         }
 
         /// <summary>Duration the full cycle of on/off lasts for.</summary>

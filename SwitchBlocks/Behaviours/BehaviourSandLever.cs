@@ -1,12 +1,12 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -15,10 +15,17 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSandLever : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSandLever() => this.Data = DataSand.Instance;
+        public BehaviourSandLever(BitVector32 leverDirections)
+        {
+            this.Data = DataSand.Instance;
+            this.LeverDirections = leverDirections;
+        }
 
         /// <summary>Sand data.</summary>
         private DataSand Data { get; }
+
+        /// <summary>Lever directions.</summary>
+        private BitVector32 LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -94,7 +101,7 @@ namespace SwitchBlocks.Behaviours
                 }
 
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsSand.LeverDirections,
+                        this.LeverDirections,
                         block))
                 {
                     return true;

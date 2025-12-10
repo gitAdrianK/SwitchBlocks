@@ -2,6 +2,7 @@ namespace SwitchBlocks
 {
     using System.IO;
     using System.Xml.Linq;
+    using JetBrains.Annotations;
     using JumpKing;
     using Settings;
     using Setups;
@@ -9,13 +10,9 @@ namespace SwitchBlocks
     /// <summary>
     ///     Collection of settings that are used by the mod and a way to load/reset them.
     /// </summary>
-    public static class ModSettings
+    public class ModSettings
     {
-        /// <summary>
-        ///     Loads the settings for blocks with such fields from a blocks.xml file
-        ///     placed inside the mods root folder.
-        /// </summary>
-        public static void Setup()
+        public ModSettings()
         {
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
@@ -30,88 +27,50 @@ namespace SwitchBlocks
             {
                 var doc = XDocument.Load(fs);
                 var root = doc.Root;
-                if (root is null)
+
+                if (SetupAuto.IsUsed)
                 {
-                    return;
+                    this.SettingsAuto = new SettingsAuto(root?.Element("Auto"));
                 }
 
-                XElement xel;
-                if (SetupAuto.IsUsed && (xel = root.Element("Auto")) != null)
+                if (SetupBasic.IsUsed)
                 {
-                    SettingsAuto.Parse(xel);
+                    this.SettingsBasic = new SettingsBasic(root?.Element("Basic"));
                 }
 
-                if (SetupBasic.IsUsed && (xel = root.Element("Basic")) != null)
+                if (SetupCountdown.IsUsed)
                 {
-                    SettingsBasic.Parse(xel);
+                    this.SettingsCountdown = new SettingsCountdown(root?.Element("Countdown"));
                 }
 
-                if (SetupCountdown.IsUsed && (xel = root.Element("Countdown")) != null)
+                if (SetupGroup.IsUsed)
                 {
-                    SettingsCountdown.Parse(xel);
+                    this.SettingsGroup = new SettingsGroup(root?.Element("Group"));
                 }
 
-                if (SetupGroup.IsUsed && (xel = root.Element("Group")) != null)
+                if (SetupJump.IsUsed)
                 {
-                    SettingsGroup.Parse(xel);
+                    this.SettingsJump = new SettingsJump(root?.Element("Jump"));
                 }
 
-                if (SetupJump.IsUsed && (xel = root.Element("Jump")) != null)
+                if (SetupSand.IsUsed)
                 {
-                    SettingsJump.Parse(xel);
+                    this.SettingsSand = new SettingsSand(root?.Element("Sand"));
                 }
 
-                if (SetupSand.IsUsed && (xel = root.Element("Sand")) != null)
+                if (SetupSequence.IsUsed)
                 {
-                    SettingsSand.Parse(xel);
-                }
-
-                if (SetupSequence.IsUsed && (xel = root.Element("Sequence")) != null)
-                {
-                    SettingsSequence.Parse(xel);
+                    this.SettingsSequence = new SettingsSequence(root?.Element("Sequence"));
                 }
             }
         }
 
-        /// <summary>
-        ///     Resets all settings to their default value.
-        /// </summary>
-        public static void Cleanup()
-        {
-            if (SetupAuto.IsUsed)
-            {
-                SettingsAuto.Reset();
-            }
-
-            if (SetupBasic.IsUsed)
-            {
-                SettingsBasic.Reset();
-            }
-
-            if (SetupCountdown.IsUsed)
-            {
-                SettingsCountdown.Reset();
-            }
-
-            if (SetupGroup.IsUsed)
-            {
-                SettingsGroup.Reset();
-            }
-
-            if (SetupJump.IsUsed)
-            {
-                SettingsJump.Reset();
-            }
-
-            if (SetupSand.IsUsed)
-            {
-                SettingsSand.Reset();
-            }
-
-            if (SetupSequence.IsUsed)
-            {
-                SettingsSequence.Reset();
-            }
-        }
+        [CanBeNull] public SettingsAuto SettingsAuto { get; }
+        [CanBeNull] public SettingsBasic SettingsBasic { get; }
+        [CanBeNull] public SettingsCountdown SettingsCountdown { get; }
+        [CanBeNull] public SettingsGroup SettingsGroup { get; }
+        [CanBeNull] public SettingsJump SettingsJump { get; }
+        [CanBeNull] public SettingsSand SettingsSand { get; }
+        [CanBeNull] public SettingsSequence SettingsSequence { get; }
     }
 }

@@ -1,13 +1,13 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -16,12 +16,13 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourGroupReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourGroupReset()
+        public BehaviourGroupReset(BitVector32 leverDirections)
         {
             var data = DataGroup.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
+            this.LeverDirections = leverDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -39,6 +40,9 @@ namespace SwitchBlocks.Behaviours
             get => DataGroup.Instance.HasSwitched;
             set => DataGroup.Instance.HasSwitched = value;
         }
+
+        /// <summary>Lever directions.</summary>
+        private BitVector32 LeverDirections { get; }
 
         /// <summary>Get or set the group data's Touched.</summary>
         /// <inheritdoc />
@@ -93,7 +97,7 @@ namespace SwitchBlocks.Behaviours
             {
                 block = advCollisionInfo.GetCollidedBlocks<BlockGroupResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
-                        SettingsGroup.LeverDirections,
+                        this.LeverDirections,
                         block))
                 {
                     return true;

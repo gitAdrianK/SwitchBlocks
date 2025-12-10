@@ -7,6 +7,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories;
     using JumpKing.Player;
+    using Settings;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -22,8 +23,9 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="settings">Settings of the auto type.</param>
         /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(PlayerEntity player)
+        public static void Setup(SettingsAuto settings, PlayerEntity player)
         {
             if (!IsUsed)
             {
@@ -32,7 +34,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataAuto.Instance;
 
-            var entityLogic = new EntityLogicAuto();
+            var entityLogic = new EntityLogicAuto(settings);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Auto,
@@ -41,7 +43,7 @@ namespace SwitchBlocks.Setups
             var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset());
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset(settings.DurationOff));
         }
 
         /// <summary>

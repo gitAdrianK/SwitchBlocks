@@ -20,9 +20,10 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="settings">Settings of the sand type.</param>
         /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to.</param>
         /// <param name="collisionQuery">An implementor of <see cref="ICollisionQuery" /></param>
-        public static void Setup(PlayerEntity player, ICollisionQuery collisionQuery)
+        public static void Setup(SettingsSand settings, PlayerEntity player, ICollisionQuery collisionQuery)
         {
             if (!IsUsed)
             {
@@ -31,7 +32,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataSand.Instance;
 
-            var entityLogic = new EntityLogicSand();
+            var entityLogic = new EntityLogicSand(settings);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Sand,
@@ -42,7 +43,7 @@ namespace SwitchBlocks.Setups
                 entityLogic);
 
             var body = player.m_body;
-            if (SettingsSand.IsV2)
+            if (settings.IsV2)
             {
                 // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.
                 _ = body.RegisterBlockBehaviour(typeof(BlockSandOn), new BehaviourSandOn(collisionQuery));
@@ -58,7 +59,7 @@ namespace SwitchBlocks.Setups
                 _ = body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
             }
 
-            _ = body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever());
+            _ = body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever(settings.LeverDirections));
         }
 
         /// <summary>

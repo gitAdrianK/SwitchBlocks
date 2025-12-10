@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -8,7 +9,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Settings;
     using Util;
 
     /// <summary>
@@ -17,12 +17,14 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourGroupDuration : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourGroupDuration()
+        public BehaviourGroupDuration(int duration, BitVector32 platformDirections)
         {
             var data = DataGroup.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Touched = data.Touched;
+            this.Duration = duration;
+            this.PlatformDirections = platformDirections;
         }
 
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
@@ -33,6 +35,12 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Cached IDs considered touched./// </summary>
         private HashSet<int> Touched { get; }
+
+        /// <summary>Duration.</summary>
+        private int Duration { get; }
+
+        /// <summary>Platform directions.</summary>
+        private BitVector32 PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -112,13 +120,13 @@ namespace SwitchBlocks.Behaviours
                     || this.Touched.Contains(groupId)
                     || !Directions.ResolveCollisionDirection(
                         behaviourContext,
-                        SettingsGroup.PlatformDirections,
+                        this.PlatformDirections,
                         (IBlock)block))
                 {
                     continue;
                 }
 
-                group.ActivatedTick = tick + SettingsGroup.Duration;
+                group.ActivatedTick = tick + this.Duration;
                 _ = this.Active.Add(groupId);
                 _ = this.Touched.Add(groupId);
             }

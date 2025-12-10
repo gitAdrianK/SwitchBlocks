@@ -16,10 +16,10 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicSequence() : base(DataSequence.Instance, SettingsSequence.Multiplier)
+        public EntityLogicSequence(SettingsSequence settings) : base(DataSequence.Instance, settings.Multiplier)
         {
-            this.Duration = SettingsSequence.Duration;
-            this.DisableOnLeaving = SettingsSequence.DisableOnLeaving;
+            this.Duration = settings.Duration;
+            this.DisableOnLeaving = settings.DisableOnLeaving;
         }
 
         /// <summary>Duration the state lasts for.</summary>

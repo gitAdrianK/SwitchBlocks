@@ -12,13 +12,13 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicCountdown() : base(DataCountdown.Instance, SettingsCountdown.Multiplier)
+        public EntityLogicCountdown(SettingsCountdown settings) : base(DataCountdown.Instance, settings.Multiplier)
         {
-            this.Duration = SettingsCountdown.Duration;
-            this.WarnCount = SettingsCountdown.WarnCount;
-            this.WarnDuration = SettingsCountdown.WarnDuration;
-            this.ForceSwitch = SettingsCountdown.ForceSwitch;
-            this.SingleUseReset = SettingsCountdown.SingleUseReset;
+            this.Duration = settings.Duration;
+            this.WarnCount = settings.WarnCount;
+            this.WarnDuration = settings.WarnDuration;
+            this.ForceSwitch = settings.ForceSwitch;
+            this.SingleUseReset = settings.SingleUseReset;
         }
 
         /// <summary>Duration the state switch lasts for.</summary>
