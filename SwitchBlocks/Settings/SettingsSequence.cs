@@ -35,6 +35,7 @@ namespace SwitchBlocks.Settings
         /// <summary>If the platform should be disabled when left.</summary>
         public bool DisableOnLeaving { get; private set; }
 
+        /// <summary>Block groups that are considered active by default.</summary>
         public int[] DefaultActive { get; private set; }
     }
 }

@@ -8,10 +8,13 @@ namespace SwitchBlocks
     using Setups;
 
     /// <summary>
-    ///     Collection of settings that are used by the mod and a way to load/reset them.
+    ///     Collection of settings that are used by the mod.
     /// </summary>
     public class ModSettings
     {
+        /// <summary>
+        ///     Creates settings used by the mod. If a block type is not used it remains null and will not be set.
+        /// </summary>
         public ModSettings()
         {
             var file = Path.Combine(
@@ -65,12 +68,32 @@ namespace SwitchBlocks
             }
         }
 
-        [CanBeNull] public SettingsAuto SettingsAuto { get; }
-        [CanBeNull] public SettingsBasic SettingsBasic { get; }
-        [CanBeNull] public SettingsCountdown SettingsCountdown { get; }
-        [CanBeNull] public SettingsGroup SettingsGroup { get; }
-        [CanBeNull] public SettingsJump SettingsJump { get; }
-        [CanBeNull] public SettingsSand SettingsSand { get; }
-        [CanBeNull] public SettingsSequence SettingsSequence { get; }
+        /// <summary>Settings for the auto block type.</summary>
+        [CanBeNull]
+        public SettingsAuto SettingsAuto { get; }
+
+        /// <summary>Settings for the basic block type.</summary>
+        [CanBeNull]
+        public SettingsBasic SettingsBasic { get; }
+
+        /// <summary>Settings for the countdown block type.</summary>
+        [CanBeNull]
+        public SettingsCountdown SettingsCountdown { get; }
+
+        /// <summary>Settings for the group block type.</summary>
+        [CanBeNull]
+        public SettingsGroup SettingsGroup { get; }
+
+        /// <summary>Settings for the jump block type.</summary>
+        [CanBeNull]
+        public SettingsJump SettingsJump { get; }
+
+        /// <summary>Settings for the sand block type.</summary>
+        [CanBeNull]
+        public SettingsSand SettingsSand { get; }
+
+        /// <summary>Settings for the sequence block type.</summary>
+        [CanBeNull]
+        public SettingsSequence SettingsSequence { get; }
     }
 }
