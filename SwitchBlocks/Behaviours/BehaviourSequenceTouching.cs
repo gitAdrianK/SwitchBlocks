@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -17,7 +16,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceTouching : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceTouching(bool disableOnLeaving, BitVector32 platformDirections)
+        public BehaviourSequenceTouching(bool disableOnLeaving, Direction platformDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
@@ -40,7 +39,7 @@ namespace SwitchBlocks.Behaviours
         private bool DisableOnLeaving { get; }
 
         /// <summary>Platform directions.</summary>
-        private BitVector32 PlatformDirections { get; }
+        private Direction PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;

@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -16,7 +15,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceReset(int[] defaultActive, BitVector32 leverDirections)
+        public BehaviourSequenceReset(int[] defaultActive, Direction leverDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
@@ -46,7 +45,7 @@ namespace SwitchBlocks.Behaviours
         private int[] DefaultActive { get; }
 
         /// <summary>Lever directions.</summary>
-        private BitVector32 LeverDirections { get; }
+        private Direction LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;

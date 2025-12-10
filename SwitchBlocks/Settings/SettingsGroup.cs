@@ -1,8 +1,8 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Collections.Specialized;
     using System.Xml.Linq;
     using JetBrains.Annotations;
+    using Util;
 
     public class SettingsGroup
     {
@@ -25,9 +25,9 @@ namespace SwitchBlocks.Settings
         public float Multiplier { get; private set; }
 
         /// <summary>Directions the group lever can be activated from.</summary>
-        public BitVector32 LeverDirections { get; private set; }
+        public Direction LeverDirections { get; private set; }
 
         /// <summary>Directions the group platform can be activated from.</summary>
-        public BitVector32 PlatformDirections { get; private set; }
+        public Direction PlatformDirections { get; private set; }
     }
 }

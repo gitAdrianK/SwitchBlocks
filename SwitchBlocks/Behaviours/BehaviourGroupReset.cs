@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -16,7 +15,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourGroupReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourGroupReset(BitVector32 leverDirections)
+        public BehaviourGroupReset(Direction leverDirections)
         {
             var data = DataGroup.Instance;
             this.Groups = data.Groups;
@@ -42,7 +41,7 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>Lever directions.</summary>
-        private BitVector32 LeverDirections { get; }
+        private Direction LeverDirections { get; }
 
         /// <summary>Get or set the group data's Touched.</summary>
         /// <inheritdoc />

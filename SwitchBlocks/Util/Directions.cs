@@ -1,11 +1,12 @@
 namespace SwitchBlocks.Util
 {
-    using System.Collections.Specialized;
+    using System;
     using Behaviours;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
 
     /// <summary>Directions.</summary>
+    [Flags]
     public enum Direction : byte
     {
         Up = 0b0001,
@@ -28,11 +29,11 @@ namespace SwitchBlocks.Util
         ///     <c>true</c> if the collision <see cref="Direction" /> for the <see cref="IBlock" /> type is valid,
         ///     <c>false</c> otherwise.
         /// </returns>
-        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, BitVector32 validDirections,
+        public static bool ResolveCollisionDirection(BehaviourContext behaviourContext, Direction validDirections,
             IBlock block)
         {
             // If everything is allowed we can just return out w/o doing any work.
-            if (validDirections.Data == (int)Direction.All)
+            if ((validDirections & Direction.All) != 0)
             {
                 return true;
             }
@@ -45,28 +46,28 @@ namespace SwitchBlocks.Util
             var blockRect = block.GetRect();
             if (playerRect.Bottom - blockRect.Top == 0
                 && prevVelocity.Y >= 0.0f
-                && validDirections[(int)Direction.Up])
+                && (validDirections & Direction.Up) != 0)
             {
                 return true;
             }
 
             if (blockRect.Bottom - playerRect.Top == 0
                 && prevVelocity.Y <= 0.0f
-                && validDirections[(int)Direction.Down])
+                && (validDirections & Direction.Down) != 0)
             {
                 return true;
             }
 
             if (playerRect.Right - blockRect.Left == 0
                 && prevVelocity.X >= 0.0f
-                && validDirections[(int)Direction.Left])
+                && (validDirections & Direction.Left) != 0)
             {
                 return true;
             }
 
             return blockRect.Right - playerRect.Left == 0
                    && prevVelocity.X <= 0.0f
-                   && validDirections[(int)Direction.Right];
+                   && (validDirections & Direction.Right) != 0;
         }
     }
 }

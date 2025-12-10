@@ -1,8 +1,8 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Collections.Specialized;
     using System.Xml.Linq;
     using JetBrains.Annotations;
+    using Util;
 
     public class SettingsCountdown
     {
@@ -30,7 +30,7 @@ namespace SwitchBlocks.Settings
         public float Multiplier { get; private set; }
 
         /// <summary>Directions the basic lever can be activated from.</summary>
-        public BitVector32 LeverDirections { get; private set; }
+        public Direction LeverDirections { get; private set; }
 
         /// <summary>If the countdown state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; private set; }

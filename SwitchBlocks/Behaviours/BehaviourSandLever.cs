@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Behaviours
 {
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -15,7 +14,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSandLever : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSandLever(BitVector32 leverDirections)
+        public BehaviourSandLever(Direction leverDirections)
         {
             this.Data = DataSand.Instance;
             this.LeverDirections = leverDirections;
@@ -25,7 +24,7 @@ namespace SwitchBlocks.Behaviours
         private DataSand Data { get; }
 
         /// <summary>Lever directions.</summary>
-        private BitVector32 LeverDirections { get; }
+        private Direction LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;

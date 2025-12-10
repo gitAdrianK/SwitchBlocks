@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -17,7 +16,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourGroupLeaving : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourGroupLeaving(BitVector32 platformDirections)
+        public BehaviourGroupLeaving(Direction platformDirections)
         {
             var data = DataGroup.Instance;
             this.Groups = data.Groups;
@@ -36,7 +35,7 @@ namespace SwitchBlocks.Behaviours
         private HashSet<int> Touched { get; set; }
 
         /// <summary>Platform directions.</summary>
-        private BitVector32 PlatformDirections { get; }
+        private Direction PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;

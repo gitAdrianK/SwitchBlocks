@@ -52,30 +52,30 @@ namespace SwitchBlocks.Settings
         ///     that weren't disabled.
         /// </summary>
         /// <param name="element"><see cref="XElement" />.</param>
-        /// <returns><see cref="BitVector32" /> with not disabled <see cref="Direction" />s.</returns>
-        public static BitVector32 ParseSideDisable(XElement element)
+        /// <returns><see cref="Direction" /> bit flags.</returns>
+        public static Direction ParseSideDisable(XElement element)
         {
             if (element is null)
             {
-                return new BitVector32((int)Direction.All);
+                return Direction.All;
             }
 
-            var directions = new BitVector32((int)Direction.All);
+            var directions = Direction.All;
             foreach (var split in element.Value.Split(','))
             {
                 switch (split.Trim().ToLower(CultureInfo.InvariantCulture))
                 {
                     case "up":
-                        directions[(int)Direction.Up] = false;
+                        directions &= ~Direction.Up;
                         break;
                     case "down":
-                        directions[(int)Direction.Down] = false;
+                        directions &= ~Direction.Down;
                         break;
                     case "left":
-                        directions[(int)Direction.Left] = false;
+                        directions &= ~Direction.Left;
                         break;
                     case "right":
-                        directions[(int)Direction.Right] = false;
+                        directions &= ~Direction.Right;
                         break;
                 }
             }

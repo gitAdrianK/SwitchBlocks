@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Behaviours
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -17,7 +16,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourSequenceDuration : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceDuration(int duration, BitVector32 platformDirections)
+        public BehaviourSequenceDuration(int duration, Direction platformDirections)
         {
             var data = DataSequence.Instance;
             this.Groups = data.Groups;
@@ -39,7 +38,7 @@ namespace SwitchBlocks.Behaviours
         private int Duration { get; }
 
         /// <summary>Platform directions.</summary>
-        private BitVector32 PlatformDirections { get; }
+        private Direction PlatformDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;

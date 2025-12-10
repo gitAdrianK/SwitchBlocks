@@ -1,8 +1,8 @@
 namespace SwitchBlocks.Settings
 {
-    using System.Collections.Specialized;
     using System.Xml.Linq;
     using JetBrains.Annotations;
+    using Util;
 
     public class SettingsSand
     {
@@ -24,6 +24,6 @@ namespace SwitchBlocks.Settings
         public float Multiplier { get; private set; }
 
         /// <summary>Directions the sand lever can be activated from.</summary>
-        public BitVector32 LeverDirections { get; private set; }
+        public Direction LeverDirections { get; private set; }
     }
 }

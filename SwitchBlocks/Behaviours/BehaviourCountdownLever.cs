@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Behaviours
 {
-    using System.Collections.Specialized;
     using System.Linq;
     using Blocks;
     using Data;
@@ -16,7 +15,7 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourCountdownLever : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourCountdownLever(BitVector32 leverDirections)
+        public BehaviourCountdownLever(Direction leverDirections)
         {
             this.Data = DataCountdown.Instance;
             this.LeverDirections = leverDirections;
@@ -26,7 +25,7 @@ namespace SwitchBlocks.Behaviours
         private DataCountdown Data { get; }
 
         /// <summary>Lever directions.</summary>
-        private BitVector32 LeverDirections { get; }
+        private Direction LeverDirections { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
