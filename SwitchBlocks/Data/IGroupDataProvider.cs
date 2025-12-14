@@ -22,8 +22,8 @@ namespace SwitchBlocks.Data
         HashSet<int> Active { get; }
 
         /// <summary>
-        ///     Ids considered finished, that is, the progress is in the opposite
-        ///     end-state to the state created with.
+        ///     Ids considered finished, that is, the progress is in the
+        ///     end-state opposite to the state created with.
         /// </summary>
         HashSet<int> Finished { get; }
     }

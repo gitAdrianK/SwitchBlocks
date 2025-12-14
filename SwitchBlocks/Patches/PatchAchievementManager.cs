@@ -3,12 +3,14 @@ namespace SwitchBlocks.Patches
     using HarmonyLib;
     using JumpKing.MiscSystems.Achievements;
 
+    // This is technically not a patch
+    // but a utility function, so one could argue it goes into the
+    // namespace util, but as it is making extensive use of Harmony tools
+    // putting it into the patches namespace isn't too far-fetched.
+
     /// <summary>
     ///     Adds the function GetTick, giving access to the current game-tick
-    ///     from the vanilla AchievementManager. This is technically not a patch
-    ///     but a utility function, so one could argue it goes into the
-    ///     namespace util, but as it is making extensive use of Harmony tools
-    ///     putting it into the patches namespace isn't too far-fetched.
+    ///     from the vanilla AchievementManager.
     /// </summary>
     public static class PatchAchievementManager
     {

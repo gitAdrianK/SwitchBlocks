@@ -207,6 +207,7 @@
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWindManager.cs"/>
     <Compile Include="Util\BlockGroupId.cs"/>
+    <Compile Include="Util\Buttons.cs" />
     <Compile Include="Util\Deserialization\Lever.cs"/>
     <Compile Include="Util\Deserialization\Platform.cs"/>
     <Compile Include="Util\Deserialization\PlatformSand.cs"/>

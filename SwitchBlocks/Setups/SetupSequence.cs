@@ -52,12 +52,6 @@ namespace SwitchBlocks.Setups
             var resets = ResetsSequence.TryDeserialize();
             AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets);
 
-            if (LevelDebugState.instance != null)
-            {
-                seeds.SaveToFile();
-                resets.SaveToFile();
-            }
-
             if (SaveManager.instance.IsNewGame)
             {
                 foreach (var defaultId in settings.DefaultActive)
@@ -73,6 +67,19 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicSequence(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
+
+            if (LevelDebugState.instance == null)
+            {
+                BlocksSequenceA.Clear();
+                BlocksSequenceB.Clear();
+                BlocksSequenceC.Clear();
+                BlocksSequenceD.Clear();
+            }
+            else
+            {
+                seeds.SaveToFile();
+                resets.SaveToFile();
+            }
 
             var body = player.m_body;
             _ = settings.Duration == 0

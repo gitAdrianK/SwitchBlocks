@@ -17,6 +17,9 @@ namespace SwitchBlocks.Patches
     [HarmonyPatch(typeof(BodyComp), nameof(BodyComp.IsOnBlock), typeof(Type))]
     public static class PatchBodyComp
     {
+        /// <summary>The current players <see cref="BodyComp"/></summary>
+        public static BodyComp BodyComp { get; set; }
+
         /// <summary>FieldRef of the <c>_knocked</c> field of <see cref="BodyComp" />.</summary>
         private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
             AccessTools.FieldRefAccess<BodyComp, bool>(
@@ -36,7 +39,10 @@ namespace SwitchBlocks.Patches
         {
             if (blockType == typeof(SandBlock))
             {
-                __result |= DataSand.Instance.HasEntered;
+                if (!(DataSand.Instance is null))
+                {
+                    __result |= DataSand.Instance.HasEntered;
+                }
                 __result |= BehaviourPost.IsPlayerOnSand;
                 __result |= BehaviourPost.IsPlayerOnInfinityJump;
             }
@@ -52,10 +58,9 @@ namespace SwitchBlocks.Patches
         }
 
         /// <summary>
-        ///     Sets the <c>_knocked</c> field of the given <see cref="BodyComp" />.
+        ///     Sets the <c>_knocked</c> field of the players <see cref="BodyComp" />.
         /// </summary>
-        /// <param name="body"><see cref="BodyComp" /> to apply the new value to.</param>
         /// <param name="isKnocked">New value to be assigned.</param>
-        public static void SetKnocked(BodyComp body, bool isKnocked) => KnockedRef(body) = isKnocked;
+        public static void SetKnocked(bool isKnocked) => KnockedRef(BodyComp) = isKnocked;
     }
 }
