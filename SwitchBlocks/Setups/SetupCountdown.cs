@@ -42,7 +42,11 @@ namespace SwitchBlocks.Setups
 
             var seeds = SeedsCountdown.TryDeserialize();
             AssignGroupIds(seeds.Seeds);
-            if (LevelDebugState.instance != null)
+            if (LevelDebugState.instance == null)
+            {
+                SingleUseLevers.Clear();
+            }
+            else
             {
                 seeds.SaveToFile();
             }

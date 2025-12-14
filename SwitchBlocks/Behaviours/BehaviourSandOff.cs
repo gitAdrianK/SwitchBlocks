@@ -118,7 +118,7 @@ namespace SwitchBlocks.Behaviours
                 bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
 
-            PatchBodyComp.SetKnocked(bodyComp, false);
+            PatchBodyComp.SetKnocked(false);
             Camera.UpdateCamera(hitbox.Center);
             return true;
         }

@@ -13,6 +13,7 @@ namespace SwitchBlocks
     using JumpKing.Level;
     using JumpKing.Mods;
     using JumpKing.Player;
+    using Patches;
     using Setups;
 #if DEBUG
     using System.Diagnostics;
@@ -77,6 +78,8 @@ namespace SwitchBlocks
                 return;
             }
 
+            PatchBodyComp.BodyComp = player.m_body;
+
             ModSounds.Setup(levelID);
 
             // These behaviours are used as a way to create pre- and post-behaviour points
@@ -127,16 +130,18 @@ namespace SwitchBlocks
                 return;
             }
 
+            PatchBodyComp.BodyComp = null;
+
             ModSounds.Cleanup();
 
             // IsUsed is false after Setup Cleanup.
-            SetupSequence.Cleanup();
-            SetupSand.Cleanup();
-            SetupJump.Cleanup();
-            SetupGroup.Cleanup();
-            SetupCountdown.Cleanup();
-            SetupBasic.Cleanup();
             SetupAuto.Cleanup();
+            SetupBasic.Cleanup();
+            SetupCountdown.Cleanup();
+            SetupGroup.Cleanup();
+            SetupJump.Cleanup();
+            SetupSand.Cleanup();
+            SetupSequence.Cleanup();
         }
 
         /// <summary>

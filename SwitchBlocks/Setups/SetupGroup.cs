@@ -19,6 +19,9 @@ namespace SwitchBlocks.Setups
         /// <summary>Whether the group block appears inside the hitbox file and counts as used.</summary>
         public static bool IsUsed { get; set; }
 
+        // The Dictionaries are static because the setup step is after the block factories have run.
+        // So we can't contain them to the setup step.
+
         /// <summary>Group A blocks.</summary>
         public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; } = new Dictionary<int, IBlockGroupId>();
 
@@ -54,14 +57,22 @@ namespace SwitchBlocks.Setups
             var resets = ResetsGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
 
-            if (LevelDebugState.instance != null)
+            var entityLogic = new EntityLogicGroup(settings);
+            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
+
+            if (LevelDebugState.instance is null)
+            {
+                BlocksGroupA.Clear();
+                BlocksGroupB.Clear();
+                BlocksGroupC.Clear();
+                BlocksGroupD.Clear();
+                Resets.Clear();
+            }
+            else
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();
             }
-
-            var entityLogic = new EntityLogicGroup(settings);
-            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
             var body = player.m_body;
             _ = settings.Duration == 0
