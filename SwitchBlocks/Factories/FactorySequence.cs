@@ -31,7 +31,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.SequenceSnowC,
             ModBlocks.SequenceSnowD,
             ModBlocks.SequenceReset,
-            ModBlocks.SequenceResetSolid
+            ModBlocks.SequenceResetSolid,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

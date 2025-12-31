@@ -91,7 +91,7 @@ namespace SwitchBlocks.Data
                             root.Element(ModConstants.SaveFinished)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
-                            ?? Enumerable.Empty<int>())
+                            ?? Enumerable.Empty<int>()),
                     };
                 }
 
@@ -136,7 +136,7 @@ namespace SwitchBlocks.Data
                         ActivatedTick =
                             int.TryParse(value.Element(ModConstants.SaveActivated)?.Value, out var result2)
                                 ? result2
-                                : 0
+                                : 0,
                     });
             }
             catch
@@ -168,7 +168,7 @@ namespace SwitchBlocks.Data
                         ActivatedTick = int.Parse(value.Element("value")
                             ?.Element("BlockGroup")
                             ?.Element("ActivatedTick")
-                            ?.Value ?? throw new InvalidOperationException())
+                            ?.Value ?? throw new InvalidOperationException()),
                     });
             }
             catch (NullReferenceException)

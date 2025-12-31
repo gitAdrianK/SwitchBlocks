@@ -28,7 +28,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoWaterOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
-            ModBlocks.AutoWindEnable
+            ModBlocks.AutoWindEnable,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

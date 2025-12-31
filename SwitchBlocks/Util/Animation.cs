@@ -7,7 +7,7 @@ namespace SwitchBlocks.Util
         Top,
         Bottom,
         Left,
-        Right
+        Right,
     }
 
     /// <summary><see cref="Animation" /> curves.</summary>
@@ -17,7 +17,7 @@ namespace SwitchBlocks.Util
         EaseIn,
         EaseOut,
         EaseInOut,
-        Stepped
+        Stepped,
     }
 
     /// <summary>An animation with an <see cref="Style" /> and <see cref="Curve" />.</summary>

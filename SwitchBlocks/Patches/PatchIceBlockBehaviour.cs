@@ -14,7 +14,7 @@ namespace SwitchBlocks.Patches
     public static class PatchIceBlockBehaviour
     {
         /// <summary>
-        /// Logical ORs the result with the bool <see cref="BehaviourPost.IsPlayerOnIce"/>.
+        ///     Logical ORs the result with the bool <see cref="BehaviourPost.IsPlayerOnIce" />.
         /// </summary>
         /// <param name="__result">The original methods result.</param>
         [UsedImplicitly]

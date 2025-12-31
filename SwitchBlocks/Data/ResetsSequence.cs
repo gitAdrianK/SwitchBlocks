@@ -52,7 +52,7 @@ namespace SwitchBlocks.Data
                             key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result)
                                 ? result
                                 : 0,
-                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())
+                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray()),
                     };
                 }
             }

@@ -14,7 +14,7 @@ namespace SwitchBlocks.Patches
     public static class PatchWaterBlockBehaviour
     {
         /// <summary>
-        /// Logical ORs the result with the bool <see cref="BehaviourPost.IsPlayerOnWater"/>.
+        ///     Logical ORs the result with the bool <see cref="BehaviourPost.IsPlayerOnWater" />.
         /// </summary>
         /// <param name="__result">The original methods result.</param>
         [UsedImplicitly]

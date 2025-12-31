@@ -17,13 +17,13 @@ namespace SwitchBlocks.Patches
     [HarmonyPatch(typeof(BodyComp), nameof(BodyComp.IsOnBlock), typeof(Type))]
     public static class PatchBodyComp
     {
-        /// <summary>The current players <see cref="BodyComp"/></summary>
-        public static BodyComp BodyComp { get; set; }
-
         /// <summary>FieldRef of the <c>_knocked</c> field of <see cref="BodyComp" />.</summary>
         private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
             AccessTools.FieldRefAccess<BodyComp, bool>(
                 AccessTools.Field("JumpKing.Player.BodyComp:_knocked"));
+
+        /// <summary>The current players <see cref="BodyComp" /></summary>
+        public static BodyComp BodyComp { get; set; }
 
         /// <summary>
         ///     Patches the IsOnBlock method of the <see cref="BodyComp" />, adds the custom blocks from this mod to also return
@@ -43,6 +43,7 @@ namespace SwitchBlocks.Patches
                 {
                     __result |= DataSand.Instance.HasEntered;
                 }
+
                 __result |= BehaviourPost.IsPlayerOnSand;
                 __result |= BehaviourPost.IsPlayerOnInfinityJump;
             }

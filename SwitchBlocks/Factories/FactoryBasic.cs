@@ -36,7 +36,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicLeverSolid,
             ModBlocks.BasicLeverSolidOn,
             ModBlocks.BasicLeverSolidOff,
-            ModBlocks.BasicWindEnable
+            ModBlocks.BasicWindEnable,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

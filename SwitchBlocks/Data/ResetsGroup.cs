@@ -69,7 +69,7 @@ namespace SwitchBlocks.Data
         {
             Resets = xels.ToDictionary(
                 key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result) ? result : 0,
-                value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())
+                value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray()),
         };
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace SwitchBlocks.Data
                 key => int.TryParse(key.Element("key")?.Element("int")?.Value, out var result) ? result : 0,
                 value => value.Element("value")?.Element("ArrayOfInt")?.Elements("int")
                     .Select(id => int.Parse(id.Value))
-                    .ToArray())
+                    .ToArray()),
         };
 
         /// <summary>

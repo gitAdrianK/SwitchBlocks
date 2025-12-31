@@ -24,7 +24,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.SandLeverOff,
             ModBlocks.SandLeverSolid,
             ModBlocks.SandLeverSolidOn,
-            ModBlocks.SandLeverSolidOff
+            ModBlocks.SandLeverSolidOff,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

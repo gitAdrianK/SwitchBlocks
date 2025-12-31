@@ -94,7 +94,7 @@ namespace SwitchBlocks.Data
                             root.Element(ModConstants.SaveTouched)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
-                            ?? Enumerable.Empty<int>())
+                            ?? Enumerable.Empty<int>()),
                     };
                 }
 

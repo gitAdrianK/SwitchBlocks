@@ -5,6 +5,6 @@
     {
         On,
         Off,
-        Always
+        Always,
     }
 }

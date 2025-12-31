@@ -53,7 +53,7 @@ namespace SwitchBlocks.Data
                         key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                          throw new InvalidOperationException()),
                         value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
-                                           throw new InvalidOperationException()))
+                                           throw new InvalidOperationException())),
                 };
             }
         }

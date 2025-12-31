@@ -64,7 +64,7 @@ namespace SwitchBlocks.Behaviours
                 advCollisionInfo.GetCollidedBlocks<BlockSequenceIceA>(),
                 advCollisionInfo.GetCollidedBlocks<BlockSequenceIceB>(),
                 advCollisionInfo.GetCollidedBlocks<BlockSequenceIceC>(),
-                advCollisionInfo.GetCollidedBlocks<BlockSequenceIceD>()
+                advCollisionInfo.GetCollidedBlocks<BlockSequenceIceD>(),
             }.SelectMany(block => block);
             var blocks = collided.Cast<IBlockGroupId>();
 

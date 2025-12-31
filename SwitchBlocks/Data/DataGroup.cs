@@ -102,7 +102,7 @@ namespace SwitchBlocks.Data
                             root.Element(ModConstants.SaveFinished)?
                                 .Elements(ModConstants.SaveId)
                                 .Select(id => int.Parse(id.Value))
-                            ?? Enumerable.Empty<int>())
+                            ?? Enumerable.Empty<int>()),
                     };
                 }
 
@@ -150,7 +150,7 @@ namespace SwitchBlocks.Data
                             value.Element(ModConstants.SaveProgress)?.Value ?? throw new InvalidOperationException(),
                             CultureInfo.InvariantCulture),
                         ActivatedTick = int.Parse(value.Element(ModConstants.SaveActivated)?.Value ??
-                                                  throw new InvalidOperationException())
+                                                  throw new InvalidOperationException()),
                     });
             }
             catch
@@ -183,7 +183,7 @@ namespace SwitchBlocks.Data
                         ActivatedTick = int.Parse(value.Element("value")
                             ?.Element("BlockGroup")
                             ?.Element("ActivatedTick")
-                            ?.Value ?? throw new InvalidOperationException())
+                            ?.Value ?? throw new InvalidOperationException()),
                     });
             }
             catch

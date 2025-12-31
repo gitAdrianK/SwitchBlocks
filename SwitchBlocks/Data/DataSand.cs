@@ -67,7 +67,7 @@ namespace SwitchBlocks.Data
                             boolResult,
                         HasEntered =
                             bool.TryParse(root.Element(ModConstants.SaveHasEntered)?.Value, out boolResult) &&
-                            boolResult
+                            boolResult,
                     };
                 }
 

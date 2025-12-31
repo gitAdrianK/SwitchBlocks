@@ -13,7 +13,7 @@ namespace SwitchBlocks.Util
         Down = 0b0010,
         Left = 0b0100,
         Right = 0b1000,
-        All = 0b1111
+        All = 0b1111,
     }
 
     /// <summary>Contains a way to determine the <see cref="Direction" /> a collision has happened from.</summary>

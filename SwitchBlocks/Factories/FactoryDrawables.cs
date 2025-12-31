@@ -28,14 +28,14 @@ namespace SwitchBlocks.Factories
             Basic,
             Countdown,
             Jump,
-            Sand
+            Sand,
         }
 
         /// <summary>Draw types.</summary>
         public enum DrawType
         {
             Platforms,
-            Levers
+            Levers,
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace SwitchBlocks.Factories
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
                         };
                         // Platform
                         var platform = new Platform
@@ -199,7 +199,7 @@ namespace SwitchBlocks.Factories
                                         platformElement.Element("Animation")?.Element("Style")?.Value, true,
                                         out var style)
                                         ? style
-                                        : Style.Fade
+                                        : Style.Fade,
                             },
                             AnimationOut = new Animation
                             {
@@ -213,10 +213,10 @@ namespace SwitchBlocks.Factories
                                     platformElement.Element("AnimationOut")?.Element("Style")?.Value, true,
                                     out var style2)
                                     ? style2
-                                    : style
+                                    : style,
                             },
                             IsForeground = !(platformElement.Element("IsForeground") is null),
-                            Sprites = null
+                            Sprites = null,
                         };
                         // Sprites
                         if ((xel = platformElement.Element("Sprites")) != null)
@@ -232,7 +232,7 @@ namespace SwitchBlocks.Factories
                                     Y =
                                         int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt)
                                             ? parsedInt
-                                            : 1
+                                            : 1,
                                 },
                                 Fps =
                                     float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float,
@@ -250,7 +250,7 @@ namespace SwitchBlocks.Factories
                                     parsedBool,
                                 IgnoreState =
                                     bool.TryParse(xel.Element("IgnoreState")?.Value, out parsedBool) &&
-                                    parsedBool
+                                    parsedBool,
                             };
                             _ = platform.Sprites.ResetWithLever
                                 ? new EntityDrawPlatformReset(platform, screen, data)
@@ -369,7 +369,7 @@ namespace SwitchBlocks.Factories
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
                         };
                         // Platform
                         var platform = new PlatformSand
@@ -383,7 +383,7 @@ namespace SwitchBlocks.Factories
                                 out var startState)
                                 ? startState
                                 : StartState.On,
-                            IsForeground = !(platformElement.Element("IsForeground") is null)
+                            IsForeground = !(platformElement.Element("IsForeground") is null),
                         };
                         _ = new EntityDrawPlatformSand(platform, screen, data);
                         entityLogic.AddScreen(screen);
@@ -462,14 +462,14 @@ namespace SwitchBlocks.Factories
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
                         };
                         // Lever
                         var lever = new Lever
                         {
                             Texture = texture,
                             Position = position,
-                            IsForeground = !(leverElement.Element("IsForeground") is null)
+                            IsForeground = !(leverElement.Element("IsForeground") is null),
                         };
                         _ = new EntityDrawLever(lever, screen, data);
                     }

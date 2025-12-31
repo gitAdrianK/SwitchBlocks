@@ -67,7 +67,7 @@ namespace SwitchBlocks.Data
             Seeds = xels.ToDictionary(
                 key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                  throw new InvalidOperationException()),
-                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException()))
+                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException())),
         };
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace SwitchBlocks.Data
             Seeds = xels.ToDictionary(
                 key => int.Parse(key.Element("key")?.Element("int")?.Value ?? throw new InvalidOperationException()),
                 value => int.Parse(value.Element("value")?.Element("int")?.Value ??
-                                   throw new InvalidOperationException()))
+                                   throw new InvalidOperationException())),
         };
 
         /// <summary>

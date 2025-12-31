@@ -28,7 +28,7 @@ namespace SwitchBlocks.Factories
         public enum BlockType
         {
             Group,
-            Sequence
+            Sequence,
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace SwitchBlocks.Factories
                         var position = new Vector2
                         {
                             X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture)
+                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
                         };
                         // Platform
                         var platform = new Platform
@@ -166,7 +166,7 @@ namespace SwitchBlocks.Factories
                                         platformElement.Element("Animation")?.Element("Style")?.Value, true,
                                         out var style)
                                         ? style
-                                        : Style.Fade
+                                        : Style.Fade,
                             },
                             AnimationOut = new Animation
                             {
@@ -180,10 +180,10 @@ namespace SwitchBlocks.Factories
                                     platformElement.Element("AnimationOut")?.Element("Style")?.Value, true,
                                     out var style2)
                                     ? style2
-                                    : style
+                                    : style,
                             },
                             IsForeground = !(platformElement.Element("IsForeground") is null),
-                            Sprites = null
+                            Sprites = null,
                         };
                         // Sprites
                         if ((xel = platformElement.Element("Sprites")) != null)
@@ -198,7 +198,7 @@ namespace SwitchBlocks.Factories
                                         : 1,
                                     Y = int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt)
                                         ? parsedInt
-                                        : 1
+                                        : 1,
                                 },
                                 Fps =
                                     float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float,
@@ -216,7 +216,7 @@ namespace SwitchBlocks.Factories
                                     parsedBool,
                                 IgnoreState =
                                     bool.TryParse(xel.Element("IgnoreState")?.Value, out parsedBool) &&
-                                    parsedBool
+                                    parsedBool,
                             };
                         }
 

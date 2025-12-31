@@ -84,7 +84,7 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>
-        ///     Parses a comma seperated list to an array of integers.
+        ///     Parses a comma separated list to an array of integers.
         ///     If the element doesn't exist an array with the only entry being 1 is returned.
         /// </summary>
         /// <param name="element"><see cref="XElement" />.</param>

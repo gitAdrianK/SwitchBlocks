@@ -25,7 +25,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpWaterOff,
             ModBlocks.JumpInfinityJumpOn,
             ModBlocks.JumpInfinityJumpOff,
-            ModBlocks.JumpWindEnable
+            ModBlocks.JumpWindEnable,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

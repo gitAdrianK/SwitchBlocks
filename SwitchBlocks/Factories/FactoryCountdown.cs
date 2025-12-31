@@ -30,7 +30,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUse,
             ModBlocks.CountdownSingleUseSolid,
-            ModBlocks.CountdownWindEnable
+            ModBlocks.CountdownWindEnable,
         };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

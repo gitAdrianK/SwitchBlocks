@@ -81,7 +81,7 @@ namespace SwitchBlocks.Data
                                 : 0,
                         ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out intResult)
                             ? intResult
-                            : 0
+                            : 0,
                     };
                 }
 

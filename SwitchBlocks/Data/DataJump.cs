@@ -77,7 +77,7 @@ namespace SwitchBlocks.Data
                         Tick =
                             int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
                                 ? intResult
-                                : 0
+                                : 0,
                     };
                 }
 
