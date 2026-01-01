@@ -60,7 +60,7 @@ namespace SwitchBlocks.Setups
             var entityLogic = new EntityLogicGroup(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
-            if (LevelDebugState.instance is null)
+            if (LevelDebugState.instance == null)
             {
                 BlocksGroupA.Clear();
                 BlocksGroupB.Clear();

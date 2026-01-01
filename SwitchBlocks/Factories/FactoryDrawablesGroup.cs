@@ -113,7 +113,7 @@ namespace SwitchBlocks.Factories
                     {
                         // Texture
                         XElement xel;
-                        if ((xel = platformElement.Element("Texture")) is null)
+                        if ((xel = platformElement.Element("Texture")) == null)
                         {
                             continue;
                         }
@@ -126,14 +126,14 @@ namespace SwitchBlocks.Factories
 
                         var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
                         // Position
-                        if ((xel = platformElement.Element("Position")) is null)
+                        if ((xel = platformElement.Element("Position")) == null)
                         {
                             continue;
                         }
 
                         var x = xel.Element("X");
                         var y = xel.Element("Y");
-                        if (x is null || y is null)
+                        if (x == null || y == null)
                         {
                             continue;
                         }
@@ -182,7 +182,7 @@ namespace SwitchBlocks.Factories
                                     ? style2
                                     : style,
                             },
-                            IsForeground = !(platformElement.Element("IsForeground") is null),
+                            IsForeground = !(platformElement.Element("IsForeground") == null),
                             Sprites = null,
                         };
                         // Sprites
@@ -259,7 +259,7 @@ namespace SwitchBlocks.Factories
                         }
 
                         // Entity
-                        _ = platform.Sprites is null
+                        _ = platform.Sprites == null
                             ? new EntityDrawPlatform(platform, screen, group)
                             : new EntityDrawPlatformLoop(platform, screen, group);
 

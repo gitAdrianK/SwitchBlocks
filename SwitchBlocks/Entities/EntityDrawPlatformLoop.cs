@@ -45,7 +45,7 @@ namespace SwitchBlocks.Entities
 
             this.Rects = rects;
             this.TimeStep = (int)((1.0f / sprites.Fps / ModConstants.DeltaTime) + 0.5f);
-            if (sprites.Frames is null)
+            if (sprites.Frames == null)
             {
                 this.Frames = new int[this.Rects.Length];
                 for (var i = 0; i < this.Frames.Length; i++)

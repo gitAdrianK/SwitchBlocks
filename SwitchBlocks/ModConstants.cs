@@ -98,6 +98,9 @@ namespace SwitchBlocks
         /// <summary>Id name inside .sav files.</summary>
         public const string SaveId = "_id";
 
+        /// <summary>Cooldown name inside .sav files.</summary>
+        public const string SaveCooldown = "_cooldownTick";
+
         /// <summary>Auto folder name.</summary>
         public const string Auto = "auto";
 

@@ -65,17 +65,17 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
-            if (!(this.Auto is null))
+            if (!(this.Auto == null))
             {
                 this.Auto.CanSwitchSafely = true;
             }
 
-            if (!(this.Countdown is null))
+            if (!(this.Countdown == null))
             {
                 this.Countdown.CanSwitchSafely = true;
             }
 
-            if (!(this.Jump is null))
+            if (!(this.Jump == null))
             {
                 this.Jump.CanSwitchSafely = true;
             }

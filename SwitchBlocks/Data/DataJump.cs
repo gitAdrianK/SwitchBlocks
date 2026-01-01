@@ -54,7 +54,7 @@ namespace SwitchBlocks.Data
                 {
                     var doc = XDocument.Load(fs);
                     var root = doc.Root;
-                    if (root is null)
+                    if (root == null)
                     {
                         instance = new DataJump();
                         return instance;
@@ -78,6 +78,10 @@ namespace SwitchBlocks.Data
                             int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
                                 ? intResult
                                 : 0,
+                        CooldownTick =
+                            int.TryParse(root.Element(ModConstants.SaveCooldown)?.Value, out intResult)
+                                ? intResult
+                                : 0,
                     };
                 }
 
@@ -87,6 +91,9 @@ namespace SwitchBlocks.Data
 
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
+
+        /// <summary>The tick the switch in the air happened.</summary>
+        public int CooldownTick { get; set; }
 
         /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
@@ -125,7 +132,8 @@ namespace SwitchBlocks.Data
                     new XElement(ModConstants.SaveProgress, this.Progress),
                     new XElement(ModConstants.SaveCss, this.CanSwitchSafely),
                     new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
-                    new XElement(ModConstants.SaveActivated, this.Tick)
+                    new XElement(ModConstants.SaveActivated, this.Tick),
+                    new XElement(ModConstants.SaveCooldown, this.CooldownTick)
                 )
             );
 

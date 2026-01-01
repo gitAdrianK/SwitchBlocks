@@ -55,7 +55,7 @@ namespace SwitchBlocks.Settings
         /// <returns><see cref="Direction" /> bit flags.</returns>
         public static Direction ParseSideDisable(XElement element)
         {
-            if (element is null)
+            if (element == null)
             {
                 return Direction.All;
             }
