@@ -13,6 +13,7 @@ namespace SwitchBlocks.Settings
         {
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.ForceSwitch = element?.Element("ForceStateSwitch") != null;
+            this.CanJumpInAir = element?.Element("CanJumpInAir") != null;
         }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the jump block type.</summary>
@@ -20,5 +21,8 @@ namespace SwitchBlocks.Settings
 
         /// <summary>If the jump state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; private set; }
+
+        /// <summary>If by pressing the jump button when in air another switch can trigger.</summary>
+        public bool CanJumpInAir { get; private set; }
     }
 }

@@ -38,7 +38,7 @@ namespace SwitchBlocks.Setups
 
             _ = DataJump.Instance;
 
-            EntityLogic = new EntityLogicJump(settings);
+            EntityLogic = new EntityLogicJump(settings, player);
             FactoryDrawables.CreateDrawables(
                 FactoryDrawables.DrawType.Platforms,
                 FactoryDrawables.BlockType.Jump,
