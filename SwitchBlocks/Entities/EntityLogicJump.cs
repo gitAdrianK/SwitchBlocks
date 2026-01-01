@@ -11,33 +11,44 @@ namespace SwitchBlocks.Entities
     /// </summary>
     public class EntityLogicJump : EntityLogic<DataJump>
     {
+        /// <summary>
+        ///     Ctor.
+        /// </summary>
+        public EntityLogicJump(SettingsJump settings, PlayerEntity player) : base(DataJump.Instance,
+            settings.Multiplier)
+        {
+            this.CanJumpInAir = settings.CanJumpInAir;
+            this.Cooldown = settings.Cooldown;
+            this.Body = player.m_body;
+        }
+
         /// <summary>If the player can trigger another switch in air.</summary>
         private bool CanJumpInAir { get; }
+
+        /// <summary>The amount of frames that have to pass before a switch can happen again, when in air.</summary>
+        private int Cooldown { get; }
+
+        /// <summary>The amount of frames the jump in air is on cooldown for.</summary>
+        private int CurrentCooldown { get; set; }
 
         /// <summary>The players body comp.</summary>
         private BodyComp Body { get; }
 
         /// <summary>
-        ///     Ctor.
-        /// </summary>
-        public EntityLogicJump(SettingsJump settings, PlayerEntity player) : base(DataJump.Instance, settings.Multiplier)
-        {
-            this.CanJumpInAir = settings.CanJumpInAir;
-            this.Body = player.m_body;
-        }
-
-        /// <summary>
         ///     Updates progress and tries to switch state.
         /// </summary>
-        /// <param name="deltaTime"></param>
+        /// <param name="deltaTime">deltaTime.</param>
         protected override void Update(float deltaTime)
         {
-            if (this.CanJumpInAir && !this.Body.IsOnGround)
+            this.CurrentCooldown--;
+
+            if (this.CanJumpInAir && !this.Body.IsOnGround && this.CurrentCooldown <= 0)
             {
                 var padState = ControllerManager.instance.GetPressedPadState();
                 if (padState.jump)
                 {
                     this.Data.SwitchOnceSafe = true;
+                    this.CurrentCooldown = this.Cooldown;
                 }
             }
 

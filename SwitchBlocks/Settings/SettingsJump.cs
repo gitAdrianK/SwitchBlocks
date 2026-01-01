@@ -14,6 +14,7 @@ namespace SwitchBlocks.Settings
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.ForceSwitch = element?.Element("ForceStateSwitch") != null;
             this.CanJumpInAir = element?.Element("CanJumpInAir") != null;
+            this.Cooldown = ParseSettings.ParseCount(element?.Element("Cooldown"), 0);
         }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the jump block type.</summary>
@@ -24,5 +25,8 @@ namespace SwitchBlocks.Settings
 
         /// <summary>If by pressing the jump button when in air another switch can trigger.</summary>
         public bool CanJumpInAir { get; private set; }
+
+        /// <summary>The amount of frames that have to pass before the player can switch in air again.</summary>
+        public int Cooldown { get; private set; }
     }
 }
