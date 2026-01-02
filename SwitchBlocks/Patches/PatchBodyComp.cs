@@ -39,7 +39,7 @@ namespace SwitchBlocks.Patches
         {
             if (blockType == typeof(SandBlock))
             {
-                if (!(DataSand.Instance == null))
+                if (DataSand.Instance != null)
                 {
                     __result |= DataSand.Instance.HasEntered;
                 }
