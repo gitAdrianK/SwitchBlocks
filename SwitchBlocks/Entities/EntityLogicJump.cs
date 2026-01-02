@@ -38,7 +38,7 @@ namespace SwitchBlocks.Entities
         protected override void Update(float deltaTime)
         {
             var currentTick = PatchAchievementManager.GetTick();
-            if (this.CanJumpInAir && !this.Body.IsOnGround && currentTick <= this.Data.CooldownTick + this.Cooldown)
+            if (this.CanJumpInAir && !this.Body.IsOnGround && currentTick >= this.Data.CooldownTick + this.Cooldown)
             {
                 var padState = ControllerManager.instance.GetPressedPadState();
                 if (padState.jump)
