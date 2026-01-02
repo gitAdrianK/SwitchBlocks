@@ -57,22 +57,14 @@ namespace SwitchBlocks.Setups
             var resets = ResetsGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
 
-            var entityLogic = new EntityLogicGroup(settings);
-            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
-
-            if (LevelDebugState.instance == null)
-            {
-                BlocksGroupA.Clear();
-                BlocksGroupB.Clear();
-                BlocksGroupC.Clear();
-                BlocksGroupD.Clear();
-                Resets.Clear();
-            }
-            else
+            if (LevelDebugState.instance != null)
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();
             }
+
+            var entityLogic = new EntityLogicGroup(settings);
+            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
             var body = player.m_body;
             _ = settings.Duration == 0
