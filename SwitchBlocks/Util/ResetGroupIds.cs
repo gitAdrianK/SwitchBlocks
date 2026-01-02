@@ -58,7 +58,7 @@ namespace SwitchBlocks.Util
 
             var toVisit = new Queue<int>();
             toVisit.Enqueue(startPosition);
-            while (toVisit.Count() != 0)
+            while (toVisit.Count != 0)
             {
                 var currentPos = toVisit.Dequeue();
                 blocks[currentPos].ResetIDs = resetIds;

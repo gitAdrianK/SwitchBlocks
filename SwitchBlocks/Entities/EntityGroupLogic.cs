@@ -33,10 +33,10 @@ namespace SwitchBlocks.Entities
         /// <summary>Cached mappings of <see cref="BlockGroup" />s to their id.</summary>
         protected Dictionary<int, BlockGroup> Groups { get; }
 
-        /// <summary>Cached IDs considered active./// </summary>
+        /// <summary>Cached IDs considered active.</summary>
         protected HashSet<int> Active { get; }
 
-        /// <summary>Cached IDs considered finished./// </summary>
+        /// <summary>Cached IDs considered finished.</summary>
         protected HashSet<int> Finished { get; }
 
         /// <summary>Multiplier.</summary>
