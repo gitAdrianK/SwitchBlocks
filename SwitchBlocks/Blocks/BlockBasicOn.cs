@@ -12,7 +12,7 @@ namespace SwitchBlocks.Blocks
         public BlockBasicOn(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BasicOn : Color.Transparent;
+        public override Color DebugColor => DataBasic.Instance.State ? ModBlocks.BasicOn : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => DataBasic.Instance.State;

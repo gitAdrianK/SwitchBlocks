@@ -8,6 +8,25 @@ namespace SwitchBlocks
     /// </summary>
     public static class ModBlocks
     {
+        /*
+            Colour patters are:
+
+            1_ = Auto
+            2_ = Basic
+            3_ = Countdown
+            4_ = Sand
+            5_ = Group
+            6_ = Sequence
+            7_ = Jump (possesses a legacy variant)
+
+            R: 238, G: 124, B:   _ = On
+            R: 238, G: 125, B:   _ = On, from other mod
+            R:   _, G: 124, B: 238 = Off
+            R:   _, G: 125, B: 238 = Off, from other mod
+            R: 238, G:   _, B: 124 = Levers/Other
+        */
+
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoOn" />.</summary>
         public static readonly Color AutoOn = new Color(238, 124, 10);
 
@@ -186,37 +205,70 @@ namespace SwitchBlocks
         public static readonly Color GroupResetSolid = new Color(238, 54, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOn" />.</summary>
-        public static readonly Color JumpOn = new Color(31, 31, 31);
+        public static readonly Color JumpOn = new Color(238, 124, 70);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOff" />.</summary>
-        public static readonly Color JumpOff = new Color(95, 95, 95);
+        public static readonly Color JumpOff = new Color(70, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpIceOn" />.</summary>
-        public static readonly Color JumpIceOn = new Color(31, 32, 31);
+        public static readonly Color JumpIceOn = new Color(238, 124, 71);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpIceOff" />.</summary>
-        public static readonly Color JumpIceOff = new Color(95, 96, 95);
+        public static readonly Color JumpIceOff = new Color(71, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSnowOn" />.</summary>
-        public static readonly Color JumpSnowOn = new Color(31, 33, 31);
+        public static readonly Color JumpSnowOn = new Color(238, 124, 72);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSnowOff" />.</summary>
-        public static readonly Color JumpSnowOff = new Color(95, 97, 95);
+        public static readonly Color JumpSnowOff = new Color(72, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpWaterOn" />.</summary>
-        public static readonly Color JumpWaterOn = new Color(31, 34, 31);
+        public static readonly Color JumpWaterOn = new Color(238, 124, 73);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpWaterOff" />.</summary>
-        public static readonly Color JumpWaterOff = new Color(95, 98, 95);
+        public static readonly Color JumpWaterOff = new Color(73, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOn" />.</summary>
-        public static readonly Color JumpInfinityJumpOn = new Color(32, 31, 31);
+        public static readonly Color JumpInfinityJumpOn = new Color(238, 125, 71);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOff" />.</summary>
-        public static readonly Color JumpInfinityJumpOff = new Color(96, 95, 95);
+        public static readonly Color JumpInfinityJumpOff = new Color(71, 125, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
-        public static readonly Color JumpWindEnable = new Color(95, 95, 96);
+        public static readonly Color JumpWindEnable = new Color(238, 77, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOn" />.</summary>
+        public static readonly Color JumpOnLegacy = new Color(31, 31, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOff" />.</summary>
+        public static readonly Color JumpOffLegacy = new Color(95, 95, 95);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpIceOn" />.</summary>
+        public static readonly Color JumpIceOnLegacy = new Color(31, 32, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpIceOff" />.</summary>
+        public static readonly Color JumpIceOffLegacy = new Color(95, 96, 95);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSnowOn" />.</summary>
+        public static readonly Color JumpSnowOnLegacy = new Color(31, 33, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSnowOff" />.</summary>
+        public static readonly Color JumpSnowOffLegacy = new Color(95, 97, 95);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpWaterOn" />.</summary>
+        public static readonly Color JumpWaterOnLegacy = new Color(31, 34, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpWaterOff" />.</summary>
+        public static readonly Color JumpWaterOffLegacy = new Color(95, 98, 95);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOn" />.</summary>
+        public static readonly Color JumpInfinityJumpOnLegacy = new Color(32, 31, 31);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOff" />.</summary>
+        public static readonly Color JumpInfinityJumpOffLegacy = new Color(96, 95, 95);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
+        public static readonly Color JumpWindEnableLegacy = new Color(95, 95, 96);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockSandOn" />.</summary>
         public static readonly Color SandOn = new Color(238, 124, 40);

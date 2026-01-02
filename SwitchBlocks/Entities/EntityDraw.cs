@@ -1,8 +1,11 @@
 namespace SwitchBlocks.Entities
 {
     using EntityComponent;
+    using JumpKing;
+    using JumpKing.Level;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
+    using Patches;
 
     /// <summary>
     ///     Abstract class other drawing entities inherit from.
@@ -43,5 +46,12 @@ namespace SwitchBlocks.Entities
 
         /// <summary>Does the entity remain in front of the player.</summary>
         public bool IsForeground { get; }
+
+        /// <summary>
+        ///     If the draw call should be cancelled because of various reasons that prevent the entity from drawing.
+        /// </summary>
+        /// <returns><c>true</c> if the draw should be cancelled, <c>false</c> otherwise.</returns>
+        protected bool DrawGuard() => Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished ||
+                                      LevelScreen.DrawDebug;
     }
 }

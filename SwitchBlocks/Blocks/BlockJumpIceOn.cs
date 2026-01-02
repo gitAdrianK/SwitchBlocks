@@ -12,7 +12,7 @@ namespace SwitchBlocks.Blocks
         public BlockJumpIceOn(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => DataJump.Instance.State ? ModBlocks.JumpIceOn : Color.Transparent;
+        public override Color DebugColor => DataJump.Instance.State ? ModBlocks.JumpIceOn : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => DataJump.Instance.State;

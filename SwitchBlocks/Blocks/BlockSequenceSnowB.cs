@@ -23,7 +23,7 @@ namespace SwitchBlocks.Blocks
                     return ModBlocks.SequenceSnowB;
                 }
 
-                return Color.Transparent;
+                return Color.DimGray;
             }
         }
 

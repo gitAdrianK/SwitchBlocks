@@ -23,7 +23,7 @@ namespace SwitchBlocks.Blocks
                     return ModBlocks.GroupD;
                 }
 
-                return Color.Transparent;
+                return Color.DimGray;
             }
         }
 

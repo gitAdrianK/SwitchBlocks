@@ -12,7 +12,7 @@ namespace SwitchBlocks.Blocks
         public BlockCountdownOn(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => DataCountdown.Instance.State ? ModBlocks.CountdownOn : Color.Transparent;
+        public override Color DebugColor => DataCountdown.Instance.State ? ModBlocks.CountdownOn : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => DataCountdown.Instance.State;

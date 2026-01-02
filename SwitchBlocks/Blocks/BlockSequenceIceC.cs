@@ -23,7 +23,7 @@ namespace SwitchBlocks.Blocks
                     return ModBlocks.SequenceIceC;
                 }
 
-                return Color.Transparent;
+                return Color.DimGray;
             }
         }
 

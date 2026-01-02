@@ -12,7 +12,7 @@ namespace SwitchBlocks.Blocks
         public BlockAutoIceOn(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => DataAuto.Instance.State ? ModBlocks.AutoIceOn : Color.Transparent;
+        public override Color DebugColor => DataAuto.Instance.State ? ModBlocks.AutoIceOn : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => DataAuto.Instance.State;

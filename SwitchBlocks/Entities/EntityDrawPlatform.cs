@@ -5,7 +5,6 @@ namespace SwitchBlocks.Entities
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Patches;
     using Util;
     using Util.Deserialization;
     using Curve = Util.Curve;
@@ -50,15 +49,7 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
         /// </summary>
-        public override void Draw()
-        {
-            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
-            {
-                return;
-            }
-
-            this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
-        }
+        public override void Draw() => this.DrawWithRectangle(new Rectangle(0, 0, this.Width, this.Height));
 
         /// <summary>
         ///     Draws the entity with a given rectangle to limit the <see cref="Texture2D" /> to.
@@ -67,6 +58,11 @@ namespace SwitchBlocks.Entities
         /// <exception cref="NotImplementedException">This should never happen.</exception>
         protected void DrawWithRectangle(Rectangle rect)
         {
+            if (this.DrawGuard())
+            {
+                return;
+            }
+
             if (this.StartState == StartState.Always)
             {
                 Game1.spriteBatch.Draw(

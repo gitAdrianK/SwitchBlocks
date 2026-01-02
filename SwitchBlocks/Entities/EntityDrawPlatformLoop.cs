@@ -150,14 +150,6 @@ namespace SwitchBlocks.Entities
         ///     <inheritdoc />
         ///     Draws only the part of the texture given by the index.
         /// </summary>
-        public override void Draw()
-        {
-            if (Camera.CurrentScreen != this.Screen || PatchEndingManager.HasFinished)
-            {
-                return;
-            }
-
-            this.DrawWithRectangle(this.Rects[this.Index]);
-        }
+        public override void Draw() => this.DrawWithRectangle(this.Rects[this.Index]);
     }
 }

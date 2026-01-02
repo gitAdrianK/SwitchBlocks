@@ -13,7 +13,7 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         public override Color DebugColor =>
-            !DataCountdown.Instance.State ? ModBlocks.CountdownIceOff : Color.Transparent;
+            !DataCountdown.Instance.State ? ModBlocks.CountdownIceOff : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => !DataCountdown.Instance.State;

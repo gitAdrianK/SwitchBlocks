@@ -13,7 +13,7 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         public override Color DebugColor =>
-            !DataBasic.Instance.State ? ModBlocks.BasicInfinityJumpOff : Color.Transparent;
+            !DataBasic.Instance.State ? ModBlocks.BasicInfinityJumpOff : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;
