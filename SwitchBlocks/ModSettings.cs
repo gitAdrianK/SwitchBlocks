@@ -17,54 +17,59 @@ namespace SwitchBlocks
         /// </summary>
         public ModSettings()
         {
+            XDocument doc;
+
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
                 ModConstants.Folder,
                 "blocks.xml");
-            if (!File.Exists(file))
+            if (File.Exists(file))
             {
-                return;
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    doc = XDocument.Load(fs);
+                }
+            }
+            else
+            {
+                doc = new XDocument(new XElement("Blocks"));
             }
 
-            using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            var root = doc.Root;
+
+            if (SetupAuto.IsUsed)
             {
-                var doc = XDocument.Load(fs);
-                var root = doc.Root;
+                this.SettingsAuto = new SettingsAuto(root?.Element("Auto"));
+            }
 
-                if (SetupAuto.IsUsed)
-                {
-                    this.SettingsAuto = new SettingsAuto(root?.Element("Auto"));
-                }
+            if (SetupBasic.IsUsed)
+            {
+                this.SettingsBasic = new SettingsBasic(root?.Element("Basic"));
+            }
 
-                if (SetupBasic.IsUsed)
-                {
-                    this.SettingsBasic = new SettingsBasic(root?.Element("Basic"));
-                }
+            if (SetupCountdown.IsUsed)
+            {
+                this.SettingsCountdown = new SettingsCountdown(root?.Element("Countdown"));
+            }
 
-                if (SetupCountdown.IsUsed)
-                {
-                    this.SettingsCountdown = new SettingsCountdown(root?.Element("Countdown"));
-                }
+            if (SetupGroup.IsUsed)
+            {
+                this.SettingsGroup = new SettingsGroup(root?.Element("Group"));
+            }
 
-                if (SetupGroup.IsUsed)
-                {
-                    this.SettingsGroup = new SettingsGroup(root?.Element("Group"));
-                }
+            if (SetupJump.IsUsed)
+            {
+                this.SettingsJump = new SettingsJump(root?.Element("Jump"));
+            }
 
-                if (SetupJump.IsUsed)
-                {
-                    this.SettingsJump = new SettingsJump(root?.Element("Jump"));
-                }
+            if (SetupSand.IsUsed)
+            {
+                this.SettingsSand = new SettingsSand(root?.Element("Sand"));
+            }
 
-                if (SetupSand.IsUsed)
-                {
-                    this.SettingsSand = new SettingsSand(root?.Element("Sand"));
-                }
-
-                if (SetupSequence.IsUsed)
-                {
-                    this.SettingsSequence = new SettingsSequence(root?.Element("Sequence"));
-                }
+            if (SetupSequence.IsUsed)
+            {
+                this.SettingsSequence = new SettingsSequence(root?.Element("Sequence"));
             }
         }
 
