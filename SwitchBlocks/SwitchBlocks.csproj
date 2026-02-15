@@ -91,6 +91,8 @@
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
     <Compile Include="Blocks\BlockAutoOn.cs"/>
+    <Compile Include="Blocks\BlockAutoSandOff.cs" />
+    <Compile Include="Blocks\BlockAutoSandOn.cs" />
     <Compile Include="Blocks\BlockAutoSnowOff.cs"/>
     <Compile Include="Blocks\BlockAutoSnowOn.cs"/>
     <Compile Include="Blocks\BlockAutoWaterOff.cs"/>
@@ -103,12 +105,16 @@
     <Compile Include="Blocks\BlockBasicMoveUpOn.cs"/>
     <Compile Include="Blocks\BlockBasicOff.cs"/>
     <Compile Include="Blocks\BlockBasicOn.cs"/>
+    <Compile Include="Blocks\BlockBasicSandOff.cs" />
+    <Compile Include="Blocks\BlockBasicSandOn.cs" />
     <Compile Include="Blocks\BlockBasicSnowOff.cs"/>
     <Compile Include="Blocks\BlockBasicSnowOn.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOff.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOn.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOff.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOn.cs"/>
+    <Compile Include="Blocks\BlockCountdownSandOff.cs" />
+    <Compile Include="Blocks\BlockCountdownSandOn.cs" />
     <Compile Include="Blocks\BlockCountdownSingleUseSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownSingleUse.cs"/>
     <Compile Include="Blocks\BlockCountdownLever.cs"/>
@@ -125,6 +131,8 @@
     <Compile Include="Blocks\BlockJumpInfinityJumpOn.cs"/>
     <Compile Include="Blocks\BlockJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpOn.cs"/>
+    <Compile Include="Blocks\BlockJumpSandOff.cs" />
+    <Compile Include="Blocks\BlockJumpSandOn.cs" />
     <Compile Include="Blocks\BlockJumpSnowOff.cs"/>
     <Compile Include="Blocks\BlockJumpSnowOn.cs"/>
     <Compile Include="Blocks\BlockJumpWaterOff.cs"/>
@@ -202,6 +210,7 @@
     <Compile Include="Factories\FactoryDrawablesGroup.cs"/>
     <Compile Include="Factories\FactoryDrawables.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
+    <Compile Include="Patches\PatchAdvCollisionInfo.cs" />
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWalk.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>

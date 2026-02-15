@@ -128,14 +128,20 @@ namespace SwitchBlocks
         // /// <summary><see cref="IBlockBehaviour" /> priority run before normal behaviours but after the one run first.</summary>
         // public const float PrioEarly = 2.5f;
 
-        /// <summary><see cref="IBlockBehaviour" /> priority run "normally", this is the priority for most.</summary>
+        /// <summary>
+        ///     <see cref="IBlockBehaviour" /> priority run "normally", this is the priority for most.
+        ///     It is slightly above 2 to still run before vanilla behaviours with priority 2.
+        /// </summary>
         public const float PrioNormal = 2.01f;
 
-        /// <summary><see cref="IBlockBehaviour" /> priority run after normal behaviours but before the one run last.</summary>
+        /// <summary>
+        ///     <see cref="IBlockBehaviour" /> priority run after normal behaviours but before the one run last.
+        ///     It is slightly below 1 to run after vanilla behaviours with priority 1.
+        /// </summary>
         public const float PrioLate = 1.5f;
 
         /// <summary><see cref="IBlockBehaviour" /> priority run after all other behaviours. Used for <see cref="BehaviourPost" />.</summary>
-        public const float PrioLast = 1.0f;
+        public const float PrioLast = 0.99f;
 
         /// <summary>Used to convert time seconds to ticks.</summary>
         public const float DeltaTime = 0.01666667f;

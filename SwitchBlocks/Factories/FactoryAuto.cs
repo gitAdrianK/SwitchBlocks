@@ -26,6 +26,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoSnowOff,
             ModBlocks.AutoWaterOn,
             ModBlocks.AutoWaterOff,
+            ModBlocks.AutoSandOn,
+            ModBlocks.AutoSandOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
             ModBlocks.AutoWindEnable,
@@ -48,6 +50,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.AutoIceOff:
                 case var _ when blockCode == ModBlocks.AutoSnowOn:
                 case var _ when blockCode == ModBlocks.AutoSnowOff:
+                case var _ when blockCode == ModBlocks.AutoSandOn:
+                case var _ when blockCode == ModBlocks.AutoSandOff:
                     return true;
             }
 
@@ -82,6 +86,10 @@ namespace SwitchBlocks.Factories
                     return new BlockAutoWaterOn(blockRect);
                 case var _ when blockCode == ModBlocks.AutoWaterOff:
                     return new BlockAutoWaterOff(blockRect);
+                case var _ when blockCode == ModBlocks.AutoSandOn:
+                    return new BlockAutoSandOn(blockRect);
+                case var _ when blockCode == ModBlocks.AutoSandOff:
+                    return new BlockAutoSandOff(blockRect);
                 case var _ when blockCode == ModBlocks.AutoReset:
                     return new BlockAutoReset(blockRect);
                 case var _ when blockCode == ModBlocks.AutoResetFull:

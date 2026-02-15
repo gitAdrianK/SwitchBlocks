@@ -85,8 +85,8 @@ namespace SwitchBlocks.Behaviours
             BehaviourPost.IsPlayerOnSnow = false;
             BehaviourPost.IsPlayerOnWater = false;
 
-            BehaviourPost.IsPlayerOnSand = false;
-            BehaviourPost.IsPlayerOnSandUp = false;
+            BehaviourPost.IsPlayerOnTypeSand = false;
+            BehaviourPost.IsPlayerOnTypeSandUp = false;
 
             // Requested gimmick from another mod.
             BehaviourPost.IsPlayerOnMoveUp = false;

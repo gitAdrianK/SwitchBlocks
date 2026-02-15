@@ -51,8 +51,11 @@ namespace SwitchBlocks.Behaviours
             var isOnBasic = advCollisionInfo.IsCollidingWith<BlockCountdownOn>();
             var isOnIce = advCollisionInfo.IsCollidingWith<BlockCountdownIceOn>();
             var isOnSnow = advCollisionInfo.IsCollidingWith<BlockCountdownSnowOn>();
-            var isOnWater = advCollisionInfo.IsCollidingWith<BlockCountdownWaterOn>();
-            this.IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow || isOnWater;
+            var isOnWater = advCollisionInfo.IsCollidingWith<BlockCountdownWaterOn>();;
+            this.IsPlayerOnBlock = isOnBasic
+                                   || isOnIce
+                                   || isOnSnow
+                                   || isOnWater;
             if (!this.IsPlayerOnBlock)
             {
                 return true;

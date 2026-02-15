@@ -106,11 +106,11 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            BehaviourPost.IsPlayerOnSand = true;
+            BehaviourPost.IsPlayerOnTypeSand = true;
 
             if (this.Data.State)
             {
-                BehaviourPost.IsPlayerOnSandUp = true;
+                BehaviourPost.IsPlayerOnTypeSandUp = true;
                 bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
             }
             else

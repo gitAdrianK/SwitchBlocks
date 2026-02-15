@@ -26,6 +26,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicSnowOff,
             ModBlocks.BasicWaterOn,
             ModBlocks.BasicWaterOff,
+            ModBlocks.BasicSandOn,
+            ModBlocks.BasicSandOff,
             ModBlocks.BasicMoveUpOn,
             ModBlocks.BasicMoveUpOff,
             ModBlocks.BasicInfinityJumpOn,
@@ -56,6 +58,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BasicIceOff:
                 case var _ when blockCode == ModBlocks.BasicSnowOn:
                 case var _ when blockCode == ModBlocks.BasicSnowOff:
+                case var _ when blockCode == ModBlocks.BasicSandOn:
+                case var _ when blockCode == ModBlocks.BasicSandOff:
                 case var _ when blockCode == ModBlocks.BasicLeverSolid:
                 case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
                 case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
@@ -93,6 +97,10 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicWaterOn(blockRect);
                 case var _ when blockCode == ModBlocks.BasicWaterOff:
                     return new BlockBasicWaterOff(blockRect);
+                case var _ when blockCode == ModBlocks.BasicSandOn:
+                    return new BlockBasicSandOn(blockRect);
+                case var _ when blockCode == ModBlocks.BasicSandOff:
+                    return new BlockBasicSandOff(blockRect);
 
                 case var _ when blockCode == ModBlocks.BasicMoveUpOn:
                     return new BlockBasicMoveUpOn(blockRect);

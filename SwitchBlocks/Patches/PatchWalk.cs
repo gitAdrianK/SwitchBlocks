@@ -68,7 +68,7 @@ namespace SwitchBlocks.Patches
             {
                 new CodeInstruction(
                     OpCodes.Call,
-                    AccessTools.PropertyGetter(typeof(BehaviourPost), nameof(BehaviourPost.IsPlayerOnSandUp))),
+                    AccessTools.PropertyGetter(typeof(BehaviourPost), nameof(BehaviourPost.IsPlayerOnTypeSandUp))),
                 new CodeInstruction(OpCodes.Brtrue_S, continueLabel),
             };
             code.InsertRange(insertionIndex, insert);

@@ -55,7 +55,11 @@ namespace SwitchBlocks.Behaviours
 
             var isOnInfinityJump = advCollisionInfo.IsCollidingWith<BlockJumpInfinityJumpOn>();
 
-            this.IsPlayerOnBlock = isOnBasic || isOnIce || isOnSnow || isOnWater || isOnInfinityJump;
+            this.IsPlayerOnBlock = isOnBasic
+                                   || isOnIce
+                                   || isOnSnow
+                                   || isOnWater
+                                   || isOnInfinityJump;
             if (!this.IsPlayerOnBlock)
             {
                 return true;

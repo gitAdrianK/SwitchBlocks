@@ -25,17 +25,20 @@ namespace SwitchBlocks.Behaviours
         /// <summary>If the player is on any water block.</summary>
         public static bool IsPlayerOnWater { get; set; }
 
-        ///<summary>If the player is on any sand block.</summary>
-        public static bool IsPlayerOnSand { get; set; }
+        // Vanilla sand like behaviour is handled by a patch to the AdvCollisionInfo.Sand.
+        // This is because collision doesn't quite work correctly otherwise.
+
+        ///<summary>If the player is on any sand type block.</summary>
+        public static bool IsPlayerOnTypeSand { get; set; }
+
+        ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
+        public static bool IsPlayerOnTypeSandUp { get; set; }
 
         ///<summary>If the player is on any move up block.</summary>
         public static bool IsPlayerOnMoveUp { get; set; }
 
         ///<summary>If the player is on any infinity jump block.</summary>
         public static bool IsPlayerOnInfinityJump { get; set; }
-
-        ///<summary>If the player is on any sand block that is currently pushing the player up.</summary>
-        public static bool IsPlayerOnSandUp { get; set; }
 
         /// <summary>The velocity of the previous time this behaviour has run.</summary>
         public static Vector2 PrevVelocity { get; private set; } = new Vector2(0, 0);

@@ -31,6 +31,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpWaterOnLegacy,
             ModBlocks.JumpWaterOff,
             ModBlocks.JumpWaterOffLegacy,
+            ModBlocks.JumpSandOn,
+            ModBlocks.JumpSandOff,
             ModBlocks.JumpInfinityJumpOn,
             ModBlocks.JumpInfinityJumpOnLegacy,
             ModBlocks.JumpInfinityJumpOff,
@@ -62,6 +64,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.JumpSnowOnLegacy:
                 case var _ when blockCode == ModBlocks.JumpSnowOff:
                 case var _ when blockCode == ModBlocks.JumpSnowOffLegacy:
+                case var _ when blockCode == ModBlocks.JumpSandOn:
+                case var _ when blockCode == ModBlocks.JumpSandOff:
                     return true;
             }
 
@@ -104,6 +108,10 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.JumpWaterOff:
                 case var _ when blockCode == ModBlocks.JumpWaterOffLegacy:
                     return new BlockJumpWaterOff(blockRect);
+                case var _ when blockCode == ModBlocks.JumpSandOn:
+                    return new BlockJumpSandOn(blockRect);
+                case var _ when blockCode == ModBlocks.JumpSandOff:
+                    return new BlockJumpSandOff(blockRect);
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOn:
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOnLegacy:
                     return new BlockJumpInfinityJumpOn(blockRect);

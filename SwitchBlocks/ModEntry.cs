@@ -97,11 +97,10 @@ namespace SwitchBlocks
             SetupSand.Setup(settings.SettingsSand, player, LevelManager.Instance);
             SetupSequence.Setup(settings.SettingsSequence, player);
 
-            // DoIf is a Harmony extension (that also does extra, for us unneeded, checks).
             var entities = entityManager.Entities
                 .SkipWhile(entity => entity != player)
                 .ToList();
-            entities.ForEach(entity =>
+            foreach (var entity in entities)
             {
                 if (!(entity is EntityDraw entityDraw))
                 {
@@ -114,7 +113,7 @@ namespace SwitchBlocks
                         entityDraw.GoToFront();
                     }
                 }
-            });
+            }
         }
 
         /// <summary>
