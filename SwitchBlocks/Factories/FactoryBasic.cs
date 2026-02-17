@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     /// <summary>
     ///     Factory for basic blocks.
@@ -28,6 +29,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicWaterOff,
             ModBlocks.BasicSandOn,
             ModBlocks.BasicSandOff,
+            ModBlocks.BasicSlopeOn,
+            ModBlocks.BasicSlopeOff,
             ModBlocks.BasicMoveUpOn,
             ModBlocks.BasicMoveUpOff,
             ModBlocks.BasicInfinityJumpOn,
@@ -60,6 +63,9 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BasicSnowOff:
                 case var _ when blockCode == ModBlocks.BasicSandOn:
                 case var _ when blockCode == ModBlocks.BasicSandOff:
+                case var _ when blockCode == ModBlocks.BasicSlopeOn:
+                case var _ when blockCode == ModBlocks.BasicSlopeOff:
+
                 case var _ when blockCode == ModBlocks.BasicLeverSolid:
                 case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
                 case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
@@ -101,6 +107,10 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicSandOn(blockRect);
                 case var _ when blockCode == ModBlocks.BasicSandOff:
                     return new BlockBasicSandOff(blockRect);
+                case var _ when blockCode == ModBlocks.BasicSlopeOn:
+                    return new BlockBasicSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.BasicSlopeOff:
+                    return new BlockBasicSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
 
                 case var _ when blockCode == ModBlocks.BasicMoveUpOn:
                     return new BlockBasicMoveUpOn(blockRect);
@@ -123,9 +133,11 @@ namespace SwitchBlocks.Factories
                     return new BlockBasicLeverSolidOn(blockRect);
                 case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
                     return new BlockBasicLeverSolidOff(blockRect);
+
                 case var _ when blockCode == ModBlocks.BasicWindEnable:
                     _ = SetupBasic.WindEnabled.Add(currentScreen);
                     return new BlockWind();
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

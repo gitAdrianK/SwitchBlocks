@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     /// <summary>
     ///     Factory for auto blocks.
@@ -28,6 +29,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoWaterOff,
             ModBlocks.AutoSandOn,
             ModBlocks.AutoSandOff,
+            ModBlocks.AutoSlopeOn,
+            ModBlocks.AutoSlopeOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
             ModBlocks.AutoWindEnable,
@@ -52,6 +55,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.AutoSnowOff:
                 case var _ when blockCode == ModBlocks.AutoSandOn:
                 case var _ when blockCode == ModBlocks.AutoSandOff:
+                case var _ when blockCode == ModBlocks.AutoSlopeOn:
+                case var _ when blockCode == ModBlocks.AutoSlopeOff:
                     return true;
             }
 
@@ -90,13 +95,20 @@ namespace SwitchBlocks.Factories
                     return new BlockAutoSandOn(blockRect);
                 case var _ when blockCode == ModBlocks.AutoSandOff:
                     return new BlockAutoSandOff(blockRect);
+                case var _ when blockCode == ModBlocks.AutoSlopeOn:
+                    return new BlockAutoSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.AutoSlopeOff:
+                    return new BlockAutoSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+
                 case var _ when blockCode == ModBlocks.AutoReset:
                     return new BlockAutoReset(blockRect);
                 case var _ when blockCode == ModBlocks.AutoResetFull:
                     return new BlockAutoResetFull(blockRect);
+
                 case var _ when blockCode == ModBlocks.AutoWindEnable:
                     _ = SetupAuto.WindEnabled.Add(currentScreen);
                     return new BlockWind();
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactoryAuto)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

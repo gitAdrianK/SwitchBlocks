@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     /// <summary>
     ///     Factory for sequence blocks.
@@ -30,6 +31,10 @@ namespace SwitchBlocks.Factories
             ModBlocks.SequenceSnowB,
             ModBlocks.SequenceSnowC,
             ModBlocks.SequenceSnowD,
+            ModBlocks.SequenceSlopeA,
+            ModBlocks.SequenceSlopeB,
+            ModBlocks.SequenceSlopeC,
+            ModBlocks.SequenceSlopeD,
             ModBlocks.SequenceReset,
             ModBlocks.SequenceResetSolid,
         };
@@ -57,6 +62,11 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.SequenceSnowB:
                 case var _ when blockCode == ModBlocks.SequenceSnowC:
                 case var _ when blockCode == ModBlocks.SequenceSnowD:
+                case var _ when blockCode == ModBlocks.SequenceSlopeA:
+                case var _ when blockCode == ModBlocks.SequenceSlopeB:
+                case var _ when blockCode == ModBlocks.SequenceSlopeC:
+                case var _ when blockCode == ModBlocks.SequenceSlopeD:
+
                 case var _ when blockCode == ModBlocks.SequenceResetSolid:
                     return true;
             }
@@ -132,6 +142,27 @@ namespace SwitchBlocks.Factories
                     var blockSequenceSnowD = new BlockSequenceSnowD(blockRect);
                     SetupSequence.BlocksSequenceD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSnowD;
                     return blockSequenceSnowD;
+                case var _ when blockCode == ModBlocks.SequenceSlopeA:
+                    var blockSequenceSlopeA =
+                        new BlockSequenceSlopeA(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupSequence.BlocksSequenceA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeA;
+                    return blockSequenceSlopeA;
+                case var _ when blockCode == ModBlocks.SequenceSlopeB:
+                    var blockSequenceSlopeB =
+                        new BlockSequenceSlopeB(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupSequence.BlocksSequenceB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeB;
+                    return blockSequenceSlopeB;
+                case var _ when blockCode == ModBlocks.SequenceSlopeC:
+                    var blockSequenceSlopeC =
+                        new BlockSequenceSlopeC(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupSequence.BlocksSequenceC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeC;
+                    return blockSequenceSlopeC;
+                case var _ when blockCode == ModBlocks.SequenceSlopeD:
+                    var blockSequenceSlopeD =
+                        new BlockSequenceSlopeD(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupSequence.BlocksSequenceD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeD;
+                    return blockSequenceSlopeD;
+
                 case var _ when blockCode == ModBlocks.SequenceReset:
                     var blockSequenceReset = new BlockSequenceReset(blockRect);
                     SetupSequence.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceReset;
@@ -140,6 +171,7 @@ namespace SwitchBlocks.Factories
                     var blockSequenceResetSolid = new BlockSequenceResetSolid(blockRect);
                     SetupSequence.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceResetSolid;
                     return blockSequenceResetSolid;
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactorySequence)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

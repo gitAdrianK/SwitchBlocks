@@ -3,6 +3,9 @@ namespace SwitchBlocks.Blocks
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
+    /// <summary>
+    ///     A box block that additionally provides a quick way to check if it is solid.
+    /// </summary>
     public abstract class ModBlock : BoxBlock, IBlockDebugColor
     {
         /// <summary>

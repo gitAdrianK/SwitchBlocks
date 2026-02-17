@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     public class FactoryJump : IBlockFactory
     {
@@ -33,6 +34,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpWaterOffLegacy,
             ModBlocks.JumpSandOn,
             ModBlocks.JumpSandOff,
+            ModBlocks.JumpSlopeOn,
+            ModBlocks.JumpSlopeOff,
             ModBlocks.JumpInfinityJumpOn,
             ModBlocks.JumpInfinityJumpOnLegacy,
             ModBlocks.JumpInfinityJumpOff,
@@ -66,6 +69,8 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.JumpSnowOffLegacy:
                 case var _ when blockCode == ModBlocks.JumpSandOn:
                 case var _ when blockCode == ModBlocks.JumpSandOff:
+                case var _ when blockCode == ModBlocks.JumpSlopeOn:
+                case var _ when blockCode == ModBlocks.JumpSlopeOff:
                     return true;
             }
 
@@ -112,16 +117,23 @@ namespace SwitchBlocks.Factories
                     return new BlockJumpSandOn(blockRect);
                 case var _ when blockCode == ModBlocks.JumpSandOff:
                     return new BlockJumpSandOff(blockRect);
+                case var _ when blockCode == ModBlocks.JumpSlopeOn:
+                    return new BlockJumpSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.JumpSlopeOff:
+                    return new BlockJumpSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOn:
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOnLegacy:
                     return new BlockJumpInfinityJumpOn(blockRect);
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOff:
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOffLegacy:
                     return new BlockJumpInfinityJumpOff(blockRect);
+
                 case var _ when blockCode == ModBlocks.JumpWindEnable:
                 case var _ when blockCode == ModBlocks.JumpWindEnableLegacy:
                     _ = SetupJump.WindEnabled.Add(currentScreen);
                     return new BlockWind();
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactoryJump)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

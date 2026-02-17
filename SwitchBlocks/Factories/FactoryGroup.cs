@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     /// <summary>
     ///     Factory for group blocks.
@@ -30,6 +31,10 @@ namespace SwitchBlocks.Factories
             ModBlocks.GroupSnowB,
             ModBlocks.GroupSnowC,
             ModBlocks.GroupSnowD,
+            ModBlocks.GroupSlopeA,
+            ModBlocks.GroupSlopeB,
+            ModBlocks.GroupSlopeC,
+            ModBlocks.GroupSlopeD,
             ModBlocks.GroupReset,
             ModBlocks.GroupResetSolid,
         };
@@ -57,6 +62,11 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.GroupSnowB:
                 case var _ when blockCode == ModBlocks.GroupSnowC:
                 case var _ when blockCode == ModBlocks.GroupSnowD:
+                case var _ when blockCode == ModBlocks.GroupSlopeA:
+                case var _ when blockCode == ModBlocks.GroupSlopeB:
+                case var _ when blockCode == ModBlocks.GroupSlopeC:
+                case var _ when blockCode == ModBlocks.GroupSlopeD:
+
                 case var _ when blockCode == ModBlocks.GroupResetSolid:
                     return true;
             }
@@ -132,6 +142,27 @@ namespace SwitchBlocks.Factories
                     var blockGroupSnowD = new BlockGroupSnowD(blockRect);
                     SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowD;
                     return blockGroupSnowD;
+                case var _ when blockCode == ModBlocks.GroupSlopeA:
+                    var blockGroupSlopeA =
+                        new BlockGroupSlopeA(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeA;
+                    return blockGroupSlopeA;
+                case var _ when blockCode == ModBlocks.GroupSlopeB:
+                    var blockGroupSlopeB =
+                        new BlockGroupSlopeB(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeB;
+                    return blockGroupSlopeB;
+                case var _ when blockCode == ModBlocks.GroupSlopeC:
+                    var blockGroupSlopeC =
+                        new BlockGroupSlopeC(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeC;
+                    return blockGroupSlopeC;
+                case var _ when blockCode == ModBlocks.GroupSlopeD:
+                    var blockGroupSlopeD =
+                        new BlockGroupSlopeD(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeD;
+                    return blockGroupSlopeD;
+
                 case var _ when blockCode == ModBlocks.GroupReset:
                     var blockReset = new BlockGroupReset(blockRect);
                     SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockReset;
@@ -140,6 +171,7 @@ namespace SwitchBlocks.Factories
                     var blockResetSolid = new BlockGroupResetSolid(blockRect);
                     SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockResetSolid;
                     return blockResetSolid;
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactoryGroup)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

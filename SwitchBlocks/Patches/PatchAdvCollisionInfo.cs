@@ -4,6 +4,7 @@
 
 namespace SwitchBlocks.Patches
 {
+    using System.Collections.Generic;
     using Blocks;
     using Data;
     using HarmonyLib;
@@ -17,6 +18,11 @@ namespace SwitchBlocks.Patches
     [HarmonyPatch(typeof(AdvCollisionInfo), nameof(AdvCollisionInfo.Sand), MethodType.Getter)]
     public static class PatchAdvCollisionInfo
     {
+        /// <summary>FieldRef of the <c>collidedBlocks</c> field of <see cref="AdvCollisionInfo" />.</summary>
+        private static readonly AccessTools.FieldRef<AdvCollisionInfo, List<IBlock>> CollidedBlocksRef =
+            AccessTools.FieldRefAccess<AdvCollisionInfo, List<IBlock>>(
+                AccessTools.Field("JumpKing.Level.AdvCollisionInfo:collidedBlocks"));
+
         /// <summary>
         ///     Logical ORs the result should the player collide with a sand block of any type,
         ///     if the type and that blocks state would see the block "active".
@@ -39,6 +45,7 @@ namespace SwitchBlocks.Patches
 
                 return;
             }
+
             if (SetupBasic.IsUsed)
             {
                 if (DataBasic.Instance.State)
@@ -52,6 +59,7 @@ namespace SwitchBlocks.Patches
 
                 return;
             }
+
             if (SetupCountdown.IsUsed)
             {
                 if (DataCountdown.Instance.State)
@@ -65,6 +73,7 @@ namespace SwitchBlocks.Patches
 
                 return;
             }
+
             if (SetupJump.IsUsed)
             {
                 if (DataJump.Instance.State)

@@ -9,6 +9,7 @@ namespace SwitchBlocks.Factories
     using JumpKing.Workshop;
     using Microsoft.Xna.Framework;
     using Setups;
+    using Util;
 
     /// <summary>
     ///     Factory for countdown blocks.
@@ -28,6 +29,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownWaterOff,
             ModBlocks.CountdownSandOn,
             ModBlocks.CountdownSandOff,
+            ModBlocks.CountdownSlopeOn,
+            ModBlocks.CountdownSlopeOff,
             ModBlocks.CountdownLever,
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUse,
@@ -51,9 +54,12 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.CountdownIceOn:
                 case var _ when blockCode == ModBlocks.CountdownIceOff:
                 case var _ when blockCode == ModBlocks.CountdownSnowOn:
+                case var _ when blockCode == ModBlocks.CountdownSnowOff:
                 case var _ when blockCode == ModBlocks.CountdownSandOff:
                 case var _ when blockCode == ModBlocks.CountdownSandOn:
-                case var _ when blockCode == ModBlocks.CountdownSnowOff:
+                case var _ when blockCode == ModBlocks.CountdownSlopeOn:
+                case var _ when blockCode == ModBlocks.CountdownSlopeOff:
+
                 case var _ when blockCode == ModBlocks.CountdownLeverSolid:
                 case var _ when blockCode == ModBlocks.CountdownSingleUseSolid:
                     return true;
@@ -95,6 +101,11 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownSandOn(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownSandOff:
                     return new BlockCountdownSandOff(blockRect);
+                case var _ when blockCode == ModBlocks.CountdownSandOn:
+                    return new BlockCountdownSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.CountdownSandOff:
+                    return new BlockCountdownSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+
                 case var _ when blockCode == ModBlocks.CountdownLever:
                     return new BlockCountdownLever(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownLeverSolid:
@@ -107,9 +118,11 @@ namespace SwitchBlocks.Factories
                     var blockSingleUseSolid = new BlockCountdownSingleUseSolid(blockRect);
                     SetupCountdown.SingleUseLevers[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSingleUseSolid;
                     return blockSingleUseSolid;
+
                 case var _ when blockCode == ModBlocks.CountdownWindEnable:
                     _ = SetupCountdown.WindEnabled.Add(currentScreen);
                     return new BlockWind();
+
                 default:
                     throw new InvalidOperationException(
                         $"{nameof(FactoryCountdown)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");

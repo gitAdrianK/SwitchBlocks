@@ -91,8 +91,10 @@
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
     <Compile Include="Blocks\BlockAutoOn.cs"/>
-    <Compile Include="Blocks\BlockAutoSandOff.cs" />
-    <Compile Include="Blocks\BlockAutoSandOn.cs" />
+    <Compile Include="Blocks\BlockAutoSandOff.cs"/>
+    <Compile Include="Blocks\BlockAutoSandOn.cs"/>
+    <Compile Include="Blocks\BlockAutoSlopeOff.cs"/>
+    <Compile Include="Blocks\BlockAutoSlopeOn.cs"/>
     <Compile Include="Blocks\BlockAutoSnowOff.cs"/>
     <Compile Include="Blocks\BlockAutoSnowOn.cs"/>
     <Compile Include="Blocks\BlockAutoWaterOff.cs"/>
@@ -105,34 +107,44 @@
     <Compile Include="Blocks\BlockBasicMoveUpOn.cs"/>
     <Compile Include="Blocks\BlockBasicOff.cs"/>
     <Compile Include="Blocks\BlockBasicOn.cs"/>
-    <Compile Include="Blocks\BlockBasicSandOff.cs" />
-    <Compile Include="Blocks\BlockBasicSandOn.cs" />
+    <Compile Include="Blocks\BlockBasicSandOff.cs"/>
+    <Compile Include="Blocks\BlockBasicSandOn.cs"/>
+    <Compile Include="Blocks\BlockBasicSlopeOff.cs"/>
+    <Compile Include="Blocks\BlockBasicSlopeOn.cs"/>
     <Compile Include="Blocks\BlockBasicSnowOff.cs"/>
     <Compile Include="Blocks\BlockBasicSnowOn.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOff.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOn.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOff.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOn.cs"/>
-    <Compile Include="Blocks\BlockCountdownSandOff.cs" />
-    <Compile Include="Blocks\BlockCountdownSandOn.cs" />
+    <Compile Include="Blocks\BlockCountdownSandOff.cs"/>
+    <Compile Include="Blocks\BlockCountdownSandOn.cs"/>
     <Compile Include="Blocks\BlockCountdownSingleUseSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownSingleUse.cs"/>
     <Compile Include="Blocks\BlockCountdownLever.cs"/>
     <Compile Include="Blocks\BlockCountdownLeverSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownOff.cs"/>
     <Compile Include="Blocks\BlockCountdownOn.cs"/>
+    <Compile Include="Blocks\BlockCountdownSlopeOff.cs"/>
+    <Compile Include="Blocks\BlockCountdownSlopeOn.cs"/>
     <Compile Include="Blocks\BlockCountdownSnowOff.cs"/>
     <Compile Include="Blocks\BlockCountdownSnowOn.cs"/>
     <Compile Include="Blocks\BlockCountdownWaterOff.cs"/>
     <Compile Include="Blocks\BlockCountdownWaterOn.cs"/>
+    <Compile Include="Blocks\BlockGroupSlopeA.cs"/>
+    <Compile Include="Blocks\BlockGroupSlopeB.cs"/>
+    <Compile Include="Blocks\BlockGroupSlopeC.cs"/>
+    <Compile Include="Blocks\BlockGroupSlopeD.cs"/>
     <Compile Include="Blocks\BlockJumpIceOff.cs"/>
     <Compile Include="Blocks\BlockJumpIceOn.cs"/>
     <Compile Include="Blocks\BlockJumpInfinityJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpInfinityJumpOn.cs"/>
     <Compile Include="Blocks\BlockJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpOn.cs"/>
-    <Compile Include="Blocks\BlockJumpSandOff.cs" />
-    <Compile Include="Blocks\BlockJumpSandOn.cs" />
+    <Compile Include="Blocks\BlockJumpSandOff.cs"/>
+    <Compile Include="Blocks\BlockJumpSandOn.cs"/>
+    <Compile Include="Blocks\BlockJumpSlopeOff.cs"/>
+    <Compile Include="Blocks\BlockJumpSlopeOn.cs"/>
     <Compile Include="Blocks\BlockJumpSnowOff.cs"/>
     <Compile Include="Blocks\BlockJumpSnowOn.cs"/>
     <Compile Include="Blocks\BlockJumpWaterOff.cs"/>
@@ -160,6 +172,10 @@
     <Compile Include="Blocks\BlockGroupC.cs"/>
     <Compile Include="Blocks\BlockGroupIceC.cs"/>
     <Compile Include="Blocks\BlockGroupIceD.cs"/>
+    <Compile Include="Blocks\BlockSequenceSlopeA.cs"/>
+    <Compile Include="Blocks\BlockSequenceSlopeB.cs"/>
+    <Compile Include="Blocks\BlockSequenceSlopeC.cs"/>
+    <Compile Include="Blocks\BlockSequenceSlopeD.cs"/>
     <Compile Include="Blocks\BlockSequenceSnowA.cs"/>
     <Compile Include="Blocks\BlockSequenceSnowB.cs"/>
     <Compile Include="Blocks\BlockSequenceSnowC.cs"/>
@@ -185,6 +201,7 @@
     <Compile Include="Blocks\BlockSandOn.cs"/>
     <Compile Include="Blocks\BlockWind.cs"/>
     <Compile Include="Blocks\ModBlock.cs"/>
+    <Compile Include="Blocks\ModSlope.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>
     <Compile Include="Data\SeedsSequence.cs"/>
@@ -210,8 +227,9 @@
     <Compile Include="Factories\FactoryDrawablesGroup.cs"/>
     <Compile Include="Factories\FactoryDrawables.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
-    <Compile Include="Patches\PatchAdvCollisionInfo.cs" />
+    <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
+    <Compile Include="Patches\PatchSlopeBlock.cs"/>
     <Compile Include="Patches\PatchWalk.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWindManager.cs"/>
@@ -261,6 +279,7 @@
     <Compile Include="ModBlocks.cs"/>
     <Compile Include="ModEntry.cs"/>
     <Compile Include="Util\ResetGroupIds.cs"/>
+    <Compile Include="Util\Slopes.cs"/>
     <Compile Include="Util\StartState.cs"/>
     <Compile Include="Util\WrappedIndex.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
@@ -270,12 +289,12 @@
     <None Include="packages.config"/>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-  <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets')" />
+  <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets')"/>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net45.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net45.targets'))"/>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

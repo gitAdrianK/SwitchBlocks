@@ -57,6 +57,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoSandOff" />.</summary>
         public static readonly Color AutoSandOff = new Color(14, 124, 238);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoSlopeOn" />.</summary>
+        public static readonly Color AutoSlopeOn = new Color(238, 124, 15);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoSlopeOff" />.</summary>
+        public static readonly Color AutoSlopeOff = new Color(15, 124, 238);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoReset" />.</summary>
         public static readonly Color AutoReset = new Color(238, 11, 124);
 
@@ -95,6 +101,12 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSandOff" />.</summary>
         public static readonly Color BasicSandOff = new Color(24, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSlopeOn" />.</summary>
+        public static readonly Color BasicSlopeOn = new Color(238, 124, 25);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSlopeOff" />.</summary>
+        public static readonly Color BasicSlopeOff = new Color(25, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOn" />.</summary>
         public static readonly Color BasicMoveUpOn = new Color(238, 125, 21);
@@ -165,6 +177,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSandOff" />.</summary>
         public static readonly Color CountdownSandOff = new Color(34, 124, 238);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSlopeOn" />.</summary>
+        public static readonly Color CountdownSlopeOn = new Color(238, 124, 35);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSlopeOff" />.</summary>
+        public static readonly Color CountdownSlopeOff = new Color(35, 124, 238);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownLever" />.</summary>
         public static readonly Color CountdownLever = new Color(238, 31, 124);
 
@@ -216,6 +234,18 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSnowD" />.</summary>
         public static readonly Color GroupSnowD = new Color(52, 238, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeA" />.</summary>
+        public static readonly Color GroupSlopeA = new Color(238, 124, 55);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeB" />.</summary>
+        public static readonly Color GroupSlopeB = new Color(52, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeC" />.</summary>
+        public static readonly Color GroupSlopeC = new Color(124, 238, 52);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeD" />.</summary>
+        public static readonly Color GroupSlopeD = new Color(52, 238, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupReset" />.</summary>
         public static readonly Color GroupReset = new Color(238, 51, 124);
 
@@ -251,6 +281,12 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSandOff" />.</summary>
         public static readonly Color JumpSandOff = new Color(74, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSlopeOn" />.</summary>
+        public static readonly Color JumpSlopeOn = new Color(238, 124, 75);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSlopeOff" />.</summary>
+        public static readonly Color JumpSlopeOff = new Color(75, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOn" />.</summary>
         public static readonly Color JumpInfinityJumpOn = new Color(238, 125, 71);
@@ -359,6 +395,18 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceSnowD" />.</summary>
         public static readonly Color SequenceSnowD = new Color(62, 238, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceSlopeA" />.</summary>
+        public static readonly Color SequenceSlopeA = new Color(238, 124, 65);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceSlopeB" />.</summary>
+        public static readonly Color SequenceSlopeB = new Color(65, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceSlopeC" />.</summary>
+        public static readonly Color SequenceSlopeC = new Color(124, 238, 65);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceSlopeD" />.</summary>
+        public static readonly Color SequenceSlopeD = new Color(65, 238, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceReset" />.</summary>
         public static readonly Color SequenceReset = new Color(238, 61, 124);
