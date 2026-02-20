@@ -118,9 +118,11 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.JumpSandOff:
                     return new BlockJumpSandOff(blockRect);
                 case var _ when blockCode == ModBlocks.JumpSlopeOn:
-                    return new BlockJumpSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockJumpSlopeOn(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                 case var _ when blockCode == ModBlocks.JumpSlopeOff:
-                    return new BlockJumpSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockJumpSlopeOff(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
 
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOn:
                 case var _ when blockCode == ModBlocks.JumpInfinityJumpOnLegacy:

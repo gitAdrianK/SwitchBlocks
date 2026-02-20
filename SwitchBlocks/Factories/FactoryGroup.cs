@@ -144,22 +144,26 @@ namespace SwitchBlocks.Factories
                     return blockGroupSnowD;
                 case var _ when blockCode == ModBlocks.GroupSlopeA:
                     var blockGroupSlopeA =
-                        new BlockGroupSlopeA(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockGroupSlopeA(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeA;
                     return blockGroupSlopeA;
                 case var _ when blockCode == ModBlocks.GroupSlopeB:
                     var blockGroupSlopeB =
-                        new BlockGroupSlopeB(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockGroupSlopeB(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeB;
                     return blockGroupSlopeB;
                 case var _ when blockCode == ModBlocks.GroupSlopeC:
                     var blockGroupSlopeC =
-                        new BlockGroupSlopeC(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockGroupSlopeC(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeC;
                     return blockGroupSlopeC;
                 case var _ when blockCode == ModBlocks.GroupSlopeD:
                     var blockGroupSlopeD =
-                        new BlockGroupSlopeD(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockGroupSlopeD(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeD;
                     return blockGroupSlopeD;
 

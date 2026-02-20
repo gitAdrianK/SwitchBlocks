@@ -96,9 +96,11 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.AutoSandOff:
                     return new BlockAutoSandOff(blockRect);
                 case var _ when blockCode == ModBlocks.AutoSlopeOn:
-                    return new BlockAutoSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockAutoSlopeOn(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                 case var _ when blockCode == ModBlocks.AutoSlopeOff:
-                    return new BlockAutoSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockAutoSlopeOff(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
 
                 case var _ when blockCode == ModBlocks.AutoReset:
                     return new BlockAutoReset(blockRect);

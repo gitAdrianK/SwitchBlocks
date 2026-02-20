@@ -144,22 +144,26 @@ namespace SwitchBlocks.Factories
                     return blockSequenceSnowD;
                 case var _ when blockCode == ModBlocks.SequenceSlopeA:
                     var blockSequenceSlopeA =
-                        new BlockSequenceSlopeA(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockSequenceSlopeA(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupSequence.BlocksSequenceA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeA;
                     return blockSequenceSlopeA;
                 case var _ when blockCode == ModBlocks.SequenceSlopeB:
                     var blockSequenceSlopeB =
-                        new BlockSequenceSlopeB(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockSequenceSlopeB(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupSequence.BlocksSequenceB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeB;
                     return blockSequenceSlopeB;
                 case var _ when blockCode == ModBlocks.SequenceSlopeC:
                     var blockSequenceSlopeC =
-                        new BlockSequenceSlopeC(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockSequenceSlopeC(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupSequence.BlocksSequenceC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeC;
                     return blockSequenceSlopeC;
                 case var _ when blockCode == ModBlocks.SequenceSlopeD:
                     var blockSequenceSlopeD =
-                        new BlockSequenceSlopeD(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                        new BlockSequenceSlopeD(blockRect,
+                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                     SetupSequence.BlocksSequenceD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSequenceSlopeD;
                     return blockSequenceSlopeD;
 

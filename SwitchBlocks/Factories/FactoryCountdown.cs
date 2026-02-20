@@ -101,10 +101,12 @@ namespace SwitchBlocks.Factories
                     return new BlockCountdownSandOn(blockRect);
                 case var _ when blockCode == ModBlocks.CountdownSandOff:
                     return new BlockCountdownSandOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSandOn:
-                    return new BlockCountdownSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                case var _ when blockCode == ModBlocks.CountdownSandOff:
-                    return new BlockCountdownSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.CountdownSlopeOn:
+                    return new BlockCountdownSlopeOn(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                case var _ when blockCode == ModBlocks.CountdownSlopeOff:
+                    return new BlockCountdownSlopeOff(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
 
                 case var _ when blockCode == ModBlocks.CountdownLever:
                     return new BlockCountdownLever(blockRect);

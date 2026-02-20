@@ -1,8 +1,4 @@
-﻿// ReSharper disable InvertIf
-
-// ReSharper disable InconsistentNaming
-
-namespace SwitchBlocks.Patches
+﻿namespace SwitchBlocks.Patches
 {
     using System.Collections.Generic;
     using Blocks;
@@ -23,6 +19,7 @@ namespace SwitchBlocks.Patches
             AccessTools.FieldRefAccess<AdvCollisionInfo, List<IBlock>>(
                 AccessTools.Field("JumpKing.Level.AdvCollisionInfo:collidedBlocks"));
 
+        // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Logical ORs the result should the player collide with a sand block of any type,
         ///     if the type and that blocks state would see the block "active".
@@ -74,6 +71,7 @@ namespace SwitchBlocks.Patches
                 return;
             }
 
+            // ReSharper disable InvertIf
             if (SetupJump.IsUsed)
             {
                 if (DataJump.Instance.State)

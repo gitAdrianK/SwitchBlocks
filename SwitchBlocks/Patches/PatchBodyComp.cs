@@ -1,5 +1,3 @@
-// ReSharper disable InconsistentNaming
-
 namespace SwitchBlocks.Patches
 {
     using System;
@@ -12,7 +10,8 @@ namespace SwitchBlocks.Patches
     using JumpKing.Player;
 
     /// <summary>
-    ///     Adds a postfix to the vanilla <see cref="BodyComp" />.
+    ///     Adds a postfix to the vanilla <see cref="BodyComp" /> and provide an easy way to set
+    ///     the "_knocked" field.
     /// </summary>
     [HarmonyPatch(typeof(BodyComp), nameof(BodyComp.IsOnBlock), typeof(Type))]
     public static class PatchBodyComp
@@ -22,9 +21,13 @@ namespace SwitchBlocks.Patches
             AccessTools.FieldRefAccess<BodyComp, bool>(
                 AccessTools.Field("JumpKing.Player.BodyComp:_knocked"));
 
-        /// <summary>The current players <see cref="BodyComp" /></summary>
+        /// <summary>
+        ///     The current players <see cref="BodyComp" />.
+        ///     This should be set in <see cref="ModEntry.OnLevelStart" /> as entities are created new for every level start.
+        /// </summary>
         public static BodyComp BodyComp { get; set; }
 
+        // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Patches the IsOnBlock method of the <see cref="BodyComp" />, adds the custom blocks from this mod to also return
         ///     <c>true</c>

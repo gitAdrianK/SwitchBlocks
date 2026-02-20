@@ -1,5 +1,3 @@
-// ReSharper disable InconsistentNaming
-
 namespace SwitchBlocks.Patches
 {
     using System.Diagnostics.CodeAnalysis;
@@ -15,6 +13,7 @@ namespace SwitchBlocks.Patches
         /// <summary>If the game has finished/ the babe has been reached.</summary>
         public static bool HasFinished { get; private set; }
 
+        // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Sets <see cref="HasFinished" /> to the same result as the CheckWin function.
         /// </summary>

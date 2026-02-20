@@ -1,6 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace SwitchBlocks.Patches
+﻿namespace SwitchBlocks.Patches
 {
     using Behaviours;
     using HarmonyLib;
@@ -13,6 +11,7 @@ namespace SwitchBlocks.Patches
     [HarmonyPatch(typeof(WaterBlockBehaviour), nameof(WaterBlockBehaviour.IsPlayerOnBlock), MethodType.Getter)]
     public static class PatchWaterBlockBehaviour
     {
+        // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Logical ORs the result with the bool <see cref="BehaviourPost.IsPlayerOnWater" />.
         /// </summary>

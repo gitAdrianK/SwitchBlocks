@@ -108,9 +108,11 @@ namespace SwitchBlocks.Factories
                 case var _ when blockCode == ModBlocks.BasicSandOff:
                     return new BlockBasicSandOff(blockRect);
                 case var _ when blockCode == ModBlocks.BasicSlopeOn:
-                    return new BlockBasicSlopeOn(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockBasicSlopeOn(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
                 case var _ when blockCode == ModBlocks.BasicSlopeOff:
-                    return new BlockBasicSlopeOff(blockRect, Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
+                    return new BlockBasicSlopeOff(blockRect,
+                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
 
                 case var _ when blockCode == ModBlocks.BasicMoveUpOn:
                     return new BlockBasicMoveUpOn(blockRect);
