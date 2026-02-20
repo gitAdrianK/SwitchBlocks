@@ -1,6 +1,5 @@
 ﻿namespace SwitchBlocks.Patches
 {
-    using System.Collections.Generic;
     using Blocks;
     using Data;
     using HarmonyLib;
@@ -14,11 +13,6 @@
     [HarmonyPatch(typeof(AdvCollisionInfo), nameof(AdvCollisionInfo.Sand), MethodType.Getter)]
     public static class PatchAdvCollisionInfo
     {
-        /// <summary>FieldRef of the <c>collidedBlocks</c> field of <see cref="AdvCollisionInfo" />.</summary>
-        private static readonly AccessTools.FieldRef<AdvCollisionInfo, List<IBlock>> CollidedBlocksRef =
-            AccessTools.FieldRefAccess<AdvCollisionInfo, List<IBlock>>(
-                AccessTools.Field("JumpKing.Level.AdvCollisionInfo:collidedBlocks"));
-
         // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Logical ORs the result should the player collide with a sand block of any type,
