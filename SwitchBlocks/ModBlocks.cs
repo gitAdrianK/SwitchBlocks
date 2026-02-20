@@ -238,13 +238,13 @@ namespace SwitchBlocks
         public static readonly Color GroupSlopeA = new Color(238, 124, 55);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeB" />.</summary>
-        public static readonly Color GroupSlopeB = new Color(52, 124, 238);
+        public static readonly Color GroupSlopeB = new Color(55, 124, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeC" />.</summary>
-        public static readonly Color GroupSlopeC = new Color(124, 238, 52);
+        public static readonly Color GroupSlopeC = new Color(124, 238, 55);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeD" />.</summary>
-        public static readonly Color GroupSlopeD = new Color(52, 238, 124);
+        public static readonly Color GroupSlopeD = new Color(55, 238, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupReset" />.</summary>
         public static readonly Color GroupReset = new Color(238, 51, 124);
