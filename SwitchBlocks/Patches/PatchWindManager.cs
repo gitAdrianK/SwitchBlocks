@@ -1,6 +1,5 @@
 namespace SwitchBlocks.Patches
 {
-    using System.Diagnostics.CodeAnalysis;
     using Data;
     using HarmonyLib;
     using JetBrains.Annotations;
@@ -19,7 +18,6 @@ namespace SwitchBlocks.Patches
         ///     for that block type is <c>true</c>.
         /// </summary>
         /// <param name="__result">Result of the original function.</param>
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         [UsedImplicitly]
         public static void Postfix(ref float __result)
         {

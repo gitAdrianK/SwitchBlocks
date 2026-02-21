@@ -17,8 +17,8 @@ namespace SwitchBlocks.Patches
     {
         /// <summary>
         ///     Add instructions to not early return <see cref="BTresult.Failure" />
-        ///     should the <see cref="PlayerEntity" /> be on a sand block moving upwards
-        ///     under the additional condition that the reason for moving up is not
+        ///     should the <see cref="PlayerEntity" /> be on a sand block moving upwards.
+        ///     That is under the additional condition that, the reason for moving up, is not
         ///     one of the custom sand types that is currently moving the player up.
         /// </summary>
         /// <param name="instructions">Original IL instructions.</param>

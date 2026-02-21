@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Patches
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using Behaviours;
     using Data;
     using HarmonyLib;
@@ -29,14 +28,13 @@ namespace SwitchBlocks.Patches
 
         // ReSharper disable InconsistentNaming
         /// <summary>
-        ///     Patches the IsOnBlock method of the <see cref="BodyComp" />, adds the custom blocks from this mod to also return
-        ///     <c>true</c>
+        ///     Patches the IsOnBlock method of the <see cref="BodyComp" />.
+        ///     Adds the custom blocks from this mod to also return <c>true</c>
         ///     in the IsOnBlock function when asked if the <see cref="BodyComp" /> is on a custom block imitating the vanilla
         ///     block's sounds and other functionality tied to it. Does NOT run behaviours if they are based on IsPlayerOnBlock.
         /// </summary>
         /// <param name="__result">Result of the original function, returning <c>true</c> if the player is on a custom block.</param>
         /// <param name="blockType">Original <see cref="Type" /> the function is called with.</param>
-        [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Harmony naming convention")]
         [UsedImplicitly]
         public static void Postfix(ref bool __result, Type blockType)
         {
