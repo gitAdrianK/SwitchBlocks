@@ -33,7 +33,7 @@ namespace SwitchBlocks.Util
             IBlock block)
         {
             // If everything is allowed we can just return out w/o doing any work.
-            if ((validDirections & Direction.All) != 0)
+            if (validDirections == Direction.All)
             {
                 return true;
             }
