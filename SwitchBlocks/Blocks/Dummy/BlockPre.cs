@@ -1,11 +1,11 @@
-namespace SwitchBlocks.Blocks
+namespace SwitchBlocks.Blocks.Dummy
 {
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
     /// <summary>
     ///     Uncreate-able dummy block to attach a behaviour to.
-    ///     Specifically to attach the behaviour to that runs with a low priority number
+    ///     Specifically to attach the behaviour to one that runs with a low priority number
     ///     and as such earlier then the other block behaviours.
     /// </summary>
     public class BlockPre : IBlock

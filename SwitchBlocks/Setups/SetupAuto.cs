@@ -24,8 +24,8 @@ namespace SwitchBlocks.Setups
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="settings">Settings of the auto type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(SettingsAuto settings, PlayerEntity player)
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsAuto settings, BodyComp body)
         {
             if (!IsUsed)
             {
@@ -40,7 +40,6 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Auto,
                 entityLogic);
 
-            var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset(settings.DurationOff));

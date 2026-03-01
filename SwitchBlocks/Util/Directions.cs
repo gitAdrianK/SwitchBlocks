@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Util
 {
     using System;
-    using Behaviours;
+    using Behaviours.Dummy;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
 

@@ -1,7 +1,7 @@
-namespace SwitchBlocks.Behaviours
+namespace SwitchBlocks.Behaviours.Dummy
 {
     using System;
-    using Blocks;
+    using Blocks.Dummy;
     using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
@@ -16,6 +16,8 @@ namespace SwitchBlocks.Behaviours
     /// </summary>
     public class BehaviourPost : IBlockBehaviour
     {
+        // Yes, I realize that it's a bunch of static variables and that I should maybe change it.
+
         /// <summary>If the player is on any ice block.</summary>
         public static bool IsPlayerOnIce { get; set; }
 
@@ -24,9 +26,6 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>If the player is on any water block.</summary>
         public static bool IsPlayerOnWater { get; set; }
-
-        // Vanilla sand like behaviour is handled by a patch to the AdvCollisionInfo.Sand.
-        // This is because collision doesn't quite work correctly otherwise.
 
         ///<summary>If the player is on any sand type block.</summary>
         public static bool IsPlayerOnTypeSand { get; set; }
@@ -43,7 +42,11 @@ namespace SwitchBlocks.Behaviours
         /// <summary>The velocity of the previous time this behaviour has run.</summary>
         public static Vector2 PrevVelocity { get; private set; } = new Vector2(0, 0);
 
-        // Documentation is false, higher numbers are run first!
+        // Vanilla sand like behaviour is handled by a patch to the AdvCollisionInfo.Sand.
+        // This is because collision doesn't quite work correctly otherwise.
+
+        // Even though it would make more sense for priorities to be reversed, it does not work the other way around!
+        /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioLast;
 
         /// <inheritdoc />
@@ -101,13 +104,14 @@ namespace SwitchBlocks.Behaviours
                 IsPlayerOnSnow = false;
             }
 
+            var bodyComp = behaviourContext.BodyComp;
             if (IsPlayerOnInfinityJump)
             {
                 PatchBodyComp.SetKnocked(false);
-                Camera.UpdateCamera(behaviourContext.BodyComp.Position.ToPoint());
+                Camera.UpdateCamera(bodyComp.Position.ToPoint());
             }
 
-            PrevVelocity = behaviourContext.BodyComp.Velocity;
+            PrevVelocity = bodyComp.Velocity;
 
             return true;
         }

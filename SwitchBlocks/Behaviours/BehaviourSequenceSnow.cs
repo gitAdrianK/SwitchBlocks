@@ -4,6 +4,7 @@ namespace SwitchBlocks.Behaviours
     using System.Linq;
     using Blocks;
     using Data;
+    using Dummy;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;

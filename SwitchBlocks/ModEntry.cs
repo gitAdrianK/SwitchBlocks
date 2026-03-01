@@ -2,8 +2,8 @@ namespace SwitchBlocks
 {
     using System.Linq;
     using System.Reflection;
-    using Behaviours;
-    using Blocks;
+    using Behaviours.Dummy;
+    using Blocks.Dummy;
     using Entities;
     using EntityComponent;
     using Factories;
@@ -78,24 +78,26 @@ namespace SwitchBlocks
                 return;
             }
 
-            PatchBodyComp.BodyComp = player.m_body;
+            var body = player.m_body;
+            PatchBodyComp.BodyComp = body;
 
             ModSounds.Setup(levelID);
 
             // These behaviours are used as a way to create pre- and post-behaviour points as well as unify certain
             // behaviours into one. These are not player behaviours so we can use priorities as well as cheese
             // the "Player behaviour modifiers detected" message.
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
-            _ = player.m_body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
+            _ = body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
+            _ = body.RegisterBlockBehaviour(typeof(BlockConveyor), new BehaviourConveyor());
+            _ = body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
 
             var settings = new ModSettings();
-            SetupAuto.Setup(settings.SettingsAuto, player);
-            SetupBasic.Setup(settings.SettingsBasic, player);
-            SetupCountdown.Setup(settings.SettingsCountdown, player);
-            SetupGroup.Setup(settings.SettingsGroup, player);
+            SetupAuto.Setup(settings.SettingsAuto, body);
+            SetupBasic.Setup(settings.SettingsBasic, body);
+            SetupCountdown.Setup(settings.SettingsCountdown, body);
+            SetupGroup.Setup(settings.SettingsGroup, body);
             SetupJump.Setup(settings.SettingsJump, player);
-            SetupSand.Setup(settings.SettingsSand, player, LevelManager.Instance);
-            SetupSequence.Setup(settings.SettingsSequence, player);
+            SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance);
+            SetupSequence.Setup(settings.SettingsSequence, body);
 
             var entities = entityManager.Entities
                 .SkipWhile(entity => entity != player)

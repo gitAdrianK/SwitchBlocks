@@ -1,6 +1,6 @@
 namespace SwitchBlocks
 {
-    using Behaviours;
+    using Behaviours.Dummy;
     using JumpKing.API;
 
     /// <summary>
@@ -61,6 +61,9 @@ namespace SwitchBlocks
 
         /// <summary>Progress name inside .sav files.</summary>
         public const string SaveProgress = "_progress";
+
+        /// <summary>Unclamped progress name inside .sav files.</summary>
+        public const string SaveProgressUnclamped = "_progressUnclamped";
 
         /// <summary>HasSwitched name inside .sav files.</summary>
         public const string SaveHasSwitched = "_hasSwitched";
@@ -136,12 +139,11 @@ namespace SwitchBlocks
 
         /// <summary>
         ///     <see cref="IBlockBehaviour" /> priority run after normal behaviours but before the one run last.
-        ///     It is slightly below 1 to run after vanilla behaviours with priority 1.
         /// </summary>
         public const float PrioLate = 1.5f;
 
         /// <summary><see cref="IBlockBehaviour" /> priority run after all other behaviours. Used for <see cref="BehaviourPost" />.</summary>
-        public const float PrioLast = 0.99f;
+        public const float PrioLast = 0.95f;
 
         /// <summary>Used to convert time seconds to ticks.</summary>
         public const float DeltaTime = 0.01666667f;

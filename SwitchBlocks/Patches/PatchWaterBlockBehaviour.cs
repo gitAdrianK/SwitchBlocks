@@ -1,6 +1,6 @@
 ﻿namespace SwitchBlocks.Patches
 {
-    using Behaviours;
+    using Behaviours.Dummy;
     using HarmonyLib;
     using JetBrains.Annotations;
     using JumpKing.BlockBehaviours;

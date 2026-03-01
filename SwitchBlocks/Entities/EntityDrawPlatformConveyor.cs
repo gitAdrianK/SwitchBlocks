@@ -1,4 +1,4 @@
-namespace SwitchBlocks.Entities
+﻿namespace SwitchBlocks.Entities
 {
     using System;
     using Data;
@@ -8,7 +8,7 @@ namespace SwitchBlocks.Entities
     using Util;
     using Util.Deserialization;
 
-    public class EntityDrawPlatformSand : EntityDraw
+    public class EntityDrawPlatformConveyor : EntityDraw
     {
         /// <summary>
         ///     Ctor.
@@ -16,7 +16,7 @@ namespace SwitchBlocks.Entities
         /// <param name="platform">Deserialization helper <see cref="PlatformScrolling" />.</param>
         /// <param name="screen">Screen this entity is on.</param>
         /// <param name="data"><see cref="IDataProvider" />.</param>
-        public EntityDrawPlatformSand(
+        public EntityDrawPlatformConveyor(
             PlatformScrolling platform,
             int screen,
             IDataProvider data)
@@ -25,6 +25,7 @@ namespace SwitchBlocks.Entities
             this.Scrolling = platform.Scrolling;
             this.Foreground = platform.Foreground;
             this.StartState = platform.StartState;
+            this.Multiplier = platform.Multiplier;
 
             if (this.Texture != null)
             {
@@ -48,6 +49,9 @@ namespace SwitchBlocks.Entities
 
         /// <summary>Start state.</summary>
         private StartState StartState { get; }
+
+        /// <summary>Scroll speed multiplier.</summary>
+        private float Multiplier { get; }
 
         /// <summary><see cref="IDataProvider" />.</summary>
         private IDataProvider Data { get; }
@@ -79,6 +83,9 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        // XXX: This DESPERATELY needs to use the same draw as vanilla sand.
+        // Calling .End() and .Start() repeatedly to set PointWrap is NOT an option.
+
         /// <summary>
         ///     Draws a given <see cref="Texture2D" />.
         /// </summary>
@@ -99,35 +106,34 @@ namespace SwitchBlocks.Entities
         /// </summary>
         private void DrawScrolling()
         {
-            var actualOffset = (int)(this.Data.Progress % this.Scrolling.Height);
+            var actualOffset = (int)(this.Data.ProgressUnclamped * this.Multiplier) % this.Scrolling.Width;
             actualOffset = this.StartState == StartState.On == this.Data.State
                 ? actualOffset
-                : this.Scrolling.Height - actualOffset;
+                : this.Scrolling.Width - actualOffset;
 
-            // Depending on if the offset would make it so we go past the texture.
-            if (actualOffset + this.Height > this.Scrolling.Height)
+            if (actualOffset + this.Width > this.Scrolling.Width)
             {
-                var diff = this.Scrolling.Height - actualOffset;
+                var diff = this.Scrolling.Width - actualOffset;
                 Game1.spriteBatch.Draw(
                     this.Scrolling,
                     this.Position,
                     new Rectangle(
-                        0,
                         actualOffset,
-                        this.Width,
-                        diff),
+                        0,
+                        diff,
+                        this.Height),
                     Color.White);
 
                 Game1.spriteBatch.Draw(
                     this.Scrolling,
                     new Vector2(
-                        this.Position.X,
-                        this.Position.Y + diff),
+                        this.Position.X + diff,
+                        this.Position.Y),
                     new Rectangle(
                         0,
                         0,
-                        this.Width,
-                        this.Height - diff),
+                        this.Width - diff,
+                        this.Height),
                     Color.White);
                 return;
             }
@@ -136,8 +142,8 @@ namespace SwitchBlocks.Entities
                 this.Scrolling,
                 this.Position,
                 new Rectangle(
-                    0,
                     actualOffset,
+                    0,
                     this.Width,
                     this.Height),
                 Color.White);

@@ -45,8 +45,8 @@ namespace SwitchBlocks.Setups
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="settings">Settings of the group type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(SettingsGroup settings, PlayerEntity player)
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsGroup settings, BodyComp body)
         {
             if (!IsUsed)
             {
@@ -66,7 +66,6 @@ namespace SwitchBlocks.Setups
             var entityLogic = new EntityLogicGroup(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
 
-            var body = player.m_body;
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockGroupA),
                     new BehaviourGroupLeaving(settings.PlatformDirections))

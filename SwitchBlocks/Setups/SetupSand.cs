@@ -21,9 +21,9 @@ namespace SwitchBlocks.Setups
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="settings">Settings of the sand type.</param>
-        /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to.</param>
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="collisionQuery">An implementor of <see cref="ICollisionQuery" /></param>
-        public static void Setup(SettingsSand settings, PlayerEntity player, ICollisionQuery collisionQuery)
+        public static void Setup(SettingsSand settings, BodyComp body, ICollisionQuery collisionQuery)
         {
             if (!IsUsed)
             {
@@ -42,7 +42,6 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.BlockType.Sand,
                 entityLogic);
 
-            var body = player.m_body;
             if (settings.IsV2)
             {
                 // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.

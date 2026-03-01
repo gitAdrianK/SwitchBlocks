@@ -2,6 +2,7 @@ namespace SwitchBlocks.Behaviours
 {
     using Blocks;
     using Data;
+    using Dummy;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;

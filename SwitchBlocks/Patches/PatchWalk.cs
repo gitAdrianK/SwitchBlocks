@@ -4,15 +4,16 @@ namespace SwitchBlocks.Patches
     using System.Linq;
     using System.Reflection.Emit;
     using BehaviorTree;
-    using Behaviours;
+    using Behaviours.Dummy;
     using HarmonyLib;
     using JetBrains.Annotations;
     using JumpKing.Player;
 
     /// <summary>
     ///     Adds a transpiler to the vanilla <see cref="Walk" />.
+    ///     This patch is disabled!
     /// </summary>
-    [HarmonyPatch(typeof(Walk), "MyRun")]
+    //[HarmonyPatch(typeof(Walk), "MyRun")]
     public static class PatchWalk
     {
         /// <summary>

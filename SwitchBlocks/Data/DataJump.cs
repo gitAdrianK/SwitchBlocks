@@ -105,6 +105,9 @@ namespace SwitchBlocks.Data
         public float Progress { get; set; }
 
         /// <inheritdoc />
+        public float ProgressUnclamped { get; set; }
+
+        /// <inheritdoc />
         public int Tick { get; set; }
 
         /// <summary>

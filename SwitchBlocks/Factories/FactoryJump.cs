@@ -44,6 +44,69 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpWindEnableLegacy,
         };
 
+        /// <summary>Solid Block Codes.</summary>
+        private static readonly HashSet<Color> SolidJumpBlocks = new HashSet<Color>
+        {
+            ModBlocks.JumpOn,
+            ModBlocks.JumpOnLegacy,
+            ModBlocks.JumpOff,
+            ModBlocks.JumpOffLegacy,
+            ModBlocks.JumpIceOn,
+            ModBlocks.JumpIceOnLegacy,
+            ModBlocks.JumpIceOff,
+            ModBlocks.JumpIceOffLegacy,
+            ModBlocks.JumpSnowOn,
+            ModBlocks.JumpSnowOnLegacy,
+            ModBlocks.JumpSnowOff,
+            ModBlocks.JumpSnowOffLegacy,
+            ModBlocks.JumpSandOn,
+            ModBlocks.JumpSandOff,
+            ModBlocks.JumpSlopeOn,
+            ModBlocks.JumpSlopeOff,
+        };
+
+        /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
+        private static readonly Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>> BlockFactories
+            = new Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>>
+            {
+                [ModBlocks.JumpOn] = (rect, src, screen, x, y) => new BlockJumpOn(rect),
+                [ModBlocks.JumpOnLegacy] = (rect, src, screen, x, y) => new BlockJumpOn(rect),
+                [ModBlocks.JumpOff] = (rect, src, screen, x, y) => new BlockJumpOff(rect),
+                [ModBlocks.JumpOffLegacy] = (rect, src, screen, x, y) => new BlockJumpOff(rect),
+                [ModBlocks.JumpIceOn] = (rect, src, screen, x, y) => new BlockJumpIceOn(rect),
+                [ModBlocks.JumpIceOnLegacy] = (rect, src, screen, x, y) => new BlockJumpIceOn(rect),
+                [ModBlocks.JumpIceOff] = (rect, src, screen, x, y) => new BlockJumpIceOff(rect),
+                [ModBlocks.JumpIceOffLegacy] = (rect, src, screen, x, y) => new BlockJumpIceOff(rect),
+                [ModBlocks.JumpSnowOn] = (rect, src, screen, x, y) => new BlockJumpSnowOn(rect),
+                [ModBlocks.JumpSnowOnLegacy] = (rect, src, screen, x, y) => new BlockJumpSnowOn(rect),
+                [ModBlocks.JumpSnowOff] = (rect, src, screen, x, y) => new BlockJumpSnowOff(rect),
+                [ModBlocks.JumpSnowOffLegacy] = (rect, src, screen, x, y) => new BlockJumpSnowOff(rect),
+                [ModBlocks.JumpWaterOn] = (rect, src, screen, x, y) => new BlockJumpWaterOn(rect),
+                [ModBlocks.JumpWaterOnLegacy] = (rect, src, screen, x, y) => new BlockJumpWaterOn(rect),
+                [ModBlocks.JumpWaterOff] = (rect, src, screen, x, y) => new BlockJumpWaterOff(rect),
+                [ModBlocks.JumpWaterOffLegacy] = (rect, src, screen, x, y) => new BlockJumpWaterOff(rect),
+                [ModBlocks.JumpSandOn] = (rect, src, screen, x, y) => new BlockJumpSandOn(rect),
+                [ModBlocks.JumpSandOff] = (rect, src, screen, x, y) => new BlockJumpSandOff(rect),
+                [ModBlocks.JumpSlopeOn] = (rect, src, screen, x, y) =>
+                    new BlockJumpSlopeOn(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.JumpSlopeOff] = (rect, src, screen, x, y) =>
+                    new BlockJumpSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.JumpInfinityJumpOn] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOn(rect),
+                [ModBlocks.JumpInfinityJumpOnLegacy] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOn(rect),
+                [ModBlocks.JumpInfinityJumpOff] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOff(rect),
+                [ModBlocks.JumpInfinityJumpOffLegacy] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOff(rect),
+                [ModBlocks.JumpWindEnable] = (rect, src, screen, x, y) =>
+                {
+                    _ = SetupJump.WindEnabled.Add(screen);
+                    return new BlockWind();
+                },
+                [ModBlocks.JumpWindEnableLegacy] = (rect, src, screen, x, y) =>
+                {
+                    _ = SetupJump.WindEnabled.Add(screen);
+                    return new BlockWind();
+                },
+            };
+
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
@@ -51,31 +114,7 @@ namespace SwitchBlocks.Factories
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode)
-        {
-            switch (blockCode)
-            {
-                case var _ when blockCode == ModBlocks.JumpOn:
-                case var _ when blockCode == ModBlocks.JumpOnLegacy:
-                case var _ when blockCode == ModBlocks.JumpOff:
-                case var _ when blockCode == ModBlocks.JumpOffLegacy:
-                case var _ when blockCode == ModBlocks.JumpIceOn:
-                case var _ when blockCode == ModBlocks.JumpIceOnLegacy:
-                case var _ when blockCode == ModBlocks.JumpIceOff:
-                case var _ when blockCode == ModBlocks.JumpIceOffLegacy:
-                case var _ when blockCode == ModBlocks.JumpSnowOn:
-                case var _ when blockCode == ModBlocks.JumpSnowOnLegacy:
-                case var _ when blockCode == ModBlocks.JumpSnowOff:
-                case var _ when blockCode == ModBlocks.JumpSnowOffLegacy:
-                case var _ when blockCode == ModBlocks.JumpSandOn:
-                case var _ when blockCode == ModBlocks.JumpSandOff:
-                case var _ when blockCode == ModBlocks.JumpSlopeOn:
-                case var _ when blockCode == ModBlocks.JumpSlopeOff:
-                    return true;
-            }
-
-            return false;
-        }
+        public bool IsSolidBlock(Color blockCode) => SolidJumpBlocks.Contains(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -87,59 +126,13 @@ namespace SwitchBlocks.Factories
                 LastUsedMapId = level.ID;
             }
 
-            switch (blockCode)
+            if (BlockFactories.TryGetValue(blockCode, out var factory))
             {
-                case var _ when blockCode == ModBlocks.JumpOn:
-                case var _ when blockCode == ModBlocks.JumpOnLegacy:
-                    return new BlockJumpOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpOff:
-                case var _ when blockCode == ModBlocks.JumpOffLegacy:
-                    return new BlockJumpOff(blockRect);
-                case var _ when blockCode == ModBlocks.JumpIceOn:
-                case var _ when blockCode == ModBlocks.JumpIceOnLegacy:
-                    return new BlockJumpIceOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpIceOff:
-                case var _ when blockCode == ModBlocks.JumpIceOffLegacy:
-                    return new BlockJumpIceOff(blockRect);
-                case var _ when blockCode == ModBlocks.JumpSnowOn:
-                case var _ when blockCode == ModBlocks.JumpSnowOnLegacy:
-                    return new BlockJumpSnowOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpSnowOff:
-                case var _ when blockCode == ModBlocks.JumpSnowOffLegacy:
-                    return new BlockJumpSnowOff(blockRect);
-                case var _ when blockCode == ModBlocks.JumpWaterOn:
-                case var _ when blockCode == ModBlocks.JumpWaterOnLegacy:
-                    return new BlockJumpWaterOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpWaterOff:
-                case var _ when blockCode == ModBlocks.JumpWaterOffLegacy:
-                    return new BlockJumpWaterOff(blockRect);
-                case var _ when blockCode == ModBlocks.JumpSandOn:
-                    return new BlockJumpSandOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpSandOff:
-                    return new BlockJumpSandOff(blockRect);
-                case var _ when blockCode == ModBlocks.JumpSlopeOn:
-                    return new BlockJumpSlopeOn(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                case var _ when blockCode == ModBlocks.JumpSlopeOff:
-                    return new BlockJumpSlopeOff(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-
-                case var _ when blockCode == ModBlocks.JumpInfinityJumpOn:
-                case var _ when blockCode == ModBlocks.JumpInfinityJumpOnLegacy:
-                    return new BlockJumpInfinityJumpOn(blockRect);
-                case var _ when blockCode == ModBlocks.JumpInfinityJumpOff:
-                case var _ when blockCode == ModBlocks.JumpInfinityJumpOffLegacy:
-                    return new BlockJumpInfinityJumpOff(blockRect);
-
-                case var _ when blockCode == ModBlocks.JumpWindEnable:
-                case var _ when blockCode == ModBlocks.JumpWindEnableLegacy:
-                    _ = SetupJump.WindEnabled.Add(currentScreen);
-                    return new BlockWind();
-
-                default:
-                    throw new InvalidOperationException(
-                        $"{nameof(FactoryJump)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                return factory(blockRect, textureSrc, currentScreen, x, y);
             }
+
+            throw new InvalidOperationException(
+                $"{nameof(FactoryJump)} cannot create a block with Color ({blockCode.R}, {blockCode.G}, {blockCode.B})");
         }
     }
 }

@@ -44,36 +44,73 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicWindEnable,
         };
 
+        /// <summary>Solid Block Codes.</summary>
+        private static readonly HashSet<Color> SolidBasicBlocks = new HashSet<Color>
+        {
+            ModBlocks.BasicOn,
+            ModBlocks.BasicOff,
+            ModBlocks.BasicIceOn,
+            ModBlocks.BasicIceOff,
+            ModBlocks.BasicSnowOn,
+            ModBlocks.BasicSnowOff,
+            ModBlocks.BasicSandOn,
+            ModBlocks.BasicSandOff,
+            ModBlocks.BasicSlopeOn,
+            ModBlocks.BasicSlopeOff,
+            ModBlocks.BasicLeverSolid,
+            ModBlocks.BasicLeverSolidOn,
+            ModBlocks.BasicLeverSolidOff,
+        };
+
+        /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
+        private static readonly Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>> BlockFactories
+            = new Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>>
+            {
+                [ModBlocks.BasicOn] = (rect, src, screen, x, y) => new BlockBasicOn(rect),
+                [ModBlocks.BasicOff] = (rect, src, screen, x, y) => new BlockBasicOff(rect),
+                [ModBlocks.BasicIceOn] = (rect, src, screen, x, y) => new BlockBasicIceOn(rect),
+                [ModBlocks.BasicIceOff] = (rect, src, screen, x, y) => new BlockBasicIceOff(rect),
+                [ModBlocks.BasicSnowOn] = (rect, src, screen, x, y) => new BlockBasicSnowOn(rect),
+                [ModBlocks.BasicSnowOff] = (rect, src, screen, x, y) => new BlockBasicSnowOff(rect),
+                [ModBlocks.BasicWaterOn] = (rect, src, screen, x, y) => new BlockBasicWaterOn(rect),
+                [ModBlocks.BasicWaterOff] = (rect, src, screen, x, y) => new BlockBasicWaterOff(rect),
+                [ModBlocks.BasicSandOn] = (rect, src, screen, x, y) => new BlockBasicSandOn(rect),
+                [ModBlocks.BasicSandOff] = (rect, src, screen, x, y) => new BlockBasicSandOff(rect),
+                [ModBlocks.BasicSlopeOn] = (rect, src, screen, x, y) =>
+                    new BlockBasicSlopeOn(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.BasicSlopeOff] = (rect, src, screen, x, y) =>
+                    new BlockBasicSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.BasicMoveUpOn] = (rect, src, screen, x, y) => new BlockBasicMoveUpOn(rect),
+                [ModBlocks.BasicMoveUpOff] = (rect, src, screen, x, y) => new BlockBasicMoveUpOff(rect),
+                [ModBlocks.BasicInfinityJumpOn] = (rect, src, screen, x, y) => new BlockBasicInfinityJumpOn(rect),
+                [ModBlocks.BasicInfinityJumpOff] = (rect, src, screen, x, y) => new BlockBasicInfinityJumpOff(rect),
+                [ModBlocks.BasicLever] = (rect, src, screen, x, y) => new BlockBasicLever(rect),
+                [ModBlocks.BasicLeverOn] = (rect, src, screen, x, y) => new BlockBasicLeverOn(rect),
+                [ModBlocks.BasicLeverOff] = (rect, src, screen, x, y) => new BlockBasicLeverOff(rect),
+                [ModBlocks.BasicLeverSolid] = (rect, src, screen, x, y) => new BlockBasicLeverSolid(rect),
+                [ModBlocks.BasicLeverSolidOn] = (rect, src, screen, x, y) => new BlockBasicLeverSolidOn(rect),
+                [ModBlocks.BasicLeverSolidOff] = (rect, src, screen, x, y) => new BlockBasicLeverSolidOff(rect),
+                [ModBlocks.BasicWindEnable] = (rect, src, screen, x, y) =>
+                {
+                    _ = SetupBasic.WindEnabled.Add(screen);
+                    return new BlockWind();
+                },
+            };
+
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         /// <inheritdoc />
-        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
+        public bool CanMakeBlock(Color blockCode, Level level) =>
+            SupportedBlockCodes.Contains(blockCode)
+            || IsBasicConveyorOn(blockCode)
+            || IsBasicConveyorOff(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode)
-        {
-            switch (blockCode)
-            {
-                case var _ when blockCode == ModBlocks.BasicOn:
-                case var _ when blockCode == ModBlocks.BasicOff:
-                case var _ when blockCode == ModBlocks.BasicIceOn:
-                case var _ when blockCode == ModBlocks.BasicIceOff:
-                case var _ when blockCode == ModBlocks.BasicSnowOn:
-                case var _ when blockCode == ModBlocks.BasicSnowOff:
-                case var _ when blockCode == ModBlocks.BasicSandOn:
-                case var _ when blockCode == ModBlocks.BasicSandOff:
-                case var _ when blockCode == ModBlocks.BasicSlopeOn:
-                case var _ when blockCode == ModBlocks.BasicSlopeOff:
-
-                case var _ when blockCode == ModBlocks.BasicLeverSolid:
-                case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
-                case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
-                    return true;
-            }
-
-            return false;
-        }
+        public bool IsSolidBlock(Color blockCode) =>
+            SolidBasicBlocks.Contains(blockCode)
+            || IsBasicConveyorOn(blockCode)
+            || IsBasicConveyorOff(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -85,65 +122,45 @@ namespace SwitchBlocks.Factories
                 LastUsedMapId = level.ID;
             }
 
-            switch (blockCode)
+            if (BlockFactories.TryGetValue(blockCode, out var factory))
             {
-                case var _ when blockCode == ModBlocks.BasicOn:
-                    return new BlockBasicOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicOff:
-                    return new BlockBasicOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicIceOn:
-                    return new BlockBasicIceOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicIceOff:
-                    return new BlockBasicIceOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicSnowOn:
-                    return new BlockBasicSnowOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicSnowOff:
-                    return new BlockBasicSnowOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicWaterOn:
-                    return new BlockBasicWaterOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicWaterOff:
-                    return new BlockBasicWaterOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicSandOn:
-                    return new BlockBasicSandOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicSandOff:
-                    return new BlockBasicSandOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicSlopeOn:
-                    return new BlockBasicSlopeOn(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                case var _ when blockCode == ModBlocks.BasicSlopeOff:
-                    return new BlockBasicSlopeOff(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-
-                case var _ when blockCode == ModBlocks.BasicMoveUpOn:
-                    return new BlockBasicMoveUpOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicMoveUpOff:
-                    return new BlockBasicMoveUpOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicInfinityJumpOn:
-                    return new BlockBasicInfinityJumpOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicInfinityJumpOff:
-                    return new BlockBasicInfinityJumpOff(blockRect);
-
-                case var _ when blockCode == ModBlocks.BasicLever:
-                    return new BlockBasicLever(blockRect);
-                case var _ when blockCode == ModBlocks.BasicLeverOn:
-                    return new BlockBasicLeverOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicLeverOff:
-                    return new BlockBasicLeverOff(blockRect);
-                case var _ when blockCode == ModBlocks.BasicLeverSolid:
-                    return new BlockBasicLeverSolid(blockRect);
-                case var _ when blockCode == ModBlocks.BasicLeverSolidOn:
-                    return new BlockBasicLeverSolidOn(blockRect);
-                case var _ when blockCode == ModBlocks.BasicLeverSolidOff:
-                    return new BlockBasicLeverSolidOff(blockRect);
-
-                case var _ when blockCode == ModBlocks.BasicWindEnable:
-                    _ = SetupBasic.WindEnabled.Add(currentScreen);
-                    return new BlockWind();
-
-                default:
-                    throw new InvalidOperationException(
-                        $"{nameof(FactoryBasic)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                return factory(blockRect, textureSrc, currentScreen, x, y);
             }
+
+            if (IsBasicConveyorOn(blockCode))
+            {
+                return new BlockBasicConveyorOn(blockRect, blockCode.B);
+            }
+
+            if (IsBasicConveyorOff(blockCode))
+            {
+                return new BlockBasicConveyorOff(blockRect, blockCode.R);
+            }
+
+            throw new InvalidOperationException(
+                $"{nameof(FactoryBasic)} cannot create a block with Color ({blockCode.R}, {blockCode.G}, {blockCode.B})");
         }
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockBasicConveyorOn" />
+        /// </summary>
+        /// <param name="blockCode">The to check block code.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockBasicConveyorOn" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsBasicConveyorOn(Color blockCode) =>
+            blockCode.R == ModBlocks.BasicConveyorOn.R
+            && blockCode.G == ModBlocks.BasicConveyorOn.G
+            && blockCode.B >= 1
+            && blockCode.B <= 30;
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockBasicConveyorOff" />
+        /// </summary>
+        /// <param name="blockCode">The to check block code.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockBasicConveyorOff" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsBasicConveyorOff(Color blockCode) =>
+            blockCode.G == ModBlocks.BasicConveyorOff.G
+            && blockCode.B == ModBlocks.BasicConveyorOff.B
+            && blockCode.R >= 1
+            && blockCode.R <= 30;
     }
 }

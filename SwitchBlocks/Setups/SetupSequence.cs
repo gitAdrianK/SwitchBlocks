@@ -39,8 +39,8 @@ namespace SwitchBlocks.Setups
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="settings">Settings of the sequence type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(SettingsSequence settings, PlayerEntity player)
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsSequence settings, BodyComp body)
         {
             if (!IsUsed)
             {
@@ -74,7 +74,6 @@ namespace SwitchBlocks.Setups
             var entityLogic = new EntityLogicSequence(settings);
             FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
 
-            var body = player.m_body;
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockSequenceA),
                     new BehaviourSequenceTouching(settings.DisableOnLeaving, settings.PlatformDirections))

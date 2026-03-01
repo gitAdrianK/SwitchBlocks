@@ -39,6 +39,142 @@ namespace SwitchBlocks.Factories
             ModBlocks.GroupResetSolid,
         };
 
+        /// <summary>Solid Block Codes.</summary>
+        private static readonly HashSet<Color> SolidGroupBlocks = new HashSet<Color>
+        {
+            ModBlocks.GroupA,
+            ModBlocks.GroupB,
+            ModBlocks.GroupC,
+            ModBlocks.GroupD,
+            ModBlocks.GroupIceA,
+            ModBlocks.GroupIceB,
+            ModBlocks.GroupIceC,
+            ModBlocks.GroupIceD,
+            ModBlocks.GroupSnowA,
+            ModBlocks.GroupSnowB,
+            ModBlocks.GroupSnowC,
+            ModBlocks.GroupSnowD,
+            ModBlocks.GroupSlopeA,
+            ModBlocks.GroupSlopeB,
+            ModBlocks.GroupSlopeC,
+            ModBlocks.GroupSlopeD,
+            ModBlocks.GroupResetSolid,
+        };
+
+        /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
+        private static readonly Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>> BlockFactories
+            = new Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>>
+            {
+                [ModBlocks.GroupA] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupA(rect);
+                    SetupGroup.BlocksGroupA[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupB] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupB(rect);
+                    SetupGroup.BlocksGroupB[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupC] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupC(rect);
+                    SetupGroup.BlocksGroupC[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupD] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupD(rect);
+                    SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupIceA] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupIceA(rect);
+                    SetupGroup.BlocksGroupA[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupIceB] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupIceB(rect);
+                    SetupGroup.BlocksGroupB[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupIceC] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupIceC(rect);
+                    SetupGroup.BlocksGroupC[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupIceD] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupIceD(rect);
+                    SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSnowA] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSnowA(rect);
+                    SetupGroup.BlocksGroupA[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSnowB] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSnowB(rect);
+                    SetupGroup.BlocksGroupB[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSnowC] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSnowC(rect);
+                    SetupGroup.BlocksGroupC[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSnowD] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSnowD(rect);
+                    SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSlopeA] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSlopeA(rect, Slopes.GetSlopeType(src, screen, x, y));
+                    SetupGroup.BlocksGroupA[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSlopeB] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSlopeB(rect, Slopes.GetSlopeType(src, screen, x, y));
+                    SetupGroup.BlocksGroupB[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSlopeC] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSlopeC(rect, Slopes.GetSlopeType(src, screen, x, y));
+                    SetupGroup.BlocksGroupC[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupSlopeD] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupSlopeD(rect, Slopes.GetSlopeType(src, screen, x, y));
+                    SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupReset] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupReset(rect);
+                    SetupGroup.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupResetSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupResetSolid(rect);
+                    SetupGroup.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+            };
+
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
@@ -46,33 +182,7 @@ namespace SwitchBlocks.Factories
         public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode)
-        {
-            switch (blockCode)
-            {
-                case var _ when blockCode == ModBlocks.GroupA:
-                case var _ when blockCode == ModBlocks.GroupB:
-                case var _ when blockCode == ModBlocks.GroupC:
-                case var _ when blockCode == ModBlocks.GroupD:
-                case var _ when blockCode == ModBlocks.GroupIceA:
-                case var _ when blockCode == ModBlocks.GroupIceB:
-                case var _ when blockCode == ModBlocks.GroupIceC:
-                case var _ when blockCode == ModBlocks.GroupIceD:
-                case var _ when blockCode == ModBlocks.GroupSnowA:
-                case var _ when blockCode == ModBlocks.GroupSnowB:
-                case var _ when blockCode == ModBlocks.GroupSnowC:
-                case var _ when blockCode == ModBlocks.GroupSnowD:
-                case var _ when blockCode == ModBlocks.GroupSlopeA:
-                case var _ when blockCode == ModBlocks.GroupSlopeB:
-                case var _ when blockCode == ModBlocks.GroupSlopeC:
-                case var _ when blockCode == ModBlocks.GroupSlopeD:
-
-                case var _ when blockCode == ModBlocks.GroupResetSolid:
-                    return true;
-            }
-
-            return false;
-        }
+        public bool IsSolidBlock(Color blockCode) => SolidGroupBlocks.Contains(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -88,98 +198,13 @@ namespace SwitchBlocks.Factories
                 LastUsedMapId = level.ID;
             }
 
-            switch (blockCode)
+            if (BlockFactories.TryGetValue(blockCode, out var factory))
             {
-                // Position stored in a single integer.
-                // X and Y can never be a three-digit number.
-                // Screen can never be a four-digit number.
-                // As such the integers form is 00...00SSSXXYY.
-                case var _ when blockCode == ModBlocks.GroupA:
-                    var blockGroupA = new BlockGroupA(blockRect);
-                    SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupA;
-                    return blockGroupA;
-                case var _ when blockCode == ModBlocks.GroupB:
-                    var blockGroupB = new BlockGroupB(blockRect);
-                    SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupB;
-                    return blockGroupB;
-                case var _ when blockCode == ModBlocks.GroupC:
-                    var blockGroupC = new BlockGroupC(blockRect);
-                    SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupC;
-                    return blockGroupC;
-                case var _ when blockCode == ModBlocks.GroupD:
-                    var blockGroupD = new BlockGroupD(blockRect);
-                    SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupD;
-                    return blockGroupD;
-                case var _ when blockCode == ModBlocks.GroupIceA:
-                    var blockGroupIceA = new BlockGroupIceA(blockRect);
-                    SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupIceA;
-                    return blockGroupIceA;
-                case var _ when blockCode == ModBlocks.GroupIceB:
-                    var blockGroupIceB = new BlockGroupIceB(blockRect);
-                    SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupIceB;
-                    return blockGroupIceB;
-                case var _ when blockCode == ModBlocks.GroupIceC:
-                    var blockGroupIceC = new BlockGroupIceC(blockRect);
-                    SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupIceC;
-                    return blockGroupIceC;
-                case var _ when blockCode == ModBlocks.GroupIceD:
-                    var blockGroupIceD = new BlockGroupIceD(blockRect);
-                    SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupIceD;
-                    return blockGroupIceD;
-                case var _ when blockCode == ModBlocks.GroupSnowA:
-                    var blockGroupSnowA = new BlockGroupSnowA(blockRect);
-                    SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowA;
-                    return blockGroupSnowA;
-                case var _ when blockCode == ModBlocks.GroupSnowB:
-                    var blockGroupSnowB = new BlockGroupSnowB(blockRect);
-                    SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowB;
-                    return blockGroupSnowB;
-                case var _ when blockCode == ModBlocks.GroupSnowC:
-                    var blockGroupSnowC = new BlockGroupSnowC(blockRect);
-                    SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowC;
-                    return blockGroupSnowC;
-                case var _ when blockCode == ModBlocks.GroupSnowD:
-                    var blockGroupSnowD = new BlockGroupSnowD(blockRect);
-                    SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSnowD;
-                    return blockGroupSnowD;
-                case var _ when blockCode == ModBlocks.GroupSlopeA:
-                    var blockGroupSlopeA =
-                        new BlockGroupSlopeA(blockRect,
-                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                    SetupGroup.BlocksGroupA[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeA;
-                    return blockGroupSlopeA;
-                case var _ when blockCode == ModBlocks.GroupSlopeB:
-                    var blockGroupSlopeB =
-                        new BlockGroupSlopeB(blockRect,
-                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                    SetupGroup.BlocksGroupB[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeB;
-                    return blockGroupSlopeB;
-                case var _ when blockCode == ModBlocks.GroupSlopeC:
-                    var blockGroupSlopeC =
-                        new BlockGroupSlopeC(blockRect,
-                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                    SetupGroup.BlocksGroupC[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeC;
-                    return blockGroupSlopeC;
-                case var _ when blockCode == ModBlocks.GroupSlopeD:
-                    var blockGroupSlopeD =
-                        new BlockGroupSlopeD(blockRect,
-                            Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                    SetupGroup.BlocksGroupD[((currentScreen + 1) * 10000) + (x * 100) + y] = blockGroupSlopeD;
-                    return blockGroupSlopeD;
-
-                case var _ when blockCode == ModBlocks.GroupReset:
-                    var blockReset = new BlockGroupReset(blockRect);
-                    SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockReset;
-                    return blockReset;
-                case var _ when blockCode == ModBlocks.GroupResetSolid:
-                    var blockResetSolid = new BlockGroupResetSolid(blockRect);
-                    SetupGroup.Resets[((currentScreen + 1) * 10000) + (x * 100) + y] = blockResetSolid;
-                    return blockResetSolid;
-
-                default:
-                    throw new InvalidOperationException(
-                        $"{nameof(FactoryGroup)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                return factory(blockRect, textureSrc, currentScreen, x, y);
             }
+
+            throw new InvalidOperationException(
+                $"{nameof(FactoryGroup)} cannot create a block with Color ({blockCode.R}, {blockCode.G}, {blockCode.B})");
         }
     }
 }

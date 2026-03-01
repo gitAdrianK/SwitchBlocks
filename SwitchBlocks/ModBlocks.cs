@@ -1,6 +1,7 @@
 namespace SwitchBlocks
 {
     using Blocks;
+    using Factories;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -24,6 +25,9 @@ namespace SwitchBlocks
             R:   _, G: 124, B: 238 = Off
             R:   _, G: 125, B: 238 = Off, from other mod
             R: 238, G:   _, B: 124 = Levers/Other
+
+            R:  238, G: 130, B: 1-30 = On, Countdown, conveyor speeds
+            R: 1-30, G: 130, B:  238 = Off, Countdown, conveyor speeds
         */
 
 
@@ -120,6 +124,18 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOff" />.</summary>
         public static readonly Color BasicInfinityJumpOff = new Color(22, 125, 238);
 
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicConveyorOn" />.
+        ///     The valid blue values are from 1 to 30 and will be checked for in the <see cref="FactoryBasic" />.
+        /// </summary>
+        public static readonly Color BasicConveyorOn = new Color(238, 120, 0);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicConveyorOff" />.
+        ///     The valid red values are from 1 to 30 and will be checked for in the <see cref="FactoryBasic" />.
+        /// </summary>
+        public static readonly Color BasicConveyorOff = new Color(0, 120, 238);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicLever" />.</summary>
         public static readonly Color BasicLever = new Color(238, 21, 124);
 
@@ -182,6 +198,18 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSlopeOff" />.</summary>
         public static readonly Color CountdownSlopeOff = new Color(35, 124, 238);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockCountdownConveyorOn" />.
+        ///     The valid blue values are from 1 to 30 and will be checked for in the <see cref="FactoryCountdown" />.
+        /// </summary>
+        public static readonly Color CountdownConveyorOn = new Color(238, 130, 0);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockCountdownConveyorOff" />.
+        ///     The valid red values are from 1 to 30 and will be checked for in the <see cref="FactoryCountdown" />.
+        /// </summary>
+        public static readonly Color CountdownConveyorOff = new Color(0, 130, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownLever" />.</summary>
         public static readonly Color CountdownLever = new Color(238, 31, 124);

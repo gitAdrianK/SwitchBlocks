@@ -51,6 +51,7 @@ namespace SwitchBlocks.Entities
         /// <param name="amount">Amount to be added/subtracted from the progress</param>
         protected void UpdateProgress(bool state, float amount)
         {
+            this.Data.ProgressUnclamped += amount;
             var stateInt = Convert.ToInt32(state);
             if (this.Data.Progress == stateInt)
             {

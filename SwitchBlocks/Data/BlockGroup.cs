@@ -22,6 +22,7 @@ namespace SwitchBlocks.Data
         {
             this.State = isEnabled;
             this.Progress = isEnabled ? 1.0f : 0.0f;
+            this.ProgressUnclamped = isEnabled ? 1.0f : 0.0f;
             this.ActivatedTick = isEnabled ? int.MaxValue : 0;
         }
 
@@ -33,6 +34,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public float Progress { get; set; }
+
+        /// <inheritdoc />
+        public float ProgressUnclamped { get; set; }
 
         /// <inheritdoc />
         public int Tick => this.ActivatedTick;

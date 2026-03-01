@@ -1,7 +1,7 @@
 namespace SwitchBlocks.Patches
 {
     using System;
-    using Behaviours;
+    using Behaviours.Dummy;
     using Data;
     using HarmonyLib;
     using JetBrains.Annotations;
@@ -18,7 +18,7 @@ namespace SwitchBlocks.Patches
         /// <summary>FieldRef of the <c>_knocked</c> field of <see cref="BodyComp" />.</summary>
         private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
             AccessTools.FieldRefAccess<BodyComp, bool>(
-                AccessTools.Field("JumpKing.Player.BodyComp:_knocked"));
+                AccessTools.Field(typeof(BodyComp), "_knocked"));
 
         /// <summary>
         ///     The current players <see cref="BodyComp" />.

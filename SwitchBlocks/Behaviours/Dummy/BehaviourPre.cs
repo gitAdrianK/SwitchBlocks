@@ -1,6 +1,6 @@
-namespace SwitchBlocks.Behaviours
+namespace SwitchBlocks.Behaviours.Dummy
 {
-    using Blocks;
+    using Blocks.Dummy;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;

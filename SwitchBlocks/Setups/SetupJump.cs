@@ -28,7 +28,7 @@ namespace SwitchBlocks.Setups
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
         /// <param name="settings">Settings of the jump type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
+        /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to and pass to the logic.</param>
         public static void Setup(SettingsJump settings, PlayerEntity player)
         {
             if (!IsUsed)

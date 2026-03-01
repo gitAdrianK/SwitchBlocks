@@ -25,8 +25,8 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// ///
         /// <param name="settings">Settings of the basic type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(SettingsBasic settings, PlayerEntity player)
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsBasic settings, BodyComp body)
         {
             if (!IsUsed)
             {
@@ -44,8 +44,11 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.DrawType.Levers,
                 FactoryDrawables.BlockType.Basic,
                 entityLogic);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Conveyors,
+                FactoryDrawables.BlockType.Basic,
+                entityLogic);
 
-            var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever(settings.LeverDirections));

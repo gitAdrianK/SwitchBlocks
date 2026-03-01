@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Factories
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -15,6 +16,10 @@ namespace SwitchBlocks.Factories
     using Util;
     using Util.Deserialization;
     using Curve = Util.Curve;
+
+    // Already working on a better solution. Will change. Or if it turns out to be less performant I guess we keep
+    // this poor excuse of a class. I REALLY don't want that to be the case, please!?
+    // Until then don't look at this mess.
 
     /// <summary>
     ///     Factory for drawable entities.
@@ -35,6 +40,7 @@ namespace SwitchBlocks.Factories
         public enum DrawType
         {
             Platforms,
+            Conveyors,
             Levers,
         }
 
@@ -83,7 +89,7 @@ namespace SwitchBlocks.Factories
                             CreatePlatforms(path, files, data, entityLogic);
                             break;
                         case BlockType.Sand:
-                            CreatePlatformsSand(path, files, data, entityLogic);
+                            CreatePlatformsScrolling(path, files, data, entityLogic, true);
                             break;
                         default:
                             throw new NotImplementedException("Unknown Block Type, cannot create entities!");
@@ -92,6 +98,9 @@ namespace SwitchBlocks.Factories
                     break;
                 case DrawType.Levers:
                     CreateLevers(path, files, data);
+                    break;
+                case DrawType.Conveyors:
+                    CreatePlatformsScrolling(path, files, data, entityLogic, false);
                     break;
                 default:
                     throw new NotImplementedException("Unknown Draw Type, cannot create entities!");
@@ -275,11 +284,13 @@ namespace SwitchBlocks.Factories
         /// <param name="files">Files inside the given path.</param>
         /// <param name="data"><see cref="IDataProvider" />.</param>
         /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
-        private static void CreatePlatformsSand<T>(
+        /// <param name="isVertical">If the scroll is vertical or horizontal.</param>
+        private static void CreatePlatformsScrolling<T>(
             string path,
             string[] files,
             IDataProvider data,
-            EntityLogic<T> entityLogic)
+            EntityLogic<T> entityLogic,
+            bool isVertical)
             where T : class, IDataProvider
         {
             var regex = new Regex(@"^platforms(\d+).xml$");
@@ -372,7 +383,12 @@ namespace SwitchBlocks.Factories
                             Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
                         };
                         // Platform
-                        var platform = new PlatformSand
+                        var multi = float.TryParse(platformElement.Element("Multiplier")?.Value, NumberStyles.Float,
+                            CultureInfo.InvariantCulture, out var foo)
+                            ? foo
+                            : 1.0f;
+                        Debugger.Log(1, "", $"> {multi} \n");
+                        var platform = new PlatformScrolling
                         {
                             Background = background,
                             Scrolling = scrolling,
@@ -384,8 +400,22 @@ namespace SwitchBlocks.Factories
                                 ? startState
                                 : StartState.On,
                             IsForeground = platformElement.Element("IsForeground") != null,
+                            Multiplier = float.TryParse(platformElement.Element("Multiplier")?.Value,
+                                NumberStyles.Float,
+                                CultureInfo.InvariantCulture, out var multiplier)
+                                ? multiplier
+                                : 1.0f,
                         };
-                        _ = new EntityDrawPlatformSand(platform, screen, data);
+
+                        if (isVertical)
+                        {
+                            _ = new EntityDrawPlatformSand(platform, screen, data);
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatformConveyor(platform, screen, data);
+                        }
+
                         entityLogic.AddScreen(screen);
                     }
                 }

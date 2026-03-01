@@ -69,8 +69,6 @@
     <Compile Include="Behaviours\BehaviourAutoOn.cs"/>
     <Compile Include="Behaviours\BehaviourBasicOn.cs"/>
     <Compile Include="Behaviours\BehaviourBasicOff.cs"/>
-    <Compile Include="Behaviours\BehaviourPost.cs"/>
-    <Compile Include="Behaviours\BehaviourPre.cs"/>
     <Compile Include="Behaviours\BehaviourAutoReset.cs"/>
     <Compile Include="Behaviours\BehaviourBasicLever.cs"/>
     <Compile Include="Behaviours\BehaviourSandOff.cs"/>
@@ -87,6 +85,9 @@
     <Compile Include="Behaviours\BehaviourSandLegacy.cs"/>
     <Compile Include="Behaviours\BehaviourSandLever.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceTouching.cs"/>
+    <Compile Include="Behaviours\Dummy\BehaviourConveyor.cs"/>
+    <Compile Include="Behaviours\Dummy\BehaviourPost.cs"/>
+    <Compile Include="Behaviours\Dummy\BehaviourPre.cs"/>
     <Compile Include="Blocks\BlockAutoIceOff.cs"/>
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
@@ -99,6 +100,8 @@
     <Compile Include="Blocks\BlockAutoSnowOn.cs"/>
     <Compile Include="Blocks\BlockAutoWaterOff.cs"/>
     <Compile Include="Blocks\BlockAutoWaterOn.cs"/>
+    <Compile Include="Blocks\BlockBasicConveyorOff.cs"/>
+    <Compile Include="Blocks\BlockBasicConveyorOn.cs"/>
     <Compile Include="Blocks\BlockBasicIceOff.cs"/>
     <Compile Include="Blocks\BlockBasicIceOn.cs"/>
     <Compile Include="Blocks\BlockBasicInfinityJumpOff.cs"/>
@@ -115,6 +118,8 @@
     <Compile Include="Blocks\BlockBasicSnowOn.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOff.cs"/>
     <Compile Include="Blocks\BlockBasicWaterOn.cs"/>
+    <Compile Include="Blocks\BlockCountdownConveyorOff.cs"/>
+    <Compile Include="Blocks\BlockCountdownConveyorOn.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOff.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOn.cs"/>
     <Compile Include="Blocks\BlockCountdownSandOff.cs"/>
@@ -149,8 +154,6 @@
     <Compile Include="Blocks\BlockJumpSnowOn.cs"/>
     <Compile Include="Blocks\BlockJumpWaterOff.cs"/>
     <Compile Include="Blocks\BlockJumpWaterOn.cs"/>
-    <Compile Include="Blocks\BlockPost.cs"/>
-    <Compile Include="Blocks\BlockPre.cs"/>
     <Compile Include="Blocks\BlockAutoReset.cs"/>
     <Compile Include="Blocks\BlockAutoResetFull.cs"/>
     <Compile Include="Blocks\BlockBasicLever.cs"/>
@@ -200,6 +203,9 @@
     <Compile Include="Blocks\BlockSandOff.cs"/>
     <Compile Include="Blocks\BlockSandOn.cs"/>
     <Compile Include="Blocks\BlockWind.cs"/>
+    <Compile Include="Blocks\Dummy\BlockConveyor.cs"/>
+    <Compile Include="Blocks\Dummy\BlockPost.cs"/>
+    <Compile Include="Blocks\Dummy\BlockPre.cs"/>
     <Compile Include="Blocks\ModBlock.cs"/>
     <Compile Include="Blocks\ModSlope.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
@@ -210,6 +216,7 @@
     <Compile Include="Data\IGroupDataProvider.cs"/>
     <Compile Include="Data\ResetsGroup.cs"/>
     <Compile Include="Entities\EntityDraw.cs"/>
+    <Compile Include="Entities\EntityDrawPlatformConveyor.cs"/>
     <Compile Include="Entities\EntityDrawLever.cs"/>
     <Compile Include="Entities\EntityDrawPlatform.cs"/>
     <Compile Include="Entities\EntityDrawPlatformLoop.cs"/>
@@ -229,6 +236,7 @@
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
+    <Compile Include="Patches\PatchResolveXCollisionBehaviour.cs"/>
     <Compile Include="Patches\PatchSlopeBlock.cs"/>
     <Compile Include="Patches\PatchWalk.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>
@@ -236,7 +244,7 @@
     <Compile Include="Util\BlockGroupId.cs"/>
     <Compile Include="Util\Deserialization\Lever.cs"/>
     <Compile Include="Util\Deserialization\Platform.cs"/>
-    <Compile Include="Util\Deserialization\PlatformSand.cs"/>
+    <Compile Include="Util\Deserialization\PlatformScrolling.cs"/>
     <Compile Include="Util\Deserialization\Sprites.cs"/>
     <Compile Include="Data\DataAuto.cs"/>
     <Compile Include="Data\DataBasic.cs"/>
@@ -278,6 +286,7 @@
     <Compile Include="ModSounds.cs"/>
     <Compile Include="ModBlocks.cs"/>
     <Compile Include="ModEntry.cs"/>
+    <Compile Include="Util\IConveyor.cs"/>
     <Compile Include="Util\ResetGroupIds.cs"/>
     <Compile Include="Util\Slopes.cs"/>
     <Compile Include="Util\StartState.cs"/>

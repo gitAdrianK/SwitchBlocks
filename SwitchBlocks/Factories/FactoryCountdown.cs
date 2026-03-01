@@ -38,35 +38,76 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownWindEnable,
         };
 
+        /// <summary>Solid Block Codes.</summary>
+        private static readonly HashSet<Color> SolidCountdownBlocks = new HashSet<Color>
+        {
+            ModBlocks.CountdownOn,
+            ModBlocks.CountdownOff,
+            ModBlocks.CountdownIceOn,
+            ModBlocks.CountdownIceOff,
+            ModBlocks.CountdownSnowOn,
+            ModBlocks.CountdownSnowOff,
+            ModBlocks.CountdownSandOff,
+            ModBlocks.CountdownSandOn,
+            ModBlocks.CountdownSlopeOn,
+            ModBlocks.CountdownSlopeOff,
+            ModBlocks.CountdownLeverSolid,
+            ModBlocks.CountdownSingleUseSolid,
+        };
+
+        /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
+        private static readonly Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>> BlockFactories
+            = new Dictionary<Color, Func<Rectangle, LevelTexture, int, int, int, IBlock>>
+            {
+                [ModBlocks.CountdownOn] = (rect, src, screen, x, y) => new BlockCountdownOn(rect),
+                [ModBlocks.CountdownOff] = (rect, src, screen, x, y) => new BlockCountdownOff(rect),
+                [ModBlocks.CountdownIceOn] = (rect, src, screen, x, y) => new BlockCountdownIceOn(rect),
+                [ModBlocks.CountdownIceOff] = (rect, src, screen, x, y) => new BlockCountdownIceOff(rect),
+                [ModBlocks.CountdownSnowOn] = (rect, src, screen, x, y) => new BlockCountdownSnowOn(rect),
+                [ModBlocks.CountdownSnowOff] = (rect, src, screen, x, y) => new BlockCountdownSnowOff(rect),
+                [ModBlocks.CountdownWaterOn] = (rect, src, screen, x, y) => new BlockCountdownWaterOn(rect),
+                [ModBlocks.CountdownWaterOff] = (rect, src, screen, x, y) => new BlockCountdownWaterOff(rect),
+                [ModBlocks.CountdownSandOn] = (rect, src, screen, x, y) => new BlockCountdownSandOn(rect),
+                [ModBlocks.CountdownSandOff] = (rect, src, screen, x, y) => new BlockCountdownSandOff(rect),
+                [ModBlocks.CountdownSlopeOn] = (rect, src, screen, x, y) =>
+                    new BlockCountdownSlopeOn(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.CountdownSlopeOff] = (rect, src, screen, x, y) =>
+                    new BlockCountdownSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.CountdownLever] = (rect, src, screen, x, y) => new BlockCountdownLever(rect),
+                [ModBlocks.CountdownLeverSolid] = (rect, src, screen, x, y) => new BlockCountdownLeverSolid(rect),
+                [ModBlocks.CountdownSingleUse] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownSingleUse(rect);
+                    SetupCountdown.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.CountdownSingleUseSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownSingleUseSolid(rect);
+                    SetupCountdown.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.CountdownWindEnable] = (rect, src, screen, x, y) =>
+                {
+                    _ = SetupCountdown.WindEnabled.Add(screen);
+                    return new BlockWind();
+                },
+            };
+
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         /// <inheritdoc />
-        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
+        public bool CanMakeBlock(Color blockCode, Level level) =>
+            SupportedBlockCodes.Contains(blockCode)
+            || IsCountdownConveyorOn(blockCode)
+            || IsCountdownConveyorOff(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode)
-        {
-            switch (blockCode)
-            {
-                case var _ when blockCode == ModBlocks.CountdownOn:
-                case var _ when blockCode == ModBlocks.CountdownOff:
-                case var _ when blockCode == ModBlocks.CountdownIceOn:
-                case var _ when blockCode == ModBlocks.CountdownIceOff:
-                case var _ when blockCode == ModBlocks.CountdownSnowOn:
-                case var _ when blockCode == ModBlocks.CountdownSnowOff:
-                case var _ when blockCode == ModBlocks.CountdownSandOff:
-                case var _ when blockCode == ModBlocks.CountdownSandOn:
-                case var _ when blockCode == ModBlocks.CountdownSlopeOn:
-                case var _ when blockCode == ModBlocks.CountdownSlopeOff:
-
-                case var _ when blockCode == ModBlocks.CountdownLeverSolid:
-                case var _ when blockCode == ModBlocks.CountdownSingleUseSolid:
-                    return true;
-            }
-
-            return false;
-        }
+        public bool IsSolidBlock(Color blockCode) =>
+            SolidCountdownBlocks.Contains(blockCode)
+            || IsCountdownConveyorOn(blockCode)
+            || IsCountdownConveyorOff(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -79,56 +120,45 @@ namespace SwitchBlocks.Factories
                 LastUsedMapId = level.ID;
             }
 
-            switch (blockCode)
+            if (BlockFactories.TryGetValue(blockCode, out var factory))
             {
-                case var _ when blockCode == ModBlocks.CountdownOn:
-                    return new BlockCountdownOn(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownOff:
-                    return new BlockCountdownOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownIceOn:
-                    return new BlockCountdownIceOn(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownIceOff:
-                    return new BlockCountdownIceOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSnowOn:
-                    return new BlockCountdownSnowOn(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSnowOff:
-                    return new BlockCountdownSnowOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownWaterOn:
-                    return new BlockCountdownWaterOn(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownWaterOff:
-                    return new BlockCountdownWaterOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSandOn:
-                    return new BlockCountdownSandOn(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSandOff:
-                    return new BlockCountdownSandOff(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSlopeOn:
-                    return new BlockCountdownSlopeOn(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-                case var _ when blockCode == ModBlocks.CountdownSlopeOff:
-                    return new BlockCountdownSlopeOff(blockRect,
-                        Slopes.GetSlopeType(textureSrc, currentScreen, x, y));
-
-                case var _ when blockCode == ModBlocks.CountdownLever:
-                    return new BlockCountdownLever(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownLeverSolid:
-                    return new BlockCountdownLeverSolid(blockRect);
-                case var _ when blockCode == ModBlocks.CountdownSingleUse:
-                    var blockSingleUse = new BlockCountdownSingleUse(blockRect);
-                    SetupCountdown.SingleUseLevers[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSingleUse;
-                    return blockSingleUse;
-                case var _ when blockCode == ModBlocks.CountdownSingleUseSolid:
-                    var blockSingleUseSolid = new BlockCountdownSingleUseSolid(blockRect);
-                    SetupCountdown.SingleUseLevers[((currentScreen + 1) * 10000) + (x * 100) + y] = blockSingleUseSolid;
-                    return blockSingleUseSolid;
-
-                case var _ when blockCode == ModBlocks.CountdownWindEnable:
-                    _ = SetupCountdown.WindEnabled.Add(currentScreen);
-                    return new BlockWind();
-
-                default:
-                    throw new InvalidOperationException(
-                        $"{nameof(FactoryCountdown)} is unable to create a block of Color code ({blockCode.R}, {blockCode.G}, {blockCode.B})");
+                return factory(blockRect, textureSrc, currentScreen, x, y);
             }
+
+            if (IsCountdownConveyorOn(blockCode))
+            {
+                return new BlockCountdownConveyorOn(blockRect, blockCode.B);
+            }
+
+            if (IsCountdownConveyorOff(blockCode))
+            {
+                return new BlockCountdownConveyorOff(blockRect, blockCode.R);
+            }
+
+            throw new InvalidOperationException(
+                $"{nameof(FactoryCountdown)} cannot create a block with Color ({blockCode.R}, {blockCode.G}, {blockCode.B})");
         }
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockCountdownConveyorOn" />
+        /// </summary>
+        /// <param name="blockCode">The to check block code.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockCountdownConveyorOn" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsCountdownConveyorOn(Color blockCode) =>
+            blockCode.R == ModBlocks.CountdownConveyorOn.R
+            && blockCode.G == ModBlocks.CountdownConveyorOn.G
+            && blockCode.B >= 1
+            && blockCode.B <= 30;
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockCountdownConveyorOff" />
+        /// </summary>
+        /// <param name="blockCode">The to check block code.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockCountdownConveyorOff" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsCountdownConveyorOff(Color blockCode) =>
+            blockCode.G == ModBlocks.CountdownConveyorOff.G
+            && blockCode.B == ModBlocks.CountdownConveyorOff.B
+            && blockCode.R >= 1
+            && blockCode.R <= 30;
     }
 }

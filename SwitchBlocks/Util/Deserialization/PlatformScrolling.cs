@@ -7,7 +7,7 @@ namespace SwitchBlocks.Util.Deserialization
     /// <summary>
     ///     Deserialization helper to create <see cref="EntityDrawPlatformSand" />.
     /// </summary>
-    public class PlatformSand
+    public class PlatformScrolling
     {
         /// <summary>Background <see cref="Texture2D" />.</summary>
         public Texture2D Background { get; set; }
@@ -26,5 +26,8 @@ namespace SwitchBlocks.Util.Deserialization
 
         /// <summary>Does the entity remain in front of the player.</summary>
         public bool IsForeground { get; set; }
+
+        /// <summary>Multiplier to the scroll speed.</summary>
+        public float Multiplier { get; set; }
     }
 }

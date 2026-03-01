@@ -21,6 +21,7 @@ namespace SwitchBlocks.Data
         {
             this.State = false;
             this.Progress = 0.0f;
+            this.ProgressUnclamped = 0.0f;
             this.CanSwitchSafely = true;
             this.SwitchOnceSafe = false;
             this.WarnCount = 0;
@@ -106,6 +107,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public float Progress { get; set; }
+
+        /// <inheritdoc />
+        public float ProgressUnclamped { get; set; }
 
         /// <inheritdoc />
         public int Tick => this.ResetTick;

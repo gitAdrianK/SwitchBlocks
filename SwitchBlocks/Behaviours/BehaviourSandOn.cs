@@ -3,6 +3,7 @@ namespace SwitchBlocks.Behaviours
     using System;
     using Blocks;
     using Data;
+    using Dummy;
     using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;

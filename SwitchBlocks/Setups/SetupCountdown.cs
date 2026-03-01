@@ -30,8 +30,8 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// ///
         /// <param name="settings">Settings of the countdown type.</param>
-        /// <param name="player">Player to register block behaviours to.</param>
-        public static void Setup(SettingsCountdown settings, PlayerEntity player)
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsCountdown settings, BodyComp body)
         {
             if (!IsUsed)
             {
@@ -60,8 +60,11 @@ namespace SwitchBlocks.Setups
                 FactoryDrawables.DrawType.Levers,
                 FactoryDrawables.BlockType.Countdown,
                 entityLogic);
+            FactoryDrawables.CreateDrawables(
+                FactoryDrawables.DrawType.Conveyors,
+                FactoryDrawables.BlockType.Countdown,
+                entityLogic);
 
-            var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever),

@@ -1,14 +1,14 @@
-namespace SwitchBlocks.Blocks
+﻿namespace SwitchBlocks.Blocks.Dummy
 {
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
 
     /// <summary>
     ///     Uncreate-able dummy block to attach a behaviour to.
-    ///     Specifically to attach the behaviour to that runs with a high priority number
+    ///     Specifically to attach the behaviour to one that runs for conveyor blocks
     ///     and as such later than the other block behaviours.
     /// </summary>
-    public class BlockPost : IBlock
+    public class BlockConveyor : IBlock
     {
         /// <summary>
         ///     This block does not draw a <see cref="Rectangle" /> in debug.
