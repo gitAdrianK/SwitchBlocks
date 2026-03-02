@@ -54,7 +54,6 @@ which if next to eachother on the hitbox file group together as long as they are
 
 Sure, make an issue and I'll have a look at it.
 
-## Why are the switches called levers?
+## I apologize for the complete and utter mess that is using LINQ for XML handling
 
-switch is a programming keyword, so i would have to name them something along the lines of \_switch or switch\_ or
-zwitch or whatever name you can think of, in the end I have to choose something ¯\\_(ツ)_/¯
+I would really like for it to use a cleaner method of reading and writing XML, but when I check its performance against something like the XmlSerializer and it is A LOT faster. And yes, I am caching the XmlSerializer, and not only that, I create the serializer even before I even measure the time it takes to read the XML file. So it gets all the benefit I can muster to give it.
