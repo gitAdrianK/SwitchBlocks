@@ -56,4 +56,4 @@ Sure, make an issue and I'll have a look at it.
 
 ## I apologize for the complete and utter mess that is using LINQ for XML handling
 
-I would really like for it to use a cleaner method of reading and writing XML, but when I check its performance against something like the XmlSerializer and it is A LOT faster. And yes, I am caching the XmlSerializer, and not only that, I create the serializer even before I even measure the time it takes to read the XML file. So it gets all the benefit I can muster to give it.
+I would really like for it to use a cleaner method of reading and writing XML, but when I check its performance against something like the XmlSerializer it is A LOT faster. And yes, I am caching the XmlSerializer, and not only that, I create the serializer even before I even measure the time it takes to read the XML file. So it gets all the benefit I can muster to give it.
