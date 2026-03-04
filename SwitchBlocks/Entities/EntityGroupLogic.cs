@@ -11,7 +11,7 @@ namespace SwitchBlocks.Entities
     /// <summary>
     ///     Abstract class other group logic entities inherit from.
     /// </summary>
-    /// <typeparam name="T">Class implementing<see cref="IGroupDataProvider" />.</typeparam>
+    /// <typeparam name="T">Class implementing <see cref="IGroupDataProvider" />.</typeparam>
     public abstract class EntityGroupLogic<T> : Entity where T : IGroupDataProvider
     {
         /// <summary>

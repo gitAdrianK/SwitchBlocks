@@ -1,11 +1,12 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.IO;
     using Behaviours;
     using Blocks;
     using Data;
     using Entities;
-    using Factories;
+    using Factories.Drawables;
     using JumpKing.Player;
     using Settings;
 
@@ -35,10 +36,19 @@ namespace SwitchBlocks.Setups
             _ = DataAuto.Instance;
 
             var entityLogic = new EntityLogicAuto(settings);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Platforms,
-                FactoryDrawables.BlockType.Auto,
-                entityLogic);
+
+            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Auto);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic);
+            }
+            else
+            {
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Platforms,
+                    FactoryDrawables.BlockType.Auto,
+                    entityLogic);
+            }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());

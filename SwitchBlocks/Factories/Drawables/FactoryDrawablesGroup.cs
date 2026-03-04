@@ -1,4 +1,4 @@
-namespace SwitchBlocks.Factories
+namespace SwitchBlocks.Factories.Drawables
 {
     using System;
     using System.Collections.Generic;
@@ -17,12 +17,14 @@ namespace SwitchBlocks.Factories
     using Util.Deserialization;
     using Curve = Util.Curve;
 
+    // This Factory is legacy and will only be kept around until its functionality is brought to the new factories.
+
     /// <summary>
     ///     Factory for drawable group entities.
     /// </summary>
     public static class FactoryDrawablesGroup
     {
-        // There are no levers for both group types
+        // There are no levers for either group type
 
         /// <summary>Block types.</summary>
         public enum BlockType
@@ -61,7 +63,7 @@ namespace SwitchBlocks.Factories
             }
 
             var groups = GetGroups(blockType);
-            CreatePlatforms(path, files, blockType, groups, entityGroupLogic);
+            CreatePlatformsLegacy(path, files, blockType, groups, entityGroupLogic);
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace SwitchBlocks.Factories
         /// <param name="groups">Collection of BlockGroups.</param>
         /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}" />.</param>
         /// <exception cref="NotImplementedException">This should never happen.</exception>
-        private static void CreatePlatforms<T>(
+        private static void CreatePlatformsLegacy<T>(
             string path,
             string[] files,
             BlockType blockType,
@@ -297,7 +299,7 @@ namespace SwitchBlocks.Factories
         /// <param name="position">Position this entity is to be created at.</param>
         /// <param name="blockGroups">Collection of <see cref="IBlockGroupId" />.</param>
         /// <returns>ID of the block at the position. 0 if no block exists at that the position.</returns>
-        private static int GetGroupId(XElement root, int screen, Vector2 position,
+        public static int GetGroupId(XElement root, int screen, Vector2 position,
             params Dictionary<int, IBlockGroupId>[] blockGroups)
         {
             var xel = root.Element("Link");

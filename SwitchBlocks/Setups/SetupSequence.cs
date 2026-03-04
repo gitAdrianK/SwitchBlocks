@@ -1,11 +1,12 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.IO;
     using Behaviours;
     using Blocks;
     using Data;
     using Entities;
-    using Factories;
+    using Factories.Drawables;
     using JumpKing;
     using JumpKing.Player;
     using JumpKing.SaveThread;
@@ -72,7 +73,17 @@ namespace SwitchBlocks.Setups
             }
 
             var entityLogic = new EntityLogicSequence(settings);
-            FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
+
+            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Sequence);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataSequence.Instance.Groups,
+                    entityLogic);
+            }
+            else
+            {
+                FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
+            }
 
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockSequenceA),

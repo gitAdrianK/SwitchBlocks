@@ -1,5 +1,6 @@
 namespace SwitchBlocks
 {
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using Behaviours.Dummy;
@@ -22,6 +23,9 @@ namespace SwitchBlocks
     [JumpKingMod(ModConstants.Modname)]
     public static class ModEntry
     {
+        public static string ModPath { get; private set; }
+        public static string TexturePath { get; private set; }
+
         /// <summary>
         ///     Called by Jump King before the level loads.
         ///     -> OnGameStart
@@ -77,6 +81,9 @@ namespace SwitchBlocks
             {
                 return;
             }
+
+            ModPath = Path.Combine(contentManager.root, ModConstants.Folder);
+            TexturePath = Path.Combine(ModPath, ModConstants.Textures);
 
             var body = player.m_body;
             PatchBodyComp.BodyComp = body;

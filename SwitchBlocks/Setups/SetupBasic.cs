@@ -1,11 +1,12 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.IO;
     using Behaviours;
     using Blocks;
     using Data;
     using Entities;
-    using Factories;
+    using Factories.Drawables;
     using JumpKing.Player;
     using Settings;
 
@@ -36,18 +37,30 @@ namespace SwitchBlocks.Setups
             _ = DataBasic.Instance;
 
             var entityLogic = new EntityLogicBasic(settings);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Platforms,
-                FactoryDrawables.BlockType.Basic,
-                entityLogic);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Levers,
-                FactoryDrawables.BlockType.Basic,
-                entityLogic);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Conveyors,
-                FactoryDrawables.BlockType.Basic,
-                entityLogic);
+
+            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Basic);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataBasic.Instance,
+                    entityLogic, false);
+            }
+            else
+            {
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Platforms,
+                    FactoryDrawables.BlockType.Basic,
+                    entityLogic);
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Levers,
+                    FactoryDrawables.BlockType.Basic,
+                    entityLogic);
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Conveyors,
+                    FactoryDrawables.BlockType.Basic,
+                    entityLogic);
+            }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());

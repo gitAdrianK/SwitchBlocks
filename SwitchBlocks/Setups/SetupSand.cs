@@ -1,10 +1,11 @@
 namespace SwitchBlocks.Setups
 {
+    using System.IO;
     using Behaviours;
     using Blocks;
     using Data;
     using Entities;
-    using Factories;
+    using Factories.Drawables;
     using JumpKing.API;
     using JumpKing.Player;
     using Settings;
@@ -33,14 +34,25 @@ namespace SwitchBlocks.Setups
             _ = DataSand.Instance;
 
             var entityLogic = new EntityLogicSand(settings);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Platforms,
-                FactoryDrawables.BlockType.Sand,
-                entityLogic);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Levers,
-                FactoryDrawables.BlockType.Sand,
-                entityLogic);
+
+            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Sand);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataSand.Instance);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataSand.Instance, entityLogic,
+                    true);
+            }
+            else
+            {
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Platforms,
+                    FactoryDrawables.BlockType.Sand,
+                    entityLogic);
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Levers,
+                    FactoryDrawables.BlockType.Sand,
+                    entityLogic);
+            }
 
             if (settings.IsV2)
             {

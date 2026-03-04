@@ -17,23 +17,14 @@ namespace SwitchBlocks
         /// </summary>
         public ModSettings()
         {
-            XDocument doc;
-
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
                 ModConstants.Folder,
                 "blocks.xml");
-            if (File.Exists(file))
-            {
-                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    doc = XDocument.Load(fs);
-                }
-            }
-            else
-            {
-                doc = new XDocument(new XElement("Blocks"));
-            }
+
+            var doc = File.Exists(file)
+                ? XDocument.Load(file)
+                : new XDocument(new XElement("Blocks"));
 
             var root = doc.Root;
 

@@ -231,8 +231,11 @@
     <Compile Include="Entities\EntityLogicJump.cs"/>
     <Compile Include="Entities\EntityLogicSand.cs"/>
     <Compile Include="Entities\EntityLogicSequence.cs"/>
-    <Compile Include="Factories\FactoryDrawablesGroup.cs"/>
-    <Compile Include="Factories\FactoryDrawables.cs"/>
+    <Compile Include="Factories\Drawables\FactoryDrawables.cs"/>
+    <Compile Include="Factories\Drawables\FactoryDrawablesGroup.cs"/>
+    <Compile Include="Factories\Drawables\FactoryLevers.cs"/>
+    <Compile Include="Factories\Drawables\FactoryPlatforms.cs"/>
+    <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>

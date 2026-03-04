@@ -1,11 +1,12 @@
 namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
+    using System.IO;
     using Behaviours;
     using Blocks;
     using Data;
     using Entities;
-    using Factories;
+    using Factories.Drawables;
     using JumpKing;
     using JumpKing.Player;
     using Settings;
@@ -52,18 +53,30 @@ namespace SwitchBlocks.Setups
             }
 
             var entityLogic = new EntityLogicCountdown(settings);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Platforms,
-                FactoryDrawables.BlockType.Countdown,
-                entityLogic);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Levers,
-                FactoryDrawables.BlockType.Countdown,
-                entityLogic);
-            FactoryDrawables.CreateDrawables(
-                FactoryDrawables.DrawType.Conveyors,
-                FactoryDrawables.BlockType.Countdown,
-                entityLogic);
+
+            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Countdown);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
+                    entityLogic, false);
+            }
+            else
+            {
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Platforms,
+                    FactoryDrawables.BlockType.Countdown,
+                    entityLogic);
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Levers,
+                    FactoryDrawables.BlockType.Countdown,
+                    entityLogic);
+                FactoryDrawables.CreateDrawablesLegacy(
+                    FactoryDrawables.DrawType.Conveyors,
+                    FactoryDrawables.BlockType.Countdown,
+                    entityLogic);
+            }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
