@@ -1,6 +1,5 @@
 ﻿namespace SwitchBlocks.Factories.Drawables
 {
-    using System;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
@@ -8,7 +7,6 @@
     using Data;
     using Entities;
     using JumpKing;
-    using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Util;
     using Util.Deserialization;
@@ -21,19 +19,47 @@
         /// <summary>The regex for conveyor files.</summary>
         private static Regex RegexConveyors { get; } = new Regex(@"^conveyors(\d+).xml$");
 
+        /// <summary>The regex for platform files.</summary>
+        private static Regex RegexPlatforms { get; } = new Regex(@"^platforms(\d+).xml$");
+
+        /// <summary>
+        ///     Creates <see cref="EntityDrawPlatformSand" /> and <see cref="EntityDrawPlatformConveyor" />.
+        /// </summary>
+        /// <param name="xmlPath">Path to XML files.</param>
+        /// <param name="texturePath">Path to textures.</param>
+        /// <param name="data">Data for the entity.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
+        /// <param name="isVertical">Scrolling is vertical or horizontal</param>
+        /// <param name="isLegacy">If the names are still the legacy variant.</param>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
         public static void CreatePlatformsScrolling<T>(
             string xmlPath,
             string texturePath,
             T data,
             EntityLogic<T> entityLogic,
-            bool isVertical)
+            bool isVertical,
+            bool isLegacy = false)
             where T : class, IDataProvider
         {
+            if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
+            {
+                return;
+            }
+
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var match = isVertical
-                    ? RegexSands.Match(Path.GetFileName(file))
-                    : RegexConveyors.Match(Path.GetFileName(file));
+                Match match;
+                if (isLegacy)
+                {
+                    match = RegexPlatforms.Match(Path.GetFileName(file));
+                }
+                else
+                {
+                    match = isVertical
+                        ? RegexSands.Match(Path.GetFileName(file))
+                        : RegexConveyors.Match(Path.GetFileName(file));
+                }
+
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
                     continue;
@@ -45,61 +71,77 @@
                     continue;
                 }
 
-                var rootName = isVertical ? "Sands" : "Conveyors";
-                var elementsName = isVertical ? "Sand" : "Conveyor";
-                var doc = XDocument.Load(file);
-                var root = doc.Root;
-                if (root?.Name != rootName)
+                // The only scrolling textures are sand and conveyors,
+                // but legacy sand still uses the element names Platforms/Platform.
+                string rootName;
+                string elementsName;
+                if (isLegacy)
                 {
-                    continue;
+                    rootName = "Platforms";
+                    elementsName = "Platform";
+                }
+                else
+                {
+                    rootName = isVertical ? "Sands" : "Conveyors";
+                    elementsName = isVertical ? "Sand" : "Conveyor";
                 }
 
-                foreach (var platformElement in root.Elements(elementsName))
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var background = TryLoadTexture(platformElement, "Background", texturePath);
-                    var scrolling = TryLoadTexture(platformElement, "Scrolling", texturePath);
-                    var foreground = TryLoadTexture(platformElement, "Foreground", texturePath);
-
-                    // At least one size giving texture required.
-                    if (background == null && foreground == null)
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != rootName)
                     {
                         continue;
                     }
 
-                    if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
+                    foreach (var platformElement in root.Elements(elementsName))
                     {
-                        continue;
-                    }
+                        var background = TryLoadTexture(platformElement, "Background", texturePath);
+                        var scrolling = TryLoadTexture(platformElement, "Scrolling", texturePath);
+                        var foreground = TryLoadTexture(platformElement, "Foreground", texturePath);
 
-                    var platform = new PlatformScrolling
-                    {
-                        Background = background,
-                        Scrolling = scrolling,
-                        Foreground = foreground,
-                        Position = position,
-                        StartState = FactoryPlatforms.ParseEnum(
-                            platformElement.Element("StartState")?.Value,
-                            StartState.On),
-                        IsForeground = platformElement.Element("IsForeground") != null,
-                        Multiplier = float.TryParse(
-                            platformElement.Element("Multiplier")?.Value,
-                            NumberStyles.Float,
-                            CultureInfo.InvariantCulture,
-                            out var parsed)
-                            ? parsed
-                            : 1.0f,
-                    };
+                        // At least one size giving texture required.
+                        if (background == null && foreground == null)
+                        {
+                            continue;
+                        }
 
-                    if (isVertical)
-                    {
-                        _ = new EntityDrawPlatformSand(platform, screen, data);
-                    }
-                    else
-                    {
-                        _ = new EntityDrawPlatformConveyor(platform, screen, data);
-                    }
+                        if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
+                        {
+                            continue;
+                        }
 
-                    entityLogic.AddScreen(screen);
+                        var platform = new PlatformScrolling
+                        {
+                            Background = background,
+                            Scrolling = scrolling,
+                            Foreground = foreground,
+                            Position = position,
+                            StartState = FactoryPlatforms.ParseEnum(
+                                platformElement.Element("StartState")?.Value,
+                                StartState.On),
+                            IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+                            Multiplier = float.TryParse(
+                                platformElement.Element("Multiplier")?.Value,
+                                NumberStyles.Float,
+                                CultureInfo.InvariantCulture,
+                                out var parsed)
+                                ? parsed
+                                : 1.0f,
+                        };
+
+                        if (isVertical)
+                        {
+                            _ = new EntityDrawPlatformSand(platform, screen, data);
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatformConveyor(platform, screen, data);
+                        }
+
+                        entityLogic.AddScreen(screen);
+                    }
                 }
             }
         }
@@ -126,147 +168,6 @@
             return File.Exists(textureFile + ".xnb")
                 ? Game1.instance.contentManager.Load<Texture2D>(textureFile)
                 : null;
-        }
-
-        /// <summary>
-        ///     Creates <see cref="EntityDrawPlatformSand" />.
-        /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
-        /// <param name="path">Path to the files containing platform definitions.</param>
-        /// <param name="files">Files inside the given path.</param>
-        /// <param name="data"><see cref="IDataProvider" />.</param>
-        /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
-        /// <param name="isVertical">If the scroll is vertical or horizontal.</param>
-        public static void CreatePlatformsScrollingLegacy<T>(
-            string path,
-            string[] files,
-            IDataProvider data,
-            EntityLogic<T> entityLogic,
-            bool isVertical)
-            where T : class, IDataProvider
-        {
-            var regex = new Regex(@"^platforms(\d+).xml$");
-
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file);
-                var match = regex.Match(fileName);
-                if (!match.Success)
-                {
-                    continue;
-                }
-
-                var screen = int.Parse(match.Groups[1].Value) - 1;
-                if (screen < 0)
-                {
-                    continue;
-                }
-
-                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    var doc = XDocument.Load(fs);
-                    var root = doc.Root;
-                    if (root?.Name != "Platforms")
-                    {
-                        continue;
-                    }
-
-                    foreach (var platformElement in root.Elements("Platform"))
-                    {
-                        // Texture
-                        var textureFolder = Path.Combine(path, ModConstants.Textures);
-                        string texturePath;
-                        Texture2D background = null;
-                        Texture2D scrolling = null;
-                        Texture2D foreground = null;
-                        // Background
-                        XElement xel;
-                        if ((xel = platformElement.Element("Background")) != null)
-                        {
-                            texturePath = Path.Combine(textureFolder, xel.Value);
-                            if (File.Exists(texturePath + ".xnb"))
-                            {
-                                background = Game1.instance.contentManager.Load<Texture2D>(texturePath);
-                            }
-                        }
-
-                        // Scrolling
-                        if ((xel = platformElement.Element("Scrolling")) != null)
-                        {
-                            texturePath = Path.Combine(textureFolder, xel.Value);
-                            if (File.Exists(texturePath + ".xnb"))
-                            {
-                                scrolling = Game1.instance.contentManager.Load<Texture2D>(texturePath);
-                            }
-                        }
-
-                        // Foreground
-                        if ((xel = platformElement.Element("Foreground")) != null)
-                        {
-                            texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
-                            if (File.Exists(texturePath + ".xnb"))
-                            {
-                                foreground = Game1.instance.contentManager.Load<Texture2D>(texturePath);
-                            }
-                        }
-
-                        // Min one size giving texture
-                        if (background == null && foreground == null)
-                        {
-                            continue;
-                        }
-
-                        // Position
-                        if ((xel = platformElement.Element("Position")) == null)
-                        {
-                            continue;
-                        }
-
-                        var x = xel.Element("X");
-                        var y = xel.Element("Y");
-                        if (x == null || y == null)
-                        {
-                            continue;
-                        }
-
-                        var position = new Vector2
-                        {
-                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
-                        };
-                        // Platform
-                        var platform = new PlatformScrolling
-                        {
-                            Background = background,
-                            Scrolling = scrolling,
-                            Foreground = foreground,
-                            Position = position,
-                            StartState = Enum.TryParse<StartState>(
-                                platformElement.Element("StartState")?.Value, true,
-                                out var startState)
-                                ? startState
-                                : StartState.On,
-                            IsForeground = platformElement.Element("IsForeground") != null,
-                            Multiplier = float.TryParse(platformElement.Element("Multiplier")?.Value,
-                                NumberStyles.Float,
-                                CultureInfo.InvariantCulture, out var multiplier)
-                                ? multiplier
-                                : 1.0f,
-                        };
-
-                        if (isVertical)
-                        {
-                            _ = new EntityDrawPlatformSand(platform, screen, data);
-                        }
-                        else
-                        {
-                            _ = new EntityDrawPlatformConveyor(platform, screen, data);
-                        }
-
-                        entityLogic.AddScreen(screen);
-                    }
-                }
-            }
         }
     }
 }

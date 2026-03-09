@@ -103,14 +103,14 @@ namespace SwitchBlocks.Factories
         /// <inheritdoc />
         public bool CanMakeBlock(Color blockCode, Level level) =>
             SupportedBlockCodes.Contains(blockCode)
-            || IsBasicConveyorOn(blockCode)
-            || IsBasicConveyorOff(blockCode);
+            || IsConveyorOn(blockCode)
+            || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
         public bool IsSolidBlock(Color blockCode) =>
             SolidBasicBlocks.Contains(blockCode)
-            || IsBasicConveyorOn(blockCode)
-            || IsBasicConveyorOff(blockCode);
+            || IsConveyorOn(blockCode)
+            || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -127,12 +127,12 @@ namespace SwitchBlocks.Factories
                 return factory(blockRect, textureSrc, currentScreen, x, y);
             }
 
-            if (IsBasicConveyorOn(blockCode))
+            if (IsConveyorOn(blockCode))
             {
                 return new BlockBasicConveyorOn(blockRect, blockCode.B);
             }
 
-            if (IsBasicConveyorOff(blockCode))
+            if (IsConveyorOff(blockCode))
             {
                 return new BlockBasicConveyorOff(blockRect, blockCode.R);
             }
@@ -144,9 +144,9 @@ namespace SwitchBlocks.Factories
         /// <summary>
         ///     Check if the block-code is that of a <see cref="BlockBasicConveyorOn" />
         /// </summary>
-        /// <param name="blockCode">The to check block code.</param>
+        /// <param name="blockCode">The block code to check.</param>
         /// <returns><c>true</c> if it is a <see cref="BlockBasicConveyorOn" /> valid color, <c>false</c> otherwise.</returns>
-        private static bool IsBasicConveyorOn(Color blockCode) =>
+        private static bool IsConveyorOn(Color blockCode) =>
             blockCode.R == ModBlocks.BasicConveyorOn.R
             && blockCode.G == ModBlocks.BasicConveyorOn.G
             && blockCode.B >= 1
@@ -155,9 +155,9 @@ namespace SwitchBlocks.Factories
         /// <summary>
         ///     Check if the block-code is that of a <see cref="BlockBasicConveyorOff" />
         /// </summary>
-        /// <param name="blockCode">The to check block code.</param>
+        /// <param name="blockCode">The block code to check.</param>
         /// <returns><c>true</c> if it is a <see cref="BlockBasicConveyorOff" /> valid color, <c>false</c> otherwise.</returns>
-        private static bool IsBasicConveyorOff(Color blockCode) =>
+        private static bool IsConveyorOff(Color blockCode) =>
             blockCode.G == ModBlocks.BasicConveyorOff.G
             && blockCode.B == ModBlocks.BasicConveyorOff.B
             && blockCode.R >= 1

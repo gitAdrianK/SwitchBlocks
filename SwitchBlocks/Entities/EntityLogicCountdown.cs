@@ -12,29 +12,38 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicCountdown(SettingsCountdown settings) : base(DataCountdown.Instance, settings.Multiplier)
+        public EntityLogicCountdown(SettingsCountdown settings) : base(DataCountdown.Instance)
+            => this.UpdateSettings(settings);
+
+        /// <summary>Duration the state switch lasts for.</summary>
+        private int Duration { get; set; }
+
+        /// <summary>Amount of warns played.</summary>
+        private int WarnCount { get; set; }
+
+        /// <summary>Duration warns are apart.</summary>
+        private int WarnDuration { get; set; }
+
+        /// <summary>If the state is forced to switch regardless of player intersection.</summary>
+        private bool ForceSwitch { get; set; }
+
+        ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
+        private bool SingleUseReset { get; set; }
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsCountdown" />.</param>
+        public void UpdateSettings(SettingsCountdown settings)
         {
+            this.Multiplier = settings.Multiplier;
+
             this.Duration = settings.Duration;
             this.WarnCount = settings.WarnCount;
             this.WarnDuration = settings.WarnDuration;
             this.ForceSwitch = settings.ForceSwitch;
             this.SingleUseReset = settings.SingleUseReset;
         }
-
-        /// <summary>Duration the state switch lasts for.</summary>
-        private int Duration { get; }
-
-        /// <summary>Amount of warns played.</summary>
-        private int WarnCount { get; }
-
-        /// <summary>Duration warns are apart.</summary>
-        private int WarnDuration { get; }
-
-        /// <summary>If the state is forced to switch regardless of player intersection.</summary>
-        private bool ForceSwitch { get; }
-
-        ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
-        private bool SingleUseReset { get; }
 
         /// <summary>
         ///     Updates progress, tries to play sounds and switch the state.

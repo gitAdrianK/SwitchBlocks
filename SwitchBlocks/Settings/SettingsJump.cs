@@ -2,6 +2,7 @@ namespace SwitchBlocks.Settings
 {
     using System.Xml.Linq;
     using JetBrains.Annotations;
+    using Util;
 
     public class SettingsJump
     {
@@ -12,8 +13,8 @@ namespace SwitchBlocks.Settings
         public SettingsJump([CanBeNull] XElement element)
         {
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
-            this.ForceSwitch = element?.Element("ForceStateSwitch") != null;
-            this.CanJumpInAir = element?.Element("CanJumpInAir") != null;
+            this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
+            this.CanJumpInAir = XmlHelper.ParseElementBool(element, "CanJumpInAir");
             this.Cooldown = ParseSettings.ParseCount(element?.Element("Cooldown"), 0);
         }
 

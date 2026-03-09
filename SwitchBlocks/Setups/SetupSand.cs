@@ -35,7 +35,7 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicSand(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Sand);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sand);
             if (Directory.Exists(xmlPath))
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataSand.Instance);
@@ -44,14 +44,17 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Platforms,
-                    FactoryDrawables.BlockType.Sand,
-                    entityLogic);
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Levers,
-                    FactoryDrawables.BlockType.Sand,
-                    entityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Sand);
+                FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataSand.Instance);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Sand);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath,
+                    Path.Combine(xmlPath, ModConstants.Textures),
+                    DataSand.Instance,
+                    entityLogic,
+                    true,
+                    true);
             }
 
             if (settings.IsV2)
@@ -70,7 +73,16 @@ namespace SwitchBlocks.Setups
                 _ = body.RegisterBlockBehaviour(typeof(BlockSandOff), behaviourSandPlatform);
             }
 
-            _ = body.RegisterBlockBehaviour(typeof(BlockSandLever), new BehaviourSandLever(settings.LeverDirections));
+            var behaviourLever = new BehaviourSandLever(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockSandLever), behaviourLever);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicSand = entityLogic;
+                debugInstance.BehaviourSandLever = behaviourLever;
+            }
         }
 
         /// <summary>

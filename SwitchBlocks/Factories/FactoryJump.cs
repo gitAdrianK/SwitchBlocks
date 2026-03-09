@@ -111,10 +111,16 @@ namespace SwitchBlocks.Factories
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         /// <inheritdoc />
-        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
+        public bool CanMakeBlock(Color blockCode, Level level)
+            => SupportedBlockCodes.Contains(blockCode)
+               || IsConveyorOn(blockCode)
+               || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode) => SolidJumpBlocks.Contains(blockCode);
+        public bool IsSolidBlock(Color blockCode)
+            => SupportedBlockCodes.Contains(blockCode)
+               || IsConveyorOn(blockCode)
+               || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -131,8 +137,40 @@ namespace SwitchBlocks.Factories
                 return factory(blockRect, textureSrc, currentScreen, x, y);
             }
 
+            if (IsConveyorOn(blockCode))
+            {
+                return new BlockJumpConveyorOn(blockRect, blockCode.B);
+            }
+
+            if (IsConveyorOff(blockCode))
+            {
+                return new BlockJumpConveyorOff(blockRect, blockCode.R);
+            }
+
             throw new InvalidOperationException(
                 $"{nameof(FactoryJump)} cannot create a block with Color ({blockCode.R}, {blockCode.G}, {blockCode.B})");
         }
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockJumpConveyorOn" />
+        /// </summary>
+        /// <param name="blockCode">The block code to check.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockJumpConveyorOn" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsConveyorOn(Color blockCode) =>
+            blockCode.R == ModBlocks.JumpConveyorOn.R
+            && blockCode.G == ModBlocks.JumpConveyorOn.G
+            && blockCode.B >= 1
+            && blockCode.B <= 30;
+
+        /// <summary>
+        ///     Check if the block-code is that of a <see cref="BlockJumpConveyorOff" />
+        /// </summary>
+        /// <param name="blockCode">The block code to check.</param>
+        /// <returns><c>true</c> if it is a <see cref="BlockJumpConveyorOff" /> valid color, <c>false</c> otherwise.</returns>
+        private static bool IsConveyorOff(Color blockCode) =>
+            blockCode.G == ModBlocks.JumpConveyorOff.G
+            && blockCode.B == ModBlocks.JumpConveyorOff.B
+            && blockCode.R >= 1
+            && blockCode.R <= 30;
     }
 }

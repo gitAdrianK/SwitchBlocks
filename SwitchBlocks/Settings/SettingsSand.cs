@@ -12,7 +12,7 @@ namespace SwitchBlocks.Settings
         /// <param name="element"><see cref="XElement" /> settings are to be taken from.</param>
         public SettingsSand([CanBeNull] XElement element)
         {
-            this.IsV2 = element?.Element("v2") != null;
+            this.IsV2 = XmlHelper.ParseElementBool(element, "IsV2");
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
         }

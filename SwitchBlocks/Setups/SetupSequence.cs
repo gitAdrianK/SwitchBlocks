@@ -7,7 +7,6 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
-    using JumpKing;
     using JumpKing.Player;
     using JumpKing.SaveThread;
     using Settings;
@@ -66,7 +65,7 @@ namespace SwitchBlocks.Setups
                 }
             }
 
-            if (LevelDebugState.instance != null)
+            if (ModDebug.IsDebug)
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();
@@ -74,15 +73,17 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicSequence(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Sequence);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sequence);
             if (Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataSequence.Instance.Groups,
+                FactoryPlatforms.CreateGroupPlatforms(xmlPath, ModEntry.TexturePath, DataSequence.Instance.Groups,
                     entityLogic);
             }
             else
             {
-                FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Sequence, entityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Sequence);
+                FactoryPlatforms.CreateGroupPlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataSequence.Instance.Groups, entityLogic);
             }
 
             _ = settings.Duration == 0
@@ -93,8 +94,16 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceIceA), new BehaviourSequenceIce());
             _ = body.RegisterBlockBehaviour(typeof(BlockSequenceSnowA), new BehaviourSequenceSnow());
-            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset),
-                new BehaviourSequenceReset(settings.DefaultActive, settings.LeverDirections));
+            var behaviourReset = new BehaviourSequenceReset(settings.DefaultActive, settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockSequenceReset), behaviourReset);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicSequence = entityLogic;
+                debugInstance.BehaviourSequenceReset = behaviourReset;
+            }
         }
 
         /// <summary>

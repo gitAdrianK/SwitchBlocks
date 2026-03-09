@@ -16,11 +16,22 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicGroup(SettingsGroup settings) : base(DataGroup.Instance, settings.Multiplier)
-            => this.Duration = settings.Duration;
+        public EntityLogicGroup(SettingsGroup settings) : base(DataGroup.Instance)
+            => this.UpdateSettings(settings);
 
         /// <summary>Duration the state lasts for.</summary>
-        private int Duration { get; }
+        private int Duration { get; set; }
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsGroup" />.</param>
+        public void UpdateSettings(SettingsGroup settings)
+        {
+            this.Multiplier = settings.Multiplier;
+
+            this.Duration = settings.Duration;
+        }
 
         /// <summary>
         ///     Updates progress and state of groups that are marked as active.

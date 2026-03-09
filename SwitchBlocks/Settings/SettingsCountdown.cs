@@ -15,8 +15,8 @@ namespace SwitchBlocks.Settings
             this.Duration = ParseSettings.ParseDuration(element?.Element("Duration"), 3.0f);
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
-            this.ForceSwitch = element?.Element("ForceStateSwitch") != null;
-            this.SingleUseReset = element?.Element("SingleUseReset") != null;
+            this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
+            this.SingleUseReset = XmlHelper.ParseElementBool(element, "SingleUseReset");
 
             var warnElement = element?.Element("Warn");
             this.WarnCount = ParseSettings.ParseCount(warnElement?.Element("Count"), 2);

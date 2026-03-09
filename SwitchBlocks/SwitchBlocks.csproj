@@ -88,6 +88,8 @@
     <Compile Include="Behaviours\Dummy\BehaviourConveyor.cs"/>
     <Compile Include="Behaviours\Dummy\BehaviourPost.cs"/>
     <Compile Include="Behaviours\Dummy\BehaviourPre.cs"/>
+    <Compile Include="Blocks\BlockAutoConveyorOff.cs"/>
+    <Compile Include="Blocks\BlockAutoConveyorOn.cs"/>
     <Compile Include="Blocks\BlockAutoIceOff.cs"/>
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
@@ -140,6 +142,8 @@
     <Compile Include="Blocks\BlockGroupSlopeB.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeC.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeD.cs"/>
+    <Compile Include="Blocks\BlockJumpConveyorOff.cs"/>
+    <Compile Include="Blocks\BlockJumpConveyorOn.cs"/>
     <Compile Include="Blocks\BlockJumpIceOff.cs"/>
     <Compile Include="Blocks\BlockJumpIceOn.cs"/>
     <Compile Include="Blocks\BlockJumpInfinityJumpOff.cs"/>
@@ -231,17 +235,18 @@
     <Compile Include="Entities\EntityLogicJump.cs"/>
     <Compile Include="Entities\EntityLogicSand.cs"/>
     <Compile Include="Entities\EntityLogicSequence.cs"/>
-    <Compile Include="Factories\Drawables\FactoryDrawables.cs"/>
-    <Compile Include="Factories\Drawables\FactoryDrawablesGroup.cs"/>
     <Compile Include="Factories\Drawables\FactoryLevers.cs"/>
     <Compile Include="Factories\Drawables\FactoryPlatforms.cs"/>
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
+    <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>
+    <Compile Include="Menus\Nodes\NodeReloadBlocksXml.cs"/>
+    <Compile Include="ModDebug.cs"/>
+    <Compile Include="Menus\Nodes\NodeCreateBlocksXml.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchResolveXCollisionBehaviour.cs"/>
     <Compile Include="Patches\PatchSlopeBlock.cs"/>
-    <Compile Include="Patches\PatchWalk.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWindManager.cs"/>
     <Compile Include="Util\BlockGroupId.cs"/>
@@ -295,6 +300,7 @@
     <Compile Include="Util\StartState.cs"/>
     <Compile Include="Util\WrappedIndex.cs"/>
     <Compile Include="Properties\AssemblyInfo.cs"/>
+    <Compile Include="Util\XmlHelper.cs"/>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig"/>

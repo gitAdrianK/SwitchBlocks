@@ -16,17 +16,26 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicSequence(SettingsSequence settings) : base(DataSequence.Instance, settings.Multiplier)
+        public EntityLogicSequence(SettingsSequence settings) : base(DataSequence.Instance)
+            => this.UpdateSettings(settings);
+
+        /// <summary>Duration the state lasts for.</summary>
+        private int Duration { get; set; }
+
+        /// <summary> If the platform switches when left.</summary>
+        private bool DisableOnLeaving { get; set; }
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsSequence" />.</param>
+        public void UpdateSettings(SettingsSequence settings)
         {
+            this.Multiplier = settings.Multiplier;
+
             this.Duration = settings.Duration;
             this.DisableOnLeaving = settings.DisableOnLeaving;
         }
-
-        /// <summary>Duration the state lasts for.</summary>
-        private int Duration { get; }
-
-        /// <summary> If the platform switches when left.</summary>
-        private bool DisableOnLeaving { get; }
 
         /// <summary>
         ///     Updates progress and state of groups that are marked as active.

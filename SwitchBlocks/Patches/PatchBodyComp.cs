@@ -17,8 +17,7 @@ namespace SwitchBlocks.Patches
     {
         /// <summary>FieldRef of the <c>_knocked</c> field of <see cref="BodyComp" />.</summary>
         private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
-            AccessTools.FieldRefAccess<BodyComp, bool>(
-                AccessTools.Field(typeof(BodyComp), "_knocked"));
+            AccessTools.FieldRefAccess<BodyComp, bool>("_knocked");
 
         /// <summary>
         ///     The current players <see cref="BodyComp" />.

@@ -100,14 +100,14 @@ namespace SwitchBlocks.Factories
         /// <inheritdoc />
         public bool CanMakeBlock(Color blockCode, Level level) =>
             SupportedBlockCodes.Contains(blockCode)
-            || IsCountdownConveyorOn(blockCode)
-            || IsCountdownConveyorOff(blockCode);
+            || IsConveyorOn(blockCode)
+            || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
         public bool IsSolidBlock(Color blockCode) =>
             SolidCountdownBlocks.Contains(blockCode)
-            || IsCountdownConveyorOn(blockCode)
-            || IsCountdownConveyorOff(blockCode);
+            || IsConveyorOn(blockCode)
+            || IsConveyorOff(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,
@@ -125,12 +125,12 @@ namespace SwitchBlocks.Factories
                 return factory(blockRect, textureSrc, currentScreen, x, y);
             }
 
-            if (IsCountdownConveyorOn(blockCode))
+            if (IsConveyorOn(blockCode))
             {
                 return new BlockCountdownConveyorOn(blockRect, blockCode.B);
             }
 
-            if (IsCountdownConveyorOff(blockCode))
+            if (IsConveyorOff(blockCode))
             {
                 return new BlockCountdownConveyorOff(blockRect, blockCode.R);
             }
@@ -142,9 +142,9 @@ namespace SwitchBlocks.Factories
         /// <summary>
         ///     Check if the block-code is that of a <see cref="BlockCountdownConveyorOn" />
         /// </summary>
-        /// <param name="blockCode">The to check block code.</param>
+        /// <param name="blockCode">The block code to check.</param>
         /// <returns><c>true</c> if it is a <see cref="BlockCountdownConveyorOn" /> valid color, <c>false</c> otherwise.</returns>
-        private static bool IsCountdownConveyorOn(Color blockCode) =>
+        private static bool IsConveyorOn(Color blockCode) =>
             blockCode.R == ModBlocks.CountdownConveyorOn.R
             && blockCode.G == ModBlocks.CountdownConveyorOn.G
             && blockCode.B >= 1
@@ -153,9 +153,9 @@ namespace SwitchBlocks.Factories
         /// <summary>
         ///     Check if the block-code is that of a <see cref="BlockCountdownConveyorOff" />
         /// </summary>
-        /// <param name="blockCode">The to check block code.</param>
+        /// <param name="blockCode">The block code to check.</param>
         /// <returns><c>true</c> if it is a <see cref="BlockCountdownConveyorOff" /> valid color, <c>false</c> otherwise.</returns>
-        private static bool IsCountdownConveyorOff(Color blockCode) =>
+        private static bool IsConveyorOff(Color blockCode) =>
             blockCode.G == ModBlocks.CountdownConveyorOff.G
             && blockCode.B == ModBlocks.CountdownConveyorOff.B
             && blockCode.R >= 1

@@ -25,7 +25,7 @@ namespace SwitchBlocks.Behaviours
         private DataBasic Data { get; }
 
         /// <summary>Lever directions.</summary>
-        private Direction LeverDirections { get; }
+        public Direction LeverDirections { get; private set; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -132,5 +132,11 @@ namespace SwitchBlocks.Behaviours
 
             return true;
         }
+
+        /// <summary>
+        ///     Updates the directions a lever can be activated from the given directions.
+        /// </summary>
+        /// <param name="leverDirections">Directions a lever can be activated from.</param>
+        public void UpdateDirections(Direction leverDirections) => this.LeverDirections = leverDirections;
     }
 }

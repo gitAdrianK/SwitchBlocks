@@ -10,7 +10,7 @@ namespace SwitchBlocks
     public static class ModBlocks
     {
         /*
-            Colour patters are:
+            Colour patterns are:
 
             1_ = Auto
             2_ = Basic
@@ -26,8 +26,14 @@ namespace SwitchBlocks
             R:   _, G: 125, B: 238 = Off, from other mod
             R: 238, G:   _, B: 124 = Levers/Other
 
+            R:  238, G: 110, B: 1-30 = On, Auto, conveyor speeds
+            R: 1-30, G: 110, B:  238 = Off, Auto, conveyor speeds
+            R:  238, G: 120, B: 1-30 = On, Basic, conveyor speeds
+            R: 1-30, G: 120, B:  238 = Off, Basic, conveyor speeds
             R:  238, G: 130, B: 1-30 = On, Countdown, conveyor speeds
             R: 1-30, G: 130, B:  238 = Off, Countdown, conveyor speeds
+            R:  238, G: 170, B: 1-30 = On, Basic, conveyor speeds
+            R: 1-30, G: 170, B:  238 = Off, Basic, conveyor speeds
         */
 
 
@@ -66,6 +72,18 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoSlopeOff" />.</summary>
         public static readonly Color AutoSlopeOff = new Color(15, 124, 238);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockAutoConveyorOn" />.
+        ///     The valid blue values are from 1 to 30 and will be checked for in the <see cref="FactoryAuto" />.
+        /// </summary>
+        public static readonly Color AutoConveyorOn = new Color(238, 110, 0);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockAutoConveyorOff" />.
+        ///     The valid red values are from 1 to 30 and will be checked for in the <see cref="FactoryAuto" />.
+        /// </summary>
+        public static readonly Color AutoConveyorOff = new Color(0, 110, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoReset" />.</summary>
         public static readonly Color AutoReset = new Color(238, 11, 124);
@@ -112,18 +130,6 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSlopeOff" />.</summary>
         public static readonly Color BasicSlopeOff = new Color(25, 124, 238);
 
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOn" />.</summary>
-        public static readonly Color BasicMoveUpOn = new Color(238, 125, 21);
-
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOff" />.</summary>
-        public static readonly Color BasicMoveUpOff = new Color(21, 125, 238);
-
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOn" />.</summary>
-        public static readonly Color BasicInfinityJumpOn = new Color(238, 125, 22);
-
-        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOff" />.</summary>
-        public static readonly Color BasicInfinityJumpOff = new Color(22, 125, 238);
-
         /// <summary>
         ///     <see cref="Color" /> that represents the <see cref="BlockBasicConveyorOn" />.
         ///     The valid blue values are from 1 to 30 and will be checked for in the <see cref="FactoryBasic" />.
@@ -135,6 +141,18 @@ namespace SwitchBlocks
         ///     The valid red values are from 1 to 30 and will be checked for in the <see cref="FactoryBasic" />.
         /// </summary>
         public static readonly Color BasicConveyorOff = new Color(0, 120, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOn" />.</summary>
+        public static readonly Color BasicMoveUpOn = new Color(238, 125, 21);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicMoveUpOff" />.</summary>
+        public static readonly Color BasicMoveUpOff = new Color(21, 125, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOn" />.</summary>
+        public static readonly Color BasicInfinityJumpOn = new Color(238, 125, 22);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicInfinityJumpOff" />.</summary>
+        public static readonly Color BasicInfinityJumpOff = new Color(22, 125, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicLever" />.</summary>
         public static readonly Color BasicLever = new Color(238, 21, 124);
@@ -315,6 +333,18 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpSlopeOff" />.</summary>
         public static readonly Color JumpSlopeOff = new Color(75, 124, 238);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockJumpConveyorOn" />.
+        ///     The valid blue values are from 1 to 30 and will be checked for in the <see cref="FactoryJump" />.
+        /// </summary>
+        public static readonly Color JumpConveyorOn = new Color(238, 170, 0);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockJumpConveyorOff" />.
+        ///     The valid red values are from 1 to 30 and will be checked for in the <see cref="FactoryJump" />.
+        /// </summary>
+        public static readonly Color JumpConveyorOff = new Color(0, 170, 238);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOn" />.</summary>
         public static readonly Color JumpInfinityJumpOn = new Color(238, 125, 71);

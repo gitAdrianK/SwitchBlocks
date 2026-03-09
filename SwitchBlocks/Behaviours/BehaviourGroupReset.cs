@@ -41,7 +41,7 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>Lever directions.</summary>
-        private Direction LeverDirections { get; }
+        private Direction LeverDirections { get; set; }
 
         /// <summary>Get or set the group data's Touched.</summary>
         /// <inheritdoc />
@@ -151,5 +151,11 @@ namespace SwitchBlocks.Behaviours
 
             return true;
         }
+
+        /// <summary>
+        ///     Updates the directions a lever can be activated from the given directions.
+        /// </summary>
+        /// <param name="leverDirections">Directions a lever can be activated from.</param>
+        public void UpdateDirections(Direction leverDirections) => this.LeverDirections = leverDirections;
     }
 }

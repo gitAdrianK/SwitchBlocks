@@ -7,7 +7,6 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
-    using JumpKing;
     using JumpKing.Player;
     using Settings;
     using Util;
@@ -58,7 +57,7 @@ namespace SwitchBlocks.Setups
             var resets = ResetsGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
 
-            if (LevelDebugState.instance != null)
+            if (ModDebug.IsDebug)
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();
@@ -66,14 +65,17 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicGroup(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Group);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Group);
             if (Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataGroup.Instance.Groups, entityLogic);
+                FactoryPlatforms.CreateGroupPlatforms(xmlPath, ModEntry.TexturePath, DataGroup.Instance.Groups,
+                    entityLogic);
             }
             else
             {
-                FactoryDrawablesGroup.CreateDrawables(FactoryDrawablesGroup.BlockType.Group, entityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Group);
+                FactoryPlatforms.CreateGroupPlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataGroup.Instance.Groups, entityLogic);
             }
 
             _ = settings.Duration == 0
@@ -84,7 +86,16 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupIceA), new BehaviourGroupIce());
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
-            _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), new BehaviourGroupReset(settings.LeverDirections));
+            var behaviourReset = new BehaviourGroupReset(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourReset);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicGroup = entityLogic;
+                debugInstance.BehaviourGroupReset = behaviourReset;
+            }
         }
 
         /// <summary>

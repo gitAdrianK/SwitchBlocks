@@ -23,7 +23,7 @@ namespace SwitchBlocks
     [JumpKingMod(ModConstants.Modname)]
     public static class ModEntry
     {
-        public static string ModPath { get; private set; }
+        public static string RootModFolder { get; private set; }
         public static string TexturePath { get; private set; }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace SwitchBlocks
                 return;
             }
 
-            ModPath = Path.Combine(contentManager.root, ModConstants.Folder);
-            TexturePath = Path.Combine(ModPath, ModConstants.Textures);
+            RootModFolder = Path.Combine(contentManager.root, ModConstants.Folder);
+            TexturePath = Path.Combine(RootModFolder, ModConstants.Textures);
 
             var body = player.m_body;
             PatchBodyComp.BodyComp = body;
@@ -111,16 +111,9 @@ namespace SwitchBlocks
                 .ToList();
             foreach (var entity in entities)
             {
-                if (!(entity is EntityDraw entityDraw))
+                if (!(entity is EntityDraw entityDraw) || entityDraw.IsForeground)
                 {
                     entity.GoToFront();
-                }
-                else
-                {
-                    if (entityDraw.IsForeground)
-                    {
-                        entityDraw.GoToFront();
-                    }
                 }
             }
         }
@@ -150,6 +143,8 @@ namespace SwitchBlocks
             SetupJump.Cleanup();
             SetupSand.Cleanup();
             SetupSequence.Cleanup();
+
+            ModDebug.Reset();
         }
 
         /// <summary>

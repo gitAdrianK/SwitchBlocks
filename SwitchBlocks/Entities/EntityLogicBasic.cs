@@ -11,9 +11,14 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicBasic(SettingsBasic settings) : base(DataBasic.Instance, settings.Multiplier)
-        {
-        }
+        public EntityLogicBasic(SettingsBasic settings) : base(DataBasic.Instance)
+            => this.UpdateSettings(settings);
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsBasic" />.</param>
+        public void UpdateSettings(SettingsBasic settings) => this.Multiplier = settings.Multiplier;
 
         /// <summary>
         ///     Updates progress.

@@ -4,6 +4,7 @@ namespace SwitchBlocks.Settings
 {
     using System.Xml.Linq;
     using JetBrains.Annotations;
+    using Util;
 
     public class SettingsAuto
     {
@@ -17,13 +18,13 @@ namespace SwitchBlocks.Settings
             this.DurationOff = ParseSettings.ParseDuration(element?.Element("DurationOff"), this.DurationOn);
             this.DurationCycle = this.DurationOn + this.DurationOff;
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
-            this.ForceSwitch = element?.Element("ForceStateSwitch") != null;
+            this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
 
             var warnElement = element?.Element("Warn");
             this.WarnCount = ParseSettings.ParseCount(warnElement?.Element("Count"), 2);
             this.WarnDuration = ParseSettings.ParseDuration(warnElement?.Element("Duration"), 1.0f);
-            this.WarnDisableOn = warnElement?.Element("DisableOn") != null;
-            this.WarnDisableOff = warnElement?.Element("DisableOff") != null;
+            this.WarnDisableOn = XmlHelper.ParseElementBool(warnElement, "DisableOn");
+            this.WarnDisableOff = XmlHelper.ParseElementBool(warnElement, "DisableOff");
         }
 
         /// <summary>How long the blocks stay in their state before switching.</summary>

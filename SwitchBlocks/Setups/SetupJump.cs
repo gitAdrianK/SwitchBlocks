@@ -23,7 +23,7 @@ namespace SwitchBlocks.Setups
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
 
         /// <summary>Logic entity of the jump block type.</summary>
-        private static EntityLogicJump EntityLogic { get; set; }
+        public static EntityLogicJump EntityLogicJump { get; set; }
 
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
@@ -39,19 +39,24 @@ namespace SwitchBlocks.Setups
 
             _ = DataJump.Instance;
 
-            EntityLogic = new EntityLogicJump(settings, player);
+            EntityLogicJump = new EntityLogicJump(settings, player);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Jump);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Jump);
             if (Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogic);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataJump.Instance,
+                    EntityLogicJump, false);
             }
             else
             {
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Platforms,
-                    FactoryDrawables.BlockType.Jump,
-                    EntityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Jump);
+                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataJump.Instance, EntityLogicJump);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Jump);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataJump.Instance, EntityLogicJump, false, true);
             }
 
             var body = player.m_body;
@@ -66,6 +71,13 @@ namespace SwitchBlocks.Setups
             {
                 PlayerEntity.OnJumpCall += JumpSwitchSafe;
             }
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicJump = EntityLogicJump;
+            }
         }
 
         /// <summary>
@@ -78,6 +90,9 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            EntityLogicJump.Destroy();
+            EntityLogicJump = null;
+
             PlayerEntity.OnJumpCall -= JumpSwitchUnsafe;
             PlayerEntity.OnJumpCall -= JumpSwitchSafe;
 
@@ -88,9 +103,9 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>Function to add to the OnJumpCall switching the state unsafely.</summary>
-        private static void JumpSwitchUnsafe()
+        public static void JumpSwitchUnsafe()
         {
-            if (EntityLogic != null && EntityLogic.IsActiveOnCurrentScreen)
+            if (EntityLogicJump != null && EntityLogicJump.IsActiveOnCurrentScreen)
             {
                 ModSounds.JumpFlip?.PlayOneShot();
             }
@@ -100,6 +115,6 @@ namespace SwitchBlocks.Setups
         }
 
         /// <summary>Function to add to the OnJumpCall switching the state safely.</summary>
-        private static void JumpSwitchSafe() => DataJump.Instance.SwitchOnceSafe = true;
+        public static void JumpSwitchSafe() => DataJump.Instance.SwitchOnceSafe = true;
     }
 }

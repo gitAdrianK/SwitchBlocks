@@ -14,8 +14,7 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicJump(SettingsJump settings, PlayerEntity player) : base(DataJump.Instance,
-            settings.Multiplier)
+        public EntityLogicJump(SettingsJump settings, PlayerEntity player) : base(DataJump.Instance)
         {
             this.CanJumpInAir = settings.CanJumpInAir;
             this.Cooldown = settings.Cooldown;
@@ -23,13 +22,25 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary>If the player can trigger another switch in air.</summary>
-        private bool CanJumpInAir { get; }
+        private bool CanJumpInAir { get; set; }
 
         /// <summary>The amount of frames that have to pass before a switch can happen again, when in air.</summary>
-        private int Cooldown { get; }
+        private int Cooldown { get; set; }
 
         /// <summary>The players body comp.</summary>
         private BodyComp Body { get; }
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsJump" />.</param>
+        public void UpdateSettings(SettingsJump settings)
+        {
+            this.Multiplier = settings.Multiplier;
+
+            this.CanJumpInAir = settings.CanJumpInAir;
+            this.Cooldown = settings.Cooldown;
+        }
 
         /// <summary>
         ///     Updates progress and tries to switch state.

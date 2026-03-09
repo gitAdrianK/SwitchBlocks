@@ -22,13 +22,23 @@
         /// <summary>The regex for files.</summary>
         private static Regex Regex { get; } = new Regex(@"^platforms(\d+).xml$");
 
-        public static void CreatePlatforms<T>(
-            string xmlPath,
-            string texturePath,
-            T data,
-            EntityLogic<T> entityLogic)
+        /// <summary>
+        ///     Creates <see cref="EntityDrawPlatform" />, <see cref="EntityDrawPlatformLoop" /> and
+        ///     <see cref="EntityDrawPlatformReset" />.
+        /// </summary>
+        /// <param name="xmlPath">Path to XML files.</param>
+        /// <param name="texturePath">Path to textures.</param>
+        /// <param name="data">Data for the entity.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
+        /// <typeparam name="T">>A class implementing <see cref="IDataProvider" />.</typeparam>
+        public static void CreatePlatforms<T>(string xmlPath, string texturePath, T data, EntityLogic<T> entityLogic)
             where T : class, IDataProvider
         {
+            if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
+            {
+                return;
+            }
+
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
                 var match = Regex.Match(Path.GetFileName(file));
@@ -43,68 +53,37 @@
                     continue;
                 }
 
-                var doc = XDocument.Load(file);
-                var root = doc.Root;
-                if (root?.Name != "Platforms")
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    continue;
-                }
-
-                foreach (var platformElement in root.Elements("Platform"))
-                {
-                    var textureElement = platformElement.Element("Texture");
-                    var positionElement = platformElement.Element("Position");
-
-                    if (textureElement == null || positionElement == null)
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root == null || root.Name != "Platforms")
                     {
-                        continue;
+                        return;
                     }
 
-                    var textureFile = Path.Combine(texturePath, textureElement.Value);
-                    if (!File.Exists(textureFile + ".xnb"))
+                    foreach (var platformElement in root.Elements("Platform"))
                     {
-                        continue;
+                        var platform = TryParsePlatformElement(platformElement, texturePath);
+                        if (platform == null)
+                        {
+                            continue;
+                        }
+
+                        var spritesElement = platformElement.Element("Sprites");
+                        if (spritesElement != null && platform.Sprites.Cells != new Point(1, 1))
+                        {
+                            _ = platform.Sprites.ResetWithLever
+                                ? new EntityDrawPlatformReset(platform, screen, data)
+                                : new EntityDrawPlatformLoop(platform, screen, data);
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatform(platform, screen, data);
+                        }
+
+                        entityLogic.AddScreen(screen);
                     }
-
-                    if (!TryParseVector2(positionElement, out var position))
-                    {
-                        continue;
-                    }
-
-                    var animationElement = platformElement.Element("Animation");
-                    var animationOutElement = platformElement.Element("AnimationOut");
-
-                    var animation = ParseAnimation(animationElement, Curve.Linear, Style.Fade);
-                    var animationOut = ParseAnimation(
-                        animationOutElement,
-                        animation.Curve,
-                        animation.Style);
-
-                    var platform = new Platform
-                    {
-                        Texture = Game1.instance.contentManager.Load<Texture2D>(textureFile),
-                        Position = position,
-                        StartState = ParseEnum(platformElement.Element("StartState")?.Value, StartState.Off),
-                        Animation = animation,
-                        AnimationOut = animationOut,
-                        IsForeground = platformElement.Element("IsForeground") != null,
-                    };
-
-                    var spritesElement = platformElement.Element("Sprites");
-                    if (spritesElement != null)
-                    {
-                        platform.Sprites = ParseSprites(spritesElement);
-
-                        _ = platform.Sprites.ResetWithLever
-                            ? new EntityDrawPlatformReset(platform, screen, data)
-                            : new EntityDrawPlatformLoop(platform, screen, data);
-                    }
-                    else
-                    {
-                        _ = new EntityDrawPlatform(platform, screen, data);
-                    }
-
-                    entityLogic.AddScreen(screen);
                 }
             }
         }
@@ -118,13 +97,16 @@
         /// <param name="groups">Collection of BlockGroups.</param>
         /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}" />.</param>
         /// <typeparam name="T">>A class implementing <see cref="IGroupDataProvider" />.</typeparam>
-        public static void CreatePlatforms<T>(
-            string xmlPath,
-            string texturePath,
+        public static void CreateGroupPlatforms<T>(string xmlPath, string texturePath,
             Dictionary<int, BlockGroup> groups,
             EntityGroupLogic<T> entityGroupLogic)
             where T : IGroupDataProvider
         {
+            if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
+            {
+                return;
+            }
+
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
                 var match = Regex.Match(Path.GetFileName(file));
@@ -139,78 +121,109 @@
                     continue;
                 }
 
-                var doc = XDocument.Load(file);
-                var root = doc.Root;
-                if (root?.Name != "Platforms")
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    continue;
-                }
-
-                foreach (var platformElement in root.Elements("Platform"))
-                {
-                    var textureElement = platformElement.Element("Texture");
-                    if (textureElement == null)
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root == null || root.Name != "Platforms")
                     {
                         continue;
                     }
 
-                    var textureFile = Path.Combine(texturePath, textureElement.Value);
-                    if (!File.Exists(textureFile + ".xnb"))
+                    foreach (var platformElement in root.Elements("Platform"))
                     {
-                        continue;
+                        var platform = TryParsePlatformElement(platformElement, texturePath);
+                        if (platform == null)
+                        {
+                            continue;
+                        }
+
+                        var groupId = FindGroupId<T>(platformElement, screen, platform.Position);
+                        if (groupId == 0 || !groups.TryGetValue(groupId, out var group))
+                        {
+                            continue;
+                        }
+
+                        if (platform.Sprites != null)
+                        {
+                            _ = platform.Sprites.ResetWithLever
+                                ? new EntityDrawPlatformReset(platform, screen, group)
+                                : new EntityDrawPlatformLoop(platform, screen, group);
+                        }
+                        else
+                        {
+                            _ = new EntityDrawPlatform(platform, screen, group);
+                        }
+
+                        entityGroupLogic.AddScreen(screen);
                     }
-
-                    if (!TryParseVector2(platformElement.Element("Position"), out var position))
-                    {
-                        continue;
-                    }
-
-                    var animation = ParseAnimation(
-                        platformElement.Element("Animation"),
-                        Curve.Linear,
-                        Style.Fade);
-
-                    var animationOut = ParseAnimation(
-                        platformElement.Element("AnimationOut"),
-                        animation.Curve,
-                        animation.Style);
-
-                    var platform = new Platform
-                    {
-                        Texture = Game1.instance.contentManager.Load<Texture2D>(textureFile),
-                        Position = position,
-                        StartState = ParseEnum(
-                            platformElement.Element("StartState")?.Value,
-                            StartState.Off),
-                        Animation = animation,
-                        AnimationOut = animationOut,
-                        IsForeground = platformElement.Element("IsForeground") != null,
-                    };
-
-                    var spritesElement = platformElement.Element("Sprites");
-                    if (spritesElement != null)
-                    {
-                        platform.Sprites = ParseSprites(spritesElement);
-                    }
-
-                    var groupId = FindGroupId<T>(platformElement, screen, position);
-                    if (groupId == 0)
-                    {
-                        continue;
-                    }
-
-                    if (!groups.TryGetValue(groupId, out var group))
-                    {
-                        continue;
-                    }
-
-                    _ = platform.Sprites == null
-                        ? new EntityDrawPlatform(platform, screen, group)
-                        : new EntityDrawPlatformLoop(platform, screen, group);
-
-                    entityGroupLogic.AddScreen(screen);
                 }
             }
+        }
+
+        /// <summary>
+        ///     Helper to try to parse an <see cref="XElement" /> to a platform.
+        /// </summary>
+        /// <param name="platformElement">The element to create a platform from.</param>
+        /// <param name="texturePath">Path to the texture.</param>
+        /// <returns>A platform if creation was successful, <c>null</c> otherwise.</returns>
+        private static Platform TryParsePlatformElement(XElement platformElement, string texturePath)
+        {
+            if (platformElement == null)
+            {
+                return null;
+            }
+
+            var textureElement = platformElement.Element("Texture");
+            var positionElement = platformElement.Element("Position");
+
+            if (textureElement == null || positionElement == null)
+            {
+                return null;
+            }
+
+            var textureFile = Path.Combine(texturePath, textureElement.Value);
+            if (!File.Exists(textureFile + ".xnb"))
+            {
+                return null;
+            }
+
+            if (!TryParseVector2(positionElement, out var position))
+            {
+                return null;
+            }
+
+            var animation = ParseAnimation(platformElement.Element("Animation"), Curve.Linear, Style.Fade);
+            var animationOut =
+                ParseAnimation(platformElement.Element("AnimationOut"), animation.Curve, animation.Style);
+
+            var platform = new Platform
+            {
+                Texture = Game1.instance.contentManager.Load<Texture2D>(textureFile),
+                Position = position,
+                StartState =
+                    ParseEnum(
+                        platformElement.Element("StartState") != null
+                            ? platformElement.Element("StartState").Value
+                            : null, StartState.Off),
+                Animation = animation,
+                AnimationOut = animationOut,
+                IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+            };
+
+            var spritesElement = platformElement.Element("Sprites");
+            if (spritesElement == null)
+            {
+                return platform;
+            }
+
+            var sprites = ParseSprites(spritesElement);
+            if (sprites.Cells != new Point(1, 1))
+            {
+                platform.Sprites = sprites;
+            }
+
+            return platform;
         }
 
         /// <summary>
@@ -230,7 +243,7 @@
         {
             if (typeof(T) == typeof(DataGroup))
             {
-                return FactoryDrawablesGroup.GetGroupId(
+                return GetGroupId(
                     platformElement,
                     screen,
                     position,
@@ -242,7 +255,7 @@
 
             if (typeof(T) == typeof(DataSequence))
             {
-                return FactoryDrawablesGroup.GetGroupId(
+                return GetGroupId(
                     platformElement,
                     screen,
                     position,
@@ -332,24 +345,21 @@
             return new Sprites
             {
                 Cells = new Point(
-                    TryParseInt(cellsElement?.Element("X"), 1),
-                    TryParseInt(cellsElement?.Element("Y"), 1)
+                    TryParseInt(cellsElement?.Element("X"), 2),
+                    TryParseInt(cellsElement?.Element("Y"), 2)
                 ),
                 Fps = TryParseFloat(element.Element("FPS"), 1f),
                 Frames = element.Element("Frames")?
                     .Elements("float")
                     .Select(f => float.Parse(f.Value, CultureInfo.InvariantCulture))
                     .ToArray(),
-                RandomOffset = TryParseBool(element.Element("RandomOffset")),
-                ResetWithLever = TryParseBool(element.Element("ResetWithLever")),
-                IgnoreState = TryParseBool(element.Element("IgnoreState")),
+                RandomOffset = XmlHelper.ParseElementBool(element, "RandomOffset"),
+                ResetWithLever = XmlHelper.ParseElementBool(element, "ResetWithLever"),
+                IgnoreState = XmlHelper.ParseElementBool(element, "IgnoreState"),
             };
 
             int TryParseInt(XElement el, int fallback) =>
                 int.TryParse(el?.Value, out var val) ? val : fallback;
-
-            bool TryParseBool(XElement el) =>
-                bool.TryParse(el?.Value, out var val) && val;
 
             float TryParseFloat(XElement el, float fallback) =>
                 float.TryParse(el?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val)
@@ -358,172 +368,39 @@
         }
 
         /// <summary>
-        ///     Creates <see cref="EntityDrawPlatform" />, <see cref="EntityDrawPlatformLoop" /> and
-        ///     <see cref="EntityDrawPlatformReset" />.
+        ///     Get the group id of the block that is at the position of the entity,
+        ///     or specified link position.
         /// </summary>
-        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
-        /// <param name="path">Path to the files containing platform definitions.</param>
-        /// <param name="files">Files inside the given path.</param>
-        /// <param name="data">Data provider.</param>
-        /// <param name="entityLogic">
-        ///     <see cref="EntityLogic{T}" />.
-        /// </param>
-        public static void CreatePlatformsLegacy<T>(
-            string path,
-            string[] files,
-            IDataProvider data,
-            EntityLogic<T> entityLogic)
-            where T : class, IDataProvider
+        /// <param name="root">Root <see cref="XElement" /> specified link may be taken from.</param>
+        /// <param name="screen">Screen this entity is to be created on.</param>
+        /// <param name="position">Position this entity is to be created at.</param>
+        /// <param name="blockGroups">Collection of <see cref="IBlockGroupId" />.</param>
+        /// <returns>ID of the block at the position. 0 if no block exists at that the position.</returns>
+        public static int GetGroupId(XElement root, int screen, Vector2 position,
+            params Dictionary<int, IBlockGroupId>[] blockGroups)
         {
-            var regex = new Regex(@"^platforms(\d+).xml$");
-
-            foreach (var file in files)
+            var xel = root.Element("Link");
+            int link;
+            if (xel != null)
             {
-                var fileName = Path.GetFileName(file);
-                var match = regex.Match(fileName);
-                if (!match.Success)
+                link = (int.TryParse(xel.Element("Screen")?.Value, out var screenResult) ? screenResult * 10000 : 0)
+                       + (int.TryParse(xel.Element("X")?.Value, out var xResult) ? xResult * 100 : 0)
+                       + (int.TryParse(xel.Element("Y")?.Value, out var yResult) ? yResult : 0);
+            }
+            else
+            {
+                link = ((screen + 1) * 10000) + ((int)(position.X / 8) * 100) + (int)(position.Y / 8);
+            }
+
+            foreach (var blockGroup in blockGroups)
+            {
+                if (blockGroup.TryGetValue(link, out var value))
                 {
-                    continue;
-                }
-
-                var screen = int.Parse(match.Groups[1].Value) - 1;
-                if (screen < 0)
-                {
-                    continue;
-                }
-
-                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    var doc = XDocument.Load(fs);
-                    var root = doc.Root;
-                    if (root?.Name != "Platforms")
-                    {
-                        continue;
-                    }
-
-                    foreach (var platformElement in root.Elements("Platform"))
-                    {
-                        // Texture
-                        XElement xel;
-                        if ((xel = platformElement.Element("Texture")) == null)
-                        {
-                            continue;
-                        }
-
-                        var texturePath = Path.Combine(path, ModConstants.Textures, xel.Value);
-                        if (!File.Exists(texturePath + ".xnb"))
-                        {
-                            continue;
-                        }
-
-                        var texture = Game1.instance.contentManager.Load<Texture2D>(texturePath);
-                        // Position
-                        if ((xel = platformElement.Element("Position")) == null)
-                        {
-                            continue;
-                        }
-
-                        var x = xel.Element("X");
-                        var y = xel.Element("Y");
-                        if (x == null || y == null)
-                        {
-                            continue;
-                        }
-
-                        var position = new Vector2
-                        {
-                            X = float.Parse(x.Value, CultureInfo.InvariantCulture),
-                            Y = float.Parse(y.Value, CultureInfo.InvariantCulture),
-                        };
-                        // Platform
-                        var platform = new Platform
-                        {
-                            Texture = texture,
-                            Position = position,
-                            StartState = Enum.TryParse<StartState>(
-                                platformElement.Element("StartState")?.Value, true,
-                                out var startState)
-                                ? startState
-                                : StartState.Off,
-                            Animation = new Animation
-                            {
-                                Curve =
-                                    Enum.TryParse<Curve>(
-                                        platformElement.Element("Animation")?.Element("Curve")?.Value, true,
-                                        out var curve)
-                                        ? curve
-                                        : Curve.Linear,
-                                Style =
-                                    Enum.TryParse<Style>(
-                                        platformElement.Element("Animation")?.Element("Style")?.Value, true,
-                                        out var style)
-                                        ? style
-                                        : Style.Fade,
-                            },
-                            AnimationOut = new Animation
-                            {
-                                Curve =
-                                    Enum.TryParse<Curve>(
-                                        platformElement.Element("AnimationOut")?.Element("Curve")?.Value, true,
-                                        out var curve2)
-                                        ? curve2
-                                        : curve,
-                                Style = Enum.TryParse<Style>(
-                                    platformElement.Element("AnimationOut")?.Element("Style")?.Value, true,
-                                    out var style2)
-                                    ? style2
-                                    : style,
-                            },
-                            IsForeground = platformElement.Element("IsForeground") != null,
-                            Sprites = null,
-                        };
-                        // Sprites
-                        if ((xel = platformElement.Element("Sprites")) != null)
-                        {
-                            platform.Sprites = new Sprites
-                            {
-                                Cells = new Point
-                                {
-                                    X = int.TryParse(xel.Element("Cells")?.Element("X")?.Value,
-                                        out var parsedInt)
-                                        ? parsedInt
-                                        : 1,
-                                    Y =
-                                        int.TryParse(xel.Element("Cells")?.Element("Y")?.Value, out parsedInt)
-                                            ? parsedInt
-                                            : 1,
-                                },
-                                Fps =
-                                    float.TryParse(xel.Element("FPS")?.Value, NumberStyles.Float,
-                                        CultureInfo.InvariantCulture, out var fps)
-                                        ? fps
-                                        : 1.0f,
-                                Frames =
-                                    xel.Element("Frames")?.Elements("float").Select(f =>
-                                        float.Parse(f.Value, CultureInfo.InvariantCulture)).ToArray(),
-                                RandomOffset =
-                                    bool.TryParse(xel.Element("RandomOffset")?.Value, out var parsedBool) &&
-                                    parsedBool,
-                                ResetWithLever =
-                                    bool.TryParse(xel.Element("ResetWithLever")?.Value, out parsedBool) &&
-                                    parsedBool,
-                                IgnoreState =
-                                    bool.TryParse(xel.Element("IgnoreState")?.Value, out parsedBool) &&
-                                    parsedBool,
-                            };
-                            _ = platform.Sprites.ResetWithLever
-                                ? new EntityDrawPlatformReset(platform, screen, data)
-                                : new EntityDrawPlatformLoop(platform, screen, data);
-                        }
-                        else
-                        {
-                            _ = new EntityDrawPlatform(platform, screen, data);
-                        }
-
-                        entityLogic.AddScreen(screen);
-                    }
+                    return value.GroupId;
                 }
             }
+
+            return 0;
         }
     }
 }

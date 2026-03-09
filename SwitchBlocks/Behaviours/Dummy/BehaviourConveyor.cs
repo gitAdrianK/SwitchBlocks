@@ -56,10 +56,15 @@
                 return inputXVelocity;
             }
 
-            ConveyorBlock = info.GetCollidedBlocks<BlockBasicConveyorOn>().FirstOrDefault()
+            // Consider a better way.
+            ConveyorBlock = info.GetCollidedBlocks<BlockAutoConveyorOn>().FirstOrDefault()
+                            ?? info.GetCollidedBlocks<BlockAutoConveyorOff>().FirstOrDefault()
+                            ?? info.GetCollidedBlocks<BlockBasicConveyorOn>().FirstOrDefault()
                             ?? info.GetCollidedBlocks<BlockBasicConveyorOff>().FirstOrDefault()
                             ?? info.GetCollidedBlocks<BlockCountdownConveyorOn>().FirstOrDefault()
-                            ?? info.GetCollidedBlocks<BlockCountdownConveyorOff>().FirstOrDefault();
+                            ?? info.GetCollidedBlocks<BlockCountdownConveyorOff>().FirstOrDefault()
+                            ?? info.GetCollidedBlocks<BlockJumpConveyorOn>().FirstOrDefault()
+                            ?? info.GetCollidedBlocks<BlockJumpConveyorOff>().FirstOrDefault();
             WasPlayerOnConveyor = this.IsPlayerOnBlock;
             ConveyorPrevPosition = bodyComp.Position;
 
@@ -79,10 +84,14 @@
                 return true;
             }
 
-            this.IsPlayerOnBlock = info.IsCollidingWith<BlockBasicConveyorOn>()
+            this.IsPlayerOnBlock = info.IsCollidingWith<BlockAutoConveyorOn>()
+                                   || info.IsCollidingWith<BlockAutoConveyorOff>()
+                                   || info.IsCollidingWith<BlockBasicConveyorOn>()
                                    || info.IsCollidingWith<BlockBasicConveyorOff>()
                                    || info.IsCollidingWith<BlockCountdownConveyorOn>()
-                                   || info.IsCollidingWith<BlockCountdownConveyorOff>();
+                                   || info.IsCollidingWith<BlockCountdownConveyorOff>()
+                                   || info.IsCollidingWith<BlockJumpConveyorOn>()
+                                   || info.IsCollidingWith<BlockJumpConveyorOff>();
             IsPlayerOnConveyor = this.IsPlayerOnBlock;
             return true;
         }

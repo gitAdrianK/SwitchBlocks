@@ -18,13 +18,11 @@ namespace SwitchBlocks.Entities
         ///     Ctor.
         /// </summary>
         /// <param name="data">Class implementing <see cref="IGroupDataProvider" />.</param>
-        /// <param name="multiplier">Multiplier.</param>
-        protected EntityGroupLogic(T data, float multiplier)
+        protected EntityGroupLogic(T data)
         {
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
-            this.Multiplier = multiplier;
             this.Screens = new HashSet<int>();
         }
         // Okay but I get it, technically if I want no code duplication at all
@@ -40,7 +38,7 @@ namespace SwitchBlocks.Entities
         protected HashSet<int> Finished { get; }
 
         /// <summary>Multiplier.</summary>
-        private float Multiplier { get; }
+        protected float Multiplier { get; set; }
 
         /// <summary>Screens platform entities appear on.</summary>
         private HashSet<int> Screens { get; }

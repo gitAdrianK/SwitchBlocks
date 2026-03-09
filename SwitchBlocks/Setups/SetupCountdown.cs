@@ -7,7 +7,6 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
-    using JumpKing;
     using JumpKing.Player;
     using Settings;
     using Util;
@@ -43,7 +42,7 @@ namespace SwitchBlocks.Setups
 
             var seeds = SeedsCountdown.TryDeserialize();
             AssignGroupIds(seeds.Seeds);
-            if (LevelDebugState.instance == null)
+            if (!ModDebug.IsDebug)
             {
                 SingleUseLevers.Clear();
             }
@@ -54,7 +53,7 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicCountdown(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Countdown);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Countdown);
             if (Directory.Exists(xmlPath))
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance);
@@ -64,26 +63,34 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Platforms,
-                    FactoryDrawables.BlockType.Countdown,
-                    entityLogic);
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Levers,
-                    FactoryDrawables.BlockType.Countdown,
-                    entityLogic);
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Conveyors,
-                    FactoryDrawables.BlockType.Countdown,
-                    entityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Countdown);
+                FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataCountdown.Instance);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Countdown);
+                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataCountdown.Instance, entityLogic);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Countdown);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataCountdown.Instance, entityLogic, false, true);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever),
-                new BehaviourCountdownLever(settings.LeverDirections));
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse),
-                new BehaviourCountdownSingleUse(settings.LeverDirections));
+            var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourLever);
+            var behaviourLeverSingleUse = new BehaviourCountdownSingleUse(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicCountdown = entityLogic;
+                debugInstance.BehaviourCountdownLever = behaviourLever;
+                debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
+            }
         }
 
         /// <summary>

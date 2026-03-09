@@ -38,7 +38,7 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicBasic(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Basic);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Basic);
             if (Directory.Exists(xmlPath))
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance);
@@ -48,23 +48,32 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Platforms,
-                    FactoryDrawables.BlockType.Basic,
-                    entityLogic);
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Levers,
-                    FactoryDrawables.BlockType.Basic,
-                    entityLogic);
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Conveyors,
-                    FactoryDrawables.BlockType.Basic,
-                    entityLogic);
+                // The legacy folder structure is not as unified.
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Basic);
+                FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataBasic.Instance);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Basic);
+                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataBasic.Instance, entityLogic);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Basic);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataBasic.Instance, entityLogic, false, true);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), new BehaviourBasicLever(settings.LeverDirections));
+            var behaviourLever = new BehaviourBasicLever(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourLever);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicBasic = entityLogic;
+                debugInstance.BehaviourBasicLever = behaviourLever;
+            }
         }
 
         /// <summary>

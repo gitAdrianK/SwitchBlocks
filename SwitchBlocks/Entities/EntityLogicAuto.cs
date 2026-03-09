@@ -12,8 +12,41 @@ namespace SwitchBlocks.Entities
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public EntityLogicAuto(SettingsAuto settings) : base(DataAuto.Instance, settings.Multiplier)
+        public EntityLogicAuto(SettingsAuto settings) : base(DataAuto.Instance)
+            => this.UpdateSettings(settings);
+
+        /// <summary>Duration the full cycle of on/off lasts for.</summary>
+        private int DurationCycle { get; set; }
+
+        /// <summary>Duration the on lasts for.</summary>
+        private int DurationOn { get; set; }
+
+        /// <summary>Duration the off lasts for.</summary>
+        private int DurationOff { get; set; }
+
+        /// <summary>Amount of warns played.</summary>
+        private int WarnCount { get; set; }
+
+        /// <summary>Duration warns are apart.</summary>
+        private int WarnDuration { get; set; }
+
+        /// <summary>If warn has been disabled for the state on.</summary>
+        private bool WarnDisableOn { get; set; }
+
+        /// <summary>If warn has been disabled for the state off.</summary>
+        private bool WarnDisableOff { get; set; }
+
+        /// <summary>If the state is forced to switch regardless of player intersection.</summary>
+        private bool ForceSwitch { get; set; }
+
+        /// <summary>
+        ///     Updates the settings from the given settings.
+        /// </summary>
+        /// <param name="settings"><see cref="SettingsAuto" />.</param>
+        public void UpdateSettings(SettingsAuto settings)
         {
+            this.Multiplier = settings.Multiplier;
+
             this.DurationCycle = settings.DurationCycle;
             this.DurationOn = settings.DurationOn;
             this.DurationOff = settings.DurationOff;
@@ -24,29 +57,6 @@ namespace SwitchBlocks.Entities
             this.ForceSwitch = settings.ForceSwitch;
         }
 
-        /// <summary>Duration the full cycle of on/off lasts for.</summary>
-        private int DurationCycle { get; }
-
-        /// <summary>Duration the on lasts for.</summary>
-        private int DurationOn { get; }
-
-        /// <summary>Duration the off lasts for.</summary>
-        private int DurationOff { get; }
-
-        /// <summary>Amount of warns played.</summary>
-        private int WarnCount { get; }
-
-        /// <summary>Duration warns are apart.</summary>
-        private int WarnDuration { get; }
-
-        /// <summary>If warn has been disabled for the state on.</summary>
-        private bool WarnDisableOn { get; }
-
-        /// <summary>If warn has been disabled for the state off.</summary>
-        private bool WarnDisableOff { get; }
-
-        /// <summary>If the state is forced to switch regardless of player intersection.</summary>
-        private bool ForceSwitch { get; }
 
         /// <summary>
         ///     Updates progress, tries to play sounds and switch the state.

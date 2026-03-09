@@ -95,7 +95,7 @@ namespace SwitchBlocks.Entities
                     progressActual = this.StartState == StartState.On == this.Data.State ? 0.0f : 1.0f;
                     break;
                 default:
-                    throw new NotImplementedException("Unknown Animation Curve, cannot draw!");
+                    throw new InvalidOperationException("Unknown Animation Curve, cannot draw!");
             }
 
             if (progressActual == 0.0f)
@@ -135,7 +135,7 @@ namespace SwitchBlocks.Entities
                     rect.Width = widthRight;
                     break;
                 default:
-                    throw new NotImplementedException("Unknown Animation Style, cannot draw!");
+                    throw new InvalidOperationException("Unknown Animation Style, cannot draw!");
             }
 
             Game1.spriteBatch.Draw(

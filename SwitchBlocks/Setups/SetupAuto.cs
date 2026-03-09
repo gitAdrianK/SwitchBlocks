@@ -37,22 +37,34 @@ namespace SwitchBlocks.Setups
 
             var entityLogic = new EntityLogicAuto(settings);
 
-            var xmlPath = Path.Combine(ModEntry.ModPath, ModConstants.Auto);
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Auto);
             if (Directory.Exists(xmlPath))
             {
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic,
+                    false);
             }
             else
             {
-                FactoryDrawables.CreateDrawablesLegacy(
-                    FactoryDrawables.DrawType.Platforms,
-                    FactoryDrawables.BlockType.Auto,
-                    entityLogic);
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Auto);
+                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataAuto.Instance, entityLogic);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Auto);
+                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataAuto.Instance, entityLogic, false, true);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset(settings.DurationOff));
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicAuto = entityLogic;
+            }
         }
 
         /// <summary>

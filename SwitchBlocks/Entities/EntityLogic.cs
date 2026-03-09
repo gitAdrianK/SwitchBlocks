@@ -18,11 +18,9 @@ namespace SwitchBlocks.Entities
         ///     Ctor.
         /// </summary>
         /// <param name="data">Class implementing <see cref="IDataProvider" />.</param>
-        /// <param name="multiplier">Multiplier.</param>
-        protected EntityLogic(T data, float multiplier)
+        protected EntityLogic(T data)
         {
             this.Data = data;
-            this.Multiplier = multiplier;
             this.Screens = new HashSet<int>();
         }
 
@@ -30,7 +28,7 @@ namespace SwitchBlocks.Entities
         protected T Data { get; }
 
         /// <summary>Multiplier.</summary>
-        protected float Multiplier { get; }
+        protected float Multiplier { get; set; }
 
         /// <summary>Screens platform entities appear on.</summary>
         private HashSet<int> Screens { get; }

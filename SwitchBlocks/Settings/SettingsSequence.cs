@@ -16,7 +16,7 @@ namespace SwitchBlocks.Settings
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
             this.PlatformDirections = ParseSettings.ParseSideDisable(element?.Element("PlatformSideDisable"));
-            this.DisableOnLeaving = element?.Element("DisableOnLeaving") != null;
+            this.DisableOnLeaving = XmlHelper.ParseElementBool(element, "DisableOnLeaving");
             this.DefaultActive = ParseSettings.ParseIntArray(element?.Element("DefaultActive"));
         }
 
