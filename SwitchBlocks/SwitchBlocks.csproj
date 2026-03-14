@@ -240,6 +240,7 @@
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateModFolders.cs"/>
+    <Compile Include="Menus\Nodes\NodeCreateTemplates.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadBlocksXml.cs"/>
     <Compile Include="ModDebug.cs"/>

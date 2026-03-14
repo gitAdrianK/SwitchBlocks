@@ -5,6 +5,8 @@
     using BehaviorTree;
     using JumpKing;
     using Setups;
+    using Util;
+    using static Util.XmlHelper.AddAs;
 
     /// <summary>
     ///     A BtNode responsible for creating the blocks.xml.
@@ -40,68 +42,72 @@
             // I'll get around to figuring a cleaner solution some time.
             if (SetupAuto.IsUsed)
             {
-                var elementAuto = AddElementOrComment(target, source, "Auto", isParent: true);
+                var elementAuto = XmlHelper.AddElementOrComment(target, source, "Auto", addAs: Parent);
                 var sourceAuto = source?.Element("Auto");
 
-                AddElementOrComment(elementAuto, sourceAuto, "Duration", "3.0");
-                AddElementOrComment(elementAuto, sourceAuto, "DurationOff", "3.0");
-                AddElementOrComment(elementAuto, sourceAuto, "Multiplier", "1.0");
-                AddElementOrComment(elementAuto, sourceAuto, "ForceStateSwitch");
+                XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "Duration", "3.0", Comment);
+                XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "DurationOff", "3.0", Comment);
+                XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "ForceStateSwitch", addAs: Comment);
 
-                var warnElement = AddElementOrComment(elementAuto, sourceAuto, "Warn", isParent: true);
+                var warnElement = XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "Warn", addAs: Parent);
                 var sourceWarn = sourceAuto?.Element("Warn");
 
-                AddElementOrComment(warnElement, sourceWarn, "Count", "2");
-                AddElementOrComment(warnElement, sourceWarn, "Duration", "1.0");
-                AddElementOrComment(warnElement, sourceWarn, "DisableOn");
-                AddElementOrComment(warnElement, sourceWarn, "DisableOff");
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "Count", "2", Comment);
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "Duration", "1.0", Comment);
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "DisableOn", addAs: Comment);
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "DisableOff", addAs: Comment);
             }
 
             if (SetupBasic.IsUsed)
             {
-                var elementBasic = AddElementOrComment(target, source, "Basic", isParent: true);
+                var elementBasic = XmlHelper.AddElementOrComment(target, source, "Basic", addAs: Parent);
                 var sourceBasic = source?.Element("Basic");
 
-                AddElementOrComment(elementBasic, sourceBasic, "Multiplier", "1.0");
-                AddElementOrComment(elementBasic, sourceBasic, "LeverSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "LeverSideDisable", "Up, Down, Left, Right",
+                    Comment);
             }
 
             if (SetupCountdown.IsUsed)
             {
-                var elementCountdown = AddElementOrComment(target, source, "Countdown", isParent: true);
+                var elementCountdown = XmlHelper.AddElementOrComment(target, source, "Countdown", addAs: Parent);
                 var sourceCountdown = source?.Element("Countdown");
 
-                AddElementOrComment(elementCountdown, sourceCountdown, "Duration", "3.0");
-                AddElementOrComment(elementCountdown, sourceCountdown, "Multiplier", "1");
-                AddElementOrComment(elementCountdown, sourceCountdown, "LeverSideDisable", "Up, Down, Left, Right");
-                AddElementOrComment(elementCountdown, sourceCountdown, "ForceStateSwitch");
-                AddElementOrComment(elementCountdown, sourceCountdown, "SingleUseReset");
+                XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Duration", "3.0", Comment);
+                XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Multiplier", "1", Comment);
+                XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "LeverSideDisable",
+                    "Up, Down, Left, Right", Comment);
+                XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "ForceStateSwitch", addAs: Comment);
+                XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "SingleUseReset", addAs: Comment);
 
-                var warnElement = AddElementOrComment(elementCountdown, sourceCountdown, "Warn", isParent: true);
+                var warnElement =
+                    XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Warn", addAs: Parent);
                 var sourceWarn = sourceCountdown?.Element("Warn");
 
-                AddElementOrComment(warnElement, sourceWarn, "Count", "2");
-                AddElementOrComment(warnElement, sourceWarn, "Duration", "1.0");
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "Count", "2", Comment);
+                XmlHelper.AddElementOrComment(warnElement, sourceWarn, "Duration", "1.0", Comment);
             }
 
             if (SetupGroup.IsUsed)
             {
-                var elementGroup = AddElementOrComment(target, source, "Group", isParent: true);
+                var elementGroup = XmlHelper.AddElementOrComment(target, source, "Group", addAs: Parent);
                 var sourceGroup = source?.Element("Group");
 
-                AddElementOrComment(elementGroup, sourceGroup, "Duration", "0");
-                AddElementOrComment(elementGroup, sourceGroup, "Multiplier", "1.0");
-                AddElementOrComment(elementGroup, sourceGroup, "LeverSideDisable", "Up, Down, Left, Right");
-                AddElementOrComment(elementGroup, sourceGroup, "PlatformSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Duration", "0");
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Multiplier", "1.0");
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "LeverSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "PlatformSideDisable",
+                    "Up, Down, Left, Right");
             }
 
             if (SetupJump.IsUsed)
             {
-                var elementJump = AddElementOrComment(target, source, "Jump", isParent: true);
+                var elementJump = XmlHelper.AddElementOrComment(target, source, "Jump", addAs: Parent);
                 var sourceJump = source?.Element("Jump");
 
-                AddElementOrComment(elementJump, sourceJump, "Multiplier", "1.0");
-                AddElementOrComment(elementJump, sourceJump, "ForceStateSwitch");
+                XmlHelper.AddElementOrComment(elementJump, sourceJump, "Multiplier", "1.0");
+                XmlHelper.AddElementOrComment(elementJump, sourceJump, "ForceStateSwitch");
                 // TODO: Uncomment after Cloudy releases his map.
                 //AddElementOrComment(elementJump, sourceJump, "CanJumpInAir", "false");
                 //AddElementOrComment(elementJump, sourceJump, "Cooldown", "0");
@@ -109,27 +115,29 @@
 
             if (SetupSand.IsUsed)
             {
-                var elementSand = AddElementOrComment(target, source, "Sand", isParent: true);
+                var elementSand = XmlHelper.AddElementOrComment(target, source, "Sand", addAs: Parent);
                 var sourceSand = source?.Element("Sand");
 
                 // v2 is disabled for now.
                 //AddElementOrComment(elementSand, sourceSand, "IsV2", "false");
-                AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0");
-                AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0");
+                XmlHelper.AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right");
             }
 
             // ReSharper disable once InvertIf
             if (SetupSequence.IsUsed)
             {
-                var elementSequence = AddElementOrComment(target, source, "Sequence", isParent: true);
+                var elementSequence = XmlHelper.AddElementOrComment(target, source, "Sequence", addAs: Parent);
                 var sourceSequence = source?.Element("Sequence");
 
-                AddElementOrComment(elementSequence, sourceSequence, "Duration", "0.0");
-                AddElementOrComment(elementSequence, sourceSequence, "Multiplier", "1.0");
-                AddElementOrComment(elementSequence, sourceSequence, "LeverSideDisable", "Up, Down, Left, Right");
-                AddElementOrComment(elementSequence, sourceSequence, "PlatformSideDisable", "Up, Down, Left, Right");
-                AddElementOrComment(elementSequence, sourceSequence, "DisableOnLeaving");
-                AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Duration", "0.0");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Multiplier", "1.0");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "LeverSideDisable",
+                    "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "PlatformSideDisable",
+                    "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DisableOnLeaving");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1");
             }
 
             newDoc.Save(file);
@@ -137,45 +145,6 @@
 
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
-        }
-
-        /// <summary>
-        ///     Adds either an <see cref="XElement" /> or <see cref="XComment" /> to the target depending on if
-        ///     the source contained the asked for element and if that element is a parent to other elements or
-        ///     a "leaf" element.
-        /// </summary>
-        /// <param name="targetParent">The XElement to add to.</param>
-        /// <param name="sourceParent">The XElement to take from.</param>
-        /// <param name="elementName">Name of the element.</param>
-        /// <param name="defaultValue">Default value should a comment be added.</param>
-        /// <param name="isParent">If the source is parent to others or a leaf.</param>
-        /// <returns><see cref="XElement" /> for further adding to, or <c>null</c> if the element is a leaf.</returns>
-        private static XElement AddElementOrComment(
-            XElement targetParent,
-            XElement sourceParent,
-            string elementName,
-            string defaultValue = null,
-            bool isParent = false)
-        {
-            if (isParent)
-            {
-                var parentElement = new XElement(elementName);
-                targetParent.Add(parentElement);
-                return parentElement;
-            }
-
-            var element = sourceParent?.Element(elementName);
-            if (element != null)
-            {
-                targetParent.Add(element);
-                return null;
-            }
-
-            targetParent.Add(defaultValue == null
-                ? new XComment($" <{elementName} /> ")
-                : new XComment($" <{elementName}>{defaultValue}</{elementName}> "));
-
-            return null;
         }
     }
 }

@@ -70,24 +70,6 @@
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourSequenceReset BehaviourSequenceReset { get; set; }
 
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton CreateModFolders(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Create mod folders", new NodeCreateModFolders())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to create the blocks.xml
-        /// </summary>
-        /// <returns>Create blocks.xml <see cref="TextButton" /></returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton CreateBlocksXml(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Create blocks.xml", new NodeCreateBlocksXml())
-                : null;
-
         /// <summary>
         ///     Adds the debug menu item to reload the blocks.xml
         /// </summary>
@@ -108,6 +90,39 @@
         public static TextButton ReloadDrawables(object factory, GuiFormat format) =>
             IsDebug
                 ? new TextButton("Reload drawables", new NodeReloadDrawables())
+                : null;
+
+        /// <summary>
+        ///     Adds the debug menu item to create mod folders.
+        /// </summary>
+        /// <returns>Create mod folders <see cref="TextButton" /></returns>
+        [PauseMenuItemSetting]
+        [UsedImplicitly]
+        public static TextButton CreateModFolders(object factory, GuiFormat format) =>
+            IsDebug
+                ? new TextButton("Create mod folders", new NodeCreateModFolders())
+                : null;
+
+        /// <summary>
+        ///     Adds the debug menu item to create the blocks.xml
+        /// </summary>
+        /// <returns>Create blocks.xml <see cref="TextButton" /></returns>
+        [PauseMenuItemSetting]
+        [UsedImplicitly]
+        public static TextButton CreateBlocksXml(object factory, GuiFormat format) =>
+            IsDebug
+                ? new TextButton("Create blocks.xml", new NodeCreateBlocksXml())
+                : null;
+
+        /// <summary>
+        ///     Adds the debug menu item to create templates.
+        /// </summary>
+        /// <returns>Create templates <see cref="TextButton" /></returns>
+        [PauseMenuItemSetting]
+        [UsedImplicitly]
+        public static TextButton CreateTemplates(object factory, GuiFormat format) =>
+            IsDebug
+                ? new TextButton("Create drawables templates", new NodeCreateTemplates())
                 : null;
 
         /// <summary>Sets the singleton instance to null.</summary>

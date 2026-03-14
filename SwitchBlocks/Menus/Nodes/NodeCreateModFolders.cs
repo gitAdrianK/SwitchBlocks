@@ -33,6 +33,8 @@
             Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Sequence));
             // Textures.
             Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Textures));
+            // Saves
+            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Saves));
 
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
