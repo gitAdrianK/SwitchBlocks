@@ -11,8 +11,12 @@
     using JumpKing.Player;
     using Setups;
 
+    /// <summary>
+    ///     A BtNode responsible for reloading the mods drawables.
+    /// </summary>
     public class NodeReloadDrawables : IBTnode
     {
+        /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
             if (!ModDebug.IsDebug)

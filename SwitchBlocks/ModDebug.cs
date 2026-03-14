@@ -70,6 +70,13 @@
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourSequenceReset BehaviourSequenceReset { get; set; }
 
+        [PauseMenuItemSetting]
+        [UsedImplicitly]
+        public static TextButton CreateModFolders(object factory, GuiFormat format) =>
+            IsDebug
+                ? new TextButton("Create mod folders", new NodeCreateModFolders())
+                : null;
+
         /// <summary>
         ///     Adds the debug menu item to create the blocks.xml
         /// </summary>

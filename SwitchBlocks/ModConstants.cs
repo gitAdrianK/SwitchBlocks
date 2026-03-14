@@ -20,6 +20,9 @@ namespace SwitchBlocks
         /// <summary>Texture folder name.</summary>
         public const string Textures = "textures";
 
+        /// <summary>Audio folder name.</summary>
+        public const string Audio = "audio";
+
         /// <summary>Saves folder name.</summary>
         public const string Saves = "saves";
 

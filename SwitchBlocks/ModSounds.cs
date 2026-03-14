@@ -62,7 +62,7 @@ namespace SwitchBlocks
         public static void Setup(ulong levelId)
         {
             var contentManager = Game1.instance.contentManager;
-            var path = Path.Combine(contentManager.root, ModConstants.Folder, "audio");
+            var path = Path.Combine(ModEntry.RootModFolder, ModConstants.Audio);
             var isReload = !LoadedMaps.Add(levelId);
 
             if (!Directory.Exists(path))

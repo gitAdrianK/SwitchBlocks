@@ -8,8 +8,12 @@
     using Settings;
     using Setups;
 
+    /// <summary>
+    ///     A BtNode responsible for reloading the blocks.xml.
+    /// </summary>
     public class NodeReloadBlocksXml : IBTnode
     {
+        /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
             if (!ModDebug.IsDebug)

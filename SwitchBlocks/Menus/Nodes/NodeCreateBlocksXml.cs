@@ -6,8 +6,12 @@
     using JumpKing;
     using Setups;
 
+    /// <summary>
+    ///     A BtNode responsible for creating the blocks.xml.
+    /// </summary>
     public class NodeCreateBlocksXml : IBTnode
     {
+        /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
@@ -18,11 +22,7 @@
             }
 
             var directoryMod = Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder);
-            if (!Directory.Exists(directoryMod))
-            {
-                Game1.instance.contentManager.audio.menu.MenuFail.Play();
-                return BTresult.Failure;
-            }
+            Directory.CreateDirectory(directoryMod);
 
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
@@ -134,6 +134,7 @@
 
             newDoc.Save(file);
             newDoc.Save(Path.Combine(directoryMod, "blocks.xml"));
+
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }
