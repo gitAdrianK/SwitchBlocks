@@ -16,8 +16,7 @@ namespace SwitchBlocks.Entities
         /// </summary>
         public EntityLogicJump(SettingsJump settings, PlayerEntity player) : base(DataJump.Instance)
         {
-            this.CanJumpInAir = settings.CanJumpInAir;
-            this.Cooldown = settings.Cooldown;
+            this.UpdateSettings(settings);
             this.Body = player.m_body;
         }
 

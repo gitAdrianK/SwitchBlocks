@@ -28,7 +28,7 @@ namespace SwitchBlocks.Entities
         protected T Data { get; }
 
         /// <summary>Multiplier.</summary>
-        protected float Multiplier { get; set; }
+        protected float Multiplier { get; set; } = 1.0f;
 
         /// <summary>Screens platform entities appear on.</summary>
         private HashSet<int> Screens { get; }
