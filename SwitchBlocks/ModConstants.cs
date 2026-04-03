@@ -149,6 +149,6 @@ namespace SwitchBlocks
         public const float PrioLast = 0.95f;
 
         /// <summary>Used to convert time seconds to ticks.</summary>
-        public const float DeltaTime = 0.01666667f;
+        public const double DeltaTime = 1 / 59d;
     }
 }
