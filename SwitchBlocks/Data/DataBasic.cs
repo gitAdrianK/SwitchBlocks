@@ -11,9 +11,6 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataBasic : IDataProvider
     {
-        /// <summary>Singleton instance.</summary>
-        private static DataBasic instance;
-
         /// <summary>
         ///     Private ctor.
         /// </summary>
@@ -27,61 +24,9 @@ namespace SwitchBlocks.Data
 
         /// <summary>
         ///     Returns the instance should it already exist.
-        ///     If it doesn't exist loads it from file.
+        ///     Unlike the other data classes this will not load from file if null.
         /// </summary>
-        public static DataBasic Instance
-        {
-            get
-            {
-                if (instance != null)
-                {
-                    return instance;
-                }
-
-                var file = Path.Combine(
-                    Game1.instance.contentManager.root,
-                    ModConstants.Folder,
-                    ModConstants.Saves,
-                    $"{ModConstants.PrefixSave}{ModConstants.Basic}{ModConstants.SuffixSav}");
-                if (SaveManager.instance.IsNewGame || !File.Exists(file))
-                {
-                    instance = new DataBasic();
-                    return instance;
-                }
-
-                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    var doc = XDocument.Load(fs);
-                    var root = doc.Root;
-                    if (root == null)
-                    {
-                        instance = new DataBasic();
-                        return instance;
-                    }
-
-                    instance = new DataBasic
-                    {
-                        State =
-                            bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
-                            boolResult,
-                        Progress =
-                            float.TryParse(root.Element(ModConstants.SaveProgress)?.Value, NumberStyles.Float,
-                                CultureInfo.InvariantCulture, out var floatResult)
-                                ? floatResult
-                                : 0.0f,
-                        HasSwitched =
-                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
-                            boolResult,
-                        Tick =
-                            int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
-                                ? intResult
-                                : 0,
-                    };
-                }
-
-                return instance;
-            }
-        }
+        public static DataBasic Instance { get; private set; }
 
         /// <summary>
         ///     Whether the state has switched touching a lever.<br />
@@ -105,9 +50,56 @@ namespace SwitchBlocks.Data
         public bool SwitchOnceSafe => true;
 
         /// <summary>
+        ///     Initializes the save singleton from file.
+        ///     If the save is set to carry over it will be ignored if the game is new.
+        /// </summary>
+        /// <param name="saveCarriesOver">Should the save carry over from previous plays.</param>
+        public static void Initialize(bool saveCarriesOver)
+        {
+            var file = Path.Combine(
+                Game1.instance.contentManager.root,
+                ModConstants.Folder,
+                ModConstants.Saves,
+                $"{ModConstants.PrefixSave}{ModConstants.Basic}{ModConstants.SuffixSav}");
+            if ((SaveManager.instance.IsNewGame && !saveCarriesOver) || !File.Exists(file))
+            {
+                Instance = new DataBasic();
+            }
+
+            using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var doc = XDocument.Load(fs);
+                var root = doc.Root;
+                if (root == null)
+                {
+                    Instance = new DataBasic();
+                }
+
+                Instance = new DataBasic
+                {
+                    State =
+                        bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
+                        boolResult,
+                    Progress =
+                        float.TryParse(root.Element(ModConstants.SaveProgress)?.Value, NumberStyles.Float,
+                            CultureInfo.InvariantCulture, out var floatResult)
+                            ? floatResult
+                            : 0.0f,
+                    HasSwitched =
+                        bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
+                        boolResult,
+                    Tick =
+                        int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
+                            ? intResult
+                            : 0,
+                };
+            }
+        }
+
+        /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>
-        public static void Reset() => instance = null;
+        public static void Reset() => Instance = null;
 
         /// <summary>
         ///     Saves the data to file.

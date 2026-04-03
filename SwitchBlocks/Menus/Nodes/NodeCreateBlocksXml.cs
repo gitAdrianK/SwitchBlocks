@@ -67,6 +67,7 @@
                 XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "Multiplier", "1.0", Comment);
                 XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "LeverSideDisable", "Up, Down, Left, Right",
                     Comment);
+                XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "SaveCarriesOver", addAs: Comment);
             }
 
             if (SetupCountdown.IsUsed)

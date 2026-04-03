@@ -34,7 +34,7 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            _ = DataBasic.Instance;
+            DataBasic.Initialize(settings.SaveCarriesOver);
 
             var entityLogic = new EntityLogicBasic(settings);
 
