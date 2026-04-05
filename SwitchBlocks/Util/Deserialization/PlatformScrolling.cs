@@ -5,7 +5,7 @@ namespace SwitchBlocks.Util.Deserialization
     using Microsoft.Xna.Framework.Graphics;
 
     /// <summary>
-    ///     Deserialization helper to create <see cref="EntityDrawPlatformSand" />.
+    ///     Deserialization helper to create <see cref="EntityDrawPlatformSand" /> and <see cref="EntityDrawPlatformTypeSand" />.
     /// </summary>
     public class PlatformScrolling
     {

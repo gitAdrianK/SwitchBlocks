@@ -44,6 +44,7 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactoryJump());
             _ = LevelManager.RegisterBlockFactory(new FactorySand());
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
+            _ = LevelManager.RegisterBlockFactory(new FactoryThreshold());
 
             var harmony = new Harmony(ModConstants.Harmony);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -70,6 +71,7 @@ namespace SwitchBlocks
             SetupJump.IsUsed = levelID == FactoryJump.LastUsedMapId;
             SetupSand.IsUsed = levelID == FactorySand.LastUsedMapId;
             SetupSequence.IsUsed = levelID == FactorySequence.LastUsedMapId;
+            SetupThreshold.IsUsed = levelID == FactoryThreshold.LastUsedMapId;
             if (!IsUsed())
             {
                 return;
@@ -105,6 +107,7 @@ namespace SwitchBlocks
             SetupJump.Setup(settings.SettingsJump, player);
             SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance);
             SetupSequence.Setup(settings.SettingsSequence, body);
+            SetupThreshold.Setup(settings.SettingsThreshold, body);
 
             var entities = entityManager.Entities
                 .SkipWhile(entity => entity != player)
@@ -143,6 +146,7 @@ namespace SwitchBlocks
             SetupJump.Cleanup();
             SetupSand.Cleanup();
             SetupSequence.Cleanup();
+            SetupThreshold.Cleanup();
 
             ModDebug.Reset();
         }
@@ -159,6 +163,7 @@ namespace SwitchBlocks
                                         || SetupGroup.IsUsed
                                         || SetupJump.IsUsed
                                         || SetupSand.IsUsed
-                                        || SetupSequence.IsUsed;
+                                        || SetupSequence.IsUsed
+                                        || SetupThreshold.IsUsed;
     }
 }

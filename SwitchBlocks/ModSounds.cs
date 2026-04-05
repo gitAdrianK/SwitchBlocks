@@ -48,6 +48,10 @@ namespace SwitchBlocks
         [CanBeNull]
         public static JKSound SequenceFlip { get; private set; }
 
+        /// <summary><see cref="JKSound" /> played when the threshold block flips state.</summary>
+        [CanBeNull]
+        public static JKSound ThresholdFlip { get; private set; }
+
         /// <summary>All maps that have been loaded with their ulong steam ID.</summary>
         private static HashSet<ulong> LoadedMaps { get; } = new HashSet<ulong>();
 
@@ -56,7 +60,7 @@ namespace SwitchBlocks
         ///     ID\switchBlocksMod\audio\".
         ///     Supported names are: autoFlip.xnb, autoWarn.xnb, basicFlip.xnb, countdownFlip.xnb, countdownWarn.xnb,
         ///     groupFlip.xnb,
-        ///     jumpFlip.xnb, sandFlip.xnb and sequenceFlip.xnb.
+        ///     jumpFlip.xnb, sandFlip.xnb, sequenceFlip.xnb and thresholdFlip.xnb.
         ///     A sound can be <c>null</c>, this should be checked for before trying to play it.
         /// </summary>
         public static void Setup(ulong levelId)
@@ -79,6 +83,7 @@ namespace SwitchBlocks
             JumpFlip = LoadOrReload(contentManager, Path.Combine(path, "jumpFlip"), isReload);
             SandFlip = LoadOrReload(contentManager, Path.Combine(path, "sandFlip"), isReload);
             SequenceFlip = LoadOrReload(contentManager, Path.Combine(path, "sequenceFlip"), isReload);
+            ThresholdFlip = LoadOrReload(contentManager, Path.Combine(path, "thresholdFlip"), isReload);
         }
 
         /// <summary>Sets all sounds to null.</summary>
@@ -93,6 +98,7 @@ namespace SwitchBlocks
             JumpFlip = null;
             SandFlip = null;
             SequenceFlip = null;
+            ThresholdFlip = null;
         }
 
         /// <summary>

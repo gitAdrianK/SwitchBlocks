@@ -8,7 +8,7 @@ namespace SwitchBlocks.Entities
     using Util;
     using Util.Deserialization;
 
-    public class EntityDrawPlatformSand : EntityDraw
+    public class EntityDrawPlatformTypeSand : EntityDraw
     {
         /// <summary>
         ///     Ctor.
@@ -16,7 +16,7 @@ namespace SwitchBlocks.Entities
         /// <param name="platform">Deserialization helper <see cref="PlatformScrolling" />.</param>
         /// <param name="screen">Screen this entity is on.</param>
         /// <param name="data"><see cref="IDataProvider" />.</param>
-        public EntityDrawPlatformSand(
+        public EntityDrawPlatformTypeSand(
             PlatformScrolling platform,
             int screen,
             IDataProvider data)
@@ -29,12 +29,12 @@ namespace SwitchBlocks.Entities
 
             if (this.Texture != null)
             {
-                this.Width = this.Texture.Width;
+                this.Width /= 2;
                 this.Height = this.Texture.Height;
             }
             else if (this.Foreground != null)
             {
-                this.Width = this.Foreground.Width;
+                this.Width = this.Foreground.Width / 2;
                 this.Height = this.Foreground.Height;
             }
 
@@ -67,11 +67,6 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            if (this.StartState == StartState.On != this.Data.State)
-            {
-                return;
-            }
-
             if (this.Texture != null)
             {
                 this.DrawTexture(this.Texture);
@@ -97,7 +92,7 @@ namespace SwitchBlocks.Entities
                 texture,
                 this.Position,
                 new Rectangle(
-                    0,
+                    this.Width * Convert.ToInt32(this.StartState == StartState.On != this.Data.State),
                     0,
                     this.Width,
                     this.Height),
@@ -108,40 +103,49 @@ namespace SwitchBlocks.Entities
         /// </summary>
         private void DrawScrolling()
         {
-            var progress = this.Data.ProgressUnclamped * this.Multiplier;
+            var actualOffset = (int)(this.Data.Progress * this.Multiplier % this.Scrolling.Height);
+            actualOffset = this.StartState == StartState.On == this.Data.State
+                ? actualOffset
+                : this.Scrolling.Height - actualOffset;
 
-            var textureHeight = this.Scrolling.Height;
-            var viewHeight = this.Height;
-
-            progress %= textureHeight;
-            if (progress < 0)
+            // Rewrite this similar to PlatformSand.
+            // Depending on if the offset would make it so we go past the texture.
+            if (actualOffset + this.Height > this.Scrolling.Height)
             {
-                progress += textureHeight;
+                var diff = this.Scrolling.Height - actualOffset;
+                Game1.spriteBatch.Draw(
+                    this.Scrolling,
+                    this.Position,
+                    new Rectangle(
+                        0,
+                        actualOffset,
+                        this.Width,
+                        diff),
+                    Color.White);
+
+                Game1.spriteBatch.Draw(
+                    this.Scrolling,
+                    new Vector2(
+                        this.Position.X,
+                        this.Position.Y + diff),
+                    new Rectangle(
+                        0,
+                        0,
+                        this.Width,
+                        this.Height - diff),
+                    Color.White);
+                return;
             }
 
-            progress = textureHeight - progress;
-
-            var offset = (int)progress;
-
-            // How much we can draw before hitting the bottom of the texture
-            var firstPartHeight = Math.Min(textureHeight - offset, viewHeight);
-
-            // First slice
             Game1.spriteBatch.Draw(
                 this.Scrolling,
                 this.Position,
-                new Rectangle(0, offset, this.Width, firstPartHeight),
+                new Rectangle(
+                    0,
+                    actualOffset,
+                    this.Width,
+                    this.Height),
                 Color.White);
-
-            // Second slice (wrap to top of texture)
-            if (firstPartHeight < viewHeight)
-            {
-                Game1.spriteBatch.Draw(
-                    this.Scrolling,
-                    new Vector2(this.Position.X, this.Position.Y + firstPartHeight),
-                    new Rectangle(0, 0, this.Width, viewHeight - firstPartHeight),
-                    Color.White);
-            }
         }
     }
 }

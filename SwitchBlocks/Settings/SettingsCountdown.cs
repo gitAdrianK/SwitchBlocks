@@ -24,24 +24,24 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>How long the blocks stay in their state before switching.</summary>
-        public int Duration { get; private set; }
+        public int Duration { get; }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the countdown block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>Directions the basic lever can be activated from.</summary>
-        public Direction LeverDirections { get; private set; }
+        public Direction LeverDirections { get; }
 
         /// <summary>If the countdown state switch is supposed to be forced, ignoring the safe switch.</summary>
-        public bool ForceSwitch { get; private set; }
+        public bool ForceSwitch { get; }
 
         ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
-        public bool SingleUseReset { get; private set; }
+        public bool SingleUseReset { get; }
 
         /// <summary>Amount of times the countdown warn sound is supposed to be played.</summary>
-        public int WarnCount { get; private set; }
+        public int WarnCount { get; }
 
         /// <summary>Duration between countdown warn sounds.</summary>
-        public int WarnDuration { get; private set; }
+        public int WarnDuration { get; }
     }
 }

@@ -86,6 +86,9 @@ namespace SwitchBlocks
         /// <summary>ResetTick name inside .sav files.</summary>
         public const string SaveResetTick = "_resetTick";
 
+        /// <summary>ResetCount name inside .sav files.</summary>
+        public const string SaveResetCount = "_resetCount";
+
         /// <summary>ActivatedTick name inside .sav files.</summary>
         public const string SaveActivated = "_activatedTick";
 
@@ -127,6 +130,9 @@ namespace SwitchBlocks
 
         /// <summary>Sequence folder name.</summary>
         public const string Sequence = "sequence";
+
+        /// <summary>Threshold folder name.</summary>
+        public const string Threshold = "threshold";
 
         /// <summary><see cref="IBlockBehaviour" /> priority run before all other behaviours. Used for <see cref="BehaviourPre" />.</summary>
         public const float PrioFirst = 3.0f;

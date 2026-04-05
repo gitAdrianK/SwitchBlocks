@@ -45,7 +45,7 @@ namespace SwitchBlocks.Factories
         };
 
         /// <summary>Solid Block Codes.</summary>
-        private static readonly HashSet<Color> SolidJumpBlocks = new HashSet<Color>
+        private static readonly HashSet<Color> SolidBlocks = new HashSet<Color>
         {
             ModBlocks.JumpOn,
             ModBlocks.JumpOnLegacy,
@@ -118,7 +118,7 @@ namespace SwitchBlocks.Factories
 
         /// <inheritdoc />
         public bool IsSolidBlock(Color blockCode)
-            => SupportedBlockCodes.Contains(blockCode)
+            => SolidBlocks.Contains(blockCode)
                || IsConveyorOn(blockCode)
                || IsConveyorOff(blockCode);
 

@@ -95,11 +95,12 @@
                 var elementGroup = XmlHelper.AddElementOrComment(target, source, "Group", addAs: Parent);
                 var sourceGroup = source?.Element("Group");
 
-                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Duration", "0");
-                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Multiplier", "1.0");
-                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "LeverSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Duration", "0", Comment);
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "LeverSideDisable", "Up, Down, Left, Right",
+                    Comment);
                 XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "PlatformSideDisable",
-                    "Up, Down, Left, Right");
+                    "Up, Down, Left, Right", Comment);
             }
 
             if (SetupJump.IsUsed)
@@ -107,8 +108,8 @@
                 var elementJump = XmlHelper.AddElementOrComment(target, source, "Jump", addAs: Parent);
                 var sourceJump = source?.Element("Jump");
 
-                XmlHelper.AddElementOrComment(elementJump, sourceJump, "Multiplier", "1.0");
-                XmlHelper.AddElementOrComment(elementJump, sourceJump, "ForceStateSwitch");
+                XmlHelper.AddElementOrComment(elementJump, sourceJump, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementJump, sourceJump, "ForceStateSwitch", addAs: Comment);
                 // TODO: Uncomment after Cloudy releases his map.
                 //AddElementOrComment(elementJump, sourceJump, "CanJumpInAir", "false");
                 //AddElementOrComment(elementJump, sourceJump, "Cooldown", "0");
@@ -121,24 +122,37 @@
 
                 // v2 is disabled for now.
                 //AddElementOrComment(elementSand, sourceSand, "IsV2", "false");
-                XmlHelper.AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0");
-                XmlHelper.AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right");
+                XmlHelper.AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right",
+                    Comment);
             }
 
-            // ReSharper disable once InvertIf
             if (SetupSequence.IsUsed)
             {
                 var elementSequence = XmlHelper.AddElementOrComment(target, source, "Sequence", addAs: Parent);
                 var sourceSequence = source?.Element("Sequence");
 
-                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Duration", "0.0");
-                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Multiplier", "1.0");
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Duration", "0.0", Comment);
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "Multiplier", "1.0", Comment);
                 XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "LeverSideDisable",
-                    "Up, Down, Left, Right");
+                    "Up, Down, Left, Right", Comment);
                 XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "PlatformSideDisable",
-                    "Up, Down, Left, Right");
-                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DisableOnLeaving");
-                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1");
+                    "Up, Down, Left, Right", Comment);
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DisableOnLeaving", addAs: Comment);
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1", Comment);
+            }
+
+            // ReSharper disable once InvertIf
+            if (SetupThreshold.IsUsed)
+            {
+                var elementThreshold = XmlHelper.AddElementOrComment(target, source, "Threshold", addAs: Parent);
+                var sourceThreshold = source?.Element("Threshold");
+
+                elementThreshold.Add(new XComment(" Stats to check for are: Jumps, Falls, Time and Session "));
+                XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Stat", "Falls", Comment);
+                XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Count", "0", Comment);
+                XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Multiplier", "1.0", Comment);
+                XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "ForceStateSwitch", addAs: Comment);
             }
 
             newDoc.Save(file);

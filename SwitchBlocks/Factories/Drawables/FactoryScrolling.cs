@@ -23,7 +23,7 @@
         private static Regex RegexPlatforms { get; } = new Regex(@"^platforms(\d+).xml$");
 
         /// <summary>
-        ///     Creates <see cref="EntityDrawPlatformSand" /> and <see cref="EntityDrawPlatformConveyor" />.
+        ///     Creates <see cref="EntityDrawPlatformTypeSand" /> and <see cref="EntityDrawPlatformConveyor" />.
         /// </summary>
         /// <param name="xmlPath">Path to XML files.</param>
         /// <param name="texturePath">Path to textures.</param>
@@ -133,12 +133,99 @@
 
                         if (isVertical)
                         {
-                            _ = new EntityDrawPlatformSand(platform, screen, data);
+                            _ = new EntityDrawPlatformTypeSand(platform, screen, data);
                         }
                         else
                         {
                             _ = new EntityDrawPlatformConveyor(platform, screen, data);
                         }
+
+                        entityLogic.AddScreen(screen);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Creates <see cref="EntityDrawPlatformSand" />.
+        /// </summary>
+        /// <param name="xmlPath">Path to XML files.</param>
+        /// <param name="texturePath">Path to textures.</param>
+        /// <param name="data">Data for the entity.</param>
+        /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
+        /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
+        public static void CreatePlatformsSand<T>(
+            string xmlPath,
+            string texturePath,
+            T data,
+            EntityLogic<T> entityLogic)
+            where T : class, IDataProvider
+        {
+            if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
+            {
+                return;
+            }
+
+            foreach (var file in Directory.EnumerateFiles(xmlPath))
+            {
+                var match = RegexSands.Match(Path.GetFileName(file));
+                if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
+                {
+                    continue;
+                }
+
+                var screen = screenIndex - 1;
+                if (screen < 0)
+                {
+                    continue;
+                }
+
+                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var doc = XDocument.Load(fs);
+                    var root = doc.Root;
+                    if (root?.Name != "Sands")
+                    {
+                        continue;
+                    }
+
+                    foreach (var platformElement in root.Elements("Sand"))
+                    {
+                        var background = TryLoadTexture(platformElement, "Background", texturePath);
+                        var scrolling = TryLoadTexture(platformElement, "Scrolling", texturePath);
+                        var foreground = TryLoadTexture(platformElement, "Foreground", texturePath);
+
+                        // At least one size giving texture required.
+                        if (background == null && foreground == null)
+                        {
+                            continue;
+                        }
+
+                        if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
+                        {
+                            continue;
+                        }
+
+                        var platform = new PlatformScrolling
+                        {
+                            Background = background,
+                            Scrolling = scrolling,
+                            Foreground = foreground,
+                            Position = position,
+                            StartState = FactoryPlatforms.ParseEnum(
+                                platformElement.Element("StartState")?.Value,
+                                StartState.On),
+                            IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+                            Multiplier = float.TryParse(
+                                platformElement.Element("Multiplier")?.Value,
+                                NumberStyles.Float,
+                                CultureInfo.InvariantCulture,
+                                out var parsed)
+                                ? parsed
+                                : 1.0f,
+                        };
+
+                        _ = new EntityDrawPlatformSand(platform, screen, data);
 
                         entityLogic.AddScreen(screen);
                     }

@@ -1,29 +1,31 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System;
     using Blocks;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
+    using Util;
 
     /// <summary>
-    ///     Behaviour attached to the <see cref="BlockAutoReset" />.
+    ///     Behaviour attached to the <see cref="BlockThresholdReset" />.
     /// </summary>
-    public class BehaviourAutoReset : IBlockBehaviour
+    public class BehaviourThresholdReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourAutoReset(int durationOff)
+        public BehaviourThresholdReset(Stat stat)
         {
-            this.Data = DataAuto.Instance;
-            this.DurationOff = durationOff;
+            this.Data = DataThreshold.Instance;
+            this.Stat = stat;
         }
 
-        /// <summary>Auto data.</summary>
-        private DataAuto Data { get; }
+        /// <summary>Threshold data.</summary>
+        private DataThreshold Data { get; }
 
-        /// <summary>Off duration.</summary>
-        private int DurationOff { get; set; }
+        /// <summary>The stat to look for.</summary>
+        private Stat Stat { get; set; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -55,29 +57,39 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var isReset = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
-            var isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
-            this.IsPlayerOnBlock = isReset || isResetFull;
+            this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockThresholdReset>();
 
             if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
-            this.Data.WarnCount = 0;
             this.Data.ResetTick = PatchAchievementManager.GetTick();
-            if (isReset && !this.Data.State)
+            switch (this.Stat)
             {
-                this.Data.ResetTick += this.DurationOff;
+                case Stat.Jumps:
+                    this.Data.ResetCount = PatchAchievementManager.GetJumps();
+                    break;
+                case Stat.Falls:
+                    this.Data.ResetCount = PatchAchievementManager.GetFalls();
+                    break;
+                case Stat.Time:
+                    this.Data.ResetCount = PatchAchievementManager.GetTick();
+                    break;
+                case Stat.Session:
+                    this.Data.ResetCount = PatchAchievementManager.GetSession();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("Unknown stat: " + this.Stat);
             }
 
             return true;
         }
 
         /// <summary>
-        ///     Updates the off duration.
+        ///     Updates the stat to check for.
         /// </summary>
-        /// <param name="durationOff">Duration of the off state.</param>
-        public void UpdateDuration(int durationOff) => this.DurationOff = durationOff;
+        /// <param name="stat">Stat to check for.</param>
+        public void UpdateStat(Stat stat) => this.Stat = stat;
     }
 }

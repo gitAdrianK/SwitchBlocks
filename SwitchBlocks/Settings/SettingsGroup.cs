@@ -19,15 +19,15 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>How long the blocks stay in their state before switching.</summary>
-        public int Duration { get; private set; }
+        public int Duration { get; }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the group block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>Directions the group lever can be activated from.</summary>
-        public Direction LeverDirections { get; private set; }
+        public Direction LeverDirections { get; }
 
         /// <summary>Directions the group platform can be activated from.</summary>
-        public Direction PlatformDirections { get; private set; }
+        public Direction PlatformDirections { get; }
     }
 }

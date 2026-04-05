@@ -34,6 +34,9 @@
         /// <summary>Logic entity of the auto block type.</summary>
         public EntityLogicAuto EntityLogicAuto { get; set; }
 
+        /// <summary>Behaviour attached to reset.</summary>
+        public BehaviourAutoReset BehaviourAutoReset { get; set; }
+
         /// <summary>Logic entity of the basic block type.</summary>
         public EntityLogicBasic EntityLogicBasic { get; set; }
 
@@ -69,6 +72,12 @@
 
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourSequenceReset BehaviourSequenceReset { get; set; }
+
+        /// <summary>Logic entity of the threshold block type.</summary>
+        public EntityLogicThreshold EntityLogicThreshold { get; set; }
+
+        /// <summary>Behaviour attached to reset.</summary>
+        public BehaviourThresholdReset BehaviourThresholdReset { get; set; }
 
         /// <summary>
         ///     Adds the debug menu item to reload the blocks.xml

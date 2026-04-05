@@ -28,7 +28,7 @@ namespace SwitchBlocks.Factories
         };
 
         /// <summary>Solid Block Codes.</summary>
-        private static readonly HashSet<Color> SolidSandBlocks = new HashSet<Color>
+        private static readonly HashSet<Color> SolidBlocks = new HashSet<Color>
         {
             ModBlocks.SandOn,
             ModBlocks.SandOff,
@@ -55,10 +55,12 @@ namespace SwitchBlocks.Factories
         public static ulong LastUsedMapId { get; private set; } = ulong.MaxValue;
 
         /// <inheritdoc />
-        public bool CanMakeBlock(Color blockCode, Level level) => SupportedBlockCodes.Contains(blockCode);
+        public bool CanMakeBlock(Color blockCode, Level level)
+            => SupportedBlockCodes.Contains(blockCode);
 
         /// <inheritdoc />
-        public bool IsSolidBlock(Color blockCode) => SolidSandBlocks.Contains(blockCode);
+        public bool IsSolidBlock(Color blockCode)
+            => SolidBlocks.Contains(blockCode);
 
         /// <inheritdoc />
         public IBlock GetBlock(Color blockCode, Rectangle blockRect, Level level, LevelTexture textureSrc,

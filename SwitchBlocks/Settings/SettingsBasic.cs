@@ -18,12 +18,12 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the basic block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>Directions the basic lever can be activated from.</summary>
-        public Direction LeverDirections { get; private set; }
+        public Direction LeverDirections { get; }
 
         /// <summary>If the save carries over when starting a new game.</summary>
-        public bool SaveCarriesOver { get; private set; }
+        public bool SaveCarriesOver { get; }
     }
 }

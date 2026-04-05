@@ -34,5 +34,26 @@ namespace SwitchBlocks.Patches
         /// <returns>Current game tick.</returns>
         public static int GetTick() =>
             AllTimeStatsRef(AchievementManager)._ticks - SnapshotRef(AchievementManager)._ticks;
+
+        /// <summary>
+        ///     Get the current jump count of the game.
+        /// </summary>
+        /// <returns>Current jump count.</returns>
+        public static int GetJumps() =>
+            AllTimeStatsRef(AchievementManager).jumps - SnapshotRef(AchievementManager).jumps;
+
+        /// <summary>
+        ///     Get the current fall count of the game.
+        /// </summary>
+        /// <returns>Current fall count.</returns>
+        public static int GetFalls() =>
+            AllTimeStatsRef(AchievementManager).falls - SnapshotRef(AchievementManager).falls;
+
+        /// <summary>
+        ///     Get the current session count of the game.
+        /// </summary>
+        /// <returns>Current session count.</returns>
+        public static int GetSession() =>
+            AllTimeStatsRef(AchievementManager).session - SnapshotRef(AchievementManager).session;
     }
 }

@@ -19,15 +19,15 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the jump block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>If the jump state switch is supposed to be forced, ignoring the safe switch.</summary>
-        public bool ForceSwitch { get; private set; }
+        public bool ForceSwitch { get; }
 
         /// <summary>If by pressing the jump button when in air another switch can trigger.</summary>
-        public bool CanJumpInAir { get; private set; }
+        public bool CanJumpInAir { get; }
 
         /// <summary>The amount of frames that have to pass before the player can switch in air again.</summary>
-        public int Cooldown { get; private set; }
+        public int Cooldown { get; }
     }
 }

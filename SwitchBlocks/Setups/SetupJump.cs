@@ -45,6 +45,7 @@ namespace SwitchBlocks.Setups
             if (Directory.Exists(xmlPath))
             {
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataJump.Instance,
                     EntityLogicJump, false);
             }
@@ -52,6 +53,10 @@ namespace SwitchBlocks.Setups
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Jump);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataJump.Instance, EntityLogicJump);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Jump);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
                     DataJump.Instance, EntityLogicJump);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Jump);

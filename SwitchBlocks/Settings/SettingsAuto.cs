@@ -1,5 +1,3 @@
-// ReSharper disable InvertIf
-
 namespace SwitchBlocks.Settings
 {
     using System.Xml.Linq;
@@ -34,24 +32,24 @@ namespace SwitchBlocks.Settings
         public int DurationOff { get; }
 
         /// <summary>How long a full on off cycle takes. </summary>
-        public int DurationCycle { get; private set; } // DurationOn + DurationOff
+        public int DurationCycle { get; } // DurationOn + DurationOff
 
         /// <summary>Multiplier of the deltaTime used in the animation of the auto block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>If the auto state switch is supposed to be forced, ignoring the safe switch.</summary>
-        public bool ForceSwitch { get; private set; }
+        public bool ForceSwitch { get; }
 
         /// <summary>Amount of times the auto warn sound is supposed to be played.</summary>
-        public int WarnCount { get; private set; }
+        public int WarnCount { get; }
 
         /// <summary>Duration between auto warn sounds.</summary>
-        public int WarnDuration { get; private set; }
+        public int WarnDuration { get; }
 
         /// <summary>If the warn sound is disabled for the on state.</summary>
-        public bool WarnDisableOn { get; private set; }
+        public bool WarnDisableOn { get; }
 
         /// <summary>If the warn sound is disabled for the off state.</summary>
-        public bool WarnDisableOff { get; private set; }
+        public bool WarnDisableOff { get; }
     }
 }

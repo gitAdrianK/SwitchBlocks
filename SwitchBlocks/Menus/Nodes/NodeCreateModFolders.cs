@@ -3,6 +3,7 @@
     using System.IO;
     using BehaviorTree;
     using JumpKing;
+    using Setups;
 
     /// <summary>
     ///     A BtNode responsible for creating the mods folder structure and the blocks.xml.
@@ -24,13 +25,46 @@
             // Audio.
             Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Audio));
             // Block types.
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Auto));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Basic));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Countdown));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Group));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Jump));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Sand));
-            Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Sequence));
+            if (SetupAuto.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Auto));
+            }
+
+            if (SetupBasic.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Basic));
+            }
+
+            if (SetupCountdown.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Countdown));
+            }
+
+            if (SetupGroup.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Group));
+            }
+
+            if (SetupJump.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Jump));
+            }
+
+            if (SetupSand.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Sand));
+            }
+
+            if (SetupSequence.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Sequence));
+            }
+
+            if (SetupThreshold.IsUsed)
+            {
+                Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Threshold));
+            }
+
             // Textures.
             Directory.CreateDirectory(Path.Combine(directoryMod, ModConstants.Textures));
             // Saves

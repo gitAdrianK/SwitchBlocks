@@ -2,28 +2,22 @@ namespace SwitchBlocks.Behaviours
 {
     using Blocks;
     using Data;
+    using Dummy;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Patches;
+    using Util;
 
     /// <summary>
-    ///     Behaviour attached to the <see cref="BlockAutoReset" />.
+    ///     Behaviour attached to the <see cref="BlockThresholdOn" />.
     /// </summary>
-    public class BehaviourAutoReset : IBlockBehaviour
+    public class BehaviourThresholdOn : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourAutoReset(int durationOff)
-        {
-            this.Data = DataAuto.Instance;
-            this.DurationOff = durationOff;
-        }
+        public BehaviourThresholdOn() => this.Data = DataThreshold.Instance;
 
-        /// <summary>Auto data.</summary>
-        private DataAuto Data { get; }
-
-        /// <summary>Off duration.</summary>
-        private int DurationOff { get; set; }
+        /// <summary>Threshold data.</summary>
+        private DataThreshold Data { get; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -55,29 +49,38 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var isReset = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
-            var isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
-            this.IsPlayerOnBlock = isReset || isResetFull;
-
+            var isOnBasic = advCollisionInfo.IsCollidingWith<BlockThresholdOn>();
+            var isOnIce = advCollisionInfo.IsCollidingWith<BlockThresholdIceOn>();
+            var isOnSnow = advCollisionInfo.IsCollidingWith<BlockThresholdSnowOn>();
+            var isOnWater = advCollisionInfo.IsCollidingWith<BlockThresholdWaterOn>();
+            this.IsPlayerOnBlock = isOnBasic
+                                   || isOnIce
+                                   || isOnSnow
+                                   || isOnWater;
             if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
-            this.Data.WarnCount = 0;
-            this.Data.ResetTick = PatchAchievementManager.GetTick();
-            if (isReset && !this.Data.State)
+            if (this.Data.State)
             {
-                this.Data.ResetTick += this.DurationOff;
+                BehaviourPost.IsPlayerOnIce |= isOnIce;
+                BehaviourPost.IsPlayerOnSnow |= isOnSnow;
+                BehaviourPost.IsPlayerOnWater |= isOnWater;
+            }
+            else
+            {
+                if (this.Data.CanSwitchSafely)
+                {
+                    this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                        behaviourContext,
+                        typeof(BlockThresholdOn),
+                        typeof(BlockThresholdIceOn),
+                        typeof(BlockThresholdSnowOn));
+                }
             }
 
             return true;
         }
-
-        /// <summary>
-        ///     Updates the off duration.
-        /// </summary>
-        /// <param name="durationOff">Duration of the off state.</param>
-        public void UpdateDuration(int durationOff) => this.DurationOff = durationOff;
     }
 }

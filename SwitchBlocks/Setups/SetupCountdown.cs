@@ -58,6 +58,8 @@ namespace SwitchBlocks.Setups
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance);
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
+                    entityLogic);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
                     entityLogic, false);
             }
@@ -69,6 +71,10 @@ namespace SwitchBlocks.Setups
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Countdown);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataCountdown.Instance, entityLogic);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Countdown);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
                     DataCountdown.Instance, entityLogic);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Countdown);

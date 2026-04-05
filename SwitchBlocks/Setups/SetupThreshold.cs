@@ -1,0 +1,84 @@
+namespace SwitchBlocks.Setups
+{
+    using System.IO;
+    using Behaviours;
+    using Blocks;
+    using Data;
+    using Entities;
+    using Factories.Drawables;
+    using JumpKing.Player;
+    using Settings;
+
+    /// <summary>
+    ///     Setup and cleanup as well as setup related fields.
+    /// </summary>
+    public static class SetupThreshold
+    {
+        /// <summary>Whether the threshold block appears inside the hitbox file and counts as used.</summary>
+        public static bool IsUsed { get; set; }
+
+        /// <summary>
+        ///     Sets up data, entities, block behaviours and does other required actions.
+        /// </summary>
+        /// <param name="settings">Settings of the threshold type.</param>
+        /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
+        public static void Setup(SettingsThreshold settings, BodyComp body)
+        {
+            if (!IsUsed)
+            {
+                return;
+            }
+
+            _ = DataThreshold.Instance;
+
+            var entityLogic = new EntityLogicThreshold(settings);
+
+            var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Threshold);
+            if (Directory.Exists(xmlPath))
+            {
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataThreshold.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataThreshold.Instance,
+                    entityLogic);
+            }
+            else
+            {
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Threshold);
+                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataThreshold.Instance, entityLogic);
+
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Threshold);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataThreshold.Instance, entityLogic);
+            }
+
+            _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOn), new BehaviourThresholdOn());
+            _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOff), new BehaviourThresholdOff());
+            var behaviourReset = new BehaviourThresholdReset(settings.Stat);
+            _ = body.RegisterBlockBehaviour(typeof(BlockThresholdReset), behaviourReset);
+
+            // ReSharper disable once InvertIf
+            if (ModDebug.IsDebug)
+            {
+                var debugInstance = ModDebug.Instance;
+                debugInstance.EntityLogicThreshold = entityLogic;
+                debugInstance.BehaviourThresholdReset = behaviourReset;
+            }
+        }
+
+        /// <summary>
+        ///     Cleans up saving data, resetting fields and does other required actions.
+        /// </summary>
+        public static void Cleanup()
+        {
+            if (!IsUsed)
+            {
+                return;
+            }
+
+            DataThreshold.Instance.SaveToFile();
+            DataThreshold.Reset();
+
+            IsUsed = false;
+        }
+    }
+}

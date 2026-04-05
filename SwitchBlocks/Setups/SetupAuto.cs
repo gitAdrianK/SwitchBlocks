@@ -41,6 +41,7 @@ namespace SwitchBlocks.Setups
             if (Directory.Exists(xmlPath))
             {
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataAuto.Instance, entityLogic,
                     false);
             }
@@ -50,6 +51,10 @@ namespace SwitchBlocks.Setups
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
                     DataAuto.Instance, entityLogic);
 
+                xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Auto);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
+                    DataAuto.Instance, entityLogic);
+
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Auto);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
                     DataAuto.Instance, entityLogic, false, true);
@@ -57,13 +62,15 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
-            _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), new BehaviourAutoReset(settings.DurationOff));
+            var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
             {
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicAuto = entityLogic;
+                debugInstance.BehaviourAutoReset = behaviourReset;
             }
         }
 

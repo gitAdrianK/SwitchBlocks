@@ -64,6 +64,7 @@ namespace SwitchBlocks.Data
             if ((SaveManager.instance.IsNewGame && !saveCarriesOver) || !File.Exists(file))
             {
                 Instance = new DataBasic();
+                return;
             }
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))

@@ -51,7 +51,9 @@
             if (SetupAuto.IsUsed)
             {
                 // These should never be null at this point, but better safe than sorry.
-                debugInstance.EntityLogicAuto?.UpdateSettings(new SettingsAuto(root?.Element("Auto")));
+                var settingsAuto = new SettingsAuto(root?.Element("Auto"));
+                debugInstance.EntityLogicAuto?.UpdateSettings(settingsAuto);
+                debugInstance.BehaviourAutoReset?.UpdateDuration(settingsAuto.DurationOff);
             }
 
             if (SetupBasic.IsUsed)
@@ -100,13 +102,20 @@
                 debugInstance.BehaviourSandLever?.UpdateDirections(settingsSand.LeverDirections);
             }
 
-            // ReSharper disable once InvertIf
             if (SetupSequence.IsUsed)
             {
                 var settingsSequence = new SettingsSequence(root?.Element("Sequence"));
                 debugInstance.EntityLogicSequence?.UpdateSettings(settingsSequence);
                 debugInstance.BehaviourSequenceReset?.UpdateDirections(settingsSequence.LeverDirections);
                 debugInstance.BehaviourSequenceReset?.UpdateDefaultActive(settingsSequence.DefaultActive);
+            }
+
+            // ReSharper disable once InvertIf
+            if (SetupThreshold.IsUsed)
+            {
+                var settingsThreshold = new SettingsThreshold(root?.Element("Threshold"));
+                debugInstance.EntityLogicThreshold?.UpdateSettings(settingsThreshold);
+                debugInstance.BehaviourThresholdReset?.UpdateStat(settingsThreshold.Stat);
             }
 
             Game1.instance.contentManager.audio.menu.Select.Play();

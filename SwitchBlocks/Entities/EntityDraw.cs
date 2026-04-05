@@ -22,8 +22,8 @@ namespace SwitchBlocks.Entities
         protected EntityDraw(Texture2D texture, Vector2 position, int screen, bool isForeground)
         {
             this.Texture = texture;
-            this.Height = texture.Height;
-            this.Width = texture.Width;
+            this.Height = texture?.Height ?? 0;
+            this.Width = texture?.Width ?? 0;
             this.Position = position;
             this.Screen = screen;
             this.IsForeground = isForeground;

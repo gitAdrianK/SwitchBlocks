@@ -21,21 +21,21 @@ namespace SwitchBlocks.Settings
         }
 
         /// <summary>How long the blocks stay in their state before switching.</summary>
-        public int Duration { get; private set; }
+        public int Duration { get; }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the sequence block type.</summary>
-        public float Multiplier { get; private set; }
+        public float Multiplier { get; }
 
         /// <summary>Directions the sequence lever can be activated from.</summary>
-        public Direction LeverDirections { get; private set; }
+        public Direction LeverDirections { get; }
 
         /// <summary>Directions the sequence platform can be activated from.</summary>
-        public Direction PlatformDirections { get; private set; }
+        public Direction PlatformDirections { get; }
 
         /// <summary>If the platform should be disabled when left.</summary>
-        public bool DisableOnLeaving { get; private set; }
+        public bool DisableOnLeaving { get; }
 
         /// <summary>Block groups that are considered active by default.</summary>
-        public int[] DefaultActive { get; private set; }
+        public int[] DefaultActive { get; }
     }
 }

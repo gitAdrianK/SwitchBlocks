@@ -19,6 +19,7 @@ namespace SwitchBlocks
             5_ = Group
             6_ = Sequence
             7_ = Jump (possesses a legacy variant)
+            8_ = Threshold
 
             R: 238, G: 124, B:   _ = On
             R: 238, G: 125, B:   _ = On, from other mod
@@ -471,5 +472,44 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockSequenceResetSolid" />.</summary>
         public static readonly Color SequenceResetSolid = new Color(238, 64, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdOn" />.</summary>
+        public static readonly Color ThresholdOn = new Color(238, 124, 80);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdOff" />.</summary>
+        public static readonly Color ThresholdOff = new Color(80, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdIceOn" />.</summary>
+        public static readonly Color ThresholdIceOn = new Color(238, 124, 81);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdIceOff" />.</summary>
+        public static readonly Color ThresholdIceOff = new Color(81, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSnowOn" />.</summary>
+        public static readonly Color ThresholdSnowOn = new Color(238, 124, 82);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSnowOff" />.</summary>
+        public static readonly Color ThresholdSnowOff = new Color(82, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdWaterOn" />.</summary>
+        public static readonly Color ThresholdWaterOn = new Color(238, 124, 83);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdWaterOff" />.</summary>
+        public static readonly Color ThresholdWaterOff = new Color(83, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSandOn" />.</summary>
+        public static readonly Color ThresholdSandOn = new Color(238, 124, 84);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSandOff" />.</summary>
+        public static readonly Color ThresholdSandOff = new Color(84, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSlopeOn" />.</summary>
+        public static readonly Color ThresholdSlopeOn = new Color(238, 124, 85);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdSlopeOff" />.</summary>
+        public static readonly Color ThresholdSlopeOff = new Color(85, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdReset" />.</summary>
+        public static readonly Color ThresholdReset = new Color(238, 81, 124);
     }
 }

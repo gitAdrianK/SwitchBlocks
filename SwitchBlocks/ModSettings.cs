@@ -62,6 +62,11 @@ namespace SwitchBlocks
             {
                 this.SettingsSequence = new SettingsSequence(root?.Element("Sequence"));
             }
+
+            if (SetupThreshold.IsUsed)
+            {
+                this.SettingsThreshold = new SettingsThreshold(root?.Element("Threshold"));
+            }
         }
 
         /// <summary>Settings for the auto block type.</summary>
@@ -91,5 +96,9 @@ namespace SwitchBlocks
         /// <summary>Settings for the sequence block type.</summary>
         [CanBeNull]
         public SettingsSequence SettingsSequence { get; }
+
+        /// <summary>Settings for the threshold block type.</summary>
+        [CanBeNull]
+        public SettingsThreshold SettingsThreshold { get; }
     }
 }
