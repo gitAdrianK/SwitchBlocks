@@ -153,8 +153,5 @@ namespace SwitchBlocks
 
         /// <summary><see cref="IBlockBehaviour" /> priority run after all other behaviours. Used for <see cref="BehaviourPost" />.</summary>
         public const float PrioLast = 0.95f;
-
-        /// <summary>Used to convert time seconds to ticks.</summary>
-        public const double DeltaTime = 1 / 59d;
     }
 }

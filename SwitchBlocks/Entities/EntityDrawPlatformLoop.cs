@@ -44,7 +44,7 @@ namespace SwitchBlocks.Entities
             }
 
             this.Rects = rects;
-            this.TimeStep = (int)((1.0f / sprites.Fps / ModConstants.DeltaTime) + 0.5f);
+            this.TimeStep = (int)((1.0f / sprites.Fps / Game1.instance.TargetElapsedTime.TotalSeconds) + 0.5f);
             if (sprites.Frames == null)
             {
                 this.Frames = new int[this.Rects.Length];
@@ -56,7 +56,7 @@ namespace SwitchBlocks.Entities
             else
             {
                 this.Frames = sprites.Frames
-                    .Select(f => (int)((f / ModConstants.DeltaTime) + 0.5f))
+                    .Select(f => (int)((f / Game1.instance.TargetElapsedTime.TotalSeconds) + 0.5f))
                     .ToArray();
             }
 
