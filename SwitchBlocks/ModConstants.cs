@@ -153,5 +153,8 @@ namespace SwitchBlocks
 
         /// <summary><see cref="IBlockBehaviour" /> priority run after all other behaviours. Used for <see cref="BehaviourPost" />.</summary>
         public const float PrioLast = 0.95f;
+
+        /// <summary>Times the game updates. Reintroduced because apparently TargetElapsedTime.TotalSeconds can be different</summary>
+        public const double DeltaTime = 0.017d;
     }
 }

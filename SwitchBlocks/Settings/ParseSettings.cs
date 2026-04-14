@@ -4,7 +4,6 @@ namespace SwitchBlocks.Settings
     using System.Globalization;
     using System.Linq;
     using System.Xml.Linq;
-    using JumpKing;
     using Util;
 
     public static class ParseSettings
@@ -17,7 +16,7 @@ namespace SwitchBlocks.Settings
         /// <returns>Duration in ticks.</returns>
         public static int ParseDuration(XElement element, int defaultDuration) =>
             float.TryParse(element?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result1)
-                ? (int)((result1 / Game1.instance.TargetElapsedTime.TotalSeconds) + 0.5f)
+                ? (int)((result1 / ModConstants.DeltaTime) + 0.5f)
                 : defaultDuration;
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace SwitchBlocks.Settings
         /// <param name="defaultDuration">Default duration if the <see cref="XElement" /> cannot be parsed in seconds.</param>
         /// <returns>Duration in ticks.</returns>
         public static int ParseDuration(XElement element, float defaultDuration)
-            => ParseDuration(element, (int)((defaultDuration / Game1.instance.TargetElapsedTime.TotalSeconds) + 0.5f));
+            => ParseDuration(element, (int)((defaultDuration / ModConstants.DeltaTime) + 0.5f));
 
         /// <summary>
         ///     Parses the <see cref="XElement" />s value to a multiplier.

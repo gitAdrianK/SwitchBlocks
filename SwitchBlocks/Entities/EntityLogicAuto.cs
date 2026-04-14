@@ -114,19 +114,10 @@ namespace SwitchBlocks.Entities
             }
 
             // The sound was disabled
-            if (this.Data.State)
+            if ((this.Data.State && this.WarnDisableOn)
+                || (!this.Data.State && this.WarnDisableOff))
             {
-                if (this.WarnDisableOn)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                if (this.WarnDisableOff)
-                {
-                    return;
-                }
+                return;
             }
 
             ModSounds.AutoWarn?.PlayOneShot();
