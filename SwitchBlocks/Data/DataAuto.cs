@@ -24,7 +24,6 @@ namespace SwitchBlocks.Data
             this.ProgressUnclamped = 0.0f;
             this.CanSwitchSafely = true;
             this.SwitchOnceSafe = false;
-            this.WarnCount = 0;
             this.ResetTick = 0;
         }
 
@@ -76,11 +75,7 @@ namespace SwitchBlocks.Data
                             bool.TryParse(root.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
                         SwitchOnceSafe =
                             bool.TryParse(root.Element(ModConstants.SaveSos)?.Value, out boolResult) && boolResult,
-                        WarnCount =
-                            int.TryParse(root.Element(ModConstants.SaveWarnCount)?.Value, out var intResult)
-                                ? intResult
-                                : 0,
-                        ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out intResult)
+                        ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out var intResult)
                             ? intResult
                             : 0,
                     };
@@ -92,9 +87,6 @@ namespace SwitchBlocks.Data
 
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
-
-        /// <summary>The amount of times the warning sound has been played.</summary>
-        public int WarnCount { get; set; }
 
         /// <summary>Tick the auto block has been reset.</summary>
         public int ResetTick { get; set; }
@@ -139,7 +131,6 @@ namespace SwitchBlocks.Data
                     new XElement(ModConstants.SaveProgress, this.Progress),
                     new XElement(ModConstants.SaveCss, this.CanSwitchSafely),
                     new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
-                    new XElement(ModConstants.SaveWarnCount, this.WarnCount),
                     new XElement(ModConstants.SaveResetTick, this.ResetTick)
                 )
             );

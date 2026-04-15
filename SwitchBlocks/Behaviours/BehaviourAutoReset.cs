@@ -64,7 +64,6 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            this.Data.WarnCount = 0;
             this.Data.ResetTick = PatchAchievementManager.GetTick();
             if (isReset && !this.Data.State)
             {
