@@ -62,12 +62,7 @@ namespace SwitchBlocks.Entities
         /// </summary>
         public override void Draw()
         {
-            if (this.DrawGuard())
-            {
-                return;
-            }
-
-            if (this.StartState == StartState.On != this.Data.State)
+            if (this.DrawGuard() || this.StartState == StartState.On != this.Data.State)
             {
                 return;
             }
@@ -108,11 +103,8 @@ namespace SwitchBlocks.Entities
         /// </summary>
         private void DrawScrolling()
         {
-            var progress = this.Data.ProgressUnclamped * this.Multiplier;
-
             var textureHeight = this.Scrolling.Height;
-            var viewHeight = this.Height;
-
+            var progress = this.Data.ProgressUnclamped * this.Multiplier;
             progress %= textureHeight;
             if (progress < 0)
             {
@@ -121,9 +113,10 @@ namespace SwitchBlocks.Entities
 
             progress = textureHeight - progress;
 
-            var offset = (int)progress;
 
             // How much we can draw before hitting the bottom of the texture
+            var viewHeight = this.Height;
+            var offset = (int)progress;
             var firstPartHeight = Math.Min(textureHeight - offset, viewHeight);
 
             // First slice

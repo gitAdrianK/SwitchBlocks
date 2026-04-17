@@ -47,7 +47,7 @@ namespace SwitchBlocks.Data
         public int Tick { get; set; }
 
         /// <inheritdoc />
-        public bool SwitchOnceSafe => true;
+        public bool SwitchOnceSafe => false;
 
         /// <summary>
         ///     Initializes the save singleton from file.

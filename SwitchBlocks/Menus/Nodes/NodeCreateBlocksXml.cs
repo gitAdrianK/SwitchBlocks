@@ -139,7 +139,7 @@
                 XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "PlatformSideDisable",
                     "Up, Down, Left, Right", Comment);
                 XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DisableOnLeaving", addAs: Comment);
-                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1", Comment);
+                XmlHelper.AddElementOrComment(elementSequence, sourceSequence, "DefaultActive", "1, 3, 5", Comment);
             }
 
             // ReSharper disable once InvertIf
@@ -148,7 +148,7 @@
                 var elementThreshold = XmlHelper.AddElementOrComment(target, source, "Threshold", addAs: Parent);
                 var sourceThreshold = source?.Element("Threshold");
 
-                elementThreshold.Add(new XComment(" Stats to check for are: Jumps, Falls, Time and Session "));
+                elementThreshold.Add(new XComment(" Stats to check for are: Jumps, Falls, Time, Session "));
                 XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Stat", "Falls", Comment);
                 XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Count", "0", Comment);
                 XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Multiplier", "1.0", Comment);

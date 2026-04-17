@@ -83,9 +83,6 @@
             }
         }
 
-        // XXX: This DESPERATELY needs to use the same draw as vanilla sand.
-        // Calling .End() and .Start() repeatedly to set PointWrap is NOT an option.
-
         /// <summary>
         ///     Draws a given <see cref="Texture2D" />.
         /// </summary>
@@ -106,47 +103,36 @@
         /// </summary>
         private void DrawScrolling()
         {
-            var actualOffset = (int)(this.Data.ProgressUnclamped * this.Multiplier) % this.Scrolling.Width;
-            actualOffset = this.StartState == StartState.On == this.Data.State
-                ? actualOffset
-                : this.Scrolling.Width - actualOffset;
+            var textureWidth = this.Scrolling.Width;
+            var progress = this.Data.ProgressUnclamped * this.Multiplier;
+            progress %= textureWidth;
 
-            if (actualOffset + this.Width > this.Scrolling.Width)
+            if (this.StartState == StartState.On != this.Data.State)
             {
-                var diff = this.Scrolling.Width - actualOffset;
-                Game1.spriteBatch.Draw(
-                    this.Scrolling,
-                    this.Position,
-                    new Rectangle(
-                        actualOffset,
-                        0,
-                        diff,
-                        this.Height),
-                    Color.White);
-
-                Game1.spriteBatch.Draw(
-                    this.Scrolling,
-                    new Vector2(
-                        this.Position.X + diff,
-                        this.Position.Y),
-                    new Rectangle(
-                        0,
-                        0,
-                        this.Width - diff,
-                        this.Height),
-                    Color.White);
-                return;
+                progress = textureWidth - progress;
             }
 
+            // How much we can draw before hitting the right of the texture
+            var viewWidth = this.Width;
+            var offset = (int)progress;
+            var firstPartWidth = Math.Min(textureWidth - offset, viewWidth);
+
+            // First slice
             Game1.spriteBatch.Draw(
                 this.Scrolling,
                 this.Position,
-                new Rectangle(
-                    actualOffset,
-                    0,
-                    this.Width,
-                    this.Height),
+                new Rectangle(offset, 0, firstPartWidth, this.Height),
                 Color.White);
+
+            // Second slice (wrap to left of texture)
+            if (firstPartWidth < viewWidth)
+            {
+                Game1.spriteBatch.Draw(
+                    this.Scrolling,
+                    new Vector2(this.Position.X + firstPartWidth, this.Position.Y),
+                    new Rectangle(0, 0, viewWidth - firstPartWidth, this.Height),
+                    Color.White);
+            }
         }
     }
 }

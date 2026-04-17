@@ -55,11 +55,11 @@
             var maxPlatform = XmlHelper.AddElementOrComment(target, "Platform", addAs: Parent);
             this.CreateRequired(maxPlatform);
             XmlHelper.AddElementOrComment(maxPlatform, "IsForeground");
+            maxPlatform.Add(new XComment(" Start states are: On, Off, Always "));
             XmlHelper.AddElementOrComment(maxPlatform, "StartState", "On");
             this.CreateAnimation(maxPlatform, "Animation");
             this.CreateAnimation(maxPlatform, "AnimationOut");
-            var sprites = XmlHelper.AddElementOrComment(maxPlatform, "Sprites", addAs: Parent);
-            this.CreateSprites(sprites);
+            this.CreateSprites(maxPlatform);
 
             doc.Save(filePath);
         }
@@ -88,6 +88,7 @@
             XmlHelper.AddElementOrComment(position, "X", "100");
             XmlHelper.AddElementOrComment(position, "Y", "50");
             XmlHelper.AddElementOrComment(maxPlatform, "IsForeground");
+            maxPlatform.Add(new XComment(" Start states are: On, Off, Always "));
             XmlHelper.AddElementOrComment(maxPlatform, "StartState", "On");
             XmlHelper.AddElementOrComment(maxPlatform, "Multiplier", "2.5");
 
@@ -105,7 +106,9 @@
         private void CreateAnimation(XElement parent, string name)
         {
             var animation = XmlHelper.AddElementOrComment(parent, name, addAs: Parent);
+            animation.Add(new XComment(" Styles are: Fade, Top, Bottom, Left, Right "));
             XmlHelper.AddElementOrComment(animation, "Style", "Fade");
+            animation.Add(new XComment(" Curves are: Linear, EaseIn, EaseOut, EaseInOut, Stepped "));
             XmlHelper.AddElementOrComment(animation, "Curve", "Linear");
         }
 

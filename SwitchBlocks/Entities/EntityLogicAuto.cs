@@ -1,7 +1,6 @@
 namespace SwitchBlocks.Entities
 {
     using System.Collections.Generic;
-    using System.Linq;
     using Data;
     using Patches;
     using Settings;
@@ -42,10 +41,10 @@ namespace SwitchBlocks.Entities
         private bool ForceSwitch { get; set; }
 
         /// <summary>Ticks that play warn sounds.</summary>
-        private int[] WarnTicks { get; set; }
+        private HashSet<int> WarnTicks { get; set; }
 
         /// <summary>Ticks that play flip sounds.</summary>
-        private int[] FlipTicks { get; set; }
+        private HashSet<int> FlipTicks { get; set; }
 
         /// <summary>
         ///     Updates the settings from the given settings.
@@ -64,15 +63,13 @@ namespace SwitchBlocks.Entities
             this.WarnDisableOff = settings.WarnDisableOff;
             this.ForceSwitch = settings.ForceSwitch;
 
-            this.FlipTicks = new[] { settings.DurationOff, settings.DurationCycle - 1 };
-            var warnTicks = new List<int>();
+            this.FlipTicks = new HashSet<int> { settings.DurationOff, settings.DurationCycle - 1 };
+            this.WarnTicks = new HashSet<int>();
             for (var i = 1; i <= this.WarnCount; i++)
             {
-                warnTicks.Add(this.DurationOff - (this.WarnDuration * i));
-                warnTicks.Add(this.DurationCycle - (this.WarnDuration * i));
+                this.WarnTicks.Add(this.DurationOff - (this.WarnDuration * i));
+                this.WarnTicks.Add(this.DurationCycle - (this.WarnDuration * i));
             }
-
-            this.WarnTicks = warnTicks.ToArray();
         }
 
 
@@ -96,6 +93,11 @@ namespace SwitchBlocks.Entities
         /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
         private void TrySound(int adjustedTick)
         {
+            if (!this.IsActiveOnCurrentScreen)
+            {
+                return;
+            }
+
             if (this.WarnTicks.Contains(adjustedTick))
             {
                 this.DoWarnSound(adjustedTick);
@@ -104,7 +106,7 @@ namespace SwitchBlocks.Entities
 
             if (this.FlipTicks.Contains(adjustedTick))
             {
-                this.DoFlipSound();
+                ModSounds.AutoFlip?.PlayOneShot();
             }
         }
 
@@ -113,11 +115,6 @@ namespace SwitchBlocks.Entities
         /// </summary>
         private void DoWarnSound(int adjustedTick)
         {
-            if (!this.IsActiveOnCurrentScreen)
-            {
-                return;
-            }
-
             // The sound was disabled
             var currState = adjustedTick - this.DurationOn < 0;
             if ((currState && this.WarnDisableOn)
@@ -130,25 +127,11 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary>
-        ///     Plays the flip sound.
-        /// </summary>
-        private void DoFlipSound()
-        {
-            if (!this.IsActiveOnCurrentScreen)
-            {
-                return;
-            }
-
-            ModSounds.AutoFlip?.PlayOneShot();
-        }
-
-        /// <summary>
         ///     Tries to switch the state if it should do so.
         /// </summary>
         /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
         private void TrySwitch(int adjustedTick)
         {
-            // I think its < but it could be <=
             var currState = adjustedTick - this.DurationOn < 0;
             if (this.Data.State == currState)
             {
