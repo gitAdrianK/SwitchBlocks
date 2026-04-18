@@ -9,6 +9,7 @@ namespace SwitchBlocks.Setups
     using Factories.Drawables;
     using JumpKing.Player;
     using JumpKing.SaveThread;
+    using Patches;
     using Settings;
     using Util;
 
@@ -50,6 +51,9 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning SEQUENCE Setup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
             var resets = ResetsSequence.TryDeserialize();
@@ -74,8 +78,10 @@ namespace SwitchBlocks.Setups
                 resets.SaveToFile();
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
             var entityLogic = new EntityLogicSequence(settings);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sequence);
             if (Directory.Exists(xmlPath))
             {
@@ -89,6 +95,7 @@ namespace SwitchBlocks.Setups
                     DataSequence.Instance.Groups, entityLogic, foregroundEntities, midgroundEntities);
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockSequenceA),
                     new BehaviourSequenceTouching(settings.DisableOnLeaving, settings.PlatformDirections))
@@ -107,6 +114,8 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicSequence = entityLogic;
                 debugInstance.BehaviourSequenceReset = behaviourReset;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Finished SEQUENCE Setup.");
         }
 
         /// <summary>
@@ -119,10 +128,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning SEQUENCE Cleanup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
             DataSequence.Instance.SaveToFile();
             DataSequence.Reset();
 
             IsUsed = false;
+            PatchModLoader.AddDebugMessage("[INFO] Finished SEQUENCE Cleanup.");
         }
 
         /// <summary>

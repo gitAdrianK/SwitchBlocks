@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks
 {
+    using System.Collections.Generic;
     using Behaviours;
     using Entities;
     using JetBrains.Annotations;
@@ -78,6 +79,9 @@
 
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourThresholdReset BehaviourThresholdReset { get; set; }
+
+        /// <summary>List of messages to add to the ModLoadLog.</summary>
+        public List<string> DebugLogMessages { get; set; }
 
         /// <summary>
         ///     Adds the debug menu item to reload the blocks.xml

@@ -8,6 +8,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using Patches;
     using Settings;
     using Util;
 
@@ -56,6 +57,9 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning GROUP Setup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
@@ -66,8 +70,10 @@ namespace SwitchBlocks.Setups
                 resets.SaveToFile();
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
             var entityLogic = new EntityLogicGroup(settings);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Group);
             if (Directory.Exists(xmlPath))
             {
@@ -81,6 +87,7 @@ namespace SwitchBlocks.Setups
                     DataGroup.Instance.Groups, entityLogic, foregroundEntities, midgroundEntities);
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockGroupA),
                     new BehaviourGroupLeaving(settings.PlatformDirections))
@@ -99,6 +106,8 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicGroup = entityLogic;
                 debugInstance.BehaviourGroupReset = behaviourReset;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Finished GROUP Setup.");
         }
 
         /// <summary>
@@ -111,10 +120,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning GROUP Cleanup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
             DataGroup.Instance.SaveToFile();
             DataGroup.Reset();
 
             IsUsed = false;
+            PatchModLoader.AddDebugMessage("[INFO] Finished GROUP Cleanup.");
         }
 
         /// <summary>

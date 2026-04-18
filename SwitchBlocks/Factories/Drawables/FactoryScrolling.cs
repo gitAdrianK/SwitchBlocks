@@ -9,6 +9,7 @@
     using Entities;
     using JumpKing;
     using Microsoft.Xna.Framework.Graphics;
+    using Patches;
     using Util;
     using Util.Deserialization;
 
@@ -51,8 +52,27 @@
                 return;
             }
 
+            // The only scrolling textures are sand and conveyors,
+            // but legacy sand still uses the element names Platforms/Platform.
+            string rootName;
+            string elementsName;
+            if (isLegacy)
+            {
+                rootName = "Platforms";
+                elementsName = "Platform";
+            }
+            else
+            {
+                rootName = isVertical ? "Sands" : "Conveyors";
+                elementsName = isVertical ? "Sand" : "Conveyor";
+            }
+
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
+                var successes = 0;
+                var failures = 0;
+                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
+
                 Match match;
                 if (isLegacy)
                 {
@@ -67,28 +87,15 @@
 
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
+                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
                     continue;
-                }
-
-                // The only scrolling textures are sand and conveyors,
-                // but legacy sand still uses the element names Platforms/Platform.
-                string rootName;
-                string elementsName;
-                if (isLegacy)
-                {
-                    rootName = "Platforms";
-                    elementsName = "Platform";
-                }
-                else
-                {
-                    rootName = isVertical ? "Sands" : "Conveyors";
-                    elementsName = isVertical ? "Sand" : "Conveyor";
                 }
 
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -109,11 +116,13 @@
                         // At least one size giving texture required.
                         if (background == null && foreground == null)
                         {
+                            failures++;
                             continue;
                         }
 
                         if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
                         {
+                            failures++;
                             continue;
                         }
 
@@ -147,6 +156,8 @@
                             entity = new EntityDrawPlatformConveyor(platform, screen, data);
                         }
 
+                        successes++;
+
                         if (platform.IsForeground)
                         {
                             foregroundEntities.Add(entity);
@@ -158,6 +169,16 @@
 
                         entityLogic.AddScreen(screen);
                     }
+                }
+
+                if (successes > 0)
+                {
+                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} scrolling platform(s).");
+                }
+
+                if (failures > 0)
+                {
+                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }
@@ -188,15 +209,21 @@
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
+                var successes = 0;
+                var failures = 0;
+                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
+
                 var match = RegexSands.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
+                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
                     continue;
                 }
 
@@ -218,11 +245,13 @@
                         // At least one size giving texture required.
                         if (background == null && foreground == null)
                         {
+                            failures++;
                             continue;
                         }
 
                         if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
                         {
+                            failures++;
                             continue;
                         }
 
@@ -247,6 +276,8 @@
                         };
 
                         var entity = new EntityDrawPlatformSand(platform, screen, data);
+                        successes++;
+
                         if (platform.IsForeground)
                         {
                             foregroundEntities.Add(entity);
@@ -258,6 +289,16 @@
 
                         entityLogic.AddScreen(screen);
                     }
+                }
+
+                if (successes > 0)
+                {
+                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} scrolling platform(s).");
+                }
+
+                if (failures > 0)
+                {
+                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }

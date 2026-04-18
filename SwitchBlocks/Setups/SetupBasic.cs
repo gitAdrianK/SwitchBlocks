@@ -8,6 +8,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -37,10 +38,15 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning BASIC Setup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
             DataBasic.Initialize(settings.SaveCarriesOver);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
             var entityLogic = new EntityLogicBasic(settings);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Basic);
             if (Directory.Exists(xmlPath))
             {
@@ -73,6 +79,7 @@ namespace SwitchBlocks.Setups
                     DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
             var behaviourLever = new BehaviourBasicLever(settings.LeverDirections);
@@ -85,6 +92,8 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicBasic = entityLogic;
                 debugInstance.BehaviourBasicLever = behaviourLever;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Finished BASIC Setup.");
         }
 
         /// <summary>
@@ -97,10 +106,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning BASIC Cleanup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
             DataBasic.Instance.SaveToFile();
             DataBasic.Reset();
 
             IsUsed = false;
+            PatchModLoader.AddDebugMessage("[INFO] Finished BASIC Cleanup.");
         }
     }
 }

@@ -8,6 +8,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -36,10 +37,15 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning AUTO Setup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
             _ = DataAuto.Instance;
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
             var entityLogic = new EntityLogicAuto(settings);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Auto);
             if (Directory.Exists(xmlPath))
             {
@@ -65,6 +71,7 @@ namespace SwitchBlocks.Setups
                     DataAuto.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
@@ -77,6 +84,8 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Finished AUTO Setup.");
         }
 
         /// <summary>
@@ -89,10 +98,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning AUTO Cleanup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
             DataAuto.Instance.SaveToFile();
             DataAuto.Reset();
 
             IsUsed = false;
+            PatchModLoader.AddDebugMessage("[INFO] Finished AUTO Cleanup.");
         }
     }
 }

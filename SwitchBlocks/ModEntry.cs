@@ -58,9 +58,13 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelStart()
         {
+            PatchModLoader.AddDebugMessage(
+                $"[INFO] Calling 'On Level Start' method with name '{nameof(OnLevelStart)}' in '{ModConstants.Modname}'.");
+
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null)
             {
+                PatchModLoader.AddDebugMessage("[INFO] Stopping. Not playing a workshop map.");
                 return;
             }
 
@@ -75,6 +79,7 @@ namespace SwitchBlocks
             SetupThreshold.IsUsed = levelID == FactoryThreshold.LastUsedMapId;
             if (!IsUsed())
             {
+                PatchModLoader.AddDebugMessage("[INFO] Stopping. Mod is not used.");
                 return;
             }
 
@@ -82,6 +87,7 @@ namespace SwitchBlocks
             var player = entityManager.Find<PlayerEntity>();
             if (player == null)
             {
+                PatchModLoader.AddDebugMessage("[WARNING] Stopping. Player not found.");
                 return;
             }
 
@@ -130,6 +136,10 @@ namespace SwitchBlocks
             {
                 foregroundEntity.GoToFront();
             }
+
+            PatchModLoader.AddDebugMessage(
+                $"[INFO] Finished 'On Level Start' method with name '{nameof(OnLevelStart)}' in '{ModConstants.Modname}'.\n");
+            PatchModLoader.WriteDebugLoadLog();
         }
 
         /// <summary>
@@ -139,9 +149,13 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelEnd()
         {
+            PatchModLoader.AddDebugMessage(
+                $"[INFO] Calling 'On Level End' method with name '{nameof(OnLevelEnd)}' in '{ModConstants.Modname}'.");
+
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null || !IsUsed())
             {
+                PatchModLoader.AddDebugMessage("[INFO] Stopping. Not playing a workshop map.");
                 return;
             }
 
@@ -159,6 +173,10 @@ namespace SwitchBlocks
             SetupSequence.Cleanup();
             SetupThreshold.Cleanup();
 
+
+            PatchModLoader.AddDebugMessage(
+                $"[INFO] Finished 'On Level End' method with name '{nameof(OnLevelEnd)}' in '{ModConstants.Modname}'.\n");
+            PatchModLoader.WriteDebugLoadLog();
             ModDebug.Reset();
         }
 

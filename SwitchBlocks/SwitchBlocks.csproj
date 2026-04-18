@@ -267,6 +267,7 @@
     <Compile Include="Menus\Nodes\NodeCreateBlocksXml.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
+    <Compile Include="Patches\PatchModLoader.cs"/>
     <Compile Include="Patches\PatchResolveXCollisionBehaviour.cs"/>
     <Compile Include="Patches\PatchSlopeBlock.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>

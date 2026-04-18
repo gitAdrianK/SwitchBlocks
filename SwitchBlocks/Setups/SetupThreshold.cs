@@ -8,6 +8,7 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -33,10 +34,15 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning THRESHOLD Setup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
             _ = DataThreshold.Instance;
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
             var entityLogic = new EntityLogicThreshold(settings);
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Threshold);
             if (Directory.Exists(xmlPath))
             {
@@ -56,6 +62,7 @@ namespace SwitchBlocks.Setups
                     DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOn), new BehaviourThresholdOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOff), new BehaviourThresholdOff());
             var behaviourReset = new BehaviourThresholdReset(settings.Stat);
@@ -68,6 +75,8 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicThreshold = entityLogic;
                 debugInstance.BehaviourThresholdReset = behaviourReset;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Finished THRESHOLD Setup.");
         }
 
         /// <summary>
@@ -80,10 +89,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchModLoader.AddDebugMessage("[INFO] Beginning THRESHOLD Cleanup.");
+
+            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
             DataThreshold.Instance.SaveToFile();
             DataThreshold.Reset();
 
             IsUsed = false;
+            PatchModLoader.AddDebugMessage("[INFO] Finished THRESHOLD Cleanup.");
         }
     }
 }
