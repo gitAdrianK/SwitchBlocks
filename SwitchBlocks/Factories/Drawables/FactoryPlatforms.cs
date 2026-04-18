@@ -30,8 +30,15 @@
         /// <param name="texturePath">Path to textures.</param>
         /// <param name="data">Data for the entity.</param>
         /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
         /// <typeparam name="T">>A class implementing <see cref="IDataProvider" />.</typeparam>
-        public static void CreatePlatforms<T>(string xmlPath, string texturePath, T data, EntityLogic<T> entityLogic)
+        public static void CreatePlatforms<T>(
+            string xmlPath,
+            string texturePath,
+            T data, EntityLogic<T> entityLogic,
+            List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
             where T : class, IDataProvider
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
@@ -70,16 +77,25 @@
                             continue;
                         }
 
-                        var spritesElement = platformElement.Element("Sprites");
-                        if (spritesElement != null && platform.Sprites.Cells != new Point(1, 1))
+                        EntityDraw entity;
+                        if (platform.Sprites != null)
                         {
-                            _ = platform.Sprites.ResetWithLever
+                            entity = platform.Sprites.ResetWithLever
                                 ? new EntityDrawPlatformReset(platform, screen, data)
                                 : new EntityDrawPlatformLoop(platform, screen, data);
                         }
                         else
                         {
-                            _ = new EntityDrawPlatform(platform, screen, data);
+                            entity = new EntityDrawPlatform(platform, screen, data);
+                        }
+
+                        if (platform.IsForeground)
+                        {
+                            foregroundEntities.Add(entity);
+                        }
+                        else if (!platform.IsBackground)
+                        {
+                            midgroundEntities.Add(entity);
                         }
 
                         entityLogic.AddScreen(screen);
@@ -96,10 +112,16 @@
         /// <param name="texturePath">Path to textures.</param>
         /// <param name="groups">Collection of BlockGroups.</param>
         /// <param name="entityGroupLogic"><see cref="EntityGroupLogic{T}" />.</param>
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
         /// <typeparam name="T">>A class implementing <see cref="IGroupDataProvider" />.</typeparam>
-        public static void CreateGroupPlatforms<T>(string xmlPath, string texturePath,
+        public static void CreateGroupPlatforms<T>(
+            string xmlPath,
+            string texturePath,
             Dictionary<int, BlockGroup> groups,
-            EntityGroupLogic<T> entityGroupLogic)
+            EntityGroupLogic<T> entityGroupLogic,
+            List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
             where T : IGroupDataProvider
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
@@ -144,15 +166,25 @@
                             continue;
                         }
 
+                        EntityDraw entity;
                         if (platform.Sprites != null)
                         {
-                            _ = platform.Sprites.ResetWithLever
+                            entity = platform.Sprites.ResetWithLever
                                 ? new EntityDrawPlatformReset(platform, screen, group)
                                 : new EntityDrawPlatformLoop(platform, screen, group);
                         }
                         else
                         {
-                            _ = new EntityDrawPlatform(platform, screen, group);
+                            entity = new EntityDrawPlatform(platform, screen, group);
+                        }
+
+                        if (platform.IsForeground)
+                        {
+                            foregroundEntities.Add(entity);
+                        }
+                        else if (!platform.IsBackground)
+                        {
+                            midgroundEntities.Add(entity);
                         }
 
                         entityGroupLogic.AddScreen(screen);
@@ -209,6 +241,7 @@
                 Animation = animation,
                 AnimationOut = animationOut,
                 IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+                IsBackground = XmlHelper.ParseElementBool(platformElement, "IsBackground"),
             };
 
             var spritesElement = platformElement.Element("Sprites");

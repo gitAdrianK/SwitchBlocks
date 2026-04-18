@@ -17,5 +17,8 @@ namespace SwitchBlocks.Util.Deserialization
 
         /// <summary>Does the entity remain in front of the player.</summary>
         public bool IsForeground { get; set; }
+
+        /// <summary>Does the entity render behind all other entities.</summary>
+        public bool IsBackground { get; set; }
     }
 }

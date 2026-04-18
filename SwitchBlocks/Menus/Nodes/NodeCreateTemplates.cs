@@ -35,9 +35,16 @@
             var doc = new XDocument(new XElement("Levers"));
             var target = doc.Root;
 
-            var lever = XmlHelper.AddElementOrComment(target, "Lever", addAs: Parent);
-            this.CreateRequired(lever);
-            XmlHelper.AddElementOrComment(lever, "IsForeground");
+            target.Add(new XComment(" This is the minimum you need to create a lever "));
+            var minLever = XmlHelper.AddElementOrComment(target, "Lever", addAs: Parent);
+            this.CreateRequired(minLever);
+
+            target.Add(new XComment(" These are all possible options "));
+            var maxLever = XmlHelper.AddElementOrComment(target, "Lever", addAs: Parent);
+            this.CreateRequired(maxLever);
+            maxLever.Add(new XComment(" Setting IsForeground will override IsBackground "));
+            XmlHelper.AddElementOrComment(maxLever, "IsForeground");
+            XmlHelper.AddElementOrComment(maxLever, "IsBackground");
 
             doc.Save(filePath);
         }
@@ -54,7 +61,9 @@
             target.Add(new XComment(" These are all possible options "));
             var maxPlatform = XmlHelper.AddElementOrComment(target, "Platform", addAs: Parent);
             this.CreateRequired(maxPlatform);
+            maxPlatform.Add(new XComment(" Setting IsForeground will override IsBackground "));
             XmlHelper.AddElementOrComment(maxPlatform, "IsForeground");
+            XmlHelper.AddElementOrComment(maxPlatform, "IsBackground");
             maxPlatform.Add(new XComment(" Start states are: On, Off, Always "));
             XmlHelper.AddElementOrComment(maxPlatform, "StartState", "On");
             this.CreateAnimation(maxPlatform, "Animation");
@@ -87,7 +96,9 @@
             position = XmlHelper.AddElementOrComment(maxPlatform, "Position", addAs: Parent);
             XmlHelper.AddElementOrComment(position, "X", "100");
             XmlHelper.AddElementOrComment(position, "Y", "50");
+            maxPlatform.Add(new XComment(" Setting IsForeground will override IsBackground "));
             XmlHelper.AddElementOrComment(maxPlatform, "IsForeground");
+            XmlHelper.AddElementOrComment(maxPlatform, "IsBackground");
             maxPlatform.Add(new XComment(" Start states are: On, Off, Always "));
             XmlHelper.AddElementOrComment(maxPlatform, "StartState", "On");
             XmlHelper.AddElementOrComment(maxPlatform, "Multiplier", "2.5");

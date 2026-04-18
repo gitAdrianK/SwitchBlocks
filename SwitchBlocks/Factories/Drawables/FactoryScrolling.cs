@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks.Factories.Drawables
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
@@ -29,7 +30,9 @@
         /// <param name="texturePath">Path to textures.</param>
         /// <param name="data">Data for the entity.</param>
         /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
-        /// <param name="isVertical">Scrolling is vertical or horizontal</param>
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        /// <param name="isVertical">Scrolling is vertical or horizontal.</param>
         /// <param name="isLegacy">If the names are still the legacy variant.</param>
         /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
         public static void CreatePlatformsScrolling<T>(
@@ -37,6 +40,8 @@
             string texturePath,
             T data,
             EntityLogic<T> entityLogic,
+            List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities,
             bool isVertical,
             bool isLegacy = false)
             where T : class, IDataProvider
@@ -122,6 +127,7 @@
                                 platformElement.Element("StartState")?.Value,
                                 StartState.On),
                             IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+                            IsBackground = XmlHelper.ParseElementBool(platformElement, "IsBackground"),
                             Multiplier = float.TryParse(
                                 platformElement.Element("Multiplier")?.Value,
                                 NumberStyles.Float,
@@ -131,13 +137,23 @@
                                 : 1.0f,
                         };
 
+                        EntityDraw entity;
                         if (isVertical)
                         {
-                            _ = new EntityDrawPlatformTypeSand(platform, screen, data);
+                            entity = new EntityDrawPlatformTypeSand(platform, screen, data);
                         }
                         else
                         {
-                            _ = new EntityDrawPlatformConveyor(platform, screen, data);
+                            entity = new EntityDrawPlatformConveyor(platform, screen, data);
+                        }
+
+                        if (platform.IsForeground)
+                        {
+                            foregroundEntities.Add(entity);
+                        }
+                        else if (!platform.IsBackground)
+                        {
+                            midgroundEntities.Add(entity);
                         }
 
                         entityLogic.AddScreen(screen);
@@ -153,12 +169,16 @@
         /// <param name="texturePath">Path to textures.</param>
         /// <param name="data">Data for the entity.</param>
         /// <param name="entityLogic"><see cref="EntityLogic{T}" />.</param>
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
         /// <typeparam name="T">A class implementing <see cref="IDataProvider" />.</typeparam>
         public static void CreatePlatformsSand<T>(
             string xmlPath,
             string texturePath,
             T data,
-            EntityLogic<T> entityLogic)
+            EntityLogic<T> entityLogic,
+            List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
             where T : class, IDataProvider
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
@@ -216,6 +236,7 @@
                                 platformElement.Element("StartState")?.Value,
                                 StartState.On),
                             IsForeground = XmlHelper.ParseElementBool(platformElement, "IsForeground"),
+                            IsBackground = XmlHelper.ParseElementBool(platformElement, "IsBackground"),
                             Multiplier = float.TryParse(
                                 platformElement.Element("Multiplier")?.Value,
                                 NumberStyles.Float,
@@ -225,7 +246,15 @@
                                 : 1.0f,
                         };
 
-                        _ = new EntityDrawPlatformSand(platform, screen, data);
+                        var entity = new EntityDrawPlatformSand(platform, screen, data);
+                        if (platform.IsForeground)
+                        {
+                            foregroundEntities.Add(entity);
+                        }
+                        else if (!platform.IsBackground)
+                        {
+                            midgroundEntities.Add(entity);
+                        }
 
                         entityLogic.AddScreen(screen);
                     }

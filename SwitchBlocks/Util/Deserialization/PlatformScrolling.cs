@@ -5,7 +5,8 @@ namespace SwitchBlocks.Util.Deserialization
     using Microsoft.Xna.Framework.Graphics;
 
     /// <summary>
-    ///     Deserialization helper to create <see cref="EntityDrawPlatformSand" /> and <see cref="EntityDrawPlatformTypeSand" />.
+    ///     Deserialization helper to create <see cref="EntityDrawPlatformSand" /> and
+    ///     <see cref="EntityDrawPlatformTypeSand" />.
     /// </summary>
     public class PlatformScrolling
     {
@@ -26,6 +27,9 @@ namespace SwitchBlocks.Util.Deserialization
 
         /// <summary>Does the entity remain in front of the player.</summary>
         public bool IsForeground { get; set; }
+
+        /// <summary>Does the entity render behind all other entities.</summary>
+        public bool IsBackground { get; set; }
 
         /// <summary>Multiplier to the scroll speed.</summary>
         public float Multiplier { get; set; }

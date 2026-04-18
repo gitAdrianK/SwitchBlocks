@@ -46,7 +46,10 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="settings">Settings of the group type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
-        public static void Setup(SettingsGroup settings, BodyComp body)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsGroup settings, BodyComp body, List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -69,13 +72,13 @@ namespace SwitchBlocks.Setups
             if (Directory.Exists(xmlPath))
             {
                 FactoryPlatforms.CreateGroupPlatforms(xmlPath, ModEntry.TexturePath, DataGroup.Instance.Groups,
-                    entityLogic);
+                    entityLogic, foregroundEntities, midgroundEntities);
             }
             else
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Group);
                 FactoryPlatforms.CreateGroupPlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataGroup.Instance.Groups, entityLogic);
+                    DataGroup.Instance.Groups, entityLogic, foregroundEntities, midgroundEntities);
             }
 
             _ = settings.Duration == 0

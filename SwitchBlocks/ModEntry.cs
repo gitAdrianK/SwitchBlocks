@@ -1,5 +1,6 @@
 namespace SwitchBlocks
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -99,25 +100,35 @@ namespace SwitchBlocks
             _ = body.RegisterBlockBehaviour(typeof(BlockConveyor), new BehaviourConveyor());
             _ = body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
 
+            var foregroundEntities = new List<EntityDraw>();
+            var midgroundEntities = new List<EntityDraw>();
             var settings = new ModSettings();
-            SetupAuto.Setup(settings.SettingsAuto, body);
-            SetupBasic.Setup(settings.SettingsBasic, body);
-            SetupCountdown.Setup(settings.SettingsCountdown, body);
-            SetupGroup.Setup(settings.SettingsGroup, body);
-            SetupJump.Setup(settings.SettingsJump, player);
-            SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance);
-            SetupSequence.Setup(settings.SettingsSequence, body);
-            SetupThreshold.Setup(settings.SettingsThreshold, body);
+            SetupAuto.Setup(settings.SettingsAuto, body, foregroundEntities, midgroundEntities);
+            SetupBasic.Setup(settings.SettingsBasic, body, foregroundEntities, midgroundEntities);
+            SetupCountdown.Setup(settings.SettingsCountdown, body, foregroundEntities, midgroundEntities);
+            SetupGroup.Setup(settings.SettingsGroup, body, foregroundEntities, midgroundEntities);
+            SetupJump.Setup(settings.SettingsJump, player, foregroundEntities, midgroundEntities);
+            SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance, foregroundEntities, midgroundEntities);
+            SetupSequence.Setup(settings.SettingsSequence, body, foregroundEntities, midgroundEntities);
+            SetupThreshold.Setup(settings.SettingsThreshold, body, foregroundEntities, midgroundEntities);
 
-            var entities = entityManager.Entities
-                .SkipWhile(entity => entity != player)
-                .ToList();
-            foreach (var entity in entities)
+            var entities = entityManager.Entities.ToList();
+            foreach (var entity in entities.Where(entity => !(entity is EntityDraw)))
             {
-                if (!(entity is EntityDraw entityDraw) || entityDraw.IsForeground)
+                if (entity is PlayerEntity)
                 {
-                    entity.GoToFront();
+                    foreach (var midgroundEntity in midgroundEntities)
+                    {
+                        midgroundEntity.GoToFront();
+                    }
                 }
+
+                entity.GoToFront();
+            }
+
+            foreach (var foregroundEntity in foregroundEntities)
+            {
+                foregroundEntity.GoToFront();
             }
         }
 

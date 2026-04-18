@@ -26,7 +26,6 @@ namespace SwitchBlocks.Entities
             this.Width = texture?.Width ?? 0;
             this.Position = position;
             this.Screen = screen;
-            this.IsForeground = isForeground;
         }
 
         /// <summary><see cref="Texture2D" />.</summary>
@@ -43,9 +42,6 @@ namespace SwitchBlocks.Entities
 
         /// <summary>Screen this entity is on.</summary>
         protected int Screen { get; }
-
-        /// <summary>Does the entity remain in front of the player.</summary>
-        public bool IsForeground { get; }
 
         /// <summary>
         ///     If the draw call should be cancelled because of various reasons that prevent the entity from drawing.

@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks.Factories.Drawables
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
@@ -23,10 +24,14 @@
         /// <param name="xmlPath">Path to XML files.</param>
         /// <param name="texturePath">Path to textures.</param>
         /// <param name="data">Data for the entity.</param>
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
         public static void CreateLevers(
             string xmlPath,
             string texturePath,
-            IDataProvider data)
+            IDataProvider data,
+            List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
             {
@@ -89,9 +94,18 @@
                             Texture = Game1.instance.contentManager.Load<Texture2D>(textureFile),
                             Position = new Vector2(x, y),
                             IsForeground = XmlHelper.ParseElementBool(leverElement, "IsForeground"),
+                            IsBackground = XmlHelper.ParseElementBool(leverElement, "IsBackground"),
                         };
 
-                        _ = new EntityDrawLever(lever, screen, data);
+                        var entity = new EntityDrawLever(lever, screen, data);
+                        if (lever.IsForeground)
+                        {
+                            foregroundEntities.Add(entity);
+                        }
+                        else if (!lever.IsBackground)
+                        {
+                            midgroundEntities.Add(entity);
+                        }
                     }
                 }
             }

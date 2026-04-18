@@ -27,7 +27,10 @@ namespace SwitchBlocks.Setups
         /// ///
         /// <param name="settings">Settings of the basic type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
-        public static void Setup(SettingsBasic settings, BodyComp body)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsBasic settings, BodyComp body, List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -41,30 +44,33 @@ namespace SwitchBlocks.Setups
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Basic);
             if (Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance);
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic);
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance, foregroundEntities,
+                    midgroundEntities);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic,
+                    foregroundEntities, midgroundEntities);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic,
+                    foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataBasic.Instance,
-                    entityLogic, false);
+                    entityLogic, foregroundEntities, midgroundEntities, false);
             }
             else
             {
                 // The legacy folder structure is not as unified.
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Basic);
                 FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance);
+                    DataBasic.Instance, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Basic);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic);
+                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Basic);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic);
+                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Basic);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic, false, true);
+                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());

@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Setups
 {
+    using System.Collections.Generic;
     using System.IO;
     using Behaviours;
     using Blocks;
@@ -22,7 +23,10 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="settings">Settings of the threshold type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
-        public static void Setup(SettingsThreshold settings, BodyComp body)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsThreshold settings, BodyComp body, List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -36,19 +40,20 @@ namespace SwitchBlocks.Setups
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Threshold);
             if (Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataThreshold.Instance, entityLogic);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataThreshold.Instance, entityLogic,
+                    foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataThreshold.Instance,
-                    entityLogic);
+                    entityLogic, foregroundEntities, midgroundEntities);
             }
             else
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Threshold);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataThreshold.Instance, entityLogic);
+                    DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Threshold);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataThreshold.Instance, entityLogic);
+                    DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOn), new BehaviourThresholdOn());

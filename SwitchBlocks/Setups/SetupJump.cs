@@ -30,7 +30,10 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="settings">Settings of the jump type.</param>
         /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to and pass to the logic.</param>
-        public static void Setup(SettingsJump settings, PlayerEntity player)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsJump settings, PlayerEntity player, List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -44,24 +47,26 @@ namespace SwitchBlocks.Setups
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Jump);
             if (Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump,
+                    foregroundEntities, midgroundEntities);
+                FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataJump.Instance, EntityLogicJump,
+                    foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataJump.Instance,
-                    EntityLogicJump, false);
+                    EntityLogicJump, foregroundEntities, midgroundEntities, false);
             }
             else
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Jump);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, EntityLogicJump);
+                    DataJump.Instance, EntityLogicJump, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Jump);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, EntityLogicJump);
+                    DataJump.Instance, EntityLogicJump, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Jump);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, EntityLogicJump, false, true);
+                    DataJump.Instance, EntityLogicJump, foregroundEntities, midgroundEntities, false, true);
             }
 
             var body = player.m_body;

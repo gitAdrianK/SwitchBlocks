@@ -31,7 +31,10 @@ namespace SwitchBlocks.Setups
         /// ///
         /// <param name="settings">Settings of the countdown type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
-        public static void Setup(SettingsCountdown settings, BodyComp body)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsCountdown settings, BodyComp body, List<EntityDraw> foregroundEntities,
+            List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -56,30 +59,32 @@ namespace SwitchBlocks.Setups
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Countdown);
             if (Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance);
-                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic);
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, foregroundEntities,
+                    midgroundEntities);
+                FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic,
+                    foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
-                    entityLogic);
+                    entityLogic, foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
-                    entityLogic, false);
+                    entityLogic, foregroundEntities, midgroundEntities, false);
             }
             else
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Countdown);
                 FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance);
+                    DataCountdown.Instance, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Countdown);
                 FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic);
+                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "sands", ModConstants.Countdown);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic);
+                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "conveyors", ModConstants.Countdown);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic, false, true);
+                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());

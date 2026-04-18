@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Setups
 {
+    using System.Collections.Generic;
     using System.IO;
     using Behaviours;
     using Blocks;
@@ -24,7 +25,10 @@ namespace SwitchBlocks.Setups
         /// <param name="settings">Settings of the sand type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="collisionQuery">An implementor of <see cref="ICollisionQuery" /></param>
-        public static void Setup(SettingsSand settings, BodyComp body, ICollisionQuery collisionQuery)
+        /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
+        /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        public static void Setup(SettingsSand settings, BodyComp body, ICollisionQuery collisionQuery,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -38,23 +42,21 @@ namespace SwitchBlocks.Setups
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sand);
             if (Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataSand.Instance);
+                FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataSand.Instance, foregroundEntities,
+                    midgroundEntities);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath, ModEntry.TexturePath, DataSand.Instance, entityLogic,
-                    true);
+                    foregroundEntities, midgroundEntities, true);
             }
             else
             {
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "levers", ModConstants.Sand);
                 FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataSand.Instance);
+                    DataSand.Instance, foregroundEntities, midgroundEntities);
 
                 xmlPath = Path.Combine(ModEntry.RootModFolder, "platforms", ModConstants.Sand);
                 FactoryScrolling.CreatePlatformsScrolling(xmlPath,
-                    Path.Combine(xmlPath, ModConstants.Textures),
-                    DataSand.Instance,
-                    entityLogic,
-                    true,
-                    true);
+                    Path.Combine(xmlPath, ModConstants.Textures), DataSand.Instance, entityLogic, foregroundEntities,
+                    midgroundEntities, true, true);
             }
 
             if (settings.IsV2)
