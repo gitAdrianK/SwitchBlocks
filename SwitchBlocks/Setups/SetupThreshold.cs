@@ -36,7 +36,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning THRESHOLD Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             _ = DataThreshold.Instance;
 
             PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");

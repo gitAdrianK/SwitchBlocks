@@ -10,6 +10,7 @@
     using Factories.Drawables;
     using JumpKing;
     using JumpKing.Player;
+    using Patches;
     using Setups;
 
     /// <summary>
@@ -29,6 +30,7 @@
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
+                PatchModLoader.AddDebugMessage($"[WARNING] The path '{directoryBin}' did not follow Worldsmith form.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -36,9 +38,12 @@
             var directoryMod = Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder);
             if (!Directory.Exists(directoryMod))
             {
+                PatchModLoader.AddDebugMessage($"[WARNING] The path '{directoryMod}' did not exist.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
+
+            PatchModLoader.AddDebugMessage("[INFO] Reloading drawables.");
 
             var debugInstance = ModDebug.Instance;
             var entityManager = EntityManager.instance;
@@ -282,6 +287,8 @@
             }
 
 
+            PatchModLoader.AddDebugMessage("[INFO] Finished reloading drawables.");
+            PatchModLoader.WriteDebugLoadLog();
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }

@@ -44,7 +44,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning COUNTDOWN Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             _ = DataCountdown.Instance;
 
             var seeds = SeedsCountdown.TryDeserialize();

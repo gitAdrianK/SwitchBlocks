@@ -52,7 +52,7 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
+                PatchModLoader.AddDebugMessage($"[INFO] Attempting to load from {new FileInfo(file).Name}.");
 
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
@@ -64,7 +64,7 @@
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
@@ -155,7 +155,7 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
+                PatchModLoader.AddDebugMessage($"[INFO] Attempting to load from {new FileInfo(file).Name}.");
 
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
@@ -167,7 +167,7 @@
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 

@@ -94,7 +94,7 @@
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
@@ -223,7 +223,7 @@
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screen}.");
+                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 

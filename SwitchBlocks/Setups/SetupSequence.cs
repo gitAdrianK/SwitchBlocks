@@ -53,7 +53,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning SEQUENCE Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
             var resets = ResetsSequence.TryDeserialize();

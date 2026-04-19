@@ -59,7 +59,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning GROUP Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);

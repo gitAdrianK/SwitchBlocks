@@ -40,7 +40,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning BASIC Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             DataBasic.Initialize(settings.SaveCarriesOver);
 
             PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");

@@ -38,7 +38,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning SAND Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             _ = DataSand.Instance;
 
             PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");

@@ -39,7 +39,7 @@ namespace SwitchBlocks.Setups
 
             PatchModLoader.AddDebugMessage("[INFO] Beginning AUTO Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Trying to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
             _ = DataAuto.Instance;
 
             PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
