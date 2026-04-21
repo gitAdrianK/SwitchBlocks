@@ -269,6 +269,7 @@
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchModLoader.cs"/>
     <Compile Include="Patches\PatchResolveXCollisionBehaviour.cs"/>
+    <Compile Include="Patches\PatchResolveYCollisionBehaviour.cs"/>
     <Compile Include="Patches\PatchSlopeBlock.cs"/>
     <Compile Include="Patches\PatchWaterBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchWindManager.cs"/>

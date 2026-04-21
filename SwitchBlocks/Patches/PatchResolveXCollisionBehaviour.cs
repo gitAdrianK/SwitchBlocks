@@ -1,6 +1,5 @@
 ﻿namespace SwitchBlocks.Patches
 {
-    using System;
     using Behaviours.Dummy;
     using HarmonyLib;
     using JumpKing.API;
@@ -31,8 +30,8 @@
             var bodyComp = behaviourContext.BodyComp;
             if (!bodyComp.IsOnGround
                 || IsBouncingAgainstConveyorBlock(bodyComp)
-                || !QueryRef(__instance).CheckCollision(bodyComp.GetHitbox(), out var overlap,
-                    out AdvCollisionInfo advCollisionInfo))
+                || !QueryRef(__instance)
+                    .CheckCollision(bodyComp.GetHitbox(), out _, out AdvCollisionInfo advCollisionInfo))
             {
                 return;
             }
@@ -43,9 +42,8 @@
                 return;
             }
 
-            // Expansion Blocks does an additional "against wall" check, but it seems to also work without doing so.
-            // I wonder what not doing so breaks.
-            bodyComp.Position.X -= overlap.Width * Math.Sign(((IConveyor)conveyorBlock).Speed);
+            // Not multiplying by the overlap removes the jitter.
+            bodyComp.Position.X -= ((IConveyor)conveyorBlock).Speed;
         }
 
         /// <summary>

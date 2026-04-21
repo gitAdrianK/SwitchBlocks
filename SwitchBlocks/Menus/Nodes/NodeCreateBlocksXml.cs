@@ -120,8 +120,7 @@
                 var elementSand = XmlHelper.AddElementOrComment(target, source, "Sand", addAs: Parent);
                 var sourceSand = source?.Element("Sand");
 
-                // v2 is disabled for now.
-                //AddElementOrComment(elementSand, sourceSand, "IsV2", "false");
+                XmlHelper.AddElementOrComment(elementSand, sourceSand, "IsV2", addAs: Comment);
                 XmlHelper.AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0", Comment);
                 XmlHelper.AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right",
                     Comment);

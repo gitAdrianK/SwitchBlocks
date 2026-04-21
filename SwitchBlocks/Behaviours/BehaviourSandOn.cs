@@ -13,7 +13,7 @@ namespace SwitchBlocks.Behaviours
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockSandOn" />.
     /// </summary>
-    public class BehaviourSandOn : IBlockBehaviour
+    internal class BehaviourSandOn : IBlockBehaviour
     {
         /// <summary>
         ///     Ctor.
@@ -58,12 +58,12 @@ namespace SwitchBlocks.Behaviours
                 return false;
             }
 
-            if (this.Data.State)
+            if (!this.Data.State)
             {
-                return behaviourContext.BodyComp.Velocity.Y >= 0.0f;
+                return behaviourContext.BodyComp.Velocity.Y < 0.0f;
             }
 
-            return behaviourContext.BodyComp.Velocity.Y < 0.0f;
+            return behaviourContext.BodyComp.Velocity.Y >= 0.0f;
         }
 
         /// <inheritdoc />
@@ -76,16 +76,20 @@ namespace SwitchBlocks.Behaviours
         /// <inheritdoc />
         public float ModifyYVelocity(float inputYVelocity, BehaviourContext behaviourContext)
         {
-            // I don't know what all the stuff inside the vanilla behaviour is for
-            // and I won't either.
-            if (this.IsPlayerOnBlock
-                && this.Data.State
-                && behaviourContext.BodyComp.Velocity.Y >= -0.75f)
+            var bodyComp = behaviourContext.BodyComp;
+            var multiplier = this.IsPlayerOnBlock && bodyComp.Velocity.Y <= 0.0f ? 0.5f : 1.0f;
+            var result = inputYVelocity * multiplier;
+            if (!this.IsPlayerOnBlock && bodyComp.IsOnGround && bodyComp.Velocity.Y > 0.0f)
             {
-                return inputYVelocity - (2.0f * PlayerValues.GRAVITY);
+                bodyComp.Position.Y += 1.0f;
             }
 
-            return inputYVelocity;
+            if (BehaviourPost.IsPlayerOnTypeSandUp)
+            {
+                result -= 0.75f;
+            }
+
+            return result;
         }
 
         /// <inheritdoc />
@@ -108,19 +112,14 @@ namespace SwitchBlocks.Behaviours
             }
 
             BehaviourPost.IsPlayerOnTypeSand = true;
-
             if (this.Data.State)
             {
                 BehaviourPost.IsPlayerOnTypeSandUp = true;
-                bodyComp.Velocity.Y = Math.Min(-0.75f, bodyComp.Velocity.Y);
-            }
-            else
-            {
-                bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             }
 
             PatchBodyComp.SetKnocked(false);
             Camera.UpdateCamera(hitbox.Center);
+            bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             return true;
         }
     }
