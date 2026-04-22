@@ -20,7 +20,7 @@
             PlatformScrolling platform,
             int screen,
             IDataProvider data)
-            : base(platform.Background, platform.Position, screen, platform.IsForeground)
+            : base(platform.Background, platform.Position, screen)
         {
             this.Scrolling = platform.Scrolling;
             this.Foreground = platform.Foreground;

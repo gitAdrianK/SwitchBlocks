@@ -18,8 +18,7 @@ namespace SwitchBlocks.Entities
         /// <param name="texture"><see cref="Texture2D" />.</param>
         /// <param name="position">Position.</param>
         /// <param name="screen">Screen this entity is on.</param>
-        /// <param name="isForeground">Should this entity remain in front of the player.</param>
-        protected EntityDraw(Texture2D texture, Vector2 position, int screen, bool isForeground)
+        protected EntityDraw(Texture2D texture, Vector2 position, int screen)
         {
             this.Texture = texture;
             this.Height = texture?.Height ?? 0;

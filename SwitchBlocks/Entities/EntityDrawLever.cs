@@ -21,7 +21,7 @@ namespace SwitchBlocks.Entities
             Lever lever,
             int screen,
             IDataProvider data)
-            : base(lever.Texture, lever.Position, screen, lever.IsForeground)
+            : base(lever.Texture, lever.Position, screen)
         {
             this.Width /= 2;
             this.Data = data;

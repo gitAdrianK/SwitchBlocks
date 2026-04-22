@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks.Patches
 {
+    using System;
     using Behaviours.Dummy;
     using HarmonyLib;
     using JumpKing.API;
@@ -31,7 +32,7 @@
             if (!bodyComp.IsOnGround
                 || IsBouncingAgainstConveyorBlock(bodyComp)
                 || !QueryRef(__instance)
-                    .CheckCollision(bodyComp.GetHitbox(), out _, out AdvCollisionInfo advCollisionInfo))
+                    .CheckCollision(bodyComp.GetHitbox(), out var overlap, out AdvCollisionInfo advCollisionInfo))
             {
                 return;
             }
@@ -43,7 +44,15 @@
             }
 
             // Not multiplying by the overlap removes the jitter.
-            bodyComp.Position.X -= ((IConveyor)conveyorBlock).Speed;
+            var speed = ((IConveyor)conveyorBlock).Speed;
+            if (speed < 0)
+            {
+                bodyComp.Position.X -= Math.Max(-overlap.Width, speed);
+            }
+            else
+            {
+                bodyComp.Position.X -= Math.Min(overlap.Width, speed);
+            }
         }
 
         /// <summary>
