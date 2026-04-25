@@ -19,12 +19,6 @@ namespace SwitchBlocks.Patches
         private static readonly AccessTools.FieldRef<BodyComp, bool> KnockedRef =
             AccessTools.FieldRefAccess<BodyComp, bool>("_knocked");
 
-        /// <summary>
-        ///     The current players <see cref="BodyComp" />.
-        ///     This should be set in <see cref="ModEntry.OnLevelStart" /> as entities are created new for every level start.
-        /// </summary>
-        public static BodyComp BodyComp { get; set; }
-
         // ReSharper disable InconsistentNaming
         /// <summary>
         ///     Patches the IsOnBlock method of the <see cref="BodyComp" />.
@@ -61,7 +55,8 @@ namespace SwitchBlocks.Patches
         /// <summary>
         ///     Sets the <c>_knocked</c> field of the players <see cref="BodyComp" />.
         /// </summary>
+        /// <param name="bodyComp">The body comp to change the knocked value of.</param>
         /// <param name="isKnocked">New value to be assigned.</param>
-        public static void SetKnocked(bool isKnocked) => KnockedRef(BodyComp) = isKnocked;
+        public static void SetKnocked(BodyComp bodyComp, bool isKnocked) => KnockedRef(bodyComp) = isKnocked;
     }
 }

@@ -117,7 +117,7 @@ namespace SwitchBlocks.Behaviours
                 BehaviourPost.IsPlayerOnTypeSandUp = true;
             }
 
-            PatchBodyComp.SetKnocked(false);
+            PatchBodyComp.SetKnocked(bodyComp, false);
             Camera.UpdateCamera(hitbox.Center);
             bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
             return true;

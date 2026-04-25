@@ -97,7 +97,6 @@ namespace SwitchBlocks
             TexturePath = Path.Combine(RootModFolder, ModConstants.Textures);
 
             var body = player.m_body;
-            PatchBodyComp.BodyComp = body;
 
             ModSounds.Setup(levelID);
 
@@ -161,8 +160,6 @@ namespace SwitchBlocks
                 PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level End' log.\n");
                 return;
             }
-
-            PatchBodyComp.BodyComp = null;
 
             ModSounds.Cleanup();
 

@@ -142,7 +142,7 @@ namespace SwitchBlocks.Behaviours
                 bodyComp.Position.Y -= 0.75f;
             }
 
-            PatchBodyComp.SetKnocked(false);
+            PatchBodyComp.SetKnocked(bodyComp, false);
             Camera.UpdateCamera(bodyComp.GetHitbox().Center);
             bodyComp.Velocity.Y = Math.Min(0.75f, bodyComp.Velocity.Y);
 

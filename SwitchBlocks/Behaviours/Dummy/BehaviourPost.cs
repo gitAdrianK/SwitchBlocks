@@ -107,7 +107,7 @@ namespace SwitchBlocks.Behaviours.Dummy
             var bodyComp = behaviourContext.BodyComp;
             if (IsPlayerOnInfinityJump)
             {
-                PatchBodyComp.SetKnocked(false);
+                PatchBodyComp.SetKnocked(bodyComp, false);
                 Camera.UpdateCamera(bodyComp.Position.ToPoint());
             }
 
