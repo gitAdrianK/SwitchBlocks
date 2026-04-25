@@ -38,15 +38,15 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning BASIC Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning BASIC Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             DataBasic.Initialize(settings.SaveCarriesOver);
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicBasic(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Basic);
             if (Directory.Exists(xmlPath))
             {
@@ -79,7 +79,7 @@ namespace SwitchBlocks.Setups
                     DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
             var behaviourLever = new BehaviourBasicLever(settings.LeverDirections);
@@ -93,7 +93,7 @@ namespace SwitchBlocks.Setups
                 debugInstance.BehaviourBasicLever = behaviourLever;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Finished BASIC Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished BASIC Setup.\n");
         }
 
         /// <summary>
@@ -106,14 +106,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning BASIC Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning BASIC Cleanup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataBasic.Instance.SaveToFile();
             DataBasic.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO] Finished BASIC Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished BASIC Cleanup.\n");
         }
     }
 }

@@ -40,15 +40,15 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning JUMP Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning JUMP Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             _ = DataJump.Instance;
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             EntityLogicJump = new EntityLogicJump(settings, player);
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Jump);
             if (Directory.Exists(xmlPath))
             {
@@ -74,12 +74,12 @@ namespace SwitchBlocks.Setups
                     DataJump.Instance, EntityLogicJump, foregroundEntities, midgroundEntities, false, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
 
-            PatchModLoader.AddDebugMessage("[INFO] Registering functions.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Registering functions.");
             if (settings.ForceSwitch)
             {
                 PlayerEntity.OnJumpCall += JumpSwitchUnsafe;
@@ -96,7 +96,7 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicJump = EntityLogicJump;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Finished JUMP Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished JUMP Setup.\n");
         }
 
         /// <summary>
@@ -109,21 +109,21 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning JUMP Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning JUMP Cleanup.");
 
             EntityLogicJump.Destroy();
             EntityLogicJump = null;
 
-            PatchModLoader.AddDebugMessage("[INFO] Removing functions.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Removing functions.");
             PlayerEntity.OnJumpCall -= JumpSwitchUnsafe;
             PlayerEntity.OnJumpCall -= JumpSwitchSafe;
 
-            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataJump.Instance.SaveToFile();
             DataJump.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO] Finished JUMP Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished JUMP Cleanup.\n");
         }
 
         /// <summary>Function to add to the OnJumpCall switching the state unsafely.</summary>

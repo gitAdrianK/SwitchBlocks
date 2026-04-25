@@ -71,7 +71,6 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
 
                 Match match;
                 if (isLegacy)
@@ -87,17 +86,16 @@
 
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
-                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
+                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -173,12 +171,14 @@
 
                 if (successes > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} scrolling platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[INFO - Switch Blocks] Successfully created {successes} scrolling platform(s).");
                 }
 
                 if (failures > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} scrolling platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[WARNING - Switch Blocks] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }
@@ -211,22 +211,20 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Trying to load from {new FileInfo(file).Name}.");
 
                 var match = RegexSands.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
-                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
+                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -293,12 +291,14 @@
 
                 if (successes > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} scrolling platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[INFO - Switch Blocks] Successfully created {successes} scrolling platform(s).");
                 }
 
                 if (failures > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} scrolling platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[WARNING - Switch Blocks] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }

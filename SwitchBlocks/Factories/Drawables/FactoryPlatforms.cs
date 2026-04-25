@@ -44,7 +44,7 @@
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
             {
-                PatchModLoader.AddDebugMessage("[INFO] Xml or texture path not found.");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Xml or texture path not found.");
                 return;
             }
 
@@ -52,22 +52,20 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Attempting to load from {new FileInfo(file).Name}.");
 
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
-                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
+                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -115,12 +113,14 @@
 
                 if (successes > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[INFO - Switch Blocks] Successfully created {successes} platform(s).");
                 }
 
                 if (failures > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[WARNING - Switch Blocks] Failed to create {failures} platform(s).");
                 }
             }
         }
@@ -147,7 +147,7 @@
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
             {
-                PatchModLoader.AddDebugMessage("[INFO] Xml or texture path not found.");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Xml or texture path not found.");
                 return;
             }
 
@@ -155,22 +155,20 @@
             {
                 var successes = 0;
                 var failures = 0;
-                PatchModLoader.AddDebugMessage($"[INFO] Attempting to load from {new FileInfo(file).Name}.");
 
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
-                    PatchModLoader.AddDebugMessage("[WARNING] File did not match xml name format.");
                     continue;
                 }
 
                 var screen = screenIndex - 1;
                 if (screen < 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Cannot create drawables for screen {screenIndex}.");
                     continue;
                 }
 
+                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -225,12 +223,14 @@
 
                 if (successes > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[INFO] Successfully created {successes} platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[INFO - Switch Blocks] Successfully created {successes} platform(s).");
                 }
 
                 if (failures > 0)
                 {
-                    PatchModLoader.AddDebugMessage($"[WARNING] Failed to create {failures} platform(s).");
+                    PatchModLoader.AddDebugMessage(
+                        $"[WARNING - Switch Blocks] Failed to create {failures} platform(s).");
                 }
             }
         }

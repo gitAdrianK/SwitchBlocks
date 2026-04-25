@@ -51,9 +51,9 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning SEQUENCE Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning SEQUENCE Setup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Attempting to load from file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
             var resets = ResetsSequence.TryDeserialize();
@@ -78,10 +78,10 @@ namespace SwitchBlocks.Setups
                 resets.SaveToFile();
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating logic entity.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicSequence(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating drawables.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sequence);
             if (Directory.Exists(xmlPath))
             {
@@ -95,7 +95,7 @@ namespace SwitchBlocks.Setups
                     DataSequence.Instance.Groups, entityLogic, foregroundEntities, midgroundEntities);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Creating behaviours.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockSequenceA),
                     new BehaviourSequenceTouching(settings.DisableOnLeaving, settings.PlatformDirections))
@@ -115,7 +115,7 @@ namespace SwitchBlocks.Setups
                 debugInstance.BehaviourSequenceReset = behaviourReset;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Finished SEQUENCE Setup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished SEQUENCE Setup.\n");
         }
 
         /// <summary>
@@ -128,14 +128,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO] Beginning SEQUENCE Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning SEQUENCE Cleanup.");
 
-            PatchModLoader.AddDebugMessage("[INFO] Saving to file.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataSequence.Instance.SaveToFile();
             DataSequence.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO] Finished SEQUENCE Cleanup.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished SEQUENCE Cleanup.\n");
         }
 
         /// <summary>

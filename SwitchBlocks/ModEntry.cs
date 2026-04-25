@@ -58,13 +58,13 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelStart()
         {
-            PatchModLoader.AddDebugMessage(
-                $"[INFO] Calling 'On Level Start' method with name '{nameof(OnLevelStart)}' in '{ModConstants.Modname}'.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning 'On Level Start' log.\n");
 
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null)
             {
-                PatchModLoader.AddDebugMessage("[INFO] Stopping. Not playing a workshop map.");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Not playing a workshop map.\n");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -79,7 +79,8 @@ namespace SwitchBlocks
             SetupThreshold.IsUsed = levelID == FactoryThreshold.LastUsedMapId;
             if (!IsUsed())
             {
-                PatchModLoader.AddDebugMessage("[INFO] Stopping. Mod is not used.");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Mod is not used.\n");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -87,7 +88,8 @@ namespace SwitchBlocks
             var player = entityManager.Find<PlayerEntity>();
             if (player == null)
             {
-                PatchModLoader.AddDebugMessage("[WARNING] Stopping. Player not found.");
+                PatchModLoader.AddDebugMessage("[WARNING - Switch Blocks] Stopping. Player not found.\n");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -108,7 +110,9 @@ namespace SwitchBlocks
 
             var foregroundEntities = new List<EntityDraw>();
             var midgroundEntities = new List<EntityDraw>();
+
             var settings = new ModSettings();
+
             SetupAuto.Setup(settings.SettingsAuto, body, foregroundEntities, midgroundEntities);
             SetupBasic.Setup(settings.SettingsBasic, body, foregroundEntities, midgroundEntities);
             SetupCountdown.Setup(settings.SettingsCountdown, body, foregroundEntities, midgroundEntities);
@@ -137,8 +141,7 @@ namespace SwitchBlocks
                 foregroundEntity.GoToFront();
             }
 
-            PatchModLoader.AddDebugMessage(
-                $"[INFO] Finished 'On Level Start' method with name '{nameof(OnLevelStart)}' in '{ModConstants.Modname}'.\n");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
             PatchModLoader.WriteDebugLoadLog();
         }
 
@@ -149,13 +152,13 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelEnd()
         {
-            PatchModLoader.AddDebugMessage(
-                $"[INFO] Calling 'On Level End' method with name '{nameof(OnLevelEnd)}' in '{ModConstants.Modname}'.");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning 'On Level End' log.\n");
 
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null || !IsUsed())
             {
-                PatchModLoader.AddDebugMessage("[INFO] Stopping. Not playing a workshop map.");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Not playing a workshop map.\n");
+                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level End' log.\n");
                 return;
             }
 
@@ -173,9 +176,7 @@ namespace SwitchBlocks
             SetupSequence.Cleanup();
             SetupThreshold.Cleanup();
 
-
-            PatchModLoader.AddDebugMessage(
-                $"[INFO] Finished 'On Level End' method with name '{nameof(OnLevelEnd)}' in '{ModConstants.Modname}'.\n");
+            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level End' log.\n");
             PatchModLoader.WriteDebugLoadLog();
             ModDebug.Reset();
         }
