@@ -11,6 +11,9 @@ namespace SwitchBlocks.Data
     /// </summary>
     public class DataBasic : IDataProvider
     {
+        /// <summary>Singleton instance.</summary>
+        private static DataBasic instance;
+
         /// <summary>
         ///     Private ctor.
         /// </summary>
@@ -24,9 +27,21 @@ namespace SwitchBlocks.Data
 
         /// <summary>
         ///     Returns the instance should it already exist.
-        ///     Unlike the other data classes this will not load from file if null.
+        ///     If it doesn't exist loads it from file.
         /// </summary>
-        public static DataBasic Instance { get; private set; }
+        public static DataBasic Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    Initialize(false);
+                }
+
+                return instance;
+            }
+            private set => instance = value;
+        }
 
         /// <summary>
         ///     Whether the state has switched touching a lever.<br />
@@ -63,7 +78,7 @@ namespace SwitchBlocks.Data
                 $"{ModConstants.PrefixSave}{ModConstants.Basic}{ModConstants.SuffixSav}");
             if ((SaveManager.instance.IsNewGame && !saveCarriesOver) || !File.Exists(file))
             {
-                Instance = new DataBasic();
+                instance = new DataBasic();
                 return;
             }
 
@@ -73,10 +88,11 @@ namespace SwitchBlocks.Data
                 var root = doc.Root;
                 if (root == null)
                 {
-                    Instance = new DataBasic();
+                    instance = new DataBasic();
+                    return;
                 }
 
-                Instance = new DataBasic
+                instance = new DataBasic
                 {
                     State =
                         bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
@@ -100,7 +116,7 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Sets the singleton instance to null.
         /// </summary>
-        public static void Reset() => Instance = null;
+        public static void Reset() => instance = null;
 
         /// <summary>
         ///     Saves the data to file.
