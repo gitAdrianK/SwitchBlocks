@@ -17,7 +17,7 @@ namespace SwitchBlocks.Settings
                 ? parsed
                 : Stat.Falls;
             this.Count = this.Stat != Stat.Time
-                ? ParseSettings.ParseCount(element?.Element("Count"), 0)
+                ? ParseSettings.ParseCount(element?.Element("Count"), 1) - 1
                 : ParseSettings.ParseDuration(element?.Element("Count"), 60.0f);
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
