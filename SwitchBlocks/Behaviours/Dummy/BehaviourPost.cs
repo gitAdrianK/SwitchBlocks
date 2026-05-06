@@ -87,6 +87,11 @@ namespace SwitchBlocks.Behaviours.Dummy
                 return Math.Min(inputYVelocity * 0.4f, PlayerValues.MAX_FALL - 1.0f);
             }
 
+            if (IsPlayerOnTypeSandUp)
+            {
+                inputYVelocity -= 1.5f;
+            }
+
             return inputYVelocity;
         }
 

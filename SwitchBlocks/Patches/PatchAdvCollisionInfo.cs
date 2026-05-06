@@ -23,7 +23,7 @@
         [UsedImplicitly]
         public static void Postfix(AdvCollisionInfo __instance, ref bool __result)
         {
-            if (SetupAuto.IsUsed)
+            if (!__result && SetupAuto.IsUsed)
             {
                 if (DataAuto.Instance.State)
                 {
@@ -33,11 +33,9 @@
                 {
                     __result |= __instance.IsCollidingWith<BlockAutoSandOff>();
                 }
-
-                return;
             }
 
-            if (SetupBasic.IsUsed)
+            if (!__result && SetupBasic.IsUsed)
             {
                 if (DataBasic.Instance.State)
                 {
@@ -47,11 +45,9 @@
                 {
                     __result |= __instance.IsCollidingWith<BlockBasicSandOff>();
                 }
-
-                return;
             }
 
-            if (SetupCountdown.IsUsed)
+            if (!__result && SetupCountdown.IsUsed)
             {
                 if (DataCountdown.Instance.State)
                 {
@@ -61,12 +57,9 @@
                 {
                     __result |= __instance.IsCollidingWith<BlockCountdownSandOff>();
                 }
-
-                return;
             }
 
-            // ReSharper disable InvertIf
-            if (SetupJump.IsUsed)
+            if (!__result && SetupJump.IsUsed)
             {
                 if (DataJump.Instance.State)
                 {
@@ -75,6 +68,19 @@
                 else
                 {
                     __result |= __instance.IsCollidingWith<BlockJumpSandOff>();
+                }
+            }
+
+            // ReSharper disable InvertIf
+            if (!__result && SetupThreshold.IsUsed)
+            {
+                if (DataThreshold.Instance.State)
+                {
+                    __result |= __instance.IsCollidingWith<BlockThresholdSandOn>();
+                }
+                else
+                {
+                    __result |= __instance.IsCollidingWith<BlockThresholdSandOff>();
                 }
             }
         }

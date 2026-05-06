@@ -84,11 +84,6 @@ namespace SwitchBlocks.Behaviours
                 bodyComp.Position.Y += 1.0f;
             }
 
-            if (BehaviourPost.IsPlayerOnTypeSandUp)
-            {
-                result -= 0.75f;
-            }
-
             return result;
         }
 
@@ -96,7 +91,7 @@ namespace SwitchBlocks.Behaviours
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
-            if (advCollisionInfo == null)
+            if (advCollisionInfo == null || !advCollisionInfo.IsCollidingWith<BlockSandOff>())
             {
                 return true;
             }
