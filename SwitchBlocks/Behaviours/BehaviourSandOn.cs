@@ -91,7 +91,7 @@ namespace SwitchBlocks.Behaviours
         public bool ExecuteBlockBehaviour(BehaviourContext behaviourContext)
         {
             var advCollisionInfo = behaviourContext?.CollisionInfo?.PreResolutionCollisionInfo;
-            if (advCollisionInfo == null || !advCollisionInfo.IsCollidingWith<BlockSandOff>())
+            if (advCollisionInfo == null)
             {
                 return true;
             }
