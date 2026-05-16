@@ -56,8 +56,8 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
-            amount *= (-1 + (stateInt * 2)) * 2 * this.Multiplier;
+            // Multiplied by 4 to make the default animation faster, about 0.25 seconds.
+            amount *= (-1 + (stateInt * 2)) * 4 * this.Multiplier;
             this.Data.Progress += amount;
             this.Data.Progress = Math.Min(Math.Max(this.Data.Progress, 0), 1);
         }
