@@ -293,11 +293,29 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupSlopeD" />.</summary>
         public static readonly Color GroupSlopeD = new Color(55, 238, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupStructureA" />.</summary>
+        public static readonly Color GroupStructureA = new Color(238, 124, 56);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupStructureB" />.</summary>
+        public static readonly Color GroupStructureB = new Color(56, 124, 238);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupStructureC" />.</summary>
+        public static readonly Color GroupStructureC = new Color(124, 238, 56);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupStructureD" />.</summary>
+        public static readonly Color GroupStructureD = new Color(56, 238, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupReset" />.</summary>
         public static readonly Color GroupReset = new Color(238, 51, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupResetSolid" />.</summary>
         public static readonly Color GroupResetSolid = new Color(238, 54, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupDeactivate" />.</summary>
+        public static readonly Color GroupDeactivate = new Color(238, 52, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockGroupDeactivateSolid" />.</summary>
+        public static readonly Color GroupDeactivateSolid = new Color(238, 55, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOn" />.</summary>
         public static readonly Color JumpOn = new Color(238, 124, 70);

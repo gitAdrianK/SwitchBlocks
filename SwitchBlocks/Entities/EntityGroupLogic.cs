@@ -2,7 +2,6 @@
 
 namespace SwitchBlocks.Entities
 {
-    using System;
     using System.Collections.Generic;
     using Data;
     using EntityComponent;
@@ -59,16 +58,20 @@ namespace SwitchBlocks.Entities
         /// <param name="amount">Amount to be added/subtracted from the progress</param>
         protected void UpdateProgress(BlockGroup group, float amount)
         {
-            var stateInt = Convert.ToInt32(group.State);
-            if (group.Progress == stateInt)
+            if (group.Progress == (group.State ? 1.0f : 0.0f))
             {
                 return;
             }
 
-            // This multiplication by two is to keep parity with a previous bug that would see the value doubled.
-            amount *= (-1 + (stateInt * 2)) * 2 * this.Multiplier;
-            group.Progress += amount;
-            group.Progress = Math.Min(Math.Max(group.Progress, 0), 1);
+            group.Progress += amount * (group.State ? 4.0f : -4.0f) * this.Multiplier;
+            if (group.Progress < 0.0f)
+            {
+                group.Progress = 0.0f;
+            }
+            else if (group.Progress > 1.0f)
+            {
+                group.Progress = 1.0f;
+            }
         }
     }
 }

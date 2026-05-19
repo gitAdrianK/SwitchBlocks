@@ -1,5 +1,3 @@
-// ReSharper disable ArrangeTypeMemberModifiers
-
 namespace SwitchBlocks.Util
 {
     using System.Collections.Generic;
@@ -8,6 +6,7 @@ namespace SwitchBlocks.Util
     /// <summary>Interface providing the GroupId.</summary>
     public interface IBlockGroupId
     {
+        // ReSharper disable ArrangeTypeMemberModifiers
         /// <summary>GroupId</summary>
         int GroupId { get; set; }
     }
@@ -105,7 +104,7 @@ namespace SwitchBlocks.Util
 
         /// <summary>
         ///     Assigns group IDs to unassigned blocks counting up the id for every created
-        ///     block group. Successfully created groups are added to the seeds dictionary.
+        ///     block group. Successfully created groups are added to the "seeds" dictionary.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
@@ -129,7 +128,7 @@ namespace SwitchBlocks.Util
 
         /// <summary>
         ///     Assigns group IDs to unassigned blocks setting the id to be larger than every created
-        ///     block group. Failures to create groups are removed from the seeds dictionary.
+        ///     block group. Failures to create groups are removed from the "seeds" dictionary.
         /// </summary>
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="groupId">ID set to be larger than every seed ID.</param>

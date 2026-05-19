@@ -4,15 +4,15 @@ namespace SwitchBlocks.Blocks
     using Util;
 
     /// <summary>
-    ///     The sequence reset block.
+    ///     The group deactivate block.
     /// </summary>
-    public class BlockSequenceReset : ModBlock, IMultipleGroupIds
+    public class BlockGroupDeactivate : ModBlock, IMultipleGroupIds
     {
         /// <inheritdoc />
-        public BlockSequenceReset(Rectangle collider) : base(collider) { }
+        public BlockGroupDeactivate(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => ModBlocks.SequenceReset;
+        public override Color DebugColor => ModBlocks.GroupDeactivate;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;

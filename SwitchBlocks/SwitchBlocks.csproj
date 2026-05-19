@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs"/>
+    <Compile Include="Behaviours\BehaviourGroupDeactivate.cs"/>
     <Compile Include="Behaviours\BehaviourGroupIce.cs"/>
     <Compile Include="Behaviours\BehaviourJumpOff.cs"/>
     <Compile Include="Behaviours\BehaviourJumpOn.cs"/>
@@ -141,10 +142,16 @@
     <Compile Include="Blocks\BlockCountdownSnowOn.cs"/>
     <Compile Include="Blocks\BlockCountdownWaterOff.cs"/>
     <Compile Include="Blocks\BlockCountdownWaterOn.cs"/>
+    <Compile Include="Blocks\BlockGroupDeactivate.cs"/>
+    <Compile Include="Blocks\BlockGroupDeactivateSolid.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeA.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeB.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeC.cs"/>
     <Compile Include="Blocks\BlockGroupSlopeD.cs"/>
+    <Compile Include="Blocks\BlockGroupStructureA.cs"/>
+    <Compile Include="Blocks\BlockGroupStructureB.cs"/>
+    <Compile Include="Blocks\BlockGroupStructureC.cs"/>
+    <Compile Include="Blocks\BlockGroupStructureD.cs"/>
     <Compile Include="Blocks\BlockJumpConveyorOff.cs"/>
     <Compile Include="Blocks\BlockJumpConveyorOn.cs"/>
     <Compile Include="Blocks\BlockJumpIceOff.cs"/>
@@ -229,6 +236,7 @@
     <Compile Include="Blocks\ModBlock.cs"/>
     <Compile Include="Blocks\ModSlope.cs"/>
     <Compile Include="Data\DataThreshold.cs"/>
+    <Compile Include="Data\DeactivatesGroup.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>
     <Compile Include="Data\SeedsSequence.cs"/>
@@ -321,7 +329,7 @@
     <Compile Include="ModBlocks.cs"/>
     <Compile Include="ModEntry.cs"/>
     <Compile Include="Util\IConveyor.cs"/>
-    <Compile Include="Util\ResetGroupIds.cs"/>
+    <Compile Include="Util\MultipleGroupIds.cs"/>
     <Compile Include="Util\Slopes.cs"/>
     <Compile Include="Util\StartState.cs"/>
     <Compile Include="Util\Stat.cs"/>

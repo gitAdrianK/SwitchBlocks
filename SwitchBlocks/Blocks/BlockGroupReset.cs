@@ -6,7 +6,7 @@ namespace SwitchBlocks.Blocks
     /// <summary>
     ///     The group reset block.
     /// </summary>
-    public class BlockGroupReset : ModBlock, IResetGroupIds
+    public class BlockGroupReset : ModBlock, IMultipleGroupIds
     {
         /// <inheritdoc />
         public BlockGroupReset(Rectangle collider) : base(collider) { }
@@ -18,6 +18,6 @@ namespace SwitchBlocks.Blocks
         protected override bool CanBlockPlayer => false;
 
         /// <inheritdoc />
-        public int[] ResetIDs { get; set; } = { };
+        public int[] Ids { get; set; } = { };
     }
 }

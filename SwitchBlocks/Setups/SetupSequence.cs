@@ -34,7 +34,7 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; } = new Dictionary<int, IBlockGroupId>();
 
         /// <summary>Group Reset blocks.</summary>
-        public static Dictionary<int, IResetGroupIds> Resets { get; } = new Dictionary<int, IResetGroupIds>();
+        public static Dictionary<int, IMultipleGroupIds> Resets { get; } = new Dictionary<int, IMultipleGroupIds>();
 
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
@@ -169,10 +169,10 @@ namespace SwitchBlocks.Setups
 
             if (resets.Count != 0)
             {
-                ResetGroupIds.AssignResetIdsFromSeed(Resets, resets);
+                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
             }
 
-            ResetGroupIds.AssignOtherResets(Resets, resets);
+            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
         }
     }
 }

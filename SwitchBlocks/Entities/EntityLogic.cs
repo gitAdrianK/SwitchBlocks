@@ -2,7 +2,6 @@
 
 namespace SwitchBlocks.Entities
 {
-    using System;
     using System.Collections.Generic;
     using Data;
     using EntityComponent;
@@ -50,16 +49,21 @@ namespace SwitchBlocks.Entities
         protected void UpdateProgress(bool state, float amount)
         {
             this.Data.ProgressUnclamped += amount;
-            var stateInt = Convert.ToInt32(state);
-            if (this.Data.Progress == stateInt)
+
+            if (this.Data.Progress == (state ? 1.0f : 0.0f))
             {
                 return;
             }
 
-            // Multiplied by 4 to make the default animation faster, about 0.25 seconds.
-            amount *= (-1 + (stateInt * 2)) * 4 * this.Multiplier;
-            this.Data.Progress += amount;
-            this.Data.Progress = Math.Min(Math.Max(this.Data.Progress, 0), 1);
+            this.Data.Progress += amount * (state ? 4.0f : -4.0f) * this.Multiplier;
+            if (this.Data.Progress < 0.0f)
+            {
+                this.Data.Progress = 0.0f;
+            }
+            else if (this.Data.Progress > 1.0f)
+            {
+                this.Data.Progress = 1.0f;
+            }
         }
     }
 }

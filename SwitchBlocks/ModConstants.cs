@@ -38,6 +38,9 @@ namespace SwitchBlocks
         /// <summary>Resets prefix.</summary>
         public const string PrefixResets = "resets_";
 
+        /// <summary>Deactivates prefix.</summary>
+        public const string PrefixDeactivates = "deactivates_";
+
         /// <summary>All saves file ending.</summary>
         public const string SuffixSav = ".sav";
 
@@ -58,6 +61,12 @@ namespace SwitchBlocks
 
         /// <summary>Reset name inside .sav files.</summary>
         public const string SaveReset = "_reset";
+
+        /// <summary>Deactivates name inside .sav files.</summary>
+        public const string SaveDeactivates = "_deactivates";
+
+        /// <summary>Deactivate name inside .sav files.</summary>
+        public const string SaveDeactivate = "_deactivate";
 
         /// <summary>State name inside .sav files.</summary>
         public const string SaveState = "_state";

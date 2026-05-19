@@ -59,6 +59,9 @@
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourGroupReset BehaviourGroupReset { get; set; }
 
+        /// <summary>Behaviour attached to deactivate.</summary>
+        public BehaviourGroupDeactivate BehaviourGroupDeactivate { get; set; }
+
         /// <summary>Logic entity of the jump block type.</summary>
         public EntityLogicJump EntityLogicJump { get; set; }
 

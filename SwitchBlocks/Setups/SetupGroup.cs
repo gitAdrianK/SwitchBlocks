@@ -36,7 +36,11 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; } = new Dictionary<int, IBlockGroupId>();
 
         /// <summary>Group Reset blocks.</summary>
-        public static Dictionary<int, IResetGroupIds> Resets { get; } = new Dictionary<int, IResetGroupIds>();
+        public static Dictionary<int, IMultipleGroupIds> Resets { get; } = new Dictionary<int, IMultipleGroupIds>();
+
+        /// <summary>Group Deactivate blocks.</summary>
+        public static Dictionary<int, IMultipleGroupIds> Deactivates { get; } =
+            new Dictionary<int, IMultipleGroupIds>();
 
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
         // clearing would result in the dict being empty on same level reload.
@@ -62,12 +66,14 @@ namespace SwitchBlocks.Setups
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
-            AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets);
+            var deactivates = DeactivatesGroup.TryDeserialize();
+            AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets, deactivates.Deactivates);
 
             if (ModDebug.IsDebug)
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();
+                deactivates.SaveToFile();
             }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
@@ -98,6 +104,8 @@ namespace SwitchBlocks.Setups
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupSnowA), new BehaviourGroupSnow());
             var behaviourReset = new BehaviourGroupReset(settings.LeverDirections);
             _ = body.RegisterBlockBehaviour(typeof(BlockGroupReset), behaviourReset);
+            var behaviourDeactivate = new BehaviourGroupDeactivate(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockGroupDeactivate), behaviourDeactivate);
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
@@ -105,6 +113,7 @@ namespace SwitchBlocks.Setups
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicGroup = entityLogic;
                 debugInstance.BehaviourGroupReset = behaviourReset;
+                debugInstance.BehaviourGroupDeactivate = behaviourDeactivate;
             }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished GROUP Setup.\n");
@@ -136,8 +145,9 @@ namespace SwitchBlocks.Setups
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
+        /// <param name="deactivates">Positions to add deactivate IDs to deactivate blocks to.</param>
         private static void AssignGroupIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
-            Dictionary<int, int[]> resets)
+            Dictionary<int, int[]> resets, Dictionary<int, int[]> deactivates)
         {
             var groupId = 1;
 
@@ -161,10 +171,17 @@ namespace SwitchBlocks.Setups
 
             if (resets.Count != 0)
             {
-                ResetGroupIds.AssignResetIdsFromSeed(Resets, resets);
+                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
             }
 
-            ResetGroupIds.AssignOtherResets(Resets, resets);
+            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+
+            if (deactivates.Count != 0)
+            {
+                MultipleGroupIds.AssignMultipleIdsFromSeed(Deactivates, deactivates);
+            }
+
+            MultipleGroupIds.AssignOtherMultipleIds(Deactivates, deactivates);
         }
     }
 }

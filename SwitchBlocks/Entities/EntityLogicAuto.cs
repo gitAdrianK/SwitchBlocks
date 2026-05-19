@@ -83,56 +83,49 @@ namespace SwitchBlocks.Entities
 
             var adjustedTick = (PatchAchievementManager.GetTick() - this.Data.ResetTick + this.DurationCycle) %
                                this.DurationCycle;
-            this.TrySound(adjustedTick);
-            this.TrySwitch(adjustedTick);
+            var currState = adjustedTick - this.DurationOn < 0;
+
+            this.TrySound(currState, adjustedTick);
+            this.TrySwitch(currState);
         }
 
         /// <summary>
         ///     Tries to make warn or flip sounds.
         /// </summary>
+        /// <param name="currState">The current state of the block type.</param>
         /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
-        private void TrySound(int adjustedTick)
+        private void TrySound(bool currState, int adjustedTick)
         {
             if (!this.IsActiveOnCurrentScreen)
             {
                 return;
             }
 
-            if (this.WarnTicks.Contains(adjustedTick))
+            if (ModSounds.AutoWarn != null && this.WarnTicks.Contains(adjustedTick))
             {
-                this.DoWarnSound(adjustedTick);
+                // The sound was disabled
+                if ((currState && this.WarnDisableOn)
+                    || (!currState && this.WarnDisableOff))
+                {
+                    return;
+                }
+
+                ModSounds.AutoWarn.PlayOneShot();
                 return;
             }
 
-            if (this.FlipTicks.Contains(adjustedTick))
+            if (ModSounds.AutoFlip != null && this.FlipTicks.Contains(adjustedTick))
             {
-                ModSounds.AutoFlip?.PlayOneShot();
+                ModSounds.AutoFlip.PlayOneShot();
             }
-        }
-
-        /// <summary>
-        ///     Plays the warn sound if it should do so.
-        /// </summary>
-        private void DoWarnSound(int adjustedTick)
-        {
-            // The sound was disabled
-            var currState = adjustedTick - this.DurationOn < 0;
-            if ((currState && this.WarnDisableOn)
-                || (!currState && this.WarnDisableOff))
-            {
-                return;
-            }
-
-            ModSounds.AutoWarn?.PlayOneShot();
         }
 
         /// <summary>
         ///     Tries to switch the state if it should do so.
         /// </summary>
-        /// <param name="adjustedTick">Tick adjusted for current cycle and tick reset.</param>
-        private void TrySwitch(int adjustedTick)
+        /// <param name="currState">The current state of the block type.</param>
+        private void TrySwitch(bool currState)
         {
-            var currState = adjustedTick - this.DurationOn < 0;
             if (this.Data.State == currState)
             {
                 return;

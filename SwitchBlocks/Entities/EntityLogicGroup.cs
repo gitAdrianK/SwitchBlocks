@@ -2,7 +2,6 @@
 
 namespace SwitchBlocks.Entities
 {
-    using System;
     using System.Collections.Generic;
     using Data;
     using Patches;
@@ -50,7 +49,7 @@ namespace SwitchBlocks.Entities
 
                 this.UpdateProgress(group, deltaTime);
                 this.TrySwitch(group, tick);
-                if (group.Progress != Convert.ToInt32(group.State))
+                if (group.Progress != (group.State ? 1.0f : 0.0f))
                 {
                     continue;
                 }

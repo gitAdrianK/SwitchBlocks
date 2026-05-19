@@ -10,18 +10,17 @@ namespace SwitchBlocks.Behaviours
     using Util;
 
     /// <summary>
-    ///     Behaviour attached to the <see cref="BlockSequenceReset" />.
+    ///     Behaviour attached to the <see cref="BlockGroupDeactivate" />.
     /// </summary>
-    public class BehaviourSequenceReset : IBlockBehaviour
+    public class BehaviourGroupDeactivate : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourSequenceReset(int[] defaultActive, Direction leverDirections)
+        public BehaviourGroupDeactivate(Direction leverDirections)
         {
-            var data = DataSequence.Instance;
+            var data = DataGroup.Instance;
             this.Groups = data.Groups;
             this.Active = data.Active;
             this.Finished = data.Finished;
-            this.DefaultActive = defaultActive;
             this.LeverDirections = leverDirections;
         }
 
@@ -34,19 +33,17 @@ namespace SwitchBlocks.Behaviours
         /// <summary>Cached IDs considered finished.</summary>
         private HashSet<int> Finished { get; }
 
-        /// <summary>Get or set the sequence data's HasSwitched.</summary>
+        /// <summary>Get or set the group data's HasSwitched.</summary>
         private static bool HasSwitched
         {
-            get => DataSequence.Instance.HasSwitched;
-            set => DataSequence.Instance.HasSwitched = value;
+            get => DataGroup.Instance.HasSwitched;
+            set => DataGroup.Instance.HasSwitched = value;
         }
-
-        ///<summary>Default active.</summary>
-        private int[] DefaultActive { get; set; }
 
         /// <summary>Lever directions.</summary>
         private Direction LeverDirections { get; set; }
 
+        /// <summary>Get or set the group data's Touched.</summary>
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
 
@@ -77,8 +74,8 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockSequenceReset>();
-            var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockSequenceResetSolid>();
+            var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockGroupDeactivate>();
+            var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockGroupDeactivateSolid>();
             this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
             if (!this.IsPlayerOnBlock)
             {
@@ -97,80 +94,42 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                var solid = advCollisionInfo.GetCollidedBlocks<BlockSequenceResetSolid>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockGroupDeactivateSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                         this.LeverDirections,
-                        solid))
+                        block))
                 {
                     return true;
                 }
-
-                block = solid;
             }
             else
             {
-                block = advCollisionInfo
-                    .GetCollidedBlocks<BlockSequenceReset>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockGroupDeactivate>().First();
             }
 
-            // If the only reset id is 0, reset to default.
-            var resetIds = ((IMultipleGroupIds)block).Ids;
-            if (resetIds.Length == 1 && resetIds[0] == 0)
+            // If the only deactivate id is 0, deactivate all groups.
+            var deactivateIds = ((IMultipleGroupIds)block).Ids;
+            if (deactivateIds.Length == 1 && deactivateIds[0] == 0)
             {
-                foreach (var groupId in this.Active)
+                foreach (var keyValuePair in
+                         this.Groups.Where(keyValuePair => !this.Finished.Contains(keyValuePair.Key)))
                 {
-                    if (!this.Groups.TryGetValue(groupId, out var activeGroup))
-                    {
-                        continue;
-                    }
-
-                    activeGroup.ActivatedTick = 0;
-                }
-
-                foreach (var groupId in this.Finished)
-                {
-                    if (!this.Groups.TryGetValue(groupId, out var finishedGroup))
-                    {
-                        continue;
-                    }
-
-                    finishedGroup.ActivatedTick = 0;
-                    _ = this.Active.Add(groupId);
-                }
-
-                this.Finished.Clear();
-
-                foreach (var defaultId in this.DefaultActive)
-                {
-                    if (!this.Groups.TryGetValue(defaultId, out var group))
-                    {
-                        continue;
-                    }
-
-                    group.ActivatedTick = int.MaxValue;
-                    _ = this.Active.Add(defaultId);
+                    keyValuePair.Value.ActivatedTick = int.MinValue;
+                    _ = this.Active.Add(keyValuePair.Key);
                 }
             }
             else
             {
-                var first = resetIds[0];
-                if (this.Groups.TryGetValue(first, out var group))
+                foreach (var deactivateId in deactivateIds)
                 {
-                    group.ActivatedTick = int.MaxValue;
-                    _ = this.Active.Add(first);
-                    _ = this.Finished.Remove(first);
-                }
-
-                foreach (var resetId in resetIds.Skip(1))
-                {
-                    if (!this.Groups.TryGetValue(resetId, out group))
+                    if (this.Finished.Contains(deactivateId)
+                        || !this.Groups.TryGetValue(deactivateId, out var group))
                     {
                         continue;
                     }
 
-                    group.ActivatedTick = 0;
-                    _ = this.Active.Add(resetId);
-                    _ = this.Finished.Remove(resetId);
+                    group.ActivatedTick = int.MinValue;
+                    _ = this.Active.Add(deactivateId);
                 }
             }
 
@@ -182,11 +141,5 @@ namespace SwitchBlocks.Behaviours
         /// </summary>
         /// <param name="leverDirections">Directions a lever can be activated from.</param>
         public void UpdateDirections(Direction leverDirections) => this.LeverDirections = leverDirections;
-
-        /// <summary>
-        ///     Updates the default active groups when a lever is activated.
-        /// </summary>
-        /// <param name="defaultActive">Group Ids active on reset.</param>
-        public void UpdateDefaultActive(int[] defaultActive) => this.DefaultActive = defaultActive;
     }
 }

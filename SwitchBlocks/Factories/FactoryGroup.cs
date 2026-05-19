@@ -35,8 +35,14 @@ namespace SwitchBlocks.Factories
             ModBlocks.GroupSlopeB,
             ModBlocks.GroupSlopeC,
             ModBlocks.GroupSlopeD,
+            ModBlocks.GroupStructureA,
+            ModBlocks.GroupStructureB,
+            ModBlocks.GroupStructureC,
+            ModBlocks.GroupStructureD,
             ModBlocks.GroupReset,
             ModBlocks.GroupResetSolid,
+            ModBlocks.GroupDeactivate,
+            ModBlocks.GroupDeactivateSolid,
         };
 
         /// <summary>Solid Block Codes.</summary>
@@ -58,7 +64,12 @@ namespace SwitchBlocks.Factories
             ModBlocks.GroupSlopeB,
             ModBlocks.GroupSlopeC,
             ModBlocks.GroupSlopeD,
+            ModBlocks.GroupStructureA,
+            ModBlocks.GroupStructureB,
+            ModBlocks.GroupStructureC,
+            ModBlocks.GroupStructureD,
             ModBlocks.GroupResetSolid,
+            ModBlocks.GroupDeactivateSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -161,6 +172,30 @@ namespace SwitchBlocks.Factories
                     SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
                     return b;
                 },
+                [ModBlocks.GroupStructureA] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupStructureA(rect);
+                    SetupGroup.BlocksGroupA[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupStructureB] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupStructureB(rect);
+                    SetupGroup.BlocksGroupB[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupStructureC] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupStructureC(rect);
+                    SetupGroup.BlocksGroupC[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupStructureD] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupStructureD(rect);
+                    SetupGroup.BlocksGroupD[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
                 [ModBlocks.GroupReset] = (rect, src, screen, x, y) =>
                 {
                     var b = new BlockGroupReset(rect);
@@ -171,6 +206,18 @@ namespace SwitchBlocks.Factories
                 {
                     var b = new BlockGroupResetSolid(rect);
                     SetupGroup.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupDeactivate] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupDeactivate(rect);
+                    SetupGroup.Deactivates[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.GroupDeactivateSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockGroupDeactivateSolid(rect);
+                    SetupGroup.Deactivates[((screen + 1) * 10000) + (x * 100) + y] = b;
                     return b;
                 },
             };
@@ -197,6 +244,7 @@ namespace SwitchBlocks.Factories
                 SetupGroup.BlocksGroupC.Clear();
                 SetupGroup.BlocksGroupD.Clear();
                 SetupGroup.Resets.Clear();
+                SetupGroup.Deactivates.Clear();
                 LastUsedMapId = level.ID;
             }
 

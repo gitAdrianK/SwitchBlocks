@@ -1,21 +1,20 @@
-// ReSharper disable ArrangeTypeMemberModifiers
-
 namespace SwitchBlocks.Util
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    /// <summary>Interface providing the ResetIDs.</summary>
-    public interface IResetGroupIds
+    /// <summary>Interface providing multiple ids.</summary>
+    public interface IMultipleGroupIds
     {
-        /// <summary>ResetIDs</summary>
-        int[] ResetIDs { get; set; }
+        // ReSharper disable ArrangeTypeMemberModifiers
+        /// <summary>IDs</summary>
+        int[] Ids { get; set; }
     }
 
     /// <summary>
-    ///     Methods related to the ResetIDs.
+    ///     Methods related to blocks providing multiple IDs.
     /// </summary>
-    public static class ResetGroupIds
+    public static class MultipleGroupIds
     {
         /// <summary>
         ///     To move 1 up or down is to change the integer by 1.
@@ -35,23 +34,23 @@ namespace SwitchBlocks.Util
         /// </summary>
         private const int Screen = BlockGroupId.Screen;
 
-        /// <summary>Value representing that a reset block resets all IDs to default.</summary>
-        private static readonly int[] ResetDefault = { 0 };
+        /// <summary>Value representing the default value for a block with multiple IDs.</summary>
+        private static readonly int[] DefaultMultipleIds = { 0 };
 
         /// <summary>
-        ///     Assigns the ResetIDs to the block and looks for neighbors of this block that are contained
-        ///     in the blocks dictionary and propagates the ResetIDs to those neighbor blocks.
+        ///     Assigns the IDs to the block and looks for neighbors of this block that are contained
+        ///     in the blocks dictionary and propagates the IDs to those neighbor blocks.
         /// </summary>
         /// <param name="blocks">Dictionary of blocks to potentially assign the IDs to and propagate from.</param>
         /// <param name="startPosition">Position from which the propagation is supposed to start.</param>
         /// <param name="resetIds">IDs that are to be assigned to all blocks of the group.</param>
-        /// <returns><c>true</c> if at least one block was assigned reset IDs, <c>false</c> otherwise.</returns>
-        private static bool PropagateResetIds(
-            Dictionary<int, IResetGroupIds> blocks,
+        /// <returns><c>true</c> if at least one block was assigned IDs, <c>false</c> otherwise.</returns>
+        private static bool PropagateMultipleIds(
+            Dictionary<int, IMultipleGroupIds> blocks,
             int startPosition,
             int[] resetIds)
         {
-            if (!blocks.TryGetValue(startPosition, out var value) || value.ResetIDs.Length != 0)
+            if (!blocks.TryGetValue(startPosition, out var value) || value.Ids.Length != 0)
             {
                 return false;
             }
@@ -61,32 +60,32 @@ namespace SwitchBlocks.Util
             while (toVisit.Count != 0)
             {
                 var currentPos = toVisit.Dequeue();
-                blocks[currentPos].ResetIDs = resetIds;
+                blocks[currentPos].Ids = resetIds;
 
                 // Left
                 var left = currentPos - Horizontal;
-                if (blocks.TryGetValue(left, out value) && value.ResetIDs.Length == 0)
+                if (blocks.TryGetValue(left, out value) && value.Ids.Length == 0)
                 {
                     toVisit.Enqueue(left);
                 }
 
                 // Right
                 var right = currentPos + Horizontal;
-                if (blocks.TryGetValue(right, out value) && value.ResetIDs.Length == 0)
+                if (blocks.TryGetValue(right, out value) && value.Ids.Length == 0)
                 {
                     toVisit.Enqueue(right);
                 }
 
                 // Up
                 var up = currentPos % 100 == 0 ? currentPos + Screen : currentPos - Vertical;
-                if (blocks.TryGetValue(up, out value) && value.ResetIDs.Length == 0)
+                if (blocks.TryGetValue(up, out value) && value.Ids.Length == 0)
                 {
                     toVisit.Enqueue(up);
                 }
 
                 // Down
                 var down = currentPos % 100 == 44 ? currentPos - Screen : currentPos + Vertical;
-                if (blocks.TryGetValue(down, out value) && value.ResetIDs.Length == 0)
+                if (blocks.TryGetValue(down, out value) && value.Ids.Length == 0)
                 {
                     toVisit.Enqueue(down);
                 }
@@ -96,41 +95,41 @@ namespace SwitchBlocks.Util
         }
 
         /// <summary>
-        ///     Assigns ResetIDs to unassigned blocks.
-        ///     Failures to create groups are removed from the reset's dictionary.
+        ///     Assigns multiple IDs to unassigned blocks.
+        ///     Failures to create groups are removed from the seed's dictionary.
         /// </summary>
         /// <param name="blocks">Blocks to potentially propagate to.</param>
-        /// <param name="resets">Resets to use for IDs assignment, failing to assign the seed removes it.</param>
-        public static void AssignResetIdsFromSeed(
-            Dictionary<int, IResetGroupIds> blocks,
-            Dictionary<int, int[]> resets)
+        /// <param name="seeds">Seeds to use for IDs assignment, failing to assign the seed removes it.</param>
+        public static void AssignMultipleIdsFromSeed(
+            Dictionary<int, IMultipleGroupIds> blocks,
+            Dictionary<int, int[]> seeds)
         {
             var misses =
-                (from kv in resets
+                (from kv in seeds
                     let currentPos = kv.Key
                     let resetIds = kv.Value
-                    where !PropagateResetIds(blocks, currentPos, resetIds)
+                    where !PropagateMultipleIds(blocks, currentPos, resetIds)
                     select currentPos).ToList();
 
             foreach (var miss in misses)
             {
-                _ = resets.Remove(miss);
+                _ = seeds.Remove(miss);
             }
         }
 
         /// <summary>
-        ///     Assigns the ResetIDs to "reset to default" to unassigned blocks.
+        ///     Assigns multiple IDs to "default" to unassigned blocks.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign to.</param>
-        /// <param name="resets">Resets to add unassigned reset blocks positions to.</param>
-        public static void AssignOtherResets(
-            Dictionary<int, IResetGroupIds> blocks,
-            Dictionary<int, int[]> resets)
+        /// <param name="seeds">Seeds to add unassigned reset blocks positions to.</param>
+        public static void AssignOtherMultipleIds(
+            Dictionary<int, IMultipleGroupIds> blocks,
+            Dictionary<int, int[]> seeds)
         {
             foreach (var position in blocks.Select(kv => kv.Key)
-                         .Where(position => PropagateResetIds(blocks, position, ResetDefault)))
+                         .Where(position => PropagateMultipleIds(blocks, position, DefaultMultipleIds)))
             {
-                resets.Add(position, ResetDefault);
+                seeds.Add(position, DefaultMultipleIds);
             }
         }
     }

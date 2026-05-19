@@ -139,6 +139,7 @@
             var settingsGroup = new SettingsGroup(root?.Element("Group"));
             debugInstance.EntityLogicGroup?.UpdateSettings(settingsGroup);
             debugInstance.BehaviourGroupReset?.UpdateDirections(settingsGroup.LeverDirections);
+            debugInstance.BehaviourGroupDeactivate?.UpdateDirections(settingsGroup.LeverDirections);
         }
 
         /// <summary>
