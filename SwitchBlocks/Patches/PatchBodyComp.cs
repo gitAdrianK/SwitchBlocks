@@ -7,6 +7,7 @@ namespace SwitchBlocks.Patches
     using JetBrains.Annotations;
     using JumpKing.Level;
     using JumpKing.Player;
+    using Setups;
 
     /// <summary>
     ///     Adds a postfix to the vanilla <see cref="BodyComp" /> and provide an easy way to set
@@ -33,7 +34,7 @@ namespace SwitchBlocks.Patches
         {
             if (blockType == typeof(SandBlock))
             {
-                if (DataSand.Instance != null)
+                if (SetupSand.IsUsed)
                 {
                     __result |= DataSand.Instance.HasEntered;
                 }
