@@ -1,4 +1,4 @@
-namespace SwitchBlocks.Blocks
+namespace SwitchBlocks.Blocks.Dummy
 {
     using JumpKing.Level;
     using Microsoft.Xna.Framework;

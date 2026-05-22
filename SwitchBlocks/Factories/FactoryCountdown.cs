@@ -3,6 +3,7 @@ namespace SwitchBlocks.Factories
     using System;
     using System.Collections.Generic;
     using Blocks;
+    using Blocks.Dummy;
     using JumpKing.API;
     using JumpKing.Level;
     using JumpKing.Level.Sampler;

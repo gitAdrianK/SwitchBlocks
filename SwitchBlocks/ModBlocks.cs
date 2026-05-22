@@ -1,6 +1,7 @@
 namespace SwitchBlocks
 {
     using Blocks;
+    using Blocks.Dummy;
     using Factories;
     using Microsoft.Xna.Framework;
 
