@@ -7,7 +7,7 @@
     using Setups;
 
     /// <summary>
-    ///     A BtNode responsible for creating the mods folder structure and the blocks.xml.
+    ///     A <see cref="IBTnode" /> responsible for creating the mods folder structure and the blocks.xml.
     /// </summary>
     public class NodeCreateModFolders : IBTnode
     {

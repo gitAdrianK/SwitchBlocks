@@ -237,11 +237,17 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSingleUse" />.</summary>
         public static readonly Color CountdownSingleUse = new Color(238, 32, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownCustomDuration" />.</summary>
+        public static readonly Color CountdownCustomDuration = new Color(238, 33, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownLeverSolid" />.</summary>
         public static readonly Color CountdownLeverSolid = new Color(238, 34, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownSingleUseSolid" />.</summary>
         public static readonly Color CountdownSingleUseSolid = new Color(238, 35, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownCustomDurationSolid" />.</summary>
+        public static readonly Color CountdownCustomDurationSolid = new Color(238, 36, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color CountdownWindEnable = new Color(238, 37, 124);

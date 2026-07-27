@@ -146,7 +146,7 @@ namespace SwitchBlocks.Setups
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
         /// <param name="deactivates">Positions to add deactivate IDs to deactivate blocks to.</param>
-        private static void AssignGroupIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
+        public static void AssignGroupIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
             Dictionary<int, int[]> resets, Dictionary<int, int[]> deactivates)
         {
             var groupId = 1;

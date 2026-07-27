@@ -26,6 +26,10 @@ namespace SwitchBlocks.Setups
         /// <summary>Countdown single use lever blocks.</summary>
         public static Dictionary<int, IBlockGroupId> SingleUseLevers { get; } = new Dictionary<int, IBlockGroupId>();
 
+        /// <summary>Countdown custom duration lever blocks.</summary>
+        public static Dictionary<int, IBlockDuration> CustomDurationLevers { get; } =
+            new Dictionary<int, IBlockDuration>();
+
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
@@ -47,15 +51,21 @@ namespace SwitchBlocks.Setups
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             _ = DataCountdown.Instance;
 
-            var seeds = SeedsCountdown.TryDeserialize();
-            AssignGroupIds(seeds.Seeds);
+            var seedsId = SeedsCountdown.TryDeserialize();
+            AssignByGroups(seedsId.Seeds);
+
+            var seedsDuration = DurationsCountdown.TryDeserialize();
+            AssignByDuration(seedsDuration.Seeds);
+
             if (!ModDebug.IsDebug)
             {
                 SingleUseLevers.Clear();
+                CustomDurationLevers.Clear();
             }
             else
             {
-                seeds.SaveToFile();
+                seedsId.SaveToFile();
+                seedsDuration.SaveToFile();
             }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
@@ -96,10 +106,12 @@ namespace SwitchBlocks.Setups
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
-            var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections);
+            var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections, settings.Duration);
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourLever);
             var behaviourLeverSingleUse = new BehaviourCountdownSingleUse(settings.LeverDirections);
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
+            var behaviourLeverCustomDuration = new BehaviourCountdownCustomDuration(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownCustomDuration), behaviourLeverCustomDuration);
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
@@ -108,6 +120,7 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicCountdown = entityLogic;
                 debugInstance.BehaviourCountdownLever = behaviourLever;
                 debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
+                debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
             }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished COUNTDOWN Setup.\n");
@@ -137,7 +150,7 @@ namespace SwitchBlocks.Setups
         ///     Assigns group IDs to all single use blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        private static void AssignGroupIds(Dictionary<int, int> seeds)
+        public static void AssignByGroups(Dictionary<int, int> seeds)
         {
             var groupId = 1;
 
@@ -150,6 +163,22 @@ namespace SwitchBlocks.Setups
             }
 
             BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+        }
+
+        /// <summary>
+        ///     Assigns durations to all custom duration blocks.
+        /// </summary>
+        /// <param name="seeds">Seeds to use for assignment.</param>
+        public static void AssignByDuration(Dictionary<int, float> seeds)
+        {
+            if (seeds.Count != 0)
+            {
+                BlockDuration.AssignDurationsFromSeed(
+                    seeds,
+                    CustomDurationLevers);
+            }
+
+            BlockDuration.AssignOtherDurations(CustomDurationLevers, seeds);
         }
     }
 }

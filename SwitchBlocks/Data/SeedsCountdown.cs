@@ -26,10 +26,10 @@ namespace SwitchBlocks.Data
         ///     Tries to load seeds from file. Default otherwise.
         /// </summary>
         /// <returns>Seeds.</returns>
-        public static SeedsCountdown TryDeserialize()
+        public static SeedsCountdown TryDeserialize(string path = null)
         {
             var contentManagerRoot = Game1.instance.contentManager.root;
-            var file = Path.Combine(
+            var file = path ?? Path.Combine(
                 contentManagerRoot,
                 ModConstants.Folder,
                 ModConstants.Saves,

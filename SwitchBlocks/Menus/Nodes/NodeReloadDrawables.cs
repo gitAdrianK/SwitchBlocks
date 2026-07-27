@@ -14,7 +14,7 @@
     using Setups;
 
     /// <summary>
-    ///     A BtNode responsible for reloading the mods drawables.
+    ///     A <see cref="IBTnode" /> responsible for reloading the mods drawables.
     /// </summary>
     public class NodeReloadDrawables : IBTnode
     {
@@ -22,12 +22,6 @@
         protected override BTresult MyRun(TickData tickData)
         {
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Reloading drawables.");
-
-            if (!ModDebug.IsDebug)
-            {
-                Game1.instance.contentManager.audio.menu.MenuFail.Play();
-                return BTresult.Failure;
-            }
 
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)

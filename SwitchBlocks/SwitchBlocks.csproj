@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\BehaviourCountdownCustomDuration.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourGroupDeactivate.cs"/>
     <Compile Include="Behaviours\BehaviourGroupIce.cs"/>
@@ -126,6 +127,8 @@
     <Compile Include="Blocks\BlockBasicWaterOn.cs"/>
     <Compile Include="Blocks\BlockCountdownConveyorOff.cs"/>
     <Compile Include="Blocks\BlockCountdownConveyorOn.cs"/>
+    <Compile Include="Blocks\BlockCountdownCustomDuration.cs"/>
+    <Compile Include="Blocks\BlockCountdownCustomDurationSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOff.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOn.cs"/>
     <Compile Include="Blocks\BlockCountdownSandOff.cs"/>
@@ -237,6 +240,7 @@
     <Compile Include="Blocks\ModSlope.cs"/>
     <Compile Include="Data\DataThreshold.cs"/>
     <Compile Include="Data\DeactivatesGroup.cs"/>
+    <Compile Include="Data\DurationsCountdown.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>
     <Compile Include="Data\SeedsSequence.cs"/>
@@ -271,6 +275,7 @@
     <Compile Include="Menus\Nodes\NodeCreateTemplates.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadBlocksXml.cs"/>
+    <Compile Include="Menus\Nodes\NodeReloadSeeds.cs"/>
     <Compile Include="ModDebug.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateBlocksXml.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
@@ -320,6 +325,7 @@
     <Compile Include="Util\Animation.cs"/>
     <Compile Include="Data\BlockGroup.cs"/>
     <Compile Include="Util\Directions.cs"/>
+    <Compile Include="Util\Duration.cs"/>
     <Compile Include="Util\Intersecting.cs"/>
     <Compile Include="Factories\FactoryAuto.cs"/>
     <Compile Include="Factories\FactoryBasic.cs"/>

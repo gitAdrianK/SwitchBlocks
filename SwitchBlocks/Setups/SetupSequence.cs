@@ -113,6 +113,7 @@ namespace SwitchBlocks.Setups
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicSequence = entityLogic;
                 debugInstance.BehaviourSequenceReset = behaviourReset;
+                debugInstance.DefaultActiveSequence = settings.DefaultActive;
             }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished SEQUENCE Setup.\n");
@@ -144,7 +145,7 @@ namespace SwitchBlocks.Setups
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        private static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
+        public static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
             Dictionary<int, int[]> resets)
         {
             var sequenceId = 1;

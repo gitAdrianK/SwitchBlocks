@@ -53,6 +53,9 @@
         /// <summary>Behaviour attached to lever.</summary>
         public BehaviourCountdownSingleUse BehaviourCountdownSingleUse { get; set; }
 
+        /// <summary>Behaviour attached to lever.</summary>
+        public BehaviourCountdownCustomDuration BehaviourCountdownCustomDuration { get; set; }
+
         /// <summary>Logic entity of the group block type.</summary>
         public EntityLogicGroup EntityLogicGroup { get; set; }
 
@@ -77,6 +80,9 @@
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourSequenceReset BehaviourSequenceReset { get; set; }
 
+        /// <summary>Default active block groups.</summary>
+        public int[] DefaultActiveSequence { get; set; }
+
         /// <summary>Logic entity of the threshold block type.</summary>
         public EntityLogicThreshold EntityLogicThreshold { get; set; }
 
@@ -87,9 +93,9 @@
         public List<string> DebugLogMessages { get; set; }
 
         /// <summary>
-        ///     Adds the debug menu item to reload the blocks.xml
+        ///     Adds the debug menu item to reload the blocks.xml.
         /// </summary>
-        /// <returns>Reload blocks.xml <see cref="TextButton" /></returns>
+        /// <returns>Reload blocks.xml <see cref="TextButton" />.</returns>
         [PauseMenuItemSetting]
         [UsedImplicitly]
         public static TextButton ReloadBlocksXml(object factory, GuiFormat format) =>
@@ -98,9 +104,9 @@
                 : null;
 
         /// <summary>
-        ///     Adds the debug menu item to reload drawables
+        ///     Adds the debug menu item to reload drawables.
         /// </summary>
-        /// <returns>Reload drawables <see cref="TextButton" /></returns>
+        /// <returns>Reload drawables <see cref="TextButton" />.</returns>
         [PauseMenuItemSetting]
         [UsedImplicitly]
         public static TextButton ReloadDrawables(object factory, GuiFormat format) =>
@@ -109,9 +115,20 @@
                 : null;
 
         /// <summary>
+        ///     Adds the debug menu item to reload seeds.
+        /// </summary>
+        /// <returns>Reload seeds <see cref="TextButton" />.</returns>
+        [PauseMenuItemSetting]
+        [UsedImplicitly]
+        public static TextButton ReloadSeeds(object factory, GuiFormat format) =>
+            IsDebug
+                ? new TextButton("Reload seeds", new NodeReloadSeeds())
+                : null;
+
+        /// <summary>
         ///     Adds the debug menu item to create mod folders.
         /// </summary>
-        /// <returns>Create mod folders <see cref="TextButton" /></returns>
+        /// <returns>Create mod folders <see cref="TextButton" />.</returns>
         [PauseMenuItemSetting]
         [UsedImplicitly]
         public static TextButton CreateModFolders(object factory, GuiFormat format) =>
@@ -120,9 +137,9 @@
                 : null;
 
         /// <summary>
-        ///     Adds the debug menu item to create the blocks.xml
+        ///     Adds the debug menu item to create the blocks.xml.
         /// </summary>
-        /// <returns>Create blocks.xml <see cref="TextButton" /></returns>
+        /// <returns>Create blocks.xml <see cref="TextButton" />.</returns>
         [PauseMenuItemSetting]
         [UsedImplicitly]
         public static TextButton CreateBlocksXml(object factory, GuiFormat format) =>
@@ -133,7 +150,7 @@
         /// <summary>
         ///     Adds the debug menu item to create templates.
         /// </summary>
-        /// <returns>Create templates <see cref="TextButton" /></returns>
+        /// <returns>Create templates <see cref="TextButton" />.</returns>
         [PauseMenuItemSetting]
         [UsedImplicitly]
         public static TextButton CreateTemplates(object factory, GuiFormat format) =>

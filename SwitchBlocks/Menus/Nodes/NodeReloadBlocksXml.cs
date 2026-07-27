@@ -10,7 +10,7 @@
     using Setups;
 
     /// <summary>
-    ///     A BtNode responsible for reloading the blocks.xml.
+    ///     A <see cref="IBTnode" /> responsible for reloading the blocks.xml.
     /// </summary>
     public class NodeReloadBlocksXml : IBTnode
     {
@@ -18,12 +18,6 @@
         protected override BTresult MyRun(TickData tickData)
         {
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Reloading settings.");
-
-            if (!ModDebug.IsDebug)
-            {
-                Game1.instance.contentManager.audio.menu.MenuFail.Play();
-                return BTresult.Failure;
-            }
 
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
@@ -120,8 +114,10 @@
 
             var settingsCountdown = new SettingsCountdown(root?.Element("Countdown"));
             debugInstance.EntityLogicCountdown?.UpdateSettings(settingsCountdown);
-            debugInstance.BehaviourCountdownLever?.UpdateDirections(settingsCountdown.LeverDirections);
+            debugInstance.BehaviourCountdownLever?.UpdateSettings(settingsCountdown.LeverDirections,
+                settingsCountdown.Duration);
             debugInstance.BehaviourCountdownSingleUse?.UpdateDirections(settingsCountdown.LeverDirections);
+            debugInstance.BehaviourCountdownCustomDuration?.UpdateDirections(settingsCountdown.LeverDirections);
         }
 
         /// <summary>
@@ -202,6 +198,7 @@
             debugInstance.EntityLogicSequence?.UpdateSettings(settingsSequence);
             debugInstance.BehaviourSequenceReset?.UpdateDirections(settingsSequence.LeverDirections);
             debugInstance.BehaviourSequenceReset?.UpdateDefaultActive(settingsSequence.DefaultActive);
+            debugInstance.DefaultActiveSequence = settingsSequence.DefaultActive;
         }
 
         /// <summary>

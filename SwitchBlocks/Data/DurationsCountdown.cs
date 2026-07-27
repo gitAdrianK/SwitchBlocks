@@ -1,87 +1,66 @@
-namespace SwitchBlocks.Data
+﻿namespace SwitchBlocks.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
     using JumpKing;
 
     /// <summary>
-    ///     Contains seed relevant for the sequence block.
+    ///     Contains seed relevant for the countdown block.
     /// </summary>
-    public class SeedsSequence
+    public class DurationsCountdown
     {
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsSequence() => this.Seeds = new Dictionary<int, int>();
+        private DurationsCountdown() => this.Seeds = new Dictionary<int, float>();
 
         /// <summary>
-        ///     Groups belonging to the respective id.
-        ///     A group has the data related to a platform.
+        ///     Mapping of the blocks position and id.
         /// </summary>
-        public Dictionary<int, int> Seeds { get; private set; }
+        public Dictionary<int, float> Seeds { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
         /// </summary>
         /// <returns>Seeds.</returns>
-        public static SeedsSequence TryDeserialize(string path = null)
+        public static DurationsCountdown TryDeserialize(string path = null)
         {
             var contentManagerRoot = Game1.instance.contentManager.root;
-            // The new seeds file is called seeds_sequence.sav
             var file = path ?? Path.Combine(
                 contentManagerRoot,
                 ModConstants.Folder,
                 ModConstants.Saves,
-                $"{ModConstants.PrefixSeeds}{ModConstants.Sequence}{ModConstants.SuffixSav}");
-            if (File.Exists(file))
-            {
-                using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    return GetNewDict(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)
-                        ?.Elements(ModConstants.SaveSeed));
-                }
-            }
-
-            // The legacy seeds file is called cache_sequence.sav
-            file = Path.Combine(
-                contentManagerRoot,
-                ModConstants.Folder,
-                ModConstants.Saves,
-                $"{ModConstants.PrefixCache}{ModConstants.Sequence}{ModConstants.SuffixSav}");
+                $"{ModConstants.PrefixDurations}{ModConstants.Countdown}{ModConstants.SuffixSav}");
             if (!File.Exists(file))
             {
-                return new SeedsSequence();
+                return new DurationsCountdown();
             }
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                return GetLegacyDict(XDocument.Load(fs).Root?.Element(ModConstants.SaveSeed)?.Elements("item"));
+                var xels = XDocument.Load(fs).Root?.Element(ModConstants.SaveSeeds)?.Elements(ModConstants.SaveSeed);
+                if (xels == null)
+                {
+                    return new DurationsCountdown();
+                }
+
+                return new DurationsCountdown
+                {
+                    Seeds = xels.ToDictionary(
+                        key => int.Parse(
+                            key.Element(ModConstants.SavePosition)?.Value
+                            ?? throw new InvalidOperationException()),
+                        value => float.Parse(
+                            value.Element(ModConstants.SaveDuration)?.Value
+                            ?? throw new InvalidOperationException(),
+                            CultureInfo.InvariantCulture)),
+                };
             }
         }
-
-        private static SeedsSequence GetNewDict(IEnumerable<XElement> xels) => new SeedsSequence
-        {
-            Seeds = xels.ToDictionary(
-                key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
-                                 throw new InvalidOperationException()),
-                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException())),
-        };
-
-        /// <summary>
-        ///     Gets SeedsSequence from the legacy file format.
-        /// </summary>
-        /// <param name="xels"><see cref="XElement" /> root of the legacy data format.</param>
-        /// <returns>Parsed <see cref="BlockGroup" />.</returns>
-        private static SeedsSequence GetLegacyDict(IEnumerable<XElement> xels) => new SeedsSequence
-        {
-            Seeds = xels.ToDictionary(
-                key => int.Parse(key.Element("key")?.Element("int")?.Value ?? throw new InvalidOperationException()),
-                value => int.Parse(value.Element("value")?.Element("int")?.Value ??
-                                   throw new InvalidOperationException())),
-        };
 
         /// <summary>
         ///     Saves the data to file. Given there is something to save.
@@ -103,19 +82,19 @@ namespace SwitchBlocks.Data
             }
 
             var doc = new XDocument(
-                new XElement("SeedsSequence",
+                new XElement("DurationsCountdown",
                     new XElement(ModConstants.SaveSeeds,
                         this.Seeds.Count != 0
                             ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
-                                    new XElement(ModConstants.SaveId, kv.Value)))
+                                    new XElement(ModConstants.SaveDuration, kv.Value)))
                             : null)));
 
             using (var fs = new FileStream(
                        Path.Combine(
                            path,
-                           $"{ModConstants.PrefixSeeds}{ModConstants.Sequence}{ModConstants.SuffixSav}"),
+                           $"{ModConstants.PrefixDurations}{ModConstants.Countdown}{ModConstants.SuffixSav}"),
                        FileMode.Create,
                        FileAccess.Write,
                        FileShare.None))
@@ -147,7 +126,7 @@ namespace SwitchBlocks.Data
             using (var fs = new FileStream(
                        Path.Combine(
                            path,
-                           $"{ModConstants.PrefixSeeds}{ModConstants.Sequence}{ModConstants.SuffixSav}"),
+                           $"{ModConstants.PrefixDurations}{ModConstants.Countdown}{ModConstants.SuffixSav}"),
                        FileMode.Create,
                        FileAccess.Write,
                        FileShare.None))

@@ -29,11 +29,11 @@ namespace SwitchBlocks.Data
         ///     Tries to load seeds from file. Default otherwise.
         /// </summary>
         /// <returns>Seeds.</returns>
-        public static SeedsGroup TryDeserialize()
+        public static SeedsGroup TryDeserialize(string path = null)
         {
             var contentManagerRoot = Game1.instance.contentManager.root;
             // The new seeds file is called seeds_group.sav
-            var file = Path.Combine(
+            var file = path ?? Path.Combine(
                 contentManagerRoot,
                 ModConstants.Folder,
                 ModConstants.Saves,

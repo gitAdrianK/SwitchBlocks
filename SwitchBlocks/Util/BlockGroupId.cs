@@ -25,7 +25,7 @@ namespace SwitchBlocks.Util
         // Bottom right is (59, 44)
 
         /// <summary>Value representing that a block was not assigned an id.</summary>
-        private const int NotAssigned = 0;
+        public const int NotAssigned = 0;
 
         /// <summary>
         ///     To move 1 up or down is to change the integer by 1.

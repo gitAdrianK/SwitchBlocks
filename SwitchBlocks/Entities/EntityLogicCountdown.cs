@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Entities
 {
+    using System.Collections.Generic;
     using Data;
     using Patches;
     using Settings;
@@ -15,9 +16,6 @@ namespace SwitchBlocks.Entities
         public EntityLogicCountdown(SettingsCountdown settings) : base(DataCountdown.Instance)
             => this.UpdateSettings(settings);
 
-        /// <summary>Duration the state switch lasts for.</summary>
-        private int Duration { get; set; }
-
         /// <summary>Amount of warns played.</summary>
         private int WarnCount { get; set; }
 
@@ -30,6 +28,9 @@ namespace SwitchBlocks.Entities
         ///<summary>If the single use countdown blocks reset when the timer ends.</summary>
         private bool SingleUseReset { get; set; }
 
+        /// <summary>Ticks that play warn sounds.</summary>
+        private HashSet<int> WarnTicks { get; set; }
+
         /// <summary>
         ///     Updates the settings from the given settings.
         /// </summary>
@@ -38,11 +39,16 @@ namespace SwitchBlocks.Entities
         {
             this.Multiplier = settings.Multiplier;
 
-            this.Duration = settings.Duration;
             this.WarnCount = settings.WarnCount;
             this.WarnDuration = settings.WarnDuration;
             this.ForceSwitch = settings.ForceSwitch;
             this.SingleUseReset = settings.SingleUseReset;
+
+            this.WarnTicks = new HashSet<int>();
+            for (var i = 1; i <= this.WarnCount; i++)
+            {
+                this.WarnTicks.Add(this.WarnDuration * i);
+            }
         }
 
         /// <summary>
@@ -59,11 +65,7 @@ namespace SwitchBlocks.Entities
             }
 
             var currentTick = PatchAchievementManager.GetTick();
-            if (this.IsActiveOnCurrentScreen)
-            {
-                this.TryWarn(this.Duration - (currentTick - this.Data.ActivatedTick));
-            }
-
+            this.TryWarn(this.Data.DeactivatedTick - currentTick);
             this.TrySwitch(currentTick);
         }
 
@@ -73,18 +75,14 @@ namespace SwitchBlocks.Entities
         /// <param name="adjustedTick">Tick adjusted for tick activated.</param>
         private void TryWarn(int adjustedTick)
         {
-            if (ModSounds.CountdownWarn == null || this.Data.WarnCount == this.WarnCount)
+            if (!this.IsActiveOnCurrentScreen
+                || ModSounds.CountdownWarn == null
+                || this.Data.WarnCount == this.WarnCount
+                || !this.WarnTicks.Contains(adjustedTick))
             {
                 return;
             }
 
-            var warnAdjust = (this.WarnCount - this.Data.WarnCount) * this.WarnDuration;
-            if (adjustedTick - warnAdjust != 0)
-            {
-                return;
-            }
-
-            this.Data.WarnCount++;
             ModSounds.CountdownWarn.PlayOneShot();
         }
 
@@ -117,7 +115,7 @@ namespace SwitchBlocks.Entities
                 return;
             }
 
-            if (this.Data.ActivatedTick + this.Duration > currentTick)
+            if (this.Data.DeactivatedTick > currentTick)
             {
                 return;
             }

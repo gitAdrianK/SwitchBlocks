@@ -35,7 +35,7 @@ namespace SwitchBlocks.Util
         private const int Screen = BlockGroupId.Screen;
 
         /// <summary>Value representing the default value for a block with multiple IDs.</summary>
-        private static readonly int[] DefaultMultipleIds = { 0 };
+        public static readonly int[] DefaultMultipleIds = { 0 };
 
         /// <summary>
         ///     Assigns the IDs to the block and looks for neighbors of this block that are contained

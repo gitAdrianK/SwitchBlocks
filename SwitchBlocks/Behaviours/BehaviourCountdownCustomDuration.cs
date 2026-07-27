@@ -1,4 +1,4 @@
-namespace SwitchBlocks.Behaviours
+﻿namespace SwitchBlocks.Behaviours
 {
     using System.Linq;
     using Blocks;
@@ -10,16 +10,15 @@ namespace SwitchBlocks.Behaviours
     using Util;
 
     /// <summary>
-    ///     Behaviour attached to the <see cref="BlockCountdownLever" />.
+    ///     Behaviour attached to the <see cref="BlockCountdownCustomDuration" />.
     /// </summary>
-    public class BehaviourCountdownLever : IBlockBehaviour
+    public class BehaviourCountdownCustomDuration : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourCountdownLever(Direction leverDirections, int duration)
+        public BehaviourCountdownCustomDuration(Direction leverDirections)
         {
             this.Data = DataCountdown.Instance;
             this.LeverDirections = leverDirections;
-            this.Duration = duration;
         }
 
         /// <summary>Countdown data.</summary>
@@ -27,9 +26,6 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Lever directions.</summary>
         private Direction LeverDirections { get; set; }
-
-        /// <summary>Duration of the switch.</summary>
-        private int Duration { get; set; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -61,20 +57,19 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownLever>();
-            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownLeverSolid>();
+            var collidingWithLever = advCollisionInfo.IsCollidingWith<BlockCountdownCustomDuration>();
+            var collidingWithLeverSolid = advCollisionInfo.IsCollidingWith<BlockCountdownCustomDurationSolid>();
             this.IsPlayerOnBlock = collidingWithLever || collidingWithLeverSolid;
-
             if (!this.IsPlayerOnBlock)
             {
-                this.Data.HasSwitched = false;
                 return true;
             }
 
+            IBlock block;
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithLeverSolid)
             {
-                var block = advCollisionInfo.GetCollidedBlocks<BlockCountdownLeverSolid>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownCustomDurationSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                         this.LeverDirections,
                         block))
@@ -82,15 +77,14 @@ namespace SwitchBlocks.Behaviours
                     return true;
                 }
             }
+            else
+            {
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownCustomDuration>().First();
+            }
 
             var currentTick = PatchAchievementManager.GetTick();
             this.Data.ActivatedTick = currentTick;
-            this.Data.DeactivatedTick = currentTick + this.Duration;
-
-            if (this.Data.HasSwitched)
-            {
-                return true;
-            }
+            this.Data.DeactivatedTick = currentTick + ((IBlockDuration)block).Duration;
 
             if (!this.Data.State)
             {
@@ -104,14 +98,9 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>
-        ///     Updates the directions a lever can be activated from the given directions as well as the duration of the switch.
+        ///     Updates the directions a lever can be activated from the given directions.
         /// </summary>
         /// <param name="leverDirections">Directions a lever can be activated from.</param>
-        /// <param name="duration">Duration a switch lasts for.</param>
-        public void UpdateSettings(Direction leverDirections, int duration)
-        {
-            this.LeverDirections = leverDirections;
-            this.Duration = duration;
-        }
+        public void UpdateDirections(Direction leverDirections) => this.LeverDirections = leverDirections;
     }
 }

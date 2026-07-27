@@ -36,6 +36,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUse,
             ModBlocks.CountdownSingleUseSolid,
+            ModBlocks.CountdownCustomDuration,
+            ModBlocks.CountdownCustomDurationSolid,
             ModBlocks.CountdownWindEnable,
         };
 
@@ -54,6 +56,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownSlopeOff,
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUseSolid,
+            ModBlocks.CountdownCustomDurationSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -86,6 +89,18 @@ namespace SwitchBlocks.Factories
                 {
                     var b = new BlockCountdownSingleUseSolid(rect);
                     SetupCountdown.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.CountdownCustomDuration] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownCustomDuration(rect);
+                    SetupCountdown.CustomDurationLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.CountdownCustomDurationSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownCustomDurationSolid(rect);
+                    SetupCountdown.CustomDurationLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
                     return b;
                 },
                 [ModBlocks.CountdownWindEnable] = (rect, src, screen, x, y) =>

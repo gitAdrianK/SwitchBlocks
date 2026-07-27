@@ -28,6 +28,7 @@ namespace SwitchBlocks.Data
             this.SwitchOnceSafe = false;
             this.WarnCount = 0;
             this.ActivatedTick = 0;
+            this.DeactivatedTick = 0;
             this.Touched = new HashSet<int>();
         }
 
@@ -90,6 +91,10 @@ namespace SwitchBlocks.Data
                             int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out intResult)
                                 ? intResult
                                 : 0,
+                        DeactivatedTick =
+                            int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out intResult)
+                                ? intResult
+                                : 0,
                         Touched = new HashSet<int>(
                             root.Element(ModConstants.SaveTouched)?
                                 .Elements(ModConstants.SaveId)
@@ -116,6 +121,9 @@ namespace SwitchBlocks.Data
 
         /// <summary>Tick the countdown block has been activated.</summary>
         public int ActivatedTick { get; set; }
+
+        /// <summary>Tick the countdown block has been activated.</summary>
+        public int DeactivatedTick { get; set; }
 
         /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
         public HashSet<int> Touched { get; private set; }
@@ -163,6 +171,7 @@ namespace SwitchBlocks.Data
                     new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
                     new XElement(ModConstants.SaveWarnCount, this.WarnCount),
                     new XElement(ModConstants.SaveActivated, this.ActivatedTick),
+                    new XElement(ModConstants.SaveDeactivated, this.DeactivatedTick),
                     new XElement(ModConstants.SaveTouched,
                         this.Touched.Count != 0
                             ? new List<XElement>(this.Touched.Select(id => new XElement(ModConstants.SaveId, id)))

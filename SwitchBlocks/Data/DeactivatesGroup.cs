@@ -28,9 +28,9 @@ namespace SwitchBlocks.Data
         ///     Tries to load deactivates from file. Default otherwise.
         /// </summary>
         /// <returns>Deactivates.</returns>
-        public static DeactivatesGroup TryDeserialize()
+        public static DeactivatesGroup TryDeserialize(string path = null)
         {
-            var file = Path.Combine(
+            var file = path ?? Path.Combine(
                 Game1.instance.contentManager.root,
                 ModConstants.Folder,
                 ModConstants.Saves,

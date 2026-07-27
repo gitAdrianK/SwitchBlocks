@@ -8,6 +8,9 @@
     using Util;
     using static Util.XmlHelper.AddAs;
 
+    /// <summary>
+    ///     A <see cref="IBTnode" /> responsible for creating templates for drawables.
+    /// </summary>
     public class NodeCreateTemplates : IBTnode
     {
         protected override BTresult MyRun(TickData tickData)

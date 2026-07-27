@@ -41,6 +41,9 @@ namespace SwitchBlocks
         /// <summary>Deactivates prefix.</summary>
         public const string PrefixDeactivates = "deactivates_";
 
+        /// <summary>Durations prefix.</summary>
+        public const string PrefixDurations = "durations_";
+
         /// <summary>All saves file ending.</summary>
         public const string SuffixSav = ".sav";
 
@@ -101,6 +104,9 @@ namespace SwitchBlocks
         /// <summary>ActivatedTick name inside .sav files.</summary>
         public const string SaveActivated = "_activatedTick";
 
+        /// <summary>DeactivatedTick name inside .sav files.</summary>
+        public const string SaveDeactivated = "_deactivatedTick";
+
         /// <summary>Touched name inside .sav files.</summary>
         public const string SaveTouched = "_touched";
 
@@ -113,8 +119,11 @@ namespace SwitchBlocks
         /// <summary>Position name inside .sav files.</summary>
         public const string SavePosition = "_position";
 
-        /// <summary>Id name inside .sav files.</summary>
+        /// <summary>ID name inside .sav files.</summary>
         public const string SaveId = "_id";
+
+        /// <summary>Duration name inside .sav files.</summary>
+        public const string SaveDuration = "_duration";
 
         /// <summary>Cooldown name inside .sav files.</summary>
         public const string SaveCooldown = "_cooldownTick";

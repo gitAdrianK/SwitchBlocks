@@ -10,7 +10,7 @@
     using static Util.XmlHelper.AddAs;
 
     /// <summary>
-    ///     A BtNode responsible for creating the blocks.xml.
+    ///     A <see cref="IBTnode" /> responsible for creating the blocks.xml.
     /// </summary>
     public class NodeCreateBlocksXml : IBTnode
     {
