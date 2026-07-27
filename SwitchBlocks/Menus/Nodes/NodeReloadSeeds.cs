@@ -36,6 +36,7 @@
                 return BTresult.Failure;
             }
 
+            this.ReloadSeedsAuto(directorySaves);
             this.ReloadSeedsCountdown(directorySaves);
             this.ReloadSeedsGroup(directorySaves);
             this.ReloadSeedsSequence(directorySaves);
@@ -43,6 +44,25 @@
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished reloading seeds.");
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
+        }
+
+        private void ReloadSeedsAuto(string directorySaves)
+        {
+            if (!SetupAuto.IsUsed)
+            {
+                return;
+            }
+
+            foreach (var block in SetupAuto.ChangeDuration.Values)
+            {
+                block.Duration = BlockDuration.NotAssigned;
+            }
+
+            var seedsDuration = DurationsAuto.TryDeserialize(Path.Combine(directorySaves,
+                $"{ModConstants.PrefixDurations}{ModConstants.Auto}{ModConstants.SuffixSav}"));
+            SetupAuto.AssignByDuration(seedsDuration.Seeds);
+
+            seedsDuration.SaveToFile();
         }
 
         private void ReloadSeedsCountdown(string directorySaves)

@@ -34,6 +34,9 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoSlopeOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
+            ModBlocks.AutoChangeDuration,
+            ModBlocks.AutoChangeDurationOn,
+            ModBlocks.AutoChangeDurationOff,
             ModBlocks.AutoWindEnable,
         };
 
@@ -72,6 +75,24 @@ namespace SwitchBlocks.Factories
                     new BlockAutoSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
                 [ModBlocks.AutoReset] = (rect, src, screen, x, y) => new BlockAutoReset(rect),
                 [ModBlocks.AutoResetFull] = (rect, src, screen, x, y) => new BlockAutoResetFull(rect),
+                [ModBlocks.AutoChangeDuration] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockAutoChangeDuration(rect);
+                    SetupAuto.ChangeDuration[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.AutoChangeDurationOn] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockAutoChangeDurationOn(rect);
+                    SetupAuto.ChangeDuration[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.AutoChangeDurationOff] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockAutoChangeDurationOff(rect);
+                    SetupAuto.ChangeDuration[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
                 [ModBlocks.AutoWindEnable] = (rect, src, screen, x, y) =>
                 {
                     _ = SetupAuto.WindEnabled.Add(screen);

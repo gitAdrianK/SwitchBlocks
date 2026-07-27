@@ -19,12 +19,15 @@ namespace SwitchBlocks.Data
         /// </summary>
         private DataAuto()
         {
+            this.DurationOn = 0;
+            this.DurationOff = 0;
             this.State = false;
             this.Progress = 0.0f;
             this.ProgressUnclamped = 0.0f;
             this.CanSwitchSafely = true;
             this.SwitchOnceSafe = false;
             this.ResetTick = 0;
+            this.HasSwitched = false;
         }
 
         /// <summary>
@@ -63,6 +66,12 @@ namespace SwitchBlocks.Data
 
                     instance = new DataAuto
                     {
+                        DurationOn = int.TryParse(root.Element(ModConstants.SaveDurationOn)?.Value, out var intResult)
+                            ? intResult
+                            : 0,
+                        DurationOff = int.TryParse(root.Element(ModConstants.SaveDurationOff)?.Value, out intResult)
+                            ? intResult
+                            : 0,
                         State =
                             bool.TryParse(root.Element(ModConstants.SaveState)?.Value, out var boolResult) &&
                             boolResult,
@@ -75,9 +84,12 @@ namespace SwitchBlocks.Data
                             bool.TryParse(root.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
                         SwitchOnceSafe =
                             bool.TryParse(root.Element(ModConstants.SaveSos)?.Value, out boolResult) && boolResult,
-                        ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out var intResult)
+                        ResetTick = int.TryParse(root.Element(ModConstants.SaveResetTick)?.Value, out intResult)
                             ? intResult
                             : 0,
+                        HasSwitched =
+                            bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
+                            boolResult,
                     };
                 }
 
@@ -85,11 +97,22 @@ namespace SwitchBlocks.Data
             }
         }
 
+        /// <summary>Current on duration.</summary>
+        public int DurationOn { get; set; }
+
+        /// <summary>Current off duration.</summary>
+        public int DurationOff { get; set; }
+
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
 
         /// <summary>Tick the auto block has been reset.</summary>
         public int ResetTick { get; set; }
+
+        /// <summary>
+        ///     Whether the state has switched touching a change duration block.<br />
+        /// </summary>
+        public bool HasSwitched { get; set; }
 
         /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
@@ -127,11 +150,14 @@ namespace SwitchBlocks.Data
 
             var doc = new XDocument(
                 new XElement("DataAuto",
+                    new XElement(ModConstants.SaveDurationOn, this.DurationOn),
+                    new XElement(ModConstants.SaveDurationOff, this.DurationOff),
                     new XElement(ModConstants.SaveState, this.State),
                     new XElement(ModConstants.SaveProgress, this.Progress),
                     new XElement(ModConstants.SaveCss, this.CanSwitchSafely),
                     new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
-                    new XElement(ModConstants.SaveResetTick, this.ResetTick)
+                    new XElement(ModConstants.SaveResetTick, this.ResetTick),
+                    new XElement(ModConstants.SaveHasSwitched, this.HasSwitched)
                 )
             );
 

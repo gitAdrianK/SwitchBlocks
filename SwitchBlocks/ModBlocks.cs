@@ -93,6 +93,15 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetFull" />.</summary>
         public static readonly Color AutoResetFull = new Color(238, 12, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoChangeDuration" />.</summary>
+        public static readonly Color AutoChangeDuration = new Color(238, 13, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoChangeDurationOn" />.</summary>
+        public static readonly Color AutoChangeDurationOn = new Color(238, 14, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoChangeDurationOff" />.</summary>
+        public static readonly Color AutoChangeDurationOff = new Color(238, 15, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color AutoWindEnable = new Color(238, 17, 124);
 

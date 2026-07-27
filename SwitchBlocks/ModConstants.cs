@@ -125,6 +125,12 @@ namespace SwitchBlocks
         /// <summary>Duration name inside .sav files.</summary>
         public const string SaveDuration = "_duration";
 
+        /// <summary>Duration on name inside .sav files.</summary>
+        public const string SaveDurationOn = "_durationOn";
+
+        /// <summary>Duration off name inside .sav files.</summary>
+        public const string SaveDurationOff = "_durationOff";
+
         /// <summary>Cooldown name inside .sav files.</summary>
         public const string SaveCooldown = "_cooldownTick";
 

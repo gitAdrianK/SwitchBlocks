@@ -86,6 +86,11 @@
             this.Data.ActivatedTick = currentTick;
             this.Data.DeactivatedTick = currentTick + ((IBlockDuration)block).Duration;
 
+            if (this.Data.HasSwitched)
+            {
+                return true;
+            }
+
             if (!this.Data.State)
             {
                 ModSounds.CountdownFlip?.PlayOneShot();

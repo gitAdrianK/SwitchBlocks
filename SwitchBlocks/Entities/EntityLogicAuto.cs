@@ -20,10 +20,10 @@ namespace SwitchBlocks.Entities
         private int DurationCycle { get; set; }
 
         /// <summary>Duration the on lasts for.</summary>
-        private int DurationOn { get; set; }
+        public int DurationOn { get; set; }
 
         /// <summary>Duration the off lasts for.</summary>
-        private int DurationOff { get; set; }
+        public int DurationOff { get; set; }
 
         /// <summary>Amount of warns played.</summary>
         private int WarnCount { get; set; }
@@ -72,6 +72,25 @@ namespace SwitchBlocks.Entities
             }
         }
 
+        /// <summary>
+        ///     Updates the durations from the given tick durations.
+        /// </summary>
+        /// <param name="ticksOn">Ticks the on state lasts.</param>
+        /// <param name="ticksOff">Ticks the off state lasts.</param>
+        public void UpdateDurations(int ticksOn, int ticksOff)
+        {
+            this.DurationCycle = ticksOn + ticksOff;
+            this.DurationOn = ticksOn;
+            this.DurationOff = ticksOff;
+
+            this.FlipTicks = new HashSet<int> { this.DurationOff, this.DurationCycle - 1 };
+            this.WarnTicks = new HashSet<int>();
+            for (var i = 1; i <= this.WarnCount; i++)
+            {
+                this.WarnTicks.Add(this.DurationOff - (this.WarnDuration * i));
+                this.WarnTicks.Add(this.DurationCycle - (this.WarnDuration * i));
+            }
+        }
 
         /// <summary>
         ///     Updates progress, tries to play sounds and switch the state.

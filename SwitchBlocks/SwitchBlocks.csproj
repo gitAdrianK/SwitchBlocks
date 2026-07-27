@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviours\BehaviourAutoChangeDuration.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownCustomDuration.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourGroupDeactivate.cs"/>
@@ -93,8 +94,11 @@
     <Compile Include="Behaviours\Dummy\BehaviourConveyor.cs"/>
     <Compile Include="Behaviours\Dummy\BehaviourPost.cs"/>
     <Compile Include="Behaviours\Dummy\BehaviourPre.cs"/>
+    <Compile Include="Blocks\BlockAutoChangeDurationOff.cs"/>
+    <Compile Include="Blocks\BlockAutoChangeDurationOn.cs"/>
     <Compile Include="Blocks\BlockAutoConveyorOff.cs"/>
     <Compile Include="Blocks\BlockAutoConveyorOn.cs"/>
+    <Compile Include="Blocks\BlockAutoChangeDuration.cs"/>
     <Compile Include="Blocks\BlockAutoIceOff.cs"/>
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
@@ -240,6 +244,7 @@
     <Compile Include="Blocks\ModSlope.cs"/>
     <Compile Include="Data\DataThreshold.cs"/>
     <Compile Include="Data\DeactivatesGroup.cs"/>
+    <Compile Include="Data\DurationsAuto.cs"/>
     <Compile Include="Data\DurationsCountdown.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>

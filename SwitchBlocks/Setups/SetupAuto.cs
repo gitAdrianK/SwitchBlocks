@@ -10,6 +10,7 @@ namespace SwitchBlocks.Setups
     using JumpKing.Player;
     using Patches;
     using Settings;
+    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -18,6 +19,11 @@ namespace SwitchBlocks.Setups
     {
         /// <summary>Whether the auto block appears inside the hitbox file and counts as used.</summary>
         public static bool IsUsed { get; set; }
+
+        // We trust that map-makers never place different change blocks next to each other.
+        /// <summary>Change duration blocks.</summary>
+        public static Dictionary<int, IBlockDuration> ChangeDuration { get; } =
+            new Dictionary<int, IBlockDuration>();
 
         /// <summary>Screens that contain a wind enable block.</summary>
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
@@ -40,10 +46,28 @@ namespace SwitchBlocks.Setups
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning AUTO Setup.");
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
-            _ = DataAuto.Instance;
+            var data = DataAuto.Instance;
+
+            var seedsDuration = DurationsAuto.TryDeserialize();
+            AssignByDuration(seedsDuration.Seeds);
+
+            if (!ModDebug.IsDebug)
+            {
+                ChangeDuration.Clear();
+            }
+            else
+            {
+                seedsDuration.SaveToFile();
+            }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicAuto(settings);
+            if (data.DurationOn > 0 || data.DurationOff > 0)
+            {
+                var durationOn = data.DurationOn > 0 ? data.DurationOn : entityLogic.DurationOn;
+                var durationOff = data.DurationOff > 0 ? data.DurationOff : entityLogic.DurationOff;
+                entityLogic.UpdateDurations(durationOn, durationOff);
+            }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Auto);
@@ -76,6 +100,8 @@ namespace SwitchBlocks.Setups
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
+            _ = body.RegisterBlockBehaviour(typeof(BlockAutoChangeDuration),
+                new BehaviourAutoChangeDuration(entityLogic));
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
@@ -106,6 +132,22 @@ namespace SwitchBlocks.Setups
 
             IsUsed = false;
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished AUTO Cleanup.\n");
+        }
+
+        /// <summary>
+        ///     Assigns durations to all custom duration blocks.
+        /// </summary>
+        /// <param name="seeds">Seeds to use for assignment.</param>
+        public static void AssignByDuration(Dictionary<int, float> seeds)
+        {
+            if (seeds.Count != 0)
+            {
+                BlockDuration.AssignDurationsFromSeed(
+                    seeds,
+                    ChangeDuration);
+            }
+
+            BlockDuration.AssignOtherDurations(ChangeDuration, seeds);
         }
     }
 }
