@@ -4,7 +4,6 @@
     using System.Xml.Linq;
     using BehaviorTree;
     using JumpKing;
-    using Patches;
     using Util;
     using static Util.XmlHelper.AddAs;
 
@@ -15,13 +14,9 @@
     {
         protected override BTresult MyRun(TickData tickData)
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating templates.");
-
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryBin}' did not follow Worldsmith structure.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -34,7 +29,6 @@
             this.CreateScrolling(Path.Combine(directoryTemplates, "sands1.xml"), "Sands", "Sand");
             this.CreateScrolling(Path.Combine(directoryTemplates, "conveyors1.xml"), "Conveyors", "Conveyor");
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished creating templates.");
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }

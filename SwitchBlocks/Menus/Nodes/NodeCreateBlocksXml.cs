@@ -4,7 +4,6 @@
     using System.Xml.Linq;
     using BehaviorTree;
     using JumpKing;
-    using Patches;
     using Setups;
     using Util;
     using static Util.XmlHelper.AddAs;
@@ -17,13 +16,9 @@
         /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating blocks.xml.");
-
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryBin}' did not follow Worldsmith structure.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -56,7 +51,6 @@
             newDoc.Save(file);
             newDoc.Save(Path.Combine(directoryMod, "blocks.xml"));
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished creating blocks.xml.");
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }

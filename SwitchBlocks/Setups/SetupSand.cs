@@ -9,7 +9,6 @@ namespace SwitchBlocks.Setups
     using Factories.Drawables;
     using JumpKing.API;
     using JumpKing.Player;
-    using Patches;
     using Settings;
 
     /// <summary>
@@ -36,15 +35,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning SAND Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             _ = DataSand.Instance;
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicSand(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sand);
             if (Directory.Exists(xmlPath))
             {
@@ -65,7 +59,6 @@ namespace SwitchBlocks.Setups
                     midgroundEntities, true, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             if (settings.IsV2)
             {
                 // To keep legacy and GotIB without change the new behaviour is behind a v2 setting.
@@ -92,8 +85,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicSand = entityLogic;
                 debugInstance.BehaviourSandLever = behaviourLever;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished SAND Setup.\n");
         }
 
         /// <summary>
@@ -106,14 +97,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning SAND Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataSand.Instance.SaveToFile();
             DataSand.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished SAND Cleanup.\n");
         }
     }
 }

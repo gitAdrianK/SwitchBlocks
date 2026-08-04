@@ -9,7 +9,6 @@
     using Entities;
     using JumpKing;
     using Microsoft.Xna.Framework.Graphics;
-    using Patches;
     using Util;
     using Util.Deserialization;
 
@@ -69,9 +68,6 @@
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var successes = 0;
-                var failures = 0;
-
                 Match match;
                 if (isLegacy)
                 {
@@ -95,7 +91,6 @@
                     continue;
                 }
 
-                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -114,13 +109,11 @@
                         // At least one size giving texture required.
                         if (background == null && foreground == null)
                         {
-                            failures++;
                             continue;
                         }
 
                         if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
                         {
-                            failures++;
                             continue;
                         }
 
@@ -154,8 +147,6 @@
                             entity = new EntityDrawPlatformConveyor(platform, screen, data);
                         }
 
-                        successes++;
-
                         if (platform.IsForeground)
                         {
                             foregroundEntities.Add(entity);
@@ -167,18 +158,6 @@
 
                         entityLogic.AddScreen(screen);
                     }
-                }
-
-                if (successes > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[INFO - Switch Blocks] Successfully created {successes} scrolling platform(s).");
-                }
-
-                if (failures > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[WARNING - Switch Blocks] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }
@@ -209,9 +188,6 @@
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var successes = 0;
-                var failures = 0;
-
                 var match = RegexSands.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
@@ -224,7 +200,6 @@
                     continue;
                 }
 
-                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -243,13 +218,11 @@
                         // At least one size giving texture required.
                         if (background == null && foreground == null)
                         {
-                            failures++;
                             continue;
                         }
 
                         if (!FactoryPlatforms.TryParseVector2(platformElement.Element("Position"), out var position))
                         {
-                            failures++;
                             continue;
                         }
 
@@ -274,7 +247,6 @@
                         };
 
                         var entity = new EntityDrawPlatformSand(platform, screen, data);
-                        successes++;
 
                         if (platform.IsForeground)
                         {
@@ -287,18 +259,6 @@
 
                         entityLogic.AddScreen(screen);
                     }
-                }
-
-                if (successes > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[INFO - Switch Blocks] Successfully created {successes} scrolling platform(s).");
-                }
-
-                if (failures > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[WARNING - Switch Blocks] Failed to create {failures} scrolling platform(s).");
                 }
             }
         }

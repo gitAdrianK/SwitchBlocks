@@ -8,7 +8,6 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
-    using Patches;
     using Settings;
 
     /// <summary>
@@ -38,15 +37,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning BASIC Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             DataBasic.Initialize(settings.SaveCarriesOver);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicBasic(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Basic);
             if (Directory.Exists(xmlPath))
             {
@@ -79,7 +73,6 @@ namespace SwitchBlocks.Setups
                     DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
             var behaviourLever = new BehaviourBasicLever(settings.LeverDirections);
@@ -92,8 +85,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicBasic = entityLogic;
                 debugInstance.BehaviourBasicLever = behaviourLever;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished BASIC Setup.\n");
         }
 
         /// <summary>
@@ -106,14 +97,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning BASIC Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataBasic.Instance.SaveToFile();
             DataBasic.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished BASIC Cleanup.\n");
         }
     }
 }

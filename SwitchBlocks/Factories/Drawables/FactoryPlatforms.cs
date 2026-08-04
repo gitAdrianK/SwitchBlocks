@@ -12,7 +12,6 @@
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Patches;
     using Setups;
     using Util;
     using Util.Deserialization;
@@ -44,15 +43,11 @@
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
             {
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Xml or texture path not found.");
                 return;
             }
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var successes = 0;
-                var failures = 0;
-
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
@@ -65,7 +60,6 @@
                     continue;
                 }
 
-                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -80,7 +74,6 @@
                         var platform = TryParsePlatformElement(platformElement, texturePath);
                         if (platform == null)
                         {
-                            failures++;
                             continue;
                         }
 
@@ -96,8 +89,6 @@
                             entity = new EntityDrawPlatform(platform, screen, data);
                         }
 
-                        successes++;
-
                         if (platform.IsForeground)
                         {
                             foregroundEntities.Add(entity);
@@ -109,18 +100,6 @@
 
                         entityLogic.AddScreen(screen);
                     }
-                }
-
-                if (successes > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[INFO - Switch Blocks] Successfully created {successes} platform(s).");
-                }
-
-                if (failures > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[WARNING - Switch Blocks] Failed to create {failures} platform(s).");
                 }
             }
         }
@@ -147,15 +126,11 @@
         {
             if (!Directory.Exists(xmlPath) || !Directory.Exists(texturePath))
             {
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Xml or texture path not found.");
                 return;
             }
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var successes = 0;
-                var failures = 0;
-
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
@@ -168,7 +143,6 @@
                     continue;
                 }
 
-                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -183,14 +157,12 @@
                         var platform = TryParsePlatformElement(platformElement, texturePath);
                         if (platform == null)
                         {
-                            failures++;
                             continue;
                         }
 
                         var groupId = FindGroupId<T>(platformElement, screen, platform.Position);
                         if (groupId == 0 || !groups.TryGetValue(groupId, out var group))
                         {
-                            failures++;
                             continue;
                         }
 
@@ -206,8 +178,6 @@
                             entity = new EntityDrawPlatform(platform, screen, group);
                         }
 
-                        successes++;
-
                         if (platform.IsForeground)
                         {
                             foregroundEntities.Add(entity);
@@ -219,18 +189,6 @@
 
                         entityGroupLogic.AddScreen(screen);
                     }
-                }
-
-                if (successes > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[INFO - Switch Blocks] Successfully created {successes} platform(s).");
-                }
-
-                if (failures > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[WARNING - Switch Blocks] Failed to create {failures} platform(s).");
                 }
             }
         }

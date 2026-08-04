@@ -4,6 +4,7 @@
     using System.Linq;
 
     // This is the third time I implement basically the same thing. I REALLY need to come up with a solution.
+    // Well the solutions I thought of are not possible in net4.5
 
     /// <summary>Interface providing the Duration.</summary>
     public interface IBlockDuration
@@ -14,7 +15,7 @@
     }
 
     /// <summary>
-    ///     Methods related to the block group id.
+    ///     Methods related to the block group duration.
     /// </summary>
     public static class BlockDuration
     {

@@ -4,7 +4,6 @@
     using BehaviorTree;
     using Data;
     using JumpKing;
-    using Patches;
     using Setups;
     using Util;
 
@@ -16,13 +15,9 @@
         /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Reloading seeds.");
-
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryBin}' did not follow Worldsmith structure.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -30,8 +25,6 @@
             var directorySaves = Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder, ModConstants.Saves);
             if (!Directory.Exists(directorySaves))
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directorySaves}' did not exist.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -41,7 +34,6 @@
             this.ReloadSeedsGroup(directorySaves);
             this.ReloadSeedsSequence(directorySaves);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished reloading seeds.");
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }

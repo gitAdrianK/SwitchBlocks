@@ -8,7 +8,6 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
-    using Patches;
     using Settings;
     using Util;
 
@@ -43,9 +42,6 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning AUTO Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             var data = DataAuto.Instance;
 
             var seedsDuration = DurationsAuto.TryDeserialize();
@@ -60,7 +56,6 @@ namespace SwitchBlocks.Setups
                 seedsDuration.SaveToFile();
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
             {
@@ -69,7 +64,6 @@ namespace SwitchBlocks.Setups
                 entityLogic.UpdateDurations(durationOn, durationOff);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Auto);
             if (Directory.Exists(xmlPath))
             {
@@ -95,7 +89,6 @@ namespace SwitchBlocks.Setups
                     DataAuto.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
             var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
@@ -110,8 +103,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished AUTO Setup.\n");
         }
 
         /// <summary>
@@ -124,14 +115,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning AUTO Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataAuto.Instance.SaveToFile();
             DataAuto.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished AUTO Cleanup.\n");
         }
 
         /// <summary>

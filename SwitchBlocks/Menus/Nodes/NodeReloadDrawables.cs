@@ -10,7 +10,6 @@
     using Factories.Drawables;
     using JumpKing;
     using JumpKing.Player;
-    using Patches;
     using Setups;
 
     /// <summary>
@@ -21,13 +20,9 @@
         /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Reloading drawables.");
-
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryBin}' did not follow Worldsmith structure.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -35,7 +30,6 @@
             var directoryMod = Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder);
             if (!Directory.Exists(directoryMod))
             {
-                PatchModLoader.AddDebugMessage($"[WARNING - Switch Blocks] The path '{directoryMod}' did not exist.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -83,9 +77,6 @@
                 foregroundEntity.GoToFront();
             }
 
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished reloading drawables.");
-            PatchModLoader.WriteDebugLoadLog();
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }

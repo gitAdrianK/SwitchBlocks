@@ -9,7 +9,6 @@ namespace SwitchBlocks.Setups
     using Factories.Drawables;
     using JumpKing.Player;
     using JumpKing.SaveThread;
-    using Patches;
     using Settings;
     using Util;
 
@@ -37,19 +36,14 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning THRESHOLD Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             var data = DataThreshold.Instance;
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicThreshold(settings);
             if (settings.Stat == Stat.Victory)
             {
                 data.State = CompletedUGCSave.ContainsCompletion(levelId);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Threshold);
             if (Directory.Exists(xmlPath))
             {
@@ -69,7 +63,6 @@ namespace SwitchBlocks.Setups
                     DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOn), new BehaviourThresholdOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOff), new BehaviourThresholdOff());
             var behaviourReset = new BehaviourThresholdReset(settings.Stat);
@@ -82,8 +75,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicThreshold = entityLogic;
                 debugInstance.BehaviourThresholdReset = behaviourReset;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished THRESHOLD Setup.\n");
         }
 
         /// <summary>
@@ -96,14 +87,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning THRESHOLD Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataThreshold.Instance.SaveToFile();
             DataThreshold.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished THRESHOLD Cleanup.\n");
         }
     }
 }

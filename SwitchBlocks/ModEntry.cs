@@ -15,7 +15,6 @@ namespace SwitchBlocks
     using JumpKing.Level;
     using JumpKing.Mods;
     using JumpKing.Player;
-    using Patches;
     using Setups;
 #if DEBUG
     using System.Diagnostics;
@@ -58,13 +57,9 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelStart()
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning 'On Level Start' log.\n");
-
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null)
             {
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Not playing a workshop map.\n");
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -79,8 +74,6 @@ namespace SwitchBlocks
             SetupThreshold.IsUsed = levelID == FactoryThreshold.LastUsedMapId;
             if (!IsUsed())
             {
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Mod is not used.\n");
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -88,8 +81,6 @@ namespace SwitchBlocks
             var player = entityManager.Find<PlayerEntity>();
             if (player == null)
             {
-                PatchModLoader.AddDebugMessage("[WARNING - Switch Blocks] Stopping. Player not found.\n");
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
                 return;
             }
 
@@ -139,9 +130,6 @@ namespace SwitchBlocks
             {
                 foregroundEntity.GoToFront();
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level Start' log.\n");
-            PatchModLoader.WriteDebugLoadLog();
         }
 
         /// <summary>
@@ -151,13 +139,9 @@ namespace SwitchBlocks
         [UsedImplicitly]
         public static void OnLevelEnd()
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning 'On Level End' log.\n");
-
             var contentManager = Game1.instance.contentManager;
             if (contentManager.level == null || !IsUsed())
             {
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Stopping. Not playing a workshop map.\n");
-                PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level End' log.\n");
                 return;
             }
 
@@ -173,8 +157,6 @@ namespace SwitchBlocks
             SetupSequence.Cleanup();
             SetupThreshold.Cleanup();
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished 'On Level End' log.\n");
-            PatchModLoader.WriteDebugLoadLog();
             ModDebug.Reset();
         }
 
@@ -184,13 +166,13 @@ namespace SwitchBlocks
         ///     The block types themselves check if they are used too.
         /// </summary>
         /// <returns><c>true</c> if any block type is used, <c>false</c> otherwise.</returns>
-        private static bool IsUsed() => SetupAuto.IsUsed
-                                        || SetupBasic.IsUsed
-                                        || SetupCountdown.IsUsed
-                                        || SetupGroup.IsUsed
-                                        || SetupJump.IsUsed
-                                        || SetupSand.IsUsed
-                                        || SetupSequence.IsUsed
-                                        || SetupThreshold.IsUsed;
+        public static bool IsUsed() => SetupAuto.IsUsed
+                                       || SetupBasic.IsUsed
+                                       || SetupCountdown.IsUsed
+                                       || SetupGroup.IsUsed
+                                       || SetupJump.IsUsed
+                                       || SetupSand.IsUsed
+                                       || SetupSequence.IsUsed
+                                       || SetupThreshold.IsUsed;
     }
 }

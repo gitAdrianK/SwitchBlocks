@@ -8,7 +8,6 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
-    using Patches;
     using Settings;
     using Util;
 
@@ -46,9 +45,6 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning COUNTDOWN Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             _ = DataCountdown.Instance;
 
             var seedsId = SeedsCountdown.TryDeserialize();
@@ -68,10 +64,8 @@ namespace SwitchBlocks.Setups
                 seedsDuration.SaveToFile();
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicCountdown(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Countdown);
             if (Directory.Exists(xmlPath))
             {
@@ -103,7 +97,6 @@ namespace SwitchBlocks.Setups
                     DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOn), new BehaviourCountdownOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
             var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections, settings.Duration);
@@ -122,8 +115,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
                 debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished COUNTDOWN Setup.\n");
         }
 
         /// <summary>
@@ -136,14 +127,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning COUNTDOWN Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataCountdown.Instance.SaveToFile();
             DataCountdown.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished COUNTDOWN Cleanup.\n");
         }
 
         /// <summary>

@@ -10,7 +10,6 @@
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Patches;
     using Util;
     using Util.Deserialization;
 
@@ -41,9 +40,6 @@
 
             foreach (var file in Directory.EnumerateFiles(xmlPath))
             {
-                var successes = 0;
-                var failures = 0;
-
                 var match = Regex.Match(Path.GetFileName(file));
                 if (!match.Success || !int.TryParse(match.Groups[1].Value, out var screenIndex))
                 {
@@ -56,7 +52,6 @@
                     continue;
                 }
 
-                PatchModLoader.AddDebugMessage($"[INFO - Switch Blocks] Attempting to load from {file}.");
                 using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var doc = XDocument.Load(fs);
@@ -73,14 +68,12 @@
 
                         if (textureElement == null || positionElement == null)
                         {
-                            failures++;
                             continue;
                         }
 
                         var textureFile = Path.Combine(texturePath, textureElement.Value);
                         if (!File.Exists(textureFile + ".xnb"))
                         {
-                            failures++;
                             continue;
                         }
 
@@ -93,7 +86,6 @@
                             !float.TryParse(yElement.Value, NumberStyles.Float, CultureInfo.InvariantCulture,
                                 out var y))
                         {
-                            failures++;
                             continue;
                         }
 
@@ -104,7 +96,6 @@
                             IsForeground = XmlHelper.ParseElementBool(leverElement, "IsForeground"),
                             IsBackground = XmlHelper.ParseElementBool(leverElement, "IsBackground"),
                         };
-                        successes++;
 
                         var entity = new EntityDrawLever(lever, screen, data);
                         if (lever.IsForeground)
@@ -116,17 +107,6 @@
                             midgroundEntities.Add(entity);
                         }
                     }
-                }
-
-                if (successes > 0)
-                {
-                    PatchModLoader.AddDebugMessage(
-                        $"[INFO - Switch Blocks] Successfully created {successes} lever(s).");
-                }
-
-                if (failures > 0)
-                {
-                    PatchModLoader.AddDebugMessage($"[WARNING - Switch Blocks] Failed to create {failures} lever(s).");
                 }
             }
         }

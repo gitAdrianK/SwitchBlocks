@@ -8,7 +8,6 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
-    using Patches;
     using Settings;
     using Util;
 
@@ -61,9 +60,6 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning GROUP Setup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
             var deactivates = DeactivatesGroup.TryDeserialize();
@@ -76,10 +72,8 @@ namespace SwitchBlocks.Setups
                 deactivates.SaveToFile();
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicGroup(settings);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Group);
             if (Directory.Exists(xmlPath))
             {
@@ -93,7 +87,6 @@ namespace SwitchBlocks.Setups
                     DataGroup.Instance.Groups, entityLogic, foregroundEntities, midgroundEntities);
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating behaviours.");
             _ = settings.Duration == 0
                 ? body.RegisterBlockBehaviour(typeof(BlockGroupA),
                     new BehaviourGroupLeaving(settings.PlatformDirections))
@@ -115,8 +108,6 @@ namespace SwitchBlocks.Setups
                 debugInstance.BehaviourGroupReset = behaviourReset;
                 debugInstance.BehaviourGroupDeactivate = behaviourDeactivate;
             }
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished GROUP Setup.\n");
         }
 
         /// <summary>
@@ -129,14 +120,10 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning GROUP Cleanup.");
-
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Saving to file.");
             DataGroup.Instance.SaveToFile();
             DataGroup.Reset();
 
             IsUsed = false;
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished GROUP Cleanup.\n");
         }
 
         /// <summary>

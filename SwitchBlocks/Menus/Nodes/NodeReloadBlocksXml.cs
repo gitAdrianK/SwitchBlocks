@@ -5,7 +5,6 @@
     using BehaviorTree;
     using JumpKing;
     using JumpKing.Player;
-    using Patches;
     using Settings;
     using Setups;
 
@@ -17,13 +16,9 @@
         /// <inheritdoc />
         protected override BTresult MyRun(TickData tickData)
         {
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Reloading settings.");
-
             var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
             if (directoryBin.Name != "bin" || directoryBin.Parent == null)
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryBin}' did not follow Worldsmith structure.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -31,8 +26,6 @@
             var directoryMod = Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder);
             if (!Directory.Exists(directoryMod))
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The path '{directoryMod}' did not exist.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -40,8 +33,6 @@
             var file = Path.Combine(directoryMod, "blocks.xml");
             if (!File.Exists(file))
             {
-                PatchModLoader.AddDebugMessage(
-                    $"[WARNING - Switch Blocks] The file '{file}' did not exist.");
                 Game1.instance.contentManager.audio.menu.MenuFail.Play();
                 return BTresult.Failure;
             }
@@ -60,7 +51,6 @@
             this.ReloadSequenceSettings(root, debugInstance);
             this.ReloadThresholdSettings(root, debugInstance);
 
-            PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Finished reloading settings.");
             Game1.instance.contentManager.audio.menu.Select.Play();
             return BTresult.Success;
         }
