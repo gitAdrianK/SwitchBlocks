@@ -8,8 +8,10 @@ namespace SwitchBlocks.Setups
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using JumpKing.SaveThread;
     using Patches;
     using Settings;
+    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -26,8 +28,9 @@ namespace SwitchBlocks.Setups
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
+        /// <param name="levelId">ID of the level started.</param>
         public static void Setup(SettingsThreshold settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+            List<EntityDraw> midgroundEntities, ulong levelId)
         {
             if (!IsUsed)
             {
@@ -37,10 +40,14 @@ namespace SwitchBlocks.Setups
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Beginning THRESHOLD Setup.");
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Attempting to load from file.");
-            _ = DataThreshold.Instance;
+            var data = DataThreshold.Instance;
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating logic entity.");
             var entityLogic = new EntityLogicThreshold(settings);
+            if (settings.Stat == Stat.Victory)
+            {
+                data.State = CompletedUGCSave.ContainsCompletion(levelId);
+            }
 
             PatchModLoader.AddDebugMessage("[INFO - Switch Blocks] Creating drawables.");
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Threshold);

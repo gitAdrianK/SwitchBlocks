@@ -70,6 +70,8 @@ namespace SwitchBlocks.Entities
                 case Stat.Session:
                     stat = PatchAchievementManager.GetSession();
                     break;
+                case Stat.Victory:
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException("Unknown stat: " + this.Stat);
             }

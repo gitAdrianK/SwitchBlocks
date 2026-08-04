@@ -7,5 +7,6 @@
         Falls,
         Time,
         Session,
+        Victory,
     }
 }

@@ -3,9 +3,11 @@ namespace SwitchBlocks.Behaviours
     using System;
     using Blocks;
     using Data;
+    using JumpKing;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using JumpKing.SaveThread;
     using Patches;
     using Util;
 
@@ -79,6 +81,8 @@ namespace SwitchBlocks.Behaviours
                 case Stat.Session:
                     this.Data.ResetCount = PatchAchievementManager.GetSession();
                     break;
+                case Stat.Victory:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("Unknown stat: " + this.Stat);
             }
@@ -90,6 +94,13 @@ namespace SwitchBlocks.Behaviours
         ///     Updates the stat to check for.
         /// </summary>
         /// <param name="stat">Stat to check for.</param>
-        public void UpdateStat(Stat stat) => this.Stat = stat;
+        public void UpdateStat(Stat stat)
+        {
+            this.Stat = stat;
+            if (this.Stat == Stat.Victory)
+            {
+                this.Data.State = CompletedUGCSave.ContainsCompletion(Game1.instance.contentManager.level.ID);
+            }
+        }
     }
 }

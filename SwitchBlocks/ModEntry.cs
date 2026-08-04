@@ -119,7 +119,7 @@ namespace SwitchBlocks
             SetupJump.Setup(settings.SettingsJump, player, foregroundEntities, midgroundEntities);
             SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance, foregroundEntities, midgroundEntities);
             SetupSequence.Setup(settings.SettingsSequence, body, foregroundEntities, midgroundEntities);
-            SetupThreshold.Setup(settings.SettingsThreshold, body, foregroundEntities, midgroundEntities);
+            SetupThreshold.Setup(settings.SettingsThreshold, body, foregroundEntities, midgroundEntities, levelID);
 
             var entities = entityManager.Entities.ToList();
             foreach (var entity in entities.Where(entity => !(entity is EntityDraw)))
