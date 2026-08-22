@@ -124,7 +124,7 @@
             var sourceCountdown = source?.Element("Countdown");
 
             XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Duration", "3.0", Comment);
-            XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Multiplier", "1", Comment);
+            XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "LeverSideDisable",
                 "Up, Down, Left, Right", Comment);
             XmlHelper.AddElementOrComment(elementCountdown, sourceCountdown, "ForceStateSwitch", addAs: Comment);
@@ -154,7 +154,7 @@
             var elementGroup = XmlHelper.AddElementOrComment(target, source, "Group", addAs: Parent);
             var sourceGroup = source?.Element("Group");
 
-            XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Duration", "0", Comment);
+            XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Duration", "0.0", Comment);
             XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementGroup, sourceGroup, "LeverSideDisable", "Up, Down, Left, Right",
                 Comment);
@@ -201,7 +201,7 @@
             var elementSand = XmlHelper.AddElementOrComment(target, source, "Sand", addAs: Parent);
             var sourceSand = source?.Element("Sand");
 
-            XmlHelper.AddElementOrComment(elementSand, sourceSand, "IsV2", addAs: Comment);
+            XmlHelper.AddElementOrComment(elementSand, sourceSand, "IsV2", addAs: Element);
             XmlHelper.AddElementOrComment(elementSand, sourceSand, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementSand, sourceSand, "LeverSideDisable", "Up, Down, Left, Right",
                 Comment);
