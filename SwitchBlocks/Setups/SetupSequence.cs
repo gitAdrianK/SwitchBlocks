@@ -2,6 +2,7 @@ namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Behaviours;
     using Blocks;
     using Data;
@@ -152,7 +153,7 @@ namespace SwitchBlocks.Setups
             Grouping.AssignIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
             Grouping.AssignIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
 
-            BlockGroup.CreateGroupData(sequenceId, groups, false);
+            BlockGroup.CreateGroupData(seeds.Values.ToArray(), groups, false);
 
             if (resets.Count != 0)
             {
