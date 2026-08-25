@@ -2,7 +2,6 @@ namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using Behaviours;
     using Blocks;
     using Data;
@@ -134,8 +133,8 @@ namespace SwitchBlocks.Setups
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
         /// <param name="deactivates">Positions to add deactivate IDs to deactivate blocks to.</param>
-        public static void AssignGroupIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
-            Dictionary<int, int[]> resets, Dictionary<int, int[]> deactivates)
+        public static void AssignGroupIds(Dictionary<int, BlockGroup> groups, IdSeeds seeds,
+            IdsSeeds resets, IdsSeeds deactivates)
         {
             var groupId = 1;
 
@@ -154,7 +153,7 @@ namespace SwitchBlocks.Setups
             Grouping.AssignIdsConsecutively(BlocksGroupC, seeds, ref groupId);
             Grouping.AssignIdsConsecutively(BlocksGroupD, seeds, ref groupId);
 
-            BlockGroup.CreateGroupData(seeds.Values.ToArray(), groups, true);
+            BlockGroup.CreateGroupData(seeds.Ids, groups, true);
 
             if (resets.Count != 0)
             {

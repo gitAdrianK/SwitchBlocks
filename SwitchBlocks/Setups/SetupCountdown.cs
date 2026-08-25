@@ -138,7 +138,7 @@ namespace SwitchBlocks.Setups
         ///     Assigns group IDs to all single use blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByGroups(Dictionary<int, int> seeds)
+        public static void AssignByGroups(IdSeeds seeds)
         {
             var groupId = 1;
 
@@ -154,7 +154,7 @@ namespace SwitchBlocks.Setups
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(Dictionary<int, int> seeds)
+        public static void AssignByDuration(DurationSeeds seeds)
         {
             if (seeds.Count != 0)
             {

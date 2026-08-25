@@ -7,6 +7,7 @@ namespace SwitchBlocks.Data
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -17,13 +18,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsGroup() => this.Seeds = new Dictionary<int, int>();
+        private SeedsGroup() => this.Seeds = new IdSeeds();
 
         /// <summary>
         ///     Groups belonging to the respective id.
         ///     A group has the data related to a platform.
         /// </summary>
-        public Dictionary<int, int> Seeds { get; private set; }
+        public IdSeeds Seeds { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -74,11 +75,11 @@ namespace SwitchBlocks.Data
 
             return new SeedsGroup
             {
-                Seeds = xElements.ToDictionary(
+                Seeds = new IdSeeds(xElements.ToDictionary(
                     key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                      throw new InvalidOperationException()),
                     value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
-                                       throw new InvalidOperationException())),
+                                       throw new InvalidOperationException()))),
             };
         }
 
@@ -89,9 +90,9 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static SeedsGroup GetLegacySeeds(IEnumerable<XElement> xels) => new SeedsGroup
         {
-            Seeds = xels.ToDictionary(
+            Seeds = new IdSeeds(xels.ToDictionary(
                 key => int.Parse(key.Element("key")?.Element("int")?.Value ?? string.Empty),
-                value => int.Parse(value.Element("value")?.Element("int")?.Value ?? string.Empty)),
+                value => int.Parse(value.Element("value")?.Element("int")?.Value ?? string.Empty))),
         };
 
         /// <summary>

@@ -2,7 +2,6 @@ namespace SwitchBlocks.Setups
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using Behaviours;
     using Blocks;
     using Data;
@@ -133,8 +132,8 @@ namespace SwitchBlocks.Setups
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
-            Dictionary<int, int[]> resets)
+        public static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, IdSeeds seeds,
+            IdsSeeds resets)
         {
             var sequenceId = 1;
 
@@ -153,7 +152,7 @@ namespace SwitchBlocks.Setups
             Grouping.AssignIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
             Grouping.AssignIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
 
-            BlockGroup.CreateGroupData(seeds.Values.ToArray(), groups, false);
+            BlockGroup.CreateGroupData(seeds.Ids, groups, false);
 
             if (resets.Count != 0)
             {

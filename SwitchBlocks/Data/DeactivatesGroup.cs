@@ -2,10 +2,10 @@
 
 namespace SwitchBlocks.Data
 {
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -16,13 +16,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private DeactivatesGroup() => this.Deactivates = new Dictionary<int, int[]>();
+        private DeactivatesGroup() => this.Deactivates = new IdsSeeds();
 
         /// <summary>
         ///     Mapping of the position and the IDs a deactivate block is supposed to be able to deactivate,
         ///     should a single 0 be the only id this block can deactivate, deactivate all.
         /// </summary>
-        public Dictionary<int, int[]> Deactivates { get; private set; }
+        public IdsSeeds Deactivates { get; private set; }
 
         /// <summary>
         ///     Tries to load deactivates from file. Default otherwise.
@@ -54,11 +54,11 @@ namespace SwitchBlocks.Data
                 {
                     return new DeactivatesGroup
                     {
-                        Deactivates = xel.Elements(ModConstants.SaveDeactivate).ToDictionary(
+                        Deactivates = new IdsSeeds(xel.Elements(ModConstants.SaveDeactivate).ToDictionary(
                             key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result)
                                 ? result
                                 : 0,
-                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray()),
+                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())),
                     };
                 }
             }

@@ -282,8 +282,11 @@
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Factories\FactoryThreshold.cs"/>
+    <Compile Include="Grouping\DurationSeeds.cs"/>
     <Compile Include="Grouping\Grouping.cs"/>
+    <Compile Include="Grouping\IdsSeeds.cs"/>
     <Compile Include="Grouping\IGroupable.cs"/>
+    <Compile Include="Grouping\IdSeeds.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateModFolders.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateTemplates.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>

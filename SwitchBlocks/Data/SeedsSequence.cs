@@ -5,6 +5,7 @@ namespace SwitchBlocks.Data
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -15,13 +16,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsSequence() => this.Seeds = new Dictionary<int, int>();
+        private SeedsSequence() => this.Seeds = new IdSeeds();
 
         /// <summary>
         ///     Groups belonging to the respective id.
         ///     A group has the data related to a platform.
         /// </summary>
-        public Dictionary<int, int> Seeds { get; private set; }
+        public IdSeeds Seeds { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -64,10 +65,11 @@ namespace SwitchBlocks.Data
 
         private static SeedsSequence GetNewDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
-            Seeds = xels.ToDictionary(
+            Seeds = new IdSeeds(xels.ToDictionary(
                 key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                  throw new InvalidOperationException()),
-                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ?? throw new InvalidOperationException())),
+                value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
+                                   throw new InvalidOperationException()))),
         };
 
         /// <summary>
@@ -77,10 +79,10 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static SeedsSequence GetLegacyDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
-            Seeds = xels.ToDictionary(
+            Seeds = new IdSeeds(xels.ToDictionary(
                 key => int.Parse(key.Element("key")?.Element("int")?.Value ?? throw new InvalidOperationException()),
                 value => int.Parse(value.Element("value")?.Element("int")?.Value ??
-                                   throw new InvalidOperationException())),
+                                   throw new InvalidOperationException()))),
         };
 
         /// <summary>

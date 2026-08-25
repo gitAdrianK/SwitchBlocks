@@ -50,7 +50,8 @@ namespace SwitchBlocks.Data
         /// <param name="groupIds">The group IDs that data is to be created for.</param>
         /// <param name="groups">The dictionary containing groups that is to be added to.</param>
         /// <param name="startState">The start state of the added platforms.</param>
-        public static void CreateGroupData(int[] groupIds, Dictionary<int, BlockGroup> groups, bool startState)
+        public static void CreateGroupData(IEnumerable<int> groupIds, Dictionary<int, BlockGroup> groups,
+            bool startState)
         {
             foreach (var groupId in groupIds)
             {

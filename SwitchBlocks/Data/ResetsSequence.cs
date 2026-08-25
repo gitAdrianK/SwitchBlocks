@@ -2,10 +2,10 @@
 
 namespace SwitchBlocks.Data
 {
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -16,13 +16,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private ResetsSequence() => this.Resets = new Dictionary<int, int[]>();
+        private ResetsSequence() => this.Resets = new IdsSeeds();
 
         /// <summary>
         ///     Mapping of the position and the IDs a reset block is supposed to be able to reset,
         ///     should a single 0 be the only id this block can reset, reset all.
         /// </summary>
-        public Dictionary<int, int[]> Resets { get; private set; }
+        public IdsSeeds Resets { get; private set; }
 
         /// <summary>
         ///     Tries to load resets from file. Default otherwise.
@@ -48,11 +48,11 @@ namespace SwitchBlocks.Data
                 {
                     return new ResetsSequence
                     {
-                        Resets = xel.Elements(ModConstants.SaveReset).ToDictionary(
+                        Resets = new IdsSeeds(xel.Elements(ModConstants.SaveReset).ToDictionary(
                             key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result)
                                 ? result
                                 : 0,
-                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray()),
+                            value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())),
                     };
                 }
             }

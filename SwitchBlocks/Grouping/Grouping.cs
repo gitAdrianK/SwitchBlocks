@@ -110,7 +110,7 @@
         /// <param name="groupId">ID set to be larger than every seed ID.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
         public static void AssignIdsFromSeed(
-            Dictionary<int, int> seeds,
+            IdSeeds seeds,
             ref int groupId,
             params Dictionary<int, IGroupId>[] allBlocks)
         {
@@ -147,7 +147,7 @@
         /// <param name="groupId">ID assigned to the groups, counted up for every group created.</param>
         public static void AssignIdsConsecutively(
             Dictionary<int, IGroupId> blocks,
-            Dictionary<int, int> seeds,
+            IdSeeds seeds,
             ref int groupId)
         {
             foreach (var position in blocks.Select(kv => kv.Key))

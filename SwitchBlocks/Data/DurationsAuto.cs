@@ -1,11 +1,11 @@
 ﻿namespace SwitchBlocks.Data
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -16,12 +16,12 @@
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private DurationsAuto() => this.Seeds = new Dictionary<int, int>();
+        private DurationsAuto() => this.Seeds = new DurationSeeds();
 
         /// <summary>
         ///     Mapping of the blocks position and id.
         /// </summary>
-        public Dictionary<int, int> Seeds { get; private set; }
+        public DurationSeeds Seeds { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -50,7 +50,7 @@
 
                 return new DurationsAuto
                 {
-                    Seeds = xels.ToDictionary(
+                    Seeds = new DurationSeeds(xels.ToDictionary(
                         key => int.Parse(
                             key.Element(ModConstants.SavePosition)?.Value
                             ?? throw new InvalidOperationException()),
@@ -59,7 +59,7 @@
                                  value.Element(ModConstants.SaveDuration)?.Value
                                  ?? throw new InvalidOperationException(),
                                  CultureInfo.InvariantCulture)
-                             / ModConstants.DeltaTime) + 0.5f)),
+                             / ModConstants.DeltaTime) + 0.5f))),
                 };
             }
         }

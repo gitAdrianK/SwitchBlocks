@@ -6,6 +6,7 @@ namespace SwitchBlocks.Data
     using System.IO;
     using System.Linq;
     using System.Xml.Linq;
+    using Grouping;
     using JumpKing;
 
     /// <summary>
@@ -16,13 +17,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private ResetsGroup() => this.Resets = new Dictionary<int, int[]>();
+        private ResetsGroup() => this.Resets = new IdsSeeds();
 
         /// <summary>
         ///     Mapping of the position and the IDs a reset block is supposed to be able to reset,
         ///     should a single 0 be the only id this block can reset, reset all.
         /// </summary>
-        public Dictionary<int, int[]> Resets { get; private set; }
+        public IdsSeeds Resets { get; private set; }
 
         /// <summary>
         ///     Tries to load resets from file. Default otherwise.
@@ -67,9 +68,9 @@ namespace SwitchBlocks.Data
 
         private static ResetsGroup GetNewDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
-            Resets = xels.ToDictionary(
+            Resets = new IdsSeeds(xels.ToDictionary(
                 key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result) ? result : 0,
-                value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray()),
+                value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())),
         };
 
         /// <summary>
@@ -79,11 +80,11 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static ResetsGroup GetLegacyDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
-            Resets = xels.ToDictionary(
+            Resets = new IdsSeeds(xels.ToDictionary(
                 key => int.TryParse(key.Element("key")?.Element("int")?.Value, out var result) ? result : 0,
                 value => value.Element("value")?.Element("ArrayOfInt")?.Elements("int")
                     .Select(id => int.Parse(id.Value))
-                    .ToArray()),
+                    .ToArray())),
         };
 
         /// <summary>
