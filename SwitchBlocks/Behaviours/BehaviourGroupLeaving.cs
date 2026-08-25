@@ -117,12 +117,12 @@ namespace SwitchBlocks.Behaviours
                 advCollisionInfo.GetCollidedBlocks<BlockGroupSnowC>(),
                 advCollisionInfo.GetCollidedBlocks<BlockGroupSnowD>(),
             }.SelectMany(block => block);
-            var blocks = collided.Cast<IBlockGroupId>();
+            var blocks = collided.Cast<ModBlockId>();
 
             var currentlyTouched = new HashSet<int>();
             foreach (var block in blocks)
             {
-                var groupId = block.GroupId;
+                var groupId = block.Value;
                 if (!this.Groups.TryGetValue(groupId, out var group))
                 {
                     continue;
@@ -131,7 +131,7 @@ namespace SwitchBlocks.Behaviours
                 if (!group.State
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                         this.PlatformDirections,
-                        (IBlock)block))
+                        block))
                 {
                     continue;
                 }

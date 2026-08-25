@@ -16,12 +16,12 @@
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private DurationsAuto() => this.Seeds = new Dictionary<int, float>();
+        private DurationsAuto() => this.Seeds = new Dictionary<int, int>();
 
         /// <summary>
         ///     Mapping of the blocks position and id.
         /// </summary>
-        public Dictionary<int, float> Seeds { get; private set; }
+        public Dictionary<int, int> Seeds { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -54,10 +54,12 @@
                         key => int.Parse(
                             key.Element(ModConstants.SavePosition)?.Value
                             ?? throw new InvalidOperationException()),
-                        value => float.Parse(
-                            value.Element(ModConstants.SaveDuration)?.Value
-                            ?? throw new InvalidOperationException(),
-                            CultureInfo.InvariantCulture)),
+                        value => (int)(
+                            (float.Parse(
+                                 value.Element(ModConstants.SaveDuration)?.Value
+                                 ?? throw new InvalidOperationException(),
+                                 CultureInfo.InvariantCulture)
+                             / ModConstants.DeltaTime) + 0.5f)),
                 };
             }
         }
@@ -88,8 +90,11 @@
                             ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
-                                    new XElement(ModConstants.SaveDuration, kv.Value)))
+                                    new XElement(
+                                        ModConstants.SaveDuration,
+                                        kv.Value * ModConstants.DeltaTime)))
                             : null)));
+
 
             using (var fs = new FileStream(
                        Path.Combine(

@@ -9,6 +9,7 @@
     using System.Xml.Linq;
     using Data;
     using Entities;
+    using Grouping;
     using JumpKing;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -407,10 +408,10 @@
         /// <param name="root">Root <see cref="XElement" /> specified link may be taken from.</param>
         /// <param name="screen">Screen this entity is to be created on.</param>
         /// <param name="position">Position this entity is to be created at.</param>
-        /// <param name="blockGroups">Collection of <see cref="IBlockGroupId" />.</param>
+        /// <param name="blockGroups">Collection of groupable by id blocks.</param>
         /// <returns>ID of the block at the position. 0 if no block exists at that the position.</returns>
         public static int GetGroupId(XElement root, int screen, Vector2 position,
-            params Dictionary<int, IBlockGroupId>[] blockGroups)
+            params Dictionary<int, IGroupId>[] blockGroups)
         {
             var xel = root.Element("Link");
             int link;
@@ -429,7 +430,7 @@
             {
                 if (blockGroup.TryGetValue(link, out var value))
                 {
-                    return value.GroupId;
+                    return value.Value;
                 }
             }
 

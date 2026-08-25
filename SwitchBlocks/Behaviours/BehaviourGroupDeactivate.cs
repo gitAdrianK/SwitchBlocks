@@ -108,7 +108,7 @@ namespace SwitchBlocks.Behaviours
             }
 
             // If the only deactivate id is 0, deactivate all groups.
-            var deactivateIds = ((IMultipleGroupIds)block).Ids;
+            var deactivateIds = ((ModBlockIds)block).Value;
             if (deactivateIds.Length == 1 && deactivateIds[0] == 0)
             {
                 foreach (var keyValuePair in

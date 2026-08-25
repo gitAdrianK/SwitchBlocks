@@ -1,12 +1,11 @@
 namespace SwitchBlocks.Blocks
 {
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The group reset block.
     /// </summary>
-    public class BlockGroupReset : ModBlock, IMultipleGroupIds
+    public class BlockGroupReset : ModBlockIds
     {
         /// <inheritdoc />
         public BlockGroupReset(Rectangle collider) : base(collider) { }
@@ -16,8 +15,5 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;
-
-        /// <inheritdoc />
-        public int[] Ids { get; set; } = { };
     }
 }

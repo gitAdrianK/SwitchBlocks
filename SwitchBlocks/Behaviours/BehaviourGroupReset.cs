@@ -108,7 +108,7 @@ namespace SwitchBlocks.Behaviours
             }
 
             // If the only reset id is 0, reset all groups.
-            var resetIds = ((IMultipleGroupIds)block).Ids;
+            var resetIds = ((ModBlockIds)block).Value;
             if (resetIds.Length == 1 && resetIds[0] == 0)
             {
                 foreach (var groupId in this.Active)

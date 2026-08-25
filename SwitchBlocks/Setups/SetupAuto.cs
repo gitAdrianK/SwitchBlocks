@@ -7,9 +7,9 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
+    using Grouping;
     using JumpKing.Player;
     using Settings;
-    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -21,8 +21,8 @@ namespace SwitchBlocks.Setups
 
         // We trust that map-makers never place different change blocks next to each other.
         /// <summary>Change duration blocks.</summary>
-        public static Dictionary<int, IBlockDuration> ChangeDuration { get; } =
-            new Dictionary<int, IBlockDuration>();
+        public static Dictionary<int, IDuration> ChangeDuration { get; } =
+            new Dictionary<int, IDuration>();
 
         /// <summary>Screens that contain a wind enable block.</summary>
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
@@ -125,16 +125,14 @@ namespace SwitchBlocks.Setups
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(Dictionary<int, float> seeds)
+        public static void AssignByDuration(Dictionary<int, int> seeds)
         {
             if (seeds.Count != 0)
             {
-                BlockDuration.AssignDurationsFromSeed(
-                    seeds,
-                    ChangeDuration);
+                Grouping.AssignFromSeed(seeds, ChangeDuration);
             }
 
-            BlockDuration.AssignOtherDurations(ChangeDuration, seeds);
+            Grouping.AssignDefaultToUnassigned(ChangeDuration, seeds);
         }
     }
 }

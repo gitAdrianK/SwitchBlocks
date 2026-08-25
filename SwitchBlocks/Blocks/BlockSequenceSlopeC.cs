@@ -3,12 +3,11 @@ namespace SwitchBlocks.Blocks
     using Data;
     using JumpKing.Level;
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The sequence slope C block.
     /// </summary>
-    public class BlockSequenceSlopeC : ModSlope, IBlockGroupId
+    public class BlockSequenceSlopeC : ModSlopeId
     {
         /// <inheritdoc />
         public BlockSequenceSlopeC(Rectangle collider, SlopeType slopeType) : base(collider, slopeType) { }
@@ -18,7 +17,7 @@ namespace SwitchBlocks.Blocks
         {
             get
             {
-                if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group)
+                if (DataSequence.Instance.Groups.TryGetValue(this.Value, out var group)
                     && group.State)
                 {
                     return ModBlocks.SequenceSlopeC;
@@ -30,9 +29,6 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         public override bool CanBlockPlayer =>
-            DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group) && group.State;
-
-        /// <inheritdoc />
-        public int GroupId { get; set; } = 0;
+            DataSequence.Instance.Groups.TryGetValue(this.Value, out var group) && group.State;
     }
 }

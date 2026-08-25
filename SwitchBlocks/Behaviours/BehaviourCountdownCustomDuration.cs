@@ -84,7 +84,7 @@
 
             var currentTick = PatchAchievementManager.GetTick();
             this.Data.ActivatedTick = currentTick;
-            this.Data.DeactivatedTick = currentTick + ((IBlockDuration)block).Duration;
+            this.Data.DeactivatedTick = currentTick + ((ModBlockDuration)block).Value;
 
             if (this.Data.HasSwitched)
             {

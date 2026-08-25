@@ -1,12 +1,11 @@
 namespace SwitchBlocks.Blocks
 {
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The countdown solid single use lever block.
     /// </summary>
-    public class BlockCountdownSingleUseSolid : ModBlock, IBlockGroupId
+    public class BlockCountdownSingleUseSolid : ModBlockId
     {
         /// <inheritdoc />
         public BlockCountdownSingleUseSolid(Rectangle collider) : base(collider) { }
@@ -16,8 +15,5 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => true;
-
-        /// <inheritdoc />
-        public int GroupId { get; set; } = 0;
     }
 }

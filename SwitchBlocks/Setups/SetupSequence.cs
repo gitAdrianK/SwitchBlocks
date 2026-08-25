@@ -7,10 +7,10 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
+    using Grouping;
     using JumpKing.Player;
     using JumpKing.SaveThread;
     using Settings;
-    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -21,19 +21,19 @@ namespace SwitchBlocks.Setups
         public static bool IsUsed { get; set; }
 
         /// <summary>Sequence A blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceA { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksSequenceA { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Sequence B blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceB { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksSequenceB { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Sequence C blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceC { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksSequenceC { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Sequence D blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksSequenceD { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksSequenceD { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Group Reset blocks.</summary>
-        public static Dictionary<int, IMultipleGroupIds> Resets { get; } = new Dictionary<int, IMultipleGroupIds>();
+        public static Dictionary<int, IGroupIds> Resets { get; } = new Dictionary<int, IGroupIds>();
 
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
@@ -139,8 +139,7 @@ namespace SwitchBlocks.Setups
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
-                    seeds,
+                Grouping.AssignIdsFromSeed(seeds,
                     ref sequenceId,
                     BlocksSequenceA,
                     BlocksSequenceB,
@@ -148,19 +147,19 @@ namespace SwitchBlocks.Setups
                     BlocksSequenceD);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
+            Grouping.AssignIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
+            Grouping.AssignIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
+            Grouping.AssignIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
+            Grouping.AssignIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
 
             BlockGroup.CreateGroupData(sequenceId, groups, false);
 
             if (resets.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
+                Grouping.AssignFromSeed(resets, Resets);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            Grouping.AssignDefaultToUnassigned(Resets, resets);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
+    using Grouping;
     using JumpKing.Player;
     using Settings;
-    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -22,24 +22,24 @@ namespace SwitchBlocks.Setups
         // The Dictionaries are static because the setup step is after the block factories have run.
         // So we can't contain them to the setup step.
 
+        // It would be cool if these could be made more specific ModBlockDuration dictionaries, but we also have ModSlopeDuration
         /// <summary>Group A blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksGroupA { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksGroupA { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Group B blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksGroupB { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksGroupB { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Group C blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksGroupC { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksGroupC { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Group D blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> BlocksGroupD { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> BlocksGroupD { get; } = new Dictionary<int, IGroupId>();
 
         /// <summary>Group Reset blocks.</summary>
-        public static Dictionary<int, IMultipleGroupIds> Resets { get; } = new Dictionary<int, IMultipleGroupIds>();
+        public static Dictionary<int, IGroupIds> Resets { get; } = new Dictionary<int, IGroupIds>();
 
         /// <summary>Group Deactivate blocks.</summary>
-        public static Dictionary<int, IMultipleGroupIds> Deactivates { get; } =
-            new Dictionary<int, IMultipleGroupIds>();
+        public static Dictionary<int, IGroupIds> Deactivates { get; } = new Dictionary<int, IGroupIds>();
 
         // The Groups cannot be reset on start or end as the factory only runs when a new level is loaded
         // clearing would result in the dict being empty on same level reload.
@@ -140,8 +140,7 @@ namespace SwitchBlocks.Setups
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
-                    seeds,
+                Grouping.AssignIdsFromSeed(seeds,
                     ref groupId,
                     BlocksGroupA,
                     BlocksGroupB,
@@ -149,26 +148,26 @@ namespace SwitchBlocks.Setups
                     BlocksGroupD);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupA, seeds, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupB, seeds, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupC, seeds, ref groupId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksGroupD, seeds, ref groupId);
+            Grouping.AssignIdsConsecutively(BlocksGroupA, seeds, ref groupId);
+            Grouping.AssignIdsConsecutively(BlocksGroupB, seeds, ref groupId);
+            Grouping.AssignIdsConsecutively(BlocksGroupC, seeds, ref groupId);
+            Grouping.AssignIdsConsecutively(BlocksGroupD, seeds, ref groupId);
 
             BlockGroup.CreateGroupData(groupId, groups, true);
 
             if (resets.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
+                Grouping.AssignFromSeed(resets, Resets);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            Grouping.AssignDefaultToUnassigned(Resets, resets);
 
             if (deactivates.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Deactivates, deactivates);
+                Grouping.AssignFromSeed(deactivates, Deactivates);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Deactivates, deactivates);
+            Grouping.AssignDefaultToUnassigned(Deactivates, deactivates);
         }
     }
 }

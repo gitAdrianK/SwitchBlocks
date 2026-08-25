@@ -2,12 +2,11 @@ namespace SwitchBlocks.Blocks
 {
     using Data;
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The sequence snow C block.
     /// </summary>
-    public class BlockSequenceSnowC : ModBlock, IBlockGroupId
+    public class BlockSequenceSnowC : ModBlockId
     {
         /// <inheritdoc />
         public BlockSequenceSnowC(Rectangle collider) : base(collider) { }
@@ -17,7 +16,7 @@ namespace SwitchBlocks.Blocks
         {
             get
             {
-                if (DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group)
+                if (DataSequence.Instance.Groups.TryGetValue(this.Value, out var group)
                     && group.State)
                 {
                     return ModBlocks.SequenceSnowC;
@@ -29,9 +28,6 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer =>
-            DataSequence.Instance.Groups.TryGetValue(this.GroupId, out var group) && group.State;
-
-        /// <inheritdoc />
-        public int GroupId { get; set; } = 0;
+            DataSequence.Instance.Groups.TryGetValue(this.Value, out var group) && group.State;
     }
 }

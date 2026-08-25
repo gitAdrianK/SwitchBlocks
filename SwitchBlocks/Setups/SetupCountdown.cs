@@ -7,9 +7,9 @@ namespace SwitchBlocks.Setups
     using Data;
     using Entities;
     using Factories.Drawables;
+    using Grouping;
     using JumpKing.Player;
     using Settings;
-    using Util;
 
     /// <summary>
     ///     Setup and cleanup as well as setup related fields.
@@ -23,11 +23,12 @@ namespace SwitchBlocks.Setups
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
 
         /// <summary>Countdown single use lever blocks.</summary>
-        public static Dictionary<int, IBlockGroupId> SingleUseLevers { get; } = new Dictionary<int, IBlockGroupId>();
+        public static Dictionary<int, IGroupId> SingleUseLevers { get; } =
+            new Dictionary<int, IGroupId>();
 
         /// <summary>Countdown custom duration lever blocks.</summary>
-        public static Dictionary<int, IBlockDuration> CustomDurationLevers { get; } =
-            new Dictionary<int, IBlockDuration>();
+        public static Dictionary<int, IDuration> CustomDurationLevers { get; } =
+            new Dictionary<int, IDuration>();
 
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
@@ -143,29 +144,24 @@ namespace SwitchBlocks.Setups
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
-                    seeds,
-                    ref groupId,
-                    SingleUseLevers);
+                Grouping.AssignIdsFromSeed(seeds, ref groupId, SingleUseLevers);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
         }
 
         /// <summary>
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(Dictionary<int, float> seeds)
+        public static void AssignByDuration(Dictionary<int, int> seeds)
         {
             if (seeds.Count != 0)
             {
-                BlockDuration.AssignDurationsFromSeed(
-                    seeds,
-                    CustomDurationLevers);
+                Grouping.AssignFromSeed(seeds, CustomDurationLevers);
             }
 
-            BlockDuration.AssignOtherDurations(CustomDurationLevers, seeds);
+            Grouping.AssignDefaultToUnassigned(CustomDurationLevers, seeds);
         }
     }
 }

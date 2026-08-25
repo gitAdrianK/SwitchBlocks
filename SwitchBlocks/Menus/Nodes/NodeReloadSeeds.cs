@@ -2,10 +2,10 @@
 {
     using System.IO;
     using BehaviorTree;
+    using Blocks;
     using Data;
     using JumpKing;
     using Setups;
-    using Util;
 
     /// <summary>
     ///     A <see cref="IBTnode" /> responsible for reloading various seeds/resets/durations files.
@@ -47,7 +47,7 @@
 
             foreach (var block in SetupAuto.ChangeDuration.Values)
             {
-                block.Duration = BlockDuration.NotAssigned;
+                block.Value = ModBlockDuration.NotAssigned;
             }
 
             var seedsDuration = DurationsAuto.TryDeserialize(Path.Combine(directorySaves,
@@ -66,12 +66,12 @@
 
             foreach (var block in SetupCountdown.SingleUseLevers.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupCountdown.CustomDurationLevers.Values)
             {
-                block.Duration = BlockDuration.NotAssigned;
+                block.Value = ModBlockDuration.NotAssigned;
             }
 
             var seedsId = SeedsCountdown.TryDeserialize(Path.Combine(directorySaves,
@@ -95,32 +95,32 @@
 
             foreach (var block in SetupGroup.BlocksGroupA.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupGroup.BlocksGroupB.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupGroup.BlocksGroupC.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupGroup.BlocksGroupD.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupGroup.Deactivates.Values)
             {
-                block.Ids = new int[0];
+                block.Value = new int[0];
             }
 
             foreach (var block in SetupGroup.Resets.Values)
             {
-                block.Ids = new int[0];
+                block.Value = new int[0];
             }
 
             var instance = DataGroup.Instance;
@@ -148,27 +148,27 @@
 
             foreach (var block in SetupSequence.BlocksSequenceA.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupSequence.BlocksSequenceB.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupSequence.BlocksSequenceC.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupSequence.BlocksSequenceD.Values)
             {
-                block.GroupId = BlockGroupId.NotAssigned;
+                block.Value = ModBlockId.NotAssigned;
             }
 
             foreach (var block in SetupSequence.Resets.Values)
             {
-                block.Ids = new int[0];
+                block.Value = new int[0];
             }
 
             var instance = DataSequence.Instance;

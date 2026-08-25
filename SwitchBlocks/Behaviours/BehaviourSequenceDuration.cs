@@ -103,17 +103,17 @@ namespace SwitchBlocks.Behaviours
                 advCollisionInfo.GetCollidedBlocks<BlockSequenceSnowC>(),
                 advCollisionInfo.GetCollidedBlocks<BlockSequenceSnowD>(),
             }.SelectMany(block => block);
-            var blocks = collided.Cast<IBlockGroupId>();
+            var blocks = collided.Cast<ModBlockId>();
 
 
             foreach (var block in blocks)
             {
-                var groupId = block.GroupId;
+                var groupId = block.Value;
                 if (!this.Groups.TryGetValue(groupId, out var group)
                     || !group.State
                     || !Directions.ResolveCollisionDirection(behaviourContext,
                         this.PlatformDirections,
-                        (IBlock)block))
+                        block))
                 {
                     continue;
                 }

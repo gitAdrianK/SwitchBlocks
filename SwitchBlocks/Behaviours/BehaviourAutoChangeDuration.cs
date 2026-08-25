@@ -8,7 +8,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
-    using Util;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockAutoChangeDuration" />.
@@ -78,8 +77,8 @@ namespace SwitchBlocks.Behaviours
 
             if (change)
             {
-                var block = (IBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDuration>().First();
-                var duration = block.Duration;
+                var block = (ModBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDuration>().First();
+                var duration = block.Value;
                 if (duration == this.EntityLogic.DurationOn && duration == this.EntityLogic.DurationOff)
                 {
                     return true;
@@ -89,8 +88,8 @@ namespace SwitchBlocks.Behaviours
             }
             else if (changeOn)
             {
-                var block = (IBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDurationOn>().First();
-                var duration = block.Duration;
+                var block = (ModBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDurationOn>().First();
+                var duration = block.Value;
                 if (duration == this.EntityLogic.DurationOn)
                 {
                     return true;
@@ -100,8 +99,8 @@ namespace SwitchBlocks.Behaviours
             }
             else
             {
-                var block = (IBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDurationOff>().First();
-                var duration = block.Duration;
+                var block = (ModBlockDuration)advCollisionInfo.GetCollidedBlocks<BlockAutoChangeDurationOff>().First();
+                var duration = block.Value;
                 if (duration == this.EntityLogic.DurationOff)
                 {
                     return true;

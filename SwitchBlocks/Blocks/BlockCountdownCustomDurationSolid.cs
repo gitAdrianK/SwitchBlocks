@@ -1,12 +1,11 @@
 ﻿namespace SwitchBlocks.Blocks
 {
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The countdown custom duration lever block.
     /// </summary>
-    public class BlockCountdownCustomDurationSolid : ModBlock, IBlockDuration
+    public class BlockCountdownCustomDurationSolid : ModBlockDuration
     {
         /// <inheritdoc />
         public BlockCountdownCustomDurationSolid(Rectangle collider) : base(collider) { }
@@ -16,8 +15,5 @@
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => true;
-
-        /// <inheritdoc />
-        public int Duration { get; set; } = 0;
     }
 }

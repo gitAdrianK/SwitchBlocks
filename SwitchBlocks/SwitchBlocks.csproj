@@ -241,7 +241,13 @@
     <Compile Include="Blocks\Dummy\BlockPre.cs"/>
     <Compile Include="Blocks\Dummy\BlockWind.cs"/>
     <Compile Include="Blocks\ModBlock.cs"/>
+    <Compile Include="Blocks\ModBlockDuration.cs"/>
+    <Compile Include="Blocks\ModBlockId.cs"/>
+    <Compile Include="Blocks\ModBlockIds.cs"/>
     <Compile Include="Blocks\ModSlope.cs"/>
+    <Compile Include="Blocks\ModSlopeDuration.cs"/>
+    <Compile Include="Blocks\ModSlopeId.cs"/>
+    <Compile Include="Blocks\ModSlopeIds.cs"/>
     <Compile Include="Data\DataThreshold.cs"/>
     <Compile Include="Data\DeactivatesGroup.cs"/>
     <Compile Include="Data\DurationsAuto.cs"/>
@@ -276,6 +282,8 @@
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Factories\FactoryThreshold.cs"/>
+    <Compile Include="Grouping\Grouping.cs"/>
+    <Compile Include="Grouping\IGroupable.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateModFolders.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateTemplates.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>
@@ -292,7 +300,6 @@
     <Compile Include="Patches\PatchWindManager.cs"/>
     <Compile Include="Settings\SettingsThreshold.cs"/>
     <Compile Include="Setups\SetupThreshold.cs"/>
-    <Compile Include="Util\BlockGroupId.cs"/>
     <Compile Include="Util\Deserialization\Lever.cs"/>
     <Compile Include="Util\Deserialization\Platform.cs"/>
     <Compile Include="Util\Deserialization\PlatformScrolling.cs"/>
@@ -329,7 +336,6 @@
     <Compile Include="Util\Animation.cs"/>
     <Compile Include="Data\BlockGroup.cs"/>
     <Compile Include="Util\Directions.cs"/>
-    <Compile Include="Util\Duration.cs"/>
     <Compile Include="Util\Intersecting.cs"/>
     <Compile Include="Factories\FactoryAuto.cs"/>
     <Compile Include="Factories\FactoryBasic.cs"/>
@@ -339,7 +345,6 @@
     <Compile Include="ModBlocks.cs"/>
     <Compile Include="ModEntry.cs"/>
     <Compile Include="Util\IConveyor.cs"/>
-    <Compile Include="Util\MultipleGroupIds.cs"/>
     <Compile Include="Util\Slopes.cs"/>
     <Compile Include="Util\StartState.cs"/>
     <Compile Include="Util\Stat.cs"/>

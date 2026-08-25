@@ -8,7 +8,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Util;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockGroupSnowA" />.
@@ -67,11 +66,11 @@ namespace SwitchBlocks.Behaviours
                 advCollisionInfo.GetCollidedBlocks<BlockGroupSnowC>(),
                 advCollisionInfo.GetCollidedBlocks<BlockGroupSnowD>(),
             }.SelectMany(block => block);
-            var blocks = collided.Cast<IBlockGroupId>();
+            var blocks = collided.Cast<ModBlockId>();
 
             foreach (var block in blocks)
             {
-                if (!this.Groups.TryGetValue(block.GroupId, out var group) || !group.State)
+                if (!this.Groups.TryGetValue(block.Value, out var group) || !group.State)
                 {
                     continue;
                 }

@@ -1,12 +1,11 @@
 namespace SwitchBlocks.Blocks
 {
     using Microsoft.Xna.Framework;
-    using Util;
 
     /// <summary>
     ///     The auto change duration block.
     /// </summary>
-    public class BlockAutoChangeDuration : ModBlock, IBlockDuration
+    public class BlockAutoChangeDuration : ModBlockDuration
     {
         /// <inheritdoc />
         public BlockAutoChangeDuration(Rectangle collider) : base(collider) { }
@@ -16,8 +15,5 @@ namespace SwitchBlocks.Blocks
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => false;
-
-        /// <inheritdoc />
-        public int Duration { get; set; }
     }
 }

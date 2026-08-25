@@ -82,14 +82,14 @@ namespace SwitchBlocks.Behaviours
                 block = advCollisionInfo.GetCollidedBlocks<BlockCountdownSingleUse>().First();
             }
 
-            var blockGroupId = (IBlockGroupId)block;
-            if (this.Data.Touched.Contains(blockGroupId.GroupId))
+            var blockGroupId = (ModBlockId)block;
+            if (this.Data.Touched.Contains(blockGroupId.Value))
             {
                 return true;
             }
 
             this.Data.ActivatedTick = PatchAchievementManager.GetTick();
-            _ = this.Data.Touched.Add(blockGroupId.GroupId);
+            _ = this.Data.Touched.Add(blockGroupId.Value);
 
             if (!this.Data.State)
             {
