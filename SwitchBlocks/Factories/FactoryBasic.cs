@@ -42,6 +42,14 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicLeverSolid,
             ModBlocks.BasicLeverSolidOn,
             ModBlocks.BasicLeverSolidOff,
+            ModBlocks.BasicSingleUse,
+            ModBlocks.BasicSingleUseOn,
+            ModBlocks.BasicSingleUseOff,
+            ModBlocks.BasicSingleUseSolid,
+            ModBlocks.BasicSingleUseSolidOn,
+            ModBlocks.BasicSingleUseSolidOff,
+            ModBlocks.BasicReset,
+            ModBlocks.BasicResetSolid,
             ModBlocks.BasicWindEnable,
         };
 
@@ -61,6 +69,10 @@ namespace SwitchBlocks.Factories
             ModBlocks.BasicLeverSolid,
             ModBlocks.BasicLeverSolidOn,
             ModBlocks.BasicLeverSolidOff,
+            ModBlocks.BasicSingleUseSolid,
+            ModBlocks.BasicSingleUseSolidOn,
+            ModBlocks.BasicSingleUseSolidOff,
+            ModBlocks.BasicResetSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -91,6 +103,54 @@ namespace SwitchBlocks.Factories
                 [ModBlocks.BasicLeverSolid] = (rect, src, screen, x, y) => new BlockBasicLeverSolid(rect),
                 [ModBlocks.BasicLeverSolidOn] = (rect, src, screen, x, y) => new BlockBasicLeverSolidOn(rect),
                 [ModBlocks.BasicLeverSolidOff] = (rect, src, screen, x, y) => new BlockBasicLeverSolidOff(rect),
+                [ModBlocks.BasicSingleUse] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUse(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicSingleUseOn] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUseOn(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicSingleUseOff] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUseOff(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicSingleUseSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUseSolid(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicSingleUseSolidOn] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUseSolidOn(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicSingleUseSolidOff] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicSingleUseSolidOff(rect);
+                    SetupBasic.SingleUseLevers[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicReset] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicReset(rect);
+                    SetupBasic.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.BasicResetSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockBasicResetSolid(rect);
+                    SetupBasic.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
                 [ModBlocks.BasicWindEnable] = (rect, src, screen, x, y) =>
                 {
                     _ = SetupBasic.WindEnabled.Add(screen);

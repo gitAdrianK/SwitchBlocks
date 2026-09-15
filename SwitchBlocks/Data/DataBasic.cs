@@ -1,7 +1,9 @@
 namespace SwitchBlocks.Data
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Xml.Linq;
     using JumpKing;
     using JumpKing.SaveThread;
@@ -23,6 +25,7 @@ namespace SwitchBlocks.Data
             this.Progress = 0.0f;
             this.HasSwitched = false;
             this.Tick = 0;
+            this.Touched = new HashSet<int>();
         }
 
         /// <summary>
@@ -48,6 +51,9 @@ namespace SwitchBlocks.Data
         ///     One time touching the lever = one switch
         /// </summary>
         public bool HasSwitched { get; set; }
+
+        /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
+        public HashSet<int> Touched { get; private set; }
 
         /// <inheritdoc />
         public bool State { get; set; }
@@ -109,6 +115,11 @@ namespace SwitchBlocks.Data
                         int.TryParse(root.Element(ModConstants.SaveActivated)?.Value, out var intResult)
                             ? intResult
                             : 0,
+                    Touched = new HashSet<int>(
+                        root.Element(ModConstants.SaveTouched)?
+                            .Elements(ModConstants.SaveId)
+                            .Select(id => int.Parse(id.Value))
+                        ?? Enumerable.Empty<int>()),
                 };
             }
         }
@@ -137,9 +148,11 @@ namespace SwitchBlocks.Data
                     new XElement(ModConstants.SaveState, this.State),
                     new XElement(ModConstants.SaveProgress, this.Progress),
                     new XElement(ModConstants.SaveHasSwitched, this.HasSwitched),
-                    new XElement(ModConstants.SaveActivated, this.Tick)
-                )
-            );
+                    new XElement(ModConstants.SaveActivated, this.Tick),
+                    new XElement(ModConstants.SaveTouched,
+                        this.Touched.Count != 0
+                            ? new List<XElement>(this.Touched.Select(id => new XElement(ModConstants.SaveId, id)))
+                            : null)));
 
             using (var fs = new FileStream(
                        Path.Combine(

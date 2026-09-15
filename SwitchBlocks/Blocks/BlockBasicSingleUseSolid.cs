@@ -5,16 +5,16 @@ namespace SwitchBlocks.Blocks
     using Util;
 
     /// <summary>
-    ///     The countdown solid single use lever block.
+    ///     The basic solid single use block.
     /// </summary>
-    public class BlockCountdownSingleUseSolid : ModBlock, IBlockGroupId
+    public class BlockBasicSingleUseSolid : ModBlock, IBlockGroupId
     {
         /// <inheritdoc />
-        public BlockCountdownSingleUseSolid(Rectangle collider) : base(collider) { }
+        public BlockBasicSingleUseSolid(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => !DataCountdown.Instance.Touched.Contains(this.GroupId)
-            ? ModBlocks.CountdownSingleUseSolid
+        public override Color DebugColor => !DataBasic.Instance.Touched.Contains(this.GroupId)
+            ? ModBlocks.BasicSingleUseSolid
             : Color.DimGray;
 
         /// <inheritdoc />

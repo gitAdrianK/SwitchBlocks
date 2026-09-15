@@ -88,6 +88,8 @@
             var settingsBasic = new SettingsBasic(root?.Element("Basic"));
             debugInstance.EntityLogicBasic?.UpdateSettings(settingsBasic);
             debugInstance.BehaviourBasicLever?.UpdateDirections(settingsBasic.LeverDirections);
+            debugInstance.BehaviourBasicSingleUse?.UpdateDirections(settingsBasic.LeverDirections);
+            debugInstance.BehaviourBasicReset?.UpdateDirections(settingsBasic.LeverDirections);
         }
 
         /// <summary>

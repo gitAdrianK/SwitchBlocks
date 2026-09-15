@@ -47,15 +47,6 @@ namespace SwitchBlocks.Setups
             var seedsDuration = DurationsAuto.TryDeserialize();
             AssignByDuration(seedsDuration.Seeds);
 
-            if (!ModDebug.IsDebug)
-            {
-                ChangeDuration.Clear();
-            }
-            else
-            {
-                seedsDuration.SaveToFile();
-            }
-
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
             {
@@ -90,18 +81,29 @@ namespace SwitchBlocks.Setups
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+
             var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
-            _ = body.RegisterBlockBehaviour(typeof(BlockAutoChangeDuration),
-                new BehaviourAutoChangeDuration(entityLogic));
 
-            // ReSharper disable once InvertIf
+            if (ChangeDuration.Count != 0)
+            {
+                _ = body.RegisterBlockBehaviour(typeof(BlockAutoChangeDuration),
+                    new BehaviourAutoChangeDuration(entityLogic));
+            }
+
             if (ModDebug.IsDebug)
             {
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
+
+                seedsDuration.SaveToFile();
+            }
+            else
+            {
+                ChangeDuration.Clear();
             }
         }
 

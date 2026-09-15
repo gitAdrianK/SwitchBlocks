@@ -53,17 +53,6 @@ namespace SwitchBlocks.Setups
             var seedsDuration = DurationsCountdown.TryDeserialize();
             AssignByDuration(seedsDuration.Seeds);
 
-            if (!ModDebug.IsDebug)
-            {
-                SingleUseLevers.Clear();
-                CustomDurationLevers.Clear();
-            }
-            else
-            {
-                seedsId.SaveToFile();
-                seedsDuration.SaveToFile();
-            }
-
             var entityLogic = new EntityLogicCountdown(settings);
 
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Countdown);
@@ -101,10 +90,28 @@ namespace SwitchBlocks.Setups
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
             var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections, settings.Duration);
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourLever);
-            var behaviourLeverSingleUse = new BehaviourCountdownSingleUse(settings.LeverDirections);
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
-            var behaviourLeverCustomDuration = new BehaviourCountdownCustomDuration(settings.LeverDirections);
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownCustomDuration), behaviourLeverCustomDuration);
+
+            if (SingleUseLevers.Count != 0)
+            {
+                var behaviourLeverSingleUse = new BehaviourCountdownSingleUse(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
+                }
+            }
+
+            if (CustomDurationLevers.Count != 0)
+            {
+                var behaviourLeverCustomDuration = new BehaviourCountdownCustomDuration(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockCountdownCustomDuration), behaviourLeverCustomDuration);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
+                }
+            }
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
@@ -112,8 +119,14 @@ namespace SwitchBlocks.Setups
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicCountdown = entityLogic;
                 debugInstance.BehaviourCountdownLever = behaviourLever;
-                debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
-                debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
+
+                seedsId.SaveToFile();
+                seedsDuration.SaveToFile();
+            }
+            else
+            {
+                SingleUseLevers.Clear();
+                CustomDurationLevers.Clear();
             }
         }
 

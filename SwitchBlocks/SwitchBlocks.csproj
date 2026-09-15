@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviours\BehaviourAutoChangeDuration.cs"/>
+    <Compile Include="Behaviours\BehaviourBasicReset.cs"/>
+    <Compile Include="Behaviours\BehaviourBasicSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownCustomDuration.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourGroupDeactivate.cs"/>
@@ -121,8 +123,16 @@
     <Compile Include="Blocks\BlockBasicMoveUpOn.cs"/>
     <Compile Include="Blocks\BlockBasicOff.cs"/>
     <Compile Include="Blocks\BlockBasicOn.cs"/>
+    <Compile Include="Blocks\BlockBasicReset.cs"/>
+    <Compile Include="Blocks\BlockBasicResetSolid.cs"/>
     <Compile Include="Blocks\BlockBasicSandOff.cs"/>
     <Compile Include="Blocks\BlockBasicSandOn.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUse.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUseOff.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUseOn.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUseSolid.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUseSolidOff.cs"/>
+    <Compile Include="Blocks\BlockBasicSingleUseSolidOn.cs"/>
     <Compile Include="Blocks\BlockBasicSlopeOff.cs"/>
     <Compile Include="Blocks\BlockBasicSlopeOn.cs"/>
     <Compile Include="Blocks\BlockBasicSnowOff.cs"/>
@@ -246,7 +256,9 @@
     <Compile Include="Data\DeactivatesGroup.cs"/>
     <Compile Include="Data\DurationsAuto.cs"/>
     <Compile Include="Data\DurationsCountdown.cs"/>
+    <Compile Include="Data\ResetsBasic.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
+    <Compile Include="Data\SeedsBasic.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>
     <Compile Include="Data\SeedsSequence.cs"/>
     <Compile Include="Data\DataSequence.cs"/>
