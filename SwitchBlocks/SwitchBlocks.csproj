@@ -63,6 +63,7 @@
     <Compile Include="Behaviours\BehaviourBasicReset.cs"/>
     <Compile Include="Behaviours\BehaviourBasicSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownCustomDuration.cs"/>
+    <Compile Include="Behaviours\BehaviourCountdownReset.cs"/>
     <Compile Include="Behaviours\BehaviourCountdownSingleUse.cs"/>
     <Compile Include="Behaviours\BehaviourGroupDeactivate.cs"/>
     <Compile Include="Behaviours\BehaviourGroupIce.cs"/>
@@ -145,6 +146,8 @@
     <Compile Include="Blocks\BlockCountdownCustomDurationSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOff.cs"/>
     <Compile Include="Blocks\BlockCountdownIceOn.cs"/>
+    <Compile Include="Blocks\BlockCountdownReset.cs"/>
+    <Compile Include="Blocks\BlockCountdownResetSolid.cs"/>
     <Compile Include="Blocks\BlockCountdownSandOff.cs"/>
     <Compile Include="Blocks\BlockCountdownSandOn.cs"/>
     <Compile Include="Blocks\BlockCountdownSingleUseSolid.cs"/>
@@ -257,6 +260,7 @@
     <Compile Include="Data\DurationsAuto.cs"/>
     <Compile Include="Data\DurationsCountdown.cs"/>
     <Compile Include="Data\ResetsBasic.cs"/>
+    <Compile Include="Data\ResetsCountdown.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
     <Compile Include="Data\SeedsBasic.cs"/>
     <Compile Include="Data\SeedsCountdown.cs"/>

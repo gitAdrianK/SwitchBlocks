@@ -39,6 +39,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownCustomDuration,
             ModBlocks.CountdownCustomDurationSolid,
             ModBlocks.CountdownWindEnable,
+            ModBlocks.CountdownReset,
+            ModBlocks.CountdownResetSolid,
         };
 
         /// <summary>Solid Block Codes.</summary>
@@ -57,6 +59,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.CountdownLeverSolid,
             ModBlocks.CountdownSingleUseSolid,
             ModBlocks.CountdownCustomDurationSolid,
+            ModBlocks.CountdownResetSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -107,6 +110,18 @@ namespace SwitchBlocks.Factories
                 {
                     _ = SetupCountdown.WindEnabled.Add(screen);
                     return new BlockWind();
+                },
+                [ModBlocks.CountdownReset] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownReset(rect);
+                    SetupCountdown.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
+                },
+                [ModBlocks.CountdownResetSolid] = (rect, src, screen, x, y) =>
+                {
+                    var b = new BlockCountdownResetSolid(rect);
+                    SetupCountdown.Resets[((screen + 1) * 10000) + (x * 100) + y] = b;
+                    return b;
                 },
             };
 

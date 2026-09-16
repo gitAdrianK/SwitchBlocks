@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks
 {
+    using System.IO;
     using Behaviours;
     using Entities;
     using JetBrains.Annotations;
@@ -27,9 +28,28 @@
         public static ModDebug Instance => instance ?? (instance = new ModDebug());
 
         /// <summary>
-        ///     <c>true</c> if the game is in debug mode, <c>false</c> otherwise.
+        ///     <c>true</c> if the game is in debug mode and started with the Worldsmith folder structure present, <c>false</c> otherwise.
         /// </summary>
-        public static bool IsDebug => LevelDebugState.instance != null;
+        public static bool IsDebug
+        {
+            get
+            {
+                if (LevelDebugState.instance == null)
+                {
+                    return false;
+                }
+
+                var directoryBin = new DirectoryInfo(Game1.instance.contentManager.root);
+                if (directoryBin.Name != "bin" || directoryBin.Parent == null)
+                {
+                    return false;
+                }
+
+                var directorySaves =
+                    Path.Combine(directoryBin.Parent.FullName, ModConstants.Folder, ModConstants.Saves);
+                return Directory.Exists(directorySaves);
+            }
+        }
 
         /// <summary>Logic entity of the auto block type.</summary>
         public EntityLogicAuto EntityLogicAuto { get; set; }
@@ -60,6 +80,9 @@
 
         /// <summary>Behaviour attached to lever.</summary>
         public BehaviourCountdownCustomDuration BehaviourCountdownCustomDuration { get; set; }
+
+        /// <summary>Behaviour attached to reset.</summary>
+        public BehaviourCountdownReset BehaviourCountdownReset { get; set; }
 
         /// <summary>Logic entity of the group block type.</summary>
         public EntityLogicGroup EntityLogicGroup { get; set; }

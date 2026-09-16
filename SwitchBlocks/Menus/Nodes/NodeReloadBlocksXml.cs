@@ -108,7 +108,8 @@
             debugInstance.EntityLogicCountdown?.UpdateSettings(settingsCountdown);
             debugInstance.BehaviourCountdownLever?.UpdateSettings(settingsCountdown.LeverDirections,
                 settingsCountdown.Duration);
-            debugInstance.BehaviourCountdownSingleUse?.UpdateDirections(settingsCountdown.LeverDirections);
+            debugInstance.BehaviourCountdownSingleUse?.UpdateSettings(settingsCountdown.LeverDirections,
+                settingsCountdown.Duration);
             debugInstance.BehaviourCountdownCustomDuration?.UpdateDirections(settingsCountdown.LeverDirections);
         }
 

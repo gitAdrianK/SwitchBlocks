@@ -9,25 +9,25 @@ namespace SwitchBlocks.Behaviours
     using Util;
 
     /// <summary>
-    ///     Behaviour attached to the <see cref="BlockBasicReset" />.
+    ///     Behaviour attached to the <see cref="BlockCountdownReset" />.
     /// </summary>
-    public class BehaviourBasicReset : IBlockBehaviour
+    public class BehaviourCountdownReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourBasicReset(Direction leverDirections)
+        public BehaviourCountdownReset(Direction leverDirections)
         {
-            this.Data = DataBasic.Instance;
+            this.Data = DataCountdown.Instance;
             this.LeverDirections = leverDirections;
         }
 
-        /// <summary>Basic data.</summary>
-        private DataBasic Data { get; }
+        /// <summary>Countdown data.</summary>
+        private DataCountdown Data { get; }
 
         /// <summary>Get or set the group data's HasSwitched.</summary>
         private static bool HasSwitched
         {
-            get => DataBasic.Instance.HasSwitched;
-            set => DataBasic.Instance.HasSwitched = value;
+            get => DataCountdown.Instance.HasSwitched;
+            set => DataCountdown.Instance.HasSwitched = value;
         }
 
         /// <summary>Lever directions.</summary>
@@ -64,8 +64,8 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockBasicReset>();
-            var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockBasicResetSolid>();
+            var collidingWithReset = advCollisionInfo.IsCollidingWith<BlockCountdownReset>();
+            var collidingWithResetSolid = advCollisionInfo.IsCollidingWith<BlockCountdownResetSolid>();
             this.IsPlayerOnBlock = collidingWithReset || collidingWithResetSolid;
             if (!this.IsPlayerOnBlock)
             {
@@ -84,7 +84,7 @@ namespace SwitchBlocks.Behaviours
             // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
             if (collidingWithResetSolid)
             {
-                block = advCollisionInfo.GetCollidedBlocks<BlockBasicResetSolid>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownResetSolid>().First();
                 if (!Directions.ResolveCollisionDirection(behaviourContext,
                         this.LeverDirections,
                         block))
@@ -94,7 +94,7 @@ namespace SwitchBlocks.Behaviours
             }
             else
             {
-                block = advCollisionInfo.GetCollidedBlocks<BlockBasicReset>().First();
+                block = advCollisionInfo.GetCollidedBlocks<BlockCountdownReset>().First();
             }
 
             // If the only reset id is 0, reset all groups.

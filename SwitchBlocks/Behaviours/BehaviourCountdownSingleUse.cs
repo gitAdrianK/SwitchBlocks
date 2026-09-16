@@ -15,10 +15,11 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourCountdownSingleUse : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourCountdownSingleUse(Direction leverDirections)
+        public BehaviourCountdownSingleUse(Direction leverDirections, int duration)
         {
             this.Data = DataCountdown.Instance;
             this.LeverDirections = leverDirections;
+            this.Duration = duration;
         }
 
         /// <summary>Countdown data.</summary>
@@ -26,6 +27,9 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Lever directions.</summary>
         private Direction LeverDirections { get; set; }
+
+        /// <summary>Duration of the switch.</summary>
+        private int Duration { get; set; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -88,7 +92,9 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            this.Data.ActivatedTick = PatchAchievementManager.GetTick();
+            var currentTick = PatchAchievementManager.GetTick();
+            this.Data.ActivatedTick = currentTick;
+            this.Data.DeactivatedTick = currentTick + this.Duration;
             _ = this.Data.Touched.Add(blockGroupId.GroupId);
 
             if (!this.Data.State)
@@ -101,9 +107,14 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>
-        ///     Updates the directions a lever can be activated from the given directions.
+        ///     Updates the directions a lever can be activated from the given directions as well as the duration of the switch.
         /// </summary>
         /// <param name="leverDirections">Directions a lever can be activated from.</param>
-        public void UpdateDirections(Direction leverDirections) => this.LeverDirections = leverDirections;
+        /// <param name="duration">Duration a switch lasts for.</param>
+        public void UpdateSettings(Direction leverDirections, int duration)
+        {
+            this.LeverDirections = leverDirections;
+            this.Duration = duration;
+        }
     }
 }

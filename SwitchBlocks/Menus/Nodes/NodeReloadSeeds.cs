@@ -30,6 +30,7 @@
             }
 
             this.ReloadSeedsAuto(directorySaves);
+            this.ReloadSeedsBasic(directorySaves);
             this.ReloadSeedsCountdown(directorySaves);
             this.ReloadSeedsGroup(directorySaves);
             this.ReloadSeedsSequence(directorySaves);
@@ -53,8 +54,33 @@
             var seedsDuration = DurationsAuto.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixDurations}{ModConstants.Auto}{ModConstants.SuffixSav}"));
             SetupAuto.AssignByDuration(seedsDuration.Seeds);
-
             seedsDuration.SaveToFile();
+        }
+
+        private void ReloadSeedsBasic(string directorySaves)
+        {
+            if (!SetupBasic.IsUsed)
+            {
+                return;
+            }
+
+            foreach (var block in SetupBasic.SingleUseLevers.Values)
+            {
+                block.GroupId = BlockGroupId.NotAssigned;
+            }
+
+            foreach (var block in SetupBasic.Resets.Values)
+            {
+                block.Ids = new int[0];
+            }
+
+            var seedsId = SeedsBasic.TryDeserialize(Path.Combine(directorySaves,
+                $"{ModConstants.PrefixSeeds}{ModConstants.Basic}{ModConstants.SuffixSav}"));
+            var resets = ResetsBasic.TryDeserialize(Path.Combine(directorySaves,
+                $"{ModConstants.PrefixResets}{ModConstants.Basic}{ModConstants.SuffixSav}"));
+            SetupBasic.AssignByGroups(seedsId.Seeds, resets.Resets);
+            seedsId.SaveToFile();
+            resets.SaveToFile();
         }
 
         private void ReloadSeedsCountdown(string directorySaves)
@@ -69,6 +95,11 @@
                 block.GroupId = BlockGroupId.NotAssigned;
             }
 
+            foreach (var block in SetupCountdown.Resets.Values)
+            {
+                block.Ids = new int[0];
+            }
+
             foreach (var block in SetupCountdown.CustomDurationLevers.Values)
             {
                 block.Duration = BlockDuration.NotAssigned;
@@ -76,13 +107,15 @@
 
             var seedsId = SeedsCountdown.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixSeeds}{ModConstants.Countdown}{ModConstants.SuffixSav}"));
-            SetupCountdown.AssignByGroups(seedsId.Seeds);
+            var resets = ResetsCountdown.TryDeserialize(Path.Combine(directorySaves,
+                $"{ModConstants.PrefixResets}{ModConstants.Countdown}{ModConstants.SuffixSav}"));
+            SetupCountdown.AssignByGroups(seedsId.Seeds, resets.Resets);
+            seedsId.SaveToFile();
+            resets.SaveToFile();
 
             var seedsDuration = DurationsCountdown.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixDurations}{ModConstants.Countdown}{ModConstants.SuffixSav}"));
             SetupCountdown.AssignByDuration(seedsDuration.Seeds);
-
-            seedsId.SaveToFile();
             seedsDuration.SaveToFile();
         }
 
