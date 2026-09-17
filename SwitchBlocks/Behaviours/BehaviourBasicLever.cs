@@ -6,7 +6,6 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Patches;
     using Util;
 
     /// <summary>
@@ -108,27 +107,12 @@ namespace SwitchBlocks.Behaviours
                 }
             }
 
-            var stateBefore = this.Data.State;
-            if (collidingWithAnyLever)
+            if (collidingWithAnyLever
+                || (collidingWithAnyLeverOn && !this.Data.State)
+                || (collidingWithAnyLeverOff && this.Data.State))
             {
-                this.Data.State = !this.Data.State;
+                this.Data.SwitchOnceSafe = true;
             }
-            else if (collidingWithAnyLeverOn)
-            {
-                this.Data.State = true;
-            }
-            else if (collidingWithAnyLeverOff)
-            {
-                this.Data.State = false;
-            }
-
-            if (stateBefore == this.Data.State)
-            {
-                return true;
-            }
-
-            this.Data.Tick = PatchAchievementManager.GetTick();
-            ModSounds.BasicFlip?.PlayOneShot();
 
             return true;
         }

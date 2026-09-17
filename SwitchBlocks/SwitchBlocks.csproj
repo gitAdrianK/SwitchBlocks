@@ -38,7 +38,12 @@
       <HintPath>..\packages\Lib.Harmony.2.2.2\lib\net45\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=4242.42.42.42, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <Private>False</Private>
       <HintPath>..\packages\JetBrains.Annotations.2025.2.4\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="LanguageJK">
+      <Private>False</Private>
+      <HintPath>..\..\..\..\..\SteamLibrary\steamapps\common\Jump King\LanguageJK.dll</HintPath>
     </Reference>
     <Reference Include="System"/>
     <Reference Include="System.Core"/>
@@ -255,6 +260,8 @@
     <Compile Include="Blocks\Dummy\BlockWind.cs"/>
     <Compile Include="Blocks\ModBlock.cs"/>
     <Compile Include="Blocks\ModSlope.cs"/>
+    <Compile Include="Controls\EBinding.cs"/>
+    <Compile Include="Controls\Preferences.cs"/>
     <Compile Include="Data\DataThreshold.cs"/>
     <Compile Include="Data\DeactivatesGroup.cs"/>
     <Compile Include="Data\DurationsAuto.cs"/>
@@ -292,6 +299,11 @@
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Factories\FactoryThreshold.cs"/>
+    <Compile Include="Menus\MenuBindButton.cs"/>
+    <Compile Include="Menus\MenuBindDefault.cs"/>
+    <Compile Include="Menus\MenuBindDisplay.cs"/>
+    <Compile Include="Menus\MenuBindSave.cs"/>
+    <Compile Include="Menus\Model\ModelMenuOptions.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateModFolders.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateTemplates.cs"/>
     <Compile Include="Menus\Nodes\NodeReloadDrawables.cs"/>
@@ -299,7 +311,9 @@
     <Compile Include="Menus\Nodes\NodeReloadSeeds.cs"/>
     <Compile Include="ModDebug.cs"/>
     <Compile Include="Menus\Nodes\NodeCreateBlocksXml.cs"/>
+    <Compile Include="ModMenus.cs"/>
     <Compile Include="Patches\PatchAdvCollisionInfo.cs"/>
+    <Compile Include="Patches\PatchControllerManager.cs"/>
     <Compile Include="Patches\PatchIceBlockBehaviour.cs"/>
     <Compile Include="Patches\PatchResolveXCollisionBehaviour.cs"/>
     <Compile Include="Patches\PatchResolveYCollisionBehaviour.cs"/>

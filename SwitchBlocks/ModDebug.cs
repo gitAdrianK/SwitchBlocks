@@ -3,12 +3,7 @@
     using System.IO;
     using Behaviours;
     using Entities;
-    using JetBrains.Annotations;
     using JumpKing;
-    using JumpKing.Mods;
-    using JumpKing.PauseMenu;
-    using JumpKing.PauseMenu.BT;
-    using Menus;
 
     /// <summary>
     ///     Adds some menu items only available when in a debug run.
@@ -28,7 +23,8 @@
         public static ModDebug Instance => instance ?? (instance = new ModDebug());
 
         /// <summary>
-        ///     <c>true</c> if the game is in debug mode and started with the Worldsmith folder structure present, <c>false</c> otherwise.
+        ///     <c>true</c> if the game is in debug mode and started with the Worldsmith folder structure present, <c>false</c>
+        ///     otherwise.
         /// </summary>
         public static bool IsDebug
         {
@@ -116,72 +112,6 @@
 
         /// <summary>Behaviour attached to reset.</summary>
         public BehaviourThresholdReset BehaviourThresholdReset { get; set; }
-
-        /// <summary>
-        ///     Adds the debug menu item to reload the blocks.xml.
-        /// </summary>
-        /// <returns>Reload blocks.xml <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton ReloadBlocksXml(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Reload blocks.xml", new NodeReloadBlocksXml())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to reload drawables.
-        /// </summary>
-        /// <returns>Reload drawables <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton ReloadDrawables(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Reload drawables", new NodeReloadDrawables())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to reload seeds.
-        /// </summary>
-        /// <returns>Reload seeds <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton ReloadSeeds(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Reload seeds", new NodeReloadSeeds())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to create mod folders.
-        /// </summary>
-        /// <returns>Create mod folders <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton CreateModFolders(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Create mod folders", new NodeCreateModFolders())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to create the blocks.xml.
-        /// </summary>
-        /// <returns>Create blocks.xml <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton CreateBlocksXml(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Create blocks.xml", new NodeCreateBlocksXml())
-                : null;
-
-        /// <summary>
-        ///     Adds the debug menu item to create templates.
-        /// </summary>
-        /// <returns>Create templates <see cref="TextButton" />.</returns>
-        [PauseMenuItemSetting]
-        [UsedImplicitly]
-        public static TextButton CreateTemplates(object factory, GuiFormat format) =>
-            IsDebug
-                ? new TextButton("Create drawables templates", new NodeCreateTemplates())
-                : null;
 
         /// <summary>Sets the singleton instance to null.</summary>
         public static void Reset() => instance = null;

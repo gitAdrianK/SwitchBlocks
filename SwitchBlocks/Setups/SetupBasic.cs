@@ -3,11 +3,13 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
     using Factories.Drawables;
     using JumpKing.Player;
+    using Patches;
     using Settings;
     using Util;
 
@@ -31,20 +33,23 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
-        /// ///
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the basic type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsBasic settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsBasic settings, BodyComp body,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
                 return;
             }
 
-            DataBasic.Initialize(settings.SaveCarriesOver);
+            PatchControllerManager.CanSwitchOnPress = settings.CanSwitchOnPress;
+
+            var data = DataBasic.Initialize(settings.SaveCarriesOver);
+            behaviourPre.Basic = data;
 
             var seedsId = SeedsBasic.TryDeserialize();
             var resets = ResetsBasic.TryDeserialize();
@@ -138,6 +143,8 @@ namespace SwitchBlocks.Setups
             {
                 return;
             }
+
+            PatchControllerManager.CanSwitchOnPress = false;
 
             DataBasic.Instance.SaveToFile();
             DataBasic.Reset();

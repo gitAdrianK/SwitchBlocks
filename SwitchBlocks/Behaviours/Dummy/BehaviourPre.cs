@@ -5,7 +5,6 @@ namespace SwitchBlocks.Behaviours.Dummy
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
-    using Setups;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockPre" />.
@@ -13,32 +12,19 @@ namespace SwitchBlocks.Behaviours.Dummy
     public class BehaviourPre : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourPre()
-        {
-            if (SetupAuto.IsUsed)
-            {
-                this.Auto = DataAuto.Instance;
-            }
-
-            if (SetupCountdown.IsUsed)
-            {
-                this.Countdown = DataCountdown.Instance;
-            }
-
-            if (SetupJump.IsUsed)
-            {
-                this.Jump = DataJump.Instance;
-            }
-        }
+        public BehaviourPre() { }
 
         /// <summary>Auto data.</summary>
-        private DataAuto Auto { get; }
+        public DataAuto Auto { get; set; }
+
+        /// <summary>Basic data.</summary>
+        public DataBasic Basic { get; set; }
 
         /// <summary>Countdown data.</summary>
-        private DataCountdown Countdown { get; }
+        public DataCountdown Countdown { get; set; }
 
         /// <summary>Jump data.</summary>
-        private DataJump Jump { get; }
+        public DataJump Jump { get; set; }
 
         // Documentation is false, higher numbers are run first!
         /// <inheritdoc />
@@ -68,6 +54,11 @@ namespace SwitchBlocks.Behaviours.Dummy
             if (this.Auto != null)
             {
                 this.Auto.CanSwitchSafely = true;
+            }
+
+            if (this.Basic != null)
+            {
+                this.Basic.CanSwitchSafely = true;
             }
 
             if (this.Countdown != null)

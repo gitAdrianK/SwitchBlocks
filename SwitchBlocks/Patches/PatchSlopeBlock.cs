@@ -39,7 +39,7 @@
 
             __result = BlockCollisionType.Collision_NonBlocking;
 
-            // Quite frankly, I would have expected setting CSS here not to work, it however, does.
+            // Quite frankly, I would have expected setting CSS here to not work, it however, does.
             switch (slope)
             {
                 case BlockAutoSlopeOn _:

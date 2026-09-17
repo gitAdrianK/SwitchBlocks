@@ -23,6 +23,8 @@ namespace SwitchBlocks.Data
         {
             this.State = false;
             this.Progress = 0.0f;
+            this.CanSwitchSafely = true;
+            this.SwitchOnceSafe = false;
             this.HasSwitched = false;
             this.Tick = 0;
             this.Touched = new HashSet<int>();
@@ -55,6 +57,9 @@ namespace SwitchBlocks.Data
         /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
         public HashSet<int> Touched { get; private set; }
 
+        /// <summary>If the block can switch safely.</summary>
+        public bool CanSwitchSafely { get; set; }
+
         /// <inheritdoc />
         public bool State { get; set; }
 
@@ -67,15 +72,15 @@ namespace SwitchBlocks.Data
         /// <inheritdoc />
         public int Tick { get; set; }
 
-        /// <inheritdoc />
-        public bool SwitchOnceSafe => false;
+        /// <summary>If the block should switch next opportunity.</summary>
+        public bool SwitchOnceSafe { get; set; }
 
         /// <summary>
         ///     Initializes the save singleton from file.
         ///     If the save is set to carry over it will be ignored if the game is new.
         /// </summary>
         /// <param name="saveCarriesOver">Should the save carry over from previous plays.</param>
-        public static void Initialize(bool saveCarriesOver)
+        public static DataBasic Initialize(bool saveCarriesOver)
         {
             var file = Path.Combine(
                 Game1.instance.contentManager.root,
@@ -85,7 +90,7 @@ namespace SwitchBlocks.Data
             if ((SaveManager.instance.IsNewGame && !saveCarriesOver) || !File.Exists(file))
             {
                 instance = new DataBasic();
-                return;
+                return instance;
             }
 
             using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -95,7 +100,7 @@ namespace SwitchBlocks.Data
                 if (root == null)
                 {
                     instance = new DataBasic();
-                    return;
+                    return instance;
                 }
 
                 instance = new DataBasic
@@ -108,6 +113,10 @@ namespace SwitchBlocks.Data
                             CultureInfo.InvariantCulture, out var floatResult)
                             ? floatResult
                             : 0.0f,
+                    CanSwitchSafely =
+                        bool.TryParse(root.Element(ModConstants.SaveCss)?.Value, out boolResult) && boolResult,
+                    SwitchOnceSafe =
+                        bool.TryParse(root.Element(ModConstants.SaveSos)?.Value, out boolResult) && boolResult,
                     HasSwitched =
                         bool.TryParse(root.Element(ModConstants.SaveHasSwitched)?.Value, out boolResult) &&
                         boolResult,
@@ -121,6 +130,7 @@ namespace SwitchBlocks.Data
                             .Select(id => int.Parse(id.Value))
                         ?? Enumerable.Empty<int>()),
                 };
+                return instance;
             }
         }
 
@@ -147,6 +157,8 @@ namespace SwitchBlocks.Data
                 new XElement("DataBasic",
                     new XElement(ModConstants.SaveState, this.State),
                     new XElement(ModConstants.SaveProgress, this.Progress),
+                    new XElement(ModConstants.SaveCss, this.CanSwitchSafely),
+                    new XElement(ModConstants.SaveSos, this.SwitchOnceSafe),
                     new XElement(ModConstants.SaveHasSwitched, this.HasSwitched),
                     new XElement(ModConstants.SaveActivated, this.Tick),
                     new XElement(ModConstants.SaveTouched,

@@ -3,6 +3,7 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
@@ -35,20 +36,21 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
-        /// ///
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the countdown type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsCountdown settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsCountdown settings, BodyComp body,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
                 return;
             }
 
-            _ = DataCountdown.Instance;
+            var data = DataCountdown.Instance;
+            behaviourPre.Countdown = data;
 
             var seedsId = SeedsCountdown.TryDeserialize();
             var resets = ResetsCountdown.TryDeserialize();

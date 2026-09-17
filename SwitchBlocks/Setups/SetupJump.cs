@@ -3,6 +3,7 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
@@ -28,19 +29,21 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the jump type.</param>
         /// <param name="player"><see cref="PlayerEntity" /> to register block behaviours to and pass to the logic.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsJump settings, PlayerEntity player, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsJump settings, PlayerEntity player,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
                 return;
             }
 
-            _ = DataJump.Instance;
+            var data = DataJump.Instance;
+            behaviourPre.Jump = data;
 
             EntityLogicJump = new EntityLogicJump(settings, player);
 

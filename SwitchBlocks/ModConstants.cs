@@ -14,6 +14,9 @@ namespace SwitchBlocks
         /// <summary><see cref="HarmonyLib.Harmony" /> instance name.</summary>
         public const string Harmony = Modname + ".Harmony";
 
+        /// <summary>Filename of the settings file.</summary>
+        public const string Settings = Modname + ".Settings.xml";
+
         /// <summary>Root folder name.</summary>
         public const string Folder = "switchBlocksMod";
 

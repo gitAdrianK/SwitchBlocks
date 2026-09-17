@@ -1,8 +1,9 @@
 namespace SwitchBlocks.Util
 {
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using JumpKing.BodyCompBehaviours;
+    using JumpKing.Level;
+    using Microsoft.Xna.Framework;
 
     /// <summary>Contains a way to determine if the player is intersecting blocks.</summary>
     public static class Intersecting
@@ -10,19 +11,14 @@ namespace SwitchBlocks.Util
         /// <summary>
         ///     Checks if the player is intersecting one of the blocks in a larger than zero manner.
         /// </summary>
-        /// <param name="behaviourContext"><see cref="BehaviourContext" /> of the situation.</param>
+        /// <param name="hitbox"><see cref="Rectangle" /> to check against.</param>
         /// <param name="blocks">Blocks to check for.</param>
         /// <returns><c>true</c> if the player is intersecting one of the blocks, <c>false</c> otherwise.</returns>
-        public static bool IsIntersectingBlocks(BehaviourContext behaviourContext, params Type[] blocks)
+        public static bool IsIntersectingBlocks(Rectangle hitbox, params IReadOnlyList<IBlock>[] blocks)
         {
-            var playerRect = behaviourContext.BodyComp.GetHitbox();
-            foreach (var block in behaviourContext
-                         .CollisionInfo
-                         .PreResolutionCollisionInfo
-                         .GetCollidedBlocks()
-                         .Where(b => blocks.Contains(b.GetType())))
+            foreach (var block in blocks.SelectMany(block => block))
             {
-                _ = block.Intersects(playerRect, out var collision);
+                _ = block.Intersects(hitbox, out var collision);
                 if (collision.Size.X > 0 || collision.Size.Y > 0)
                 {
                     return true;

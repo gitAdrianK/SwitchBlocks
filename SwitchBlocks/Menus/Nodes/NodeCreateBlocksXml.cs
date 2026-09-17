@@ -105,6 +105,8 @@
             XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "LeverSideDisable", "Up, Down, Left, Right",
                 Comment);
             XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "SaveCarriesOver", addAs: Comment);
+            XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "CanSwitchOnPress", addAs: Comment);
+            XmlHelper.AddElementOrComment(elementBasic, sourceBasic, "ForceStateSwitch", addAs: Comment);
         }
 
         /// <summary>
