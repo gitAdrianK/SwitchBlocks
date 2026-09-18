@@ -2,6 +2,7 @@ namespace SwitchBlocks.Entities
 {
     using System;
     using Data;
+    using JumpKing.GameManager;
     using Patches;
     using Settings;
     using Util;
@@ -72,6 +73,17 @@ namespace SwitchBlocks.Entities
                     break;
                 case Stat.Victory:
                     return;
+                case Stat.Boots:
+                    stat = GameLoop.instance.EndingItems.boots ? 0 : int.MaxValue;
+                    break;
+                case Stat.Ring:
+                    stat = GameLoop.instance.EndingItems.snake ? 0 : int.MaxValue;
+                    break;
+                case Stat.BootsRing:
+                    stat = GameLoop.instance.EndingItems.boots && GameLoop.instance.EndingItems.snake
+                        ? 0
+                        : int.MaxValue;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("Unknown stat: " + this.Stat);
             }

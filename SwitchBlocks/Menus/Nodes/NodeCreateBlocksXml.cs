@@ -1,5 +1,6 @@
 ﻿namespace SwitchBlocks.Menus
 {
+    using System;
     using System.IO;
     using System.Xml.Linq;
     using BehaviorTree;
@@ -251,8 +252,11 @@
             var elementThreshold = XmlHelper.AddElementOrComment(target, source, "Threshold", addAs: Parent);
             var sourceThreshold = source?.Element("Threshold");
 
-            elementThreshold.Add(new XComment(" Stats to check for are: Jumps, Falls, Time, Session, and Victory "));
+            elementThreshold.Add(
+                new XComment($" Stats to check for are: {string.Join(", ", Enum.GetNames(typeof(Stat)))} "));
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Stat", "Falls", Comment);
+            elementThreshold.Add(new XComment(
+                $" Count is ignored for {nameof(Stat.Victory)}, {nameof(Stat.Boots)}, {nameof(Stat.Ring)} and {nameof(Stat.BootsRing)} "));
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Count", "0", Comment);
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "ForceStateSwitch", addAs: Comment);

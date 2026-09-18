@@ -8,5 +8,8 @@
         Time,
         Session,
         Victory,
+        Boots,
+        Ring,
+        BootsRing,
     }
 }
