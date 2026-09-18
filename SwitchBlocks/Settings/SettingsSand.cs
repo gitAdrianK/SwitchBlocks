@@ -20,10 +20,10 @@ namespace SwitchBlocks.Settings
         /// <summary>If the v2 of sand is being used.</summary>
         public bool IsV2 { get; }
 
-        /// <summary>Multiplier of the deltaTime used in the animation of the sand block type.</summary>
+        /// <summary>Multiplier of the deltaTime used in the animation of the block type.</summary>
         public float Multiplier { get; }
 
-        /// <summary>Directions the sand lever can be activated from.</summary>
+        /// <summary>Directions the lever can be activated from.</summary>
         public Direction LeverDirections { get; }
     }
 }

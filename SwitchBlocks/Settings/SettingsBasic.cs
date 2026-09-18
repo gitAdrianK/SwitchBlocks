@@ -19,10 +19,10 @@ namespace SwitchBlocks.Settings
             this.CanSwitchOnPress = XmlHelper.ParseElementBool(element, "CanSwitchOnPress");
         }
 
-        /// <summary>Multiplier of the deltaTime used in the animation of the basic block type.</summary>
+        /// <summary>Multiplier of the deltaTime used in the animation of the block type.</summary>
         public float Multiplier { get; }
 
-        /// <summary>If the auto state switch is supposed to be forced, ignoring the safe switch.</summary>
+        /// <summary>If the state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; }
 
         /// <summary>Directions the basic lever can be activated from.</summary>

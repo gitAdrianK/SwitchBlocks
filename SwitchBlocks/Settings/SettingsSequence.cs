@@ -23,13 +23,13 @@ namespace SwitchBlocks.Settings
         /// <summary>How long the blocks stay in their state before switching.</summary>
         public int Duration { get; }
 
-        /// <summary>Multiplier of the deltaTime used in the animation of the sequence block type.</summary>
+        /// <summary>Multiplier of the deltaTime used in the animation of the block type.</summary>
         public float Multiplier { get; }
 
-        /// <summary>Directions the sequence lever can be activated from.</summary>
+        /// <summary>Directions the lever can be activated from.</summary>
         public Direction LeverDirections { get; }
 
-        /// <summary>Directions the sequence platform can be activated from.</summary>
+        /// <summary>Directions the platform can be activated from.</summary>
         public Direction PlatformDirections { get; }
 
         /// <summary>If the platform should be disabled when left.</summary>

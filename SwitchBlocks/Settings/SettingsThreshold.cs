@@ -29,10 +29,10 @@ namespace SwitchBlocks.Settings
         /// <summary>The threshold to check for.</summary>
         public int Count { get; }
 
-        /// <summary>Multiplier of the deltaTime used in the animation of the threshold block type.</summary>
+        /// <summary>Multiplier of the deltaTime used in the animation of the block type.</summary>
         public float Multiplier { get; }
 
-        /// <summary>If the threshold state switch is supposed to be forced, ignoring the safe switch.</summary>
+        /// <summary>If the state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; }
     }
 }

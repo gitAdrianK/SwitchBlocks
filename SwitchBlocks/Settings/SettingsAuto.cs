@@ -34,16 +34,16 @@ namespace SwitchBlocks.Settings
         /// <summary>How long a full on off cycle takes. </summary>
         public int DurationCycle { get; } // DurationOn + DurationOff
 
-        /// <summary>Multiplier of the deltaTime used in the animation of the auto block type.</summary>
+        /// <summary>Multiplier of the deltaTime used in the animation of the block type.</summary>
         public float Multiplier { get; }
 
-        /// <summary>If the auto state switch is supposed to be forced, ignoring the safe switch.</summary>
+        /// <summary>If the state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; }
 
-        /// <summary>Amount of times the auto warn sound is supposed to be played.</summary>
+        /// <summary>Amount of times the warn sound is supposed to be played.</summary>
         public int WarnCount { get; }
 
-        /// <summary>Duration between auto warn sounds.</summary>
+        /// <summary>Duration between warn sounds.</summary>
         public int WarnDuration { get; }
 
         /// <summary>If the warn sound is disabled for the on state.</summary>
