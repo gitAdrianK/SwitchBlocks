@@ -4,6 +4,7 @@ namespace SwitchBlocks.Entities
     using Data;
     using JumpKing;
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
     using Util.Deserialization;
 
     /// <summary>
@@ -28,13 +29,25 @@ namespace SwitchBlocks.Entities
         }
 
         /// <summary><see cref="IDataProvider" />.</summary>
-        private IDataProvider Data { get; }
+        protected IDataProvider Data { get; }
 
         /// <summary>
         ///     Draws the entity if the current screen is the screen it appears on or the game has not finished yet.
         ///     Based on state given by the <see cref="IDataProvider" /> the left of right half of the texture is drawn.
         /// </summary>
-        public override void Draw()
+        public override void Draw() =>
+            this.DrawWithRectangle(new Rectangle(
+                this.Width * Convert.ToInt32(!this.Data.State),
+                0,
+                this.Width,
+                this.Height)
+            );
+
+        /// <summary>
+        ///     Draws the entity with a given rectangle to limit the <see cref="Texture2D" /> to.
+        /// </summary>
+        /// <param name="rect"><see cref="Rectangle" /> to limit the texture to.</param>
+        protected void DrawWithRectangle(Rectangle rect)
         {
             if (this.DrawGuard())
             {
@@ -44,11 +57,7 @@ namespace SwitchBlocks.Entities
             Game1.spriteBatch.Draw(
                 this.Texture,
                 this.Position,
-                new Rectangle(
-                    this.Width * Convert.ToInt32(!this.Data.State),
-                    0,
-                    this.Width,
-                    this.Height),
+                rect,
                 Color.White);
         }
     }

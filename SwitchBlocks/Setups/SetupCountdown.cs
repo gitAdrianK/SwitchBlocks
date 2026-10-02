@@ -66,6 +66,9 @@ namespace SwitchBlocks.Setups
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, foregroundEntities,
                     midgroundEntities);
+                FactoryLevers.CreateSingleUses(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
+                    foregroundEntities,
+                    midgroundEntities);
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic,
                     foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
@@ -143,7 +146,6 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                SingleUseLevers.Clear();
                 CustomDurationLevers.Clear();
                 Resets.Clear();
             }

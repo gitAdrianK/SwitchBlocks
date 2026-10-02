@@ -62,6 +62,8 @@ namespace SwitchBlocks.Setups
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance, foregroundEntities,
                     midgroundEntities);
+                FactoryLevers.CreateSingleUses(xmlPath, ModEntry.TexturePath, DataBasic.Instance, foregroundEntities,
+                    midgroundEntities);
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic,
                     foregroundEntities, midgroundEntities);
                 FactoryScrolling.CreatePlatformsSand(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic,
@@ -129,7 +131,6 @@ namespace SwitchBlocks.Setups
             }
             else
             {
-                SingleUseLevers.Clear();
                 Resets.Clear();
             }
         }

@@ -11,7 +11,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     ///     Contains data relevant for the basic block.
     /// </summary>
-    public class DataBasic : IDataProvider
+    public class DataBasic : IDataProvider, ITouchedProvider
     {
         /// <summary>Singleton instance.</summary>
         private static DataBasic instance;
@@ -54,9 +54,6 @@ namespace SwitchBlocks.Data
         /// </summary>
         public bool HasSwitched { get; set; }
 
-        /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
-        public HashSet<int> Touched { get; private set; }
-
         /// <summary>If the block can switch safely.</summary>
         public bool CanSwitchSafely { get; set; }
 
@@ -74,6 +71,9 @@ namespace SwitchBlocks.Data
 
         /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
+
+        /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
+        public HashSet<int> Touched { get; private set; }
 
         /// <summary>
         ///     Initializes the save singleton from file.

@@ -1,6 +1,7 @@
 ﻿namespace SwitchBlocks.Menus
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using BehaviorTree;
@@ -44,7 +45,8 @@
             var midgroundEntities = new List<EntityDraw>();
             var foregroundEntities = new List<EntityDraw>();
 
-            var texturesPath = Path.Combine(directoryMod, ModConstants.Textures);
+            var texturesPath = Path.Combine(directoryBin.FullName, ModConstants.Folder, ModConstants.Textures);
+            Debugger.Log(1, "", $"> {texturesPath}\n");
 
             this.ReloadAutoDrawables(debugInstance, directoryMod, texturesPath, foregroundEntities, midgroundEntities);
             this.ReloadBasicDrawables(debugInstance, directoryMod, texturesPath, foregroundEntities, midgroundEntities);
@@ -102,29 +104,17 @@
 
             var entityLogic = debugInstance.EntityLogicAuto;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Auto);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities, false);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Auto);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataAuto.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "sands", ModConstants.Auto);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataAuto.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "conveyors", ModConstants.Auto);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataAuto.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
-            }
+            FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
+                foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
+                foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataAuto.Instance, entityLogic,
+                foregroundEntities, midgroundEntities, false);
         }
 
         /// <summary>
@@ -148,36 +138,21 @@
 
             var entityLogic = debugInstance.EntityLogicBasic;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Basic);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, texturesPath, DataBasic.Instance, foregroundEntities,
-                    midgroundEntities);
-                FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataBasic.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataBasic.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataBasic.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities, false);
+                return;
             }
-            else
-            {
-                // The legacy folder structure is not as unified.
-                xmlPath = Path.Combine(directoryMod, "levers", ModConstants.Basic);
-                FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Basic);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "sands", ModConstants.Basic);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "conveyors", ModConstants.Basic);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataBasic.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
-            }
+            FactoryLevers.CreateLevers(xmlPath, texturesPath, DataBasic.Instance, foregroundEntities,
+                midgroundEntities);
+            FactoryLevers.CreateSingleUses(xmlPath, texturesPath, DataBasic.Instance, foregroundEntities,
+                midgroundEntities);
+            FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataBasic.Instance, entityLogic,
+                foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataBasic.Instance,
+                entityLogic, foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataBasic.Instance,
+                entityLogic, foregroundEntities, midgroundEntities, false);
         }
 
         /// <summary>
@@ -201,35 +176,21 @@
 
             var entityLogic = debugInstance.EntityLogicCountdown;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Countdown);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, texturesPath, DataCountdown.Instance, foregroundEntities,
-                    midgroundEntities);
-                FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataCountdown.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataCountdown.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataCountdown.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities, false);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "levers", ModConstants.Countdown);
-                FactoryLevers.CreateLevers(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Countdown);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "sands", ModConstants.Countdown);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "conveyors", ModConstants.Countdown);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataCountdown.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
-            }
+            FactoryLevers.CreateLevers(xmlPath, texturesPath, DataCountdown.Instance, foregroundEntities,
+                midgroundEntities);
+            FactoryLevers.CreateSingleUses(xmlPath, texturesPath, DataCountdown.Instance, foregroundEntities,
+                midgroundEntities);
+            FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataCountdown.Instance,
+                entityLogic, foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataCountdown.Instance,
+                entityLogic, foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataCountdown.Instance,
+                entityLogic, foregroundEntities, midgroundEntities, false);
         }
 
         /// <summary>
@@ -253,18 +214,13 @@
 
             var entityLogic = debugInstance.EntityLogicGroup;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Group);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreateGroupPlatforms(xmlPath, texturesPath, DataGroup.Instance.Groups,
-                    entityLogic, foregroundEntities, midgroundEntities);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Group);
-                FactoryPlatforms.CreateGroupPlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataGroup.Instance.Groups,
-                    entityLogic, foregroundEntities, midgroundEntities);
-            }
+
+            FactoryPlatforms.CreateGroupPlatforms(xmlPath, texturesPath, DataGroup.Instance.Groups,
+                entityLogic, foregroundEntities, midgroundEntities);
         }
 
         /// <summary>
@@ -288,29 +244,17 @@
 
             var entityLogic = debugInstance.EntityLogicJump;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Jump);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataJump.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataJump.Instance, entityLogic,
-                    foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataJump.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities, false);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Jump);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "sands", ModConstants.Jump);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, entityLogic, foregroundEntities, midgroundEntities);
-
-                xmlPath = Path.Combine(directoryMod, "conveyors", ModConstants.Jump);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataJump.Instance, entityLogic, foregroundEntities, midgroundEntities, false, true);
-            }
+            FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataJump.Instance, entityLogic,
+                foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataJump.Instance, entityLogic,
+                foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataJump.Instance,
+                entityLogic, foregroundEntities, midgroundEntities, false);
         }
 
         /// <summary>
@@ -334,23 +278,15 @@
 
             var entityLogic = debugInstance.EntityLogicSand;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Sand);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryLevers.CreateLevers(xmlPath, texturesPath, DataSand.Instance, foregroundEntities,
-                    midgroundEntities);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataSand.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities, true);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "levers", ModConstants.Sand);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataSand.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Sand);
-                FactoryScrolling.CreatePlatformsScrolling(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataSand.Instance, entityLogic, foregroundEntities, midgroundEntities, true, true);
-            }
+            FactoryLevers.CreateLevers(xmlPath, texturesPath, DataSand.Instance, foregroundEntities,
+                midgroundEntities);
+            FactoryScrolling.CreatePlatformsScrolling(xmlPath, texturesPath, DataSand.Instance,
+                entityLogic, foregroundEntities, midgroundEntities, true);
         }
 
         /// <summary>
@@ -374,18 +310,13 @@
 
             var entityLogic = debugInstance.EntityLogicSequence;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Sequence);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreateGroupPlatforms(xmlPath, texturesPath, DataSequence.Instance.Groups,
-                    entityLogic, foregroundEntities, midgroundEntities);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Sequence);
-                FactoryPlatforms.CreateGroupPlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataSequence.Instance.Groups,
-                    entityLogic, foregroundEntities, midgroundEntities);
-            }
+
+            FactoryPlatforms.CreateGroupPlatforms(xmlPath, texturesPath, DataSequence.Instance.Groups,
+                entityLogic, foregroundEntities, midgroundEntities);
         }
 
         /// <summary>
@@ -409,23 +340,15 @@
 
             var entityLogic = debugInstance.EntityLogicThreshold;
             var xmlPath = Path.Combine(directoryMod, ModConstants.Threshold);
-            if (Directory.Exists(xmlPath))
+            if (!Directory.Exists(xmlPath))
             {
-                FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataThreshold.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataThreshold.Instance,
-                    entityLogic, foregroundEntities, midgroundEntities);
+                return;
             }
-            else
-            {
-                xmlPath = Path.Combine(directoryMod, "platforms", ModConstants.Threshold);
-                FactoryPlatforms.CreatePlatforms(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
 
-                xmlPath = Path.Combine(directoryMod, "sands", ModConstants.Threshold);
-                FactoryScrolling.CreatePlatformsSand(xmlPath, Path.Combine(xmlPath, ModConstants.Textures),
-                    DataThreshold.Instance, entityLogic, foregroundEntities, midgroundEntities);
-            }
+            FactoryPlatforms.CreatePlatforms(xmlPath, texturesPath, DataThreshold.Instance,
+                entityLogic, foregroundEntities, midgroundEntities);
+            FactoryScrolling.CreatePlatformsSand(xmlPath, texturesPath, DataThreshold.Instance,
+                entityLogic, foregroundEntities, midgroundEntities);
         }
     }
 }

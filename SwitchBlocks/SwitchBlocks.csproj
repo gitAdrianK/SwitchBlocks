@@ -266,6 +266,7 @@
     <Compile Include="Data\DeactivatesGroup.cs"/>
     <Compile Include="Data\DurationsAuto.cs"/>
     <Compile Include="Data\DurationsCountdown.cs"/>
+    <Compile Include="Data\ITouchedProvider.cs"/>
     <Compile Include="Data\ResetsBasic.cs"/>
     <Compile Include="Data\ResetsCountdown.cs"/>
     <Compile Include="Data\ResetsSequence.cs"/>
@@ -284,6 +285,7 @@
     <Compile Include="Entities\EntityDrawPlatformReset.cs"/>
     <Compile Include="Entities\EntityDrawPlatformSand.cs"/>
     <Compile Include="Entities\EntityDrawPlatformTypeSand.cs"/>
+    <Compile Include="Entities\EntityDrawSingleUse.cs"/>
     <Compile Include="Entities\EntityGroupLogic.cs"/>
     <Compile Include="Entities\EntityLogic.cs"/>
     <Compile Include="Entities\EntityLogicAuto.cs"/>
