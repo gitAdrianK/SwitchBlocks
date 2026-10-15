@@ -3,11 +3,14 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
     using Factories.Drawables;
+    using Grouping;
     using JumpKing.Player;
+    using Patches;
     using Settings;
 
     /// <summary>
@@ -21,23 +24,37 @@ namespace SwitchBlocks.Setups
         /// <summary>Screens that contain a wind enable block.</summary>
         public static HashSet<int> WindEnabled { get; } = new HashSet<int>();
 
+        /// <summary>Basic single use lever blocks.</summary>
+        public static Dictionary<int, IGroupId> SingleUseLevers { get; } = new Dictionary<int, IGroupId>();
+
+        /// <summary>Basic Reset blocks.</summary>
+        public static Dictionary<int, IGroupIds> Resets { get; } = new Dictionary<int, IGroupIds>();
+
+
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
-        /// ///
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the basic type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsBasic settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsBasic settings, BodyComp body,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
                 return;
             }
 
-            DataBasic.Initialize(settings.SaveCarriesOver);
+            PatchControllerManager.CanSwitchOnPress = settings.CanSwitchOnPress;
+
+            var data = DataBasic.Initialize(settings.SaveCarriesOver);
+            behaviourPre.Basic = data;
+
+            var seedsId = SeedsBasic.TryDeserialize();
+            var resets = ResetsBasic.TryDeserialize();
+            AssignByGroups(seedsId.Seeds, resets.Resets);
 
             var entityLogic = new EntityLogicBasic(settings);
 
@@ -45,6 +62,8 @@ namespace SwitchBlocks.Setups
             if (Directory.Exists(xmlPath))
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataBasic.Instance, foregroundEntities,
+                    midgroundEntities);
+                FactoryLevers.CreateSingleUses(xmlPath, ModEntry.TexturePath, DataBasic.Instance, foregroundEntities,
                     midgroundEntities);
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataBasic.Instance, entityLogic,
                     foregroundEntities, midgroundEntities);
@@ -74,16 +93,46 @@ namespace SwitchBlocks.Setups
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOn), new BehaviourBasicOn());
+
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicOff), new BehaviourBasicOff());
+
             var behaviourLever = new BehaviourBasicLever(settings.LeverDirections);
             _ = body.RegisterBlockBehaviour(typeof(BlockBasicLever), behaviourLever);
 
-            // ReSharper disable once InvertIf
+            if (SingleUseLevers.Count != 0)
+            {
+                var behaviourSingleUse = new BehaviourBasicSingleUse(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockBasicSingleUse), behaviourSingleUse);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourBasicSingleUse = behaviourSingleUse;
+                }
+            }
+
+            if (Resets.Count != 0)
+            {
+                var behaviourReset = new BehaviourBasicReset(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockBasicReset), behaviourReset);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourBasicReset = behaviourReset;
+                }
+            }
+
             if (ModDebug.IsDebug)
             {
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicBasic = entityLogic;
                 debugInstance.BehaviourBasicLever = behaviourLever;
+
+                seedsId.SaveToFile();
+                resets.SaveToFile();
+            }
+            else
+            {
+                Resets.Clear();
             }
         }
 
@@ -97,10 +146,39 @@ namespace SwitchBlocks.Setups
                 return;
             }
 
+            PatchControllerManager.CanSwitchOnPress = false;
+
             DataBasic.Instance.SaveToFile();
             DataBasic.Reset();
 
             IsUsed = false;
+        }
+
+        /// <summary>
+        ///     Assigns group IDs to all single use blocks.
+        /// </summary>
+        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
+        public static void AssignByGroups(IdSeeds seeds, IdsSeeds resets)
+        {
+            var groupId = 1;
+
+            if (seeds.Count != 0)
+            {
+                Grouping.AssignIdsFromSeed(
+                    seeds,
+                    ref groupId,
+                    SingleUseLevers);
+            }
+
+            Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+
+            if (resets.Count != 0)
+            {
+                Grouping.AssignFromSeed(resets, Resets);
+            }
+
+            Grouping.AssignDefaultToUnassigned(Resets, resets);
         }
     }
 }

@@ -73,10 +73,10 @@ namespace SwitchBlocks.Behaviours
                 if (this.Data.CanSwitchSafely)
                 {
                     this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
-                        behaviourContext,
-                        typeof(BlockCountdownOn),
-                        typeof(BlockCountdownIceOn),
-                        typeof(BlockCountdownSnowOn));
+                        behaviourContext.BodyComp.GetHitbox(),
+                        advCollisionInfo.GetCollidedBlocks<BlockCountdownOn>(),
+                        advCollisionInfo.GetCollidedBlocks<BlockCountdownIceOn>(),
+                        advCollisionInfo.GetCollidedBlocks<BlockCountdownSnowOn>());
                 }
             }
 

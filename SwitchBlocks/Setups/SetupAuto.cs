@@ -3,6 +3,7 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
@@ -30,12 +31,13 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the auto type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsAuto settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsAuto settings, BodyComp body,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
@@ -43,18 +45,10 @@ namespace SwitchBlocks.Setups
             }
 
             var data = DataAuto.Instance;
+            behaviourPre.Auto = data;
 
             var seedsDuration = DurationsAuto.TryDeserialize();
             AssignByDuration(seedsDuration.Seeds);
-
-            if (!ModDebug.IsDebug)
-            {
-                ChangeDuration.Clear();
-            }
-            else
-            {
-                seedsDuration.SaveToFile();
-            }
 
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
@@ -90,18 +84,29 @@ namespace SwitchBlocks.Setups
             }
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOn), new BehaviourAutoOn());
+
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
+
             var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
-            _ = body.RegisterBlockBehaviour(typeof(BlockAutoChangeDuration),
-                new BehaviourAutoChangeDuration(entityLogic));
 
-            // ReSharper disable once InvertIf
+            if (ChangeDuration.Count != 0)
+            {
+                _ = body.RegisterBlockBehaviour(typeof(BlockAutoChangeDuration),
+                    new BehaviourAutoChangeDuration(entityLogic));
+            }
+
             if (ModDebug.IsDebug)
             {
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
+
+                seedsDuration.SaveToFile();
+            }
+            else
+            {
+                ChangeDuration.Clear();
             }
         }
 

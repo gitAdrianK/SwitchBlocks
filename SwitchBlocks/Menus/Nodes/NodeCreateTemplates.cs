@@ -25,6 +25,7 @@
             Directory.CreateDirectory(directoryTemplates);
 
             this.CreateLevers(Path.Combine(directoryTemplates, "levers1.xml"));
+            this.CreateSingleUses(Path.Combine(directoryTemplates, "singleUses1.xml"));
             this.CreatePlatforms(Path.Combine(directoryTemplates, "platforms1.xml"));
             this.CreateScrolling(Path.Combine(directoryTemplates, "sands1.xml"), "Sands", "Sand");
             this.CreateScrolling(Path.Combine(directoryTemplates, "conveyors1.xml"), "Conveyors", "Conveyor");
@@ -52,6 +53,26 @@
             doc.Save(filePath);
         }
 
+        private void CreateSingleUses(string filePath)
+        {
+            var doc = new XDocument(new XElement("SingleUses"));
+            var target = doc.Root;
+
+            target.Add(new XComment(" This is the minimum you need to create a single use lever "));
+            var minSingleUse = XmlHelper.AddElementOrComment(target, "SingleUse", addAs: Parent);
+            this.CreateRequired(minSingleUse);
+
+            target.Add(new XComment(" These are all possible options "));
+            var maxSingleUse = XmlHelper.AddElementOrComment(target, "SingleUse", addAs: Parent);
+            this.CreateRequired(maxSingleUse);
+            maxSingleUse.Add(new XComment(" Setting IsForeground will override IsBackground "));
+            XmlHelper.AddElementOrComment(maxSingleUse, "IsForeground");
+            XmlHelper.AddElementOrComment(maxSingleUse, "IsBackground");
+            this.CreateLinks(maxSingleUse);
+
+            doc.Save(filePath);
+        }
+
         private void CreatePlatforms(string filePath)
         {
             var doc = new XDocument(new XElement("Platforms"));
@@ -72,6 +93,7 @@
             this.CreateAnimation(maxPlatform, "Animation");
             this.CreateAnimation(maxPlatform, "AnimationOut");
             this.CreateSprites(maxPlatform);
+            this.CreateLinks(maxPlatform, true);
 
             doc.Save(filePath);
         }
@@ -141,6 +163,24 @@
             XmlHelper.AddElementOrComment(sprites, "RandomOffset");
             XmlHelper.AddElementOrComment(sprites, "ResetWithLever");
             XmlHelper.AddElementOrComment(sprites, "IgnoreState");
+        }
+
+        private void CreateLinks(XElement parent, bool withComment = false)
+        {
+            var link = XmlHelper.AddElementOrComment(parent, "Link", addAs: Parent);
+
+            if (withComment)
+            {
+                link.Add(new XComment(" <Link> is specific to drawables that are reliant on the ID of a block. "));
+                link.Add(new XComment(
+                    " If the drawable is placed directly at the position of the block it is not needed to specify. "));
+                link.Add(new XComment(
+                    " The coordinate is in hitbox coordinates (This is the screen position divided by 8). "));
+            }
+
+            XmlHelper.AddElementOrComment(link, "Screen", "9");
+            XmlHelper.AddElementOrComment(link, "X", "19");
+            XmlHelper.AddElementOrComment(link, "Y", "25");
         }
     }
 }

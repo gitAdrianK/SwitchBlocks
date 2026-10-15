@@ -6,6 +6,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
+    using Util;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockBasicOff" />.
@@ -62,17 +63,31 @@ namespace SwitchBlocks.Behaviours
                                    || isOnWater
                                    || isOnMoveUp
                                    || isOnInfinityJump;
-            if (!this.IsPlayerOnBlock || this.Data.State)
+            if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
-            BehaviourPost.IsPlayerOnIce |= isOnIce;
-            BehaviourPost.IsPlayerOnSnow |= isOnSnow;
-            BehaviourPost.IsPlayerOnWater |= isOnWater;
+            if (!this.Data.State)
+            {
+                BehaviourPost.IsPlayerOnIce |= isOnIce;
+                BehaviourPost.IsPlayerOnSnow |= isOnSnow;
+                BehaviourPost.IsPlayerOnWater |= isOnWater;
 
-            BehaviourPost.IsPlayerOnMoveUp |= isOnMoveUp;
-            BehaviourPost.IsPlayerOnInfinityJump |= isOnInfinityJump;
+                BehaviourPost.IsPlayerOnMoveUp |= isOnMoveUp;
+                BehaviourPost.IsPlayerOnInfinityJump |= isOnInfinityJump;
+            }
+            else
+            {
+                if (this.Data.CanSwitchSafely)
+                {
+                    this.Data.CanSwitchSafely = !Intersecting.IsIntersectingBlocks(
+                        behaviourContext.BodyComp.GetHitbox(),
+                        advCollisionInfo.GetCollidedBlocks<BlockBasicOff>(),
+                        advCollisionInfo.GetCollidedBlocks<BlockBasicIceOff>(),
+                        advCollisionInfo.GetCollidedBlocks<BlockBasicSnowOff>());
+                }
+            }
 
             return true;
         }

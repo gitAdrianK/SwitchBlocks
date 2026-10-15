@@ -21,6 +21,7 @@ namespace SwitchBlocks.Setups
 
         // The Dictionaries are static because the setup step is after the block factories have run.
         // So we can't contain them to the setup step.
+        // Also, we need them for the drawables' creation.
 
         // It would be cool if these could be made more specific ModBlockDuration dictionaries, but we also have ModSlopeDuration
         /// <summary>Group A blocks.</summary>
@@ -65,13 +66,6 @@ namespace SwitchBlocks.Setups
             var deactivates = DeactivatesGroup.TryDeserialize();
             AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets, deactivates.Deactivates);
 
-            if (ModDebug.IsDebug)
-            {
-                seeds.SaveToFile();
-                resets.SaveToFile();
-                deactivates.SaveToFile();
-            }
-
             var entityLogic = new EntityLogicGroup(settings);
 
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Group);
@@ -107,6 +101,10 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicGroup = entityLogic;
                 debugInstance.BehaviourGroupReset = behaviourReset;
                 debugInstance.BehaviourGroupDeactivate = behaviourDeactivate;
+
+                seeds.SaveToFile();
+                resets.SaveToFile();
+                deactivates.SaveToFile();
             }
         }
 

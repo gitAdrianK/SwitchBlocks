@@ -68,12 +68,6 @@ namespace SwitchBlocks.Setups
                 }
             }
 
-            if (ModDebug.IsDebug)
-            {
-                seeds.SaveToFile();
-                resets.SaveToFile();
-            }
-
             var entityLogic = new EntityLogicSequence(settings);
 
             var xmlPath = Path.Combine(ModEntry.RootModFolder, ModConstants.Sequence);
@@ -107,6 +101,9 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicSequence = entityLogic;
                 debugInstance.BehaviourSequenceReset = behaviourReset;
                 debugInstance.DefaultActiveSequence = settings.DefaultActive;
+
+                seeds.SaveToFile();
+                resets.SaveToFile();
             }
         }
 

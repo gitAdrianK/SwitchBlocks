@@ -88,6 +88,8 @@
             var settingsBasic = new SettingsBasic(root?.Element("Basic"));
             debugInstance.EntityLogicBasic?.UpdateSettings(settingsBasic);
             debugInstance.BehaviourBasicLever?.UpdateDirections(settingsBasic.LeverDirections);
+            debugInstance.BehaviourBasicSingleUse?.UpdateDirections(settingsBasic.LeverDirections);
+            debugInstance.BehaviourBasicReset?.UpdateDirections(settingsBasic.LeverDirections);
         }
 
         /// <summary>
@@ -106,7 +108,8 @@
             debugInstance.EntityLogicCountdown?.UpdateSettings(settingsCountdown);
             debugInstance.BehaviourCountdownLever?.UpdateSettings(settingsCountdown.LeverDirections,
                 settingsCountdown.Duration);
-            debugInstance.BehaviourCountdownSingleUse?.UpdateDirections(settingsCountdown.LeverDirections);
+            debugInstance.BehaviourCountdownSingleUse?.UpdateSettings(settingsCountdown.LeverDirections,
+                settingsCountdown.Duration);
             debugInstance.BehaviourCountdownCustomDuration?.UpdateDirections(settingsCountdown.LeverDirections);
         }
 

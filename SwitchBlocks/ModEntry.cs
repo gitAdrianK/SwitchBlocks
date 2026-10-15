@@ -1,11 +1,14 @@
 namespace SwitchBlocks
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using Behaviours.Dummy;
     using Blocks.Dummy;
+    using Controls;
     using Entities;
     using EntityComponent;
     using Factories;
@@ -25,6 +28,7 @@ namespace SwitchBlocks
     {
         public static string RootModFolder { get; private set; }
         public static string TexturePath { get; private set; }
+        public static Preferences Preferences { get; private set; }
 
         /// <summary>
         ///     Called by Jump King before the level loads.
@@ -46,8 +50,32 @@ namespace SwitchBlocks
             _ = LevelManager.RegisterBlockFactory(new FactorySequence());
             _ = LevelManager.RegisterBlockFactory(new FactoryThreshold());
 
-            var harmony = new Harmony(ModConstants.Harmony);
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            var assembly = Assembly.GetExecutingAssembly();
+
+            new Harmony(ModConstants.Harmony).PatchAll(assembly);
+
+            // Using the XmlSerializer for this because it happens on game start, so there's little need for it to be fast.
+            // Unlike everything else that happens when the level loads,
+            // specifically when the player is already visible/laying on the ground.
+            var assemblyPath = Path.GetDirectoryName(assembly.Location) ?? throw new InvalidOperationException();
+            try
+            {
+                var prefs = XmlSerializerHelper.Deserialize<Preferences>(Path.Combine(assemblyPath,
+                    ModConstants.Settings));
+                if (prefs.KeyBindings.Count != Enum.GetValues(typeof(EBinding)).Length)
+                {
+                    throw new Exception("Missing keybinding!");
+                }
+
+                Preferences = prefs;
+            }
+            catch
+            {
+                Preferences = new Preferences();
+                XmlSerializerHelper.Serialize(Path.Combine(assemblyPath, ModConstants.Settings), Preferences);
+            }
+
+            Preferences.PropertyChanged += SaveSettingsOnFile;
         }
 
         /// <summary>
@@ -94,7 +122,8 @@ namespace SwitchBlocks
             // These behaviours are used as a way to create pre- and post-behaviour points as well as unify certain
             // behaviours into one. These are not player behaviours so we can use priorities as well as cheese
             // the "Player behaviour modifiers detected" message.
-            _ = body.RegisterBlockBehaviour(typeof(BlockPre), new BehaviourPre());
+            var behaviourPre = new BehaviourPre();
+            _ = body.RegisterBlockBehaviour(typeof(BlockPre), behaviourPre);
             _ = body.RegisterBlockBehaviour(typeof(BlockConveyor), new BehaviourConveyor());
             _ = body.RegisterBlockBehaviour(typeof(BlockPost), new BehaviourPost());
 
@@ -103,11 +132,11 @@ namespace SwitchBlocks
 
             var settings = new ModSettings();
 
-            SetupAuto.Setup(settings.SettingsAuto, body, foregroundEntities, midgroundEntities);
-            SetupBasic.Setup(settings.SettingsBasic, body, foregroundEntities, midgroundEntities);
-            SetupCountdown.Setup(settings.SettingsCountdown, body, foregroundEntities, midgroundEntities);
+            SetupAuto.Setup(behaviourPre, settings.SettingsAuto, body, foregroundEntities, midgroundEntities);
+            SetupBasic.Setup(behaviourPre, settings.SettingsBasic, body, foregroundEntities, midgroundEntities);
+            SetupCountdown.Setup(behaviourPre, settings.SettingsCountdown, body, foregroundEntities, midgroundEntities);
             SetupGroup.Setup(settings.SettingsGroup, body, foregroundEntities, midgroundEntities);
-            SetupJump.Setup(settings.SettingsJump, player, foregroundEntities, midgroundEntities);
+            SetupJump.Setup(behaviourPre, settings.SettingsJump, player, foregroundEntities, midgroundEntities);
             SetupSand.Setup(settings.SettingsSand, body, LevelManager.Instance, foregroundEntities, midgroundEntities);
             SetupSequence.Setup(settings.SettingsSequence, body, foregroundEntities, midgroundEntities);
             SetupThreshold.Setup(settings.SettingsThreshold, body, foregroundEntities, midgroundEntities, levelID);
@@ -174,5 +203,18 @@ namespace SwitchBlocks
                                        || SetupSand.IsUsed
                                        || SetupSequence.IsUsed
                                        || SetupThreshold.IsUsed;
+
+        /// <summary>
+        ///     Save settings when a field changes.
+        /// </summary>
+        /// <param name="sender">Object sending the event.</param>
+        /// <param name="args">Arguments passed by the event</param>
+        /// <exception cref="InvalidOperationException">Thrown when getting the assembly location fails.</exception>
+        private static void SaveSettingsOnFile(object sender, PropertyChangedEventArgs args)
+        {
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ??
+                               throw new InvalidOperationException();
+            XmlSerializerHelper.Serialize(Path.Combine(assemblyPath, ModConstants.Settings), Preferences);
+        }
     }
 }

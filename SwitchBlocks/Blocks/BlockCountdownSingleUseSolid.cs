@@ -1,5 +1,6 @@
 namespace SwitchBlocks.Blocks
 {
+    using Data;
     using Microsoft.Xna.Framework;
 
     /// <summary>
@@ -10,8 +11,9 @@ namespace SwitchBlocks.Blocks
         /// <inheritdoc />
         public BlockCountdownSingleUseSolid(Rectangle collider) : base(collider) { }
 
-        /// <inheritdoc />
-        public override Color DebugColor => ModBlocks.CountdownSingleUseSolid;
+        public override Color DebugColor => !DataCountdown.Instance.Touched.Contains(this.Value)
+            ? ModBlocks.CountdownSingleUseSolid
+            : Color.DimGray;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => true;

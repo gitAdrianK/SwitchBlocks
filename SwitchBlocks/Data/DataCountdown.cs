@@ -11,7 +11,7 @@ namespace SwitchBlocks.Data
     /// <summary>
     ///     Contains data relevant for the countdown block.
     /// </summary>
-    public class DataCountdown : IDataProvider
+    public class DataCountdown : IDataProvider, ITouchedProvider
     {
         /// <summary>Singleton instance.</summary>
         private static DataCountdown instance;
@@ -125,9 +125,6 @@ namespace SwitchBlocks.Data
         /// <summary>Tick the countdown block has been activated.</summary>
         public int DeactivatedTick { get; set; }
 
-        /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
-        public HashSet<int> Touched { get; private set; }
-
         /// <summary>If the block should switch next opportunity.</summary>
         public bool SwitchOnceSafe { get; set; }
 
@@ -142,6 +139,9 @@ namespace SwitchBlocks.Data
 
         /// <inheritdoc />
         public int Tick => this.ActivatedTick;
+
+        /// <summary>Single use lever block group IDs that have been touched/activated.</summary>
+        public HashSet<int> Touched { get; private set; }
 
         /// <summary>
         ///     Sets the singleton instance to null.

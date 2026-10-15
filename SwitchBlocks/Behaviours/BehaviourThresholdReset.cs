@@ -82,6 +82,9 @@ namespace SwitchBlocks.Behaviours
                     this.Data.ResetCount = PatchAchievementManager.GetSession();
                     break;
                 case Stat.Victory:
+                case Stat.Boots:
+                case Stat.Ring:
+                case Stat.BootsRing:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Unknown stat: " + this.Stat);

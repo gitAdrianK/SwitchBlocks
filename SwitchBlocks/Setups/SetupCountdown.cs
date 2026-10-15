@@ -3,6 +3,7 @@ namespace SwitchBlocks.Setups
     using System.Collections.Generic;
     using System.IO;
     using Behaviours;
+    using Behaviours.Dummy;
     using Blocks;
     using Data;
     using Entities;
@@ -30,40 +31,36 @@ namespace SwitchBlocks.Setups
         public static Dictionary<int, IDuration> CustomDurationLevers { get; } =
             new Dictionary<int, IDuration>();
 
+        /// <summary>Countdown Reset blocks.</summary>
+        public static Dictionary<int, IGroupIds> Resets { get; } =
+            new Dictionary<int, IGroupIds>();
+
+
         /// <summary>
         ///     Sets up data, entities, block behaviours and does other required actions.
         /// </summary>
-        /// ///
+        /// <param name="behaviourPre"><see cref="BehaviourPre" /> to give data to.</param>
         /// <param name="settings">Settings of the countdown type.</param>
         /// <param name="body"><see cref="BodyComp" /> to register block behaviours to.</param>
         /// <param name="foregroundEntities">Entities that are supposed to be moved into the foreground.</param>
         /// <param name="midgroundEntities">Entities that are supposed to be moved into the midground.</param>
-        public static void Setup(SettingsCountdown settings, BodyComp body, List<EntityDraw> foregroundEntities,
-            List<EntityDraw> midgroundEntities)
+        public static void Setup(BehaviourPre behaviourPre, SettingsCountdown settings, BodyComp body,
+            List<EntityDraw> foregroundEntities, List<EntityDraw> midgroundEntities)
         {
             if (!IsUsed)
             {
                 return;
             }
 
-            _ = DataCountdown.Instance;
+            var data = DataCountdown.Instance;
+            behaviourPre.Countdown = data;
 
             var seedsId = SeedsCountdown.TryDeserialize();
-            AssignByGroups(seedsId.Seeds);
+            var resets = ResetsCountdown.TryDeserialize();
+            AssignByGroups(seedsId.Seeds, resets.Resets);
 
             var seedsDuration = DurationsCountdown.TryDeserialize();
             AssignByDuration(seedsDuration.Seeds);
-
-            if (!ModDebug.IsDebug)
-            {
-                SingleUseLevers.Clear();
-                CustomDurationLevers.Clear();
-            }
-            else
-            {
-                seedsId.SaveToFile();
-                seedsDuration.SaveToFile();
-            }
 
             var entityLogic = new EntityLogicCountdown(settings);
 
@@ -71,6 +68,9 @@ namespace SwitchBlocks.Setups
             if (Directory.Exists(xmlPath))
             {
                 FactoryLevers.CreateLevers(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, foregroundEntities,
+                    midgroundEntities);
+                FactoryLevers.CreateSingleUses(xmlPath, ModEntry.TexturePath, DataCountdown.Instance,
+                    foregroundEntities,
                     midgroundEntities);
                 FactoryPlatforms.CreatePlatforms(xmlPath, ModEntry.TexturePath, DataCountdown.Instance, entityLogic,
                     foregroundEntities, midgroundEntities);
@@ -102,10 +102,40 @@ namespace SwitchBlocks.Setups
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownOff), new BehaviourCountdownOff());
             var behaviourLever = new BehaviourCountdownLever(settings.LeverDirections, settings.Duration);
             _ = body.RegisterBlockBehaviour(typeof(BlockCountdownLever), behaviourLever);
-            var behaviourLeverSingleUse = new BehaviourCountdownSingleUse(settings.LeverDirections);
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
-            var behaviourLeverCustomDuration = new BehaviourCountdownCustomDuration(settings.LeverDirections);
-            _ = body.RegisterBlockBehaviour(typeof(BlockCountdownCustomDuration), behaviourLeverCustomDuration);
+
+            if (SingleUseLevers.Count != 0)
+            {
+                var behaviourLeverSingleUse =
+                    new BehaviourCountdownSingleUse(settings.LeverDirections, settings.Duration);
+                _ = body.RegisterBlockBehaviour(typeof(BlockCountdownSingleUse), behaviourLeverSingleUse);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
+                }
+            }
+
+            if (CustomDurationLevers.Count != 0)
+            {
+                var behaviourLeverCustomDuration = new BehaviourCountdownCustomDuration(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockCountdownCustomDuration), behaviourLeverCustomDuration);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
+                }
+            }
+
+            if (Resets.Count != 0)
+            {
+                var behaviourReset = new BehaviourCountdownReset(settings.LeverDirections);
+                _ = body.RegisterBlockBehaviour(typeof(BlockCountdownReset), behaviourReset);
+                if (ModDebug.IsDebug)
+                {
+                    var debugInstance = ModDebug.Instance;
+                    debugInstance.BehaviourCountdownReset = behaviourReset;
+                }
+            }
 
             // ReSharper disable once InvertIf
             if (ModDebug.IsDebug)
@@ -113,8 +143,15 @@ namespace SwitchBlocks.Setups
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicCountdown = entityLogic;
                 debugInstance.BehaviourCountdownLever = behaviourLever;
-                debugInstance.BehaviourCountdownSingleUse = behaviourLeverSingleUse;
-                debugInstance.BehaviourCountdownCustomDuration = behaviourLeverCustomDuration;
+
+                seedsId.SaveToFile();
+                seedsDuration.SaveToFile();
+                resets.SaveToFile();
+            }
+            else
+            {
+                CustomDurationLevers.Clear();
+                Resets.Clear();
             }
         }
 
@@ -138,7 +175,8 @@ namespace SwitchBlocks.Setups
         ///     Assigns group IDs to all single use blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByGroups(IdSeeds seeds)
+        /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
+        public static void AssignByGroups(IdSeeds seeds, IdsSeeds resets)
         {
             var groupId = 1;
 
@@ -148,6 +186,13 @@ namespace SwitchBlocks.Setups
             }
 
             Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+
+            if (resets.Count != 0)
+            {
+                Grouping.AssignFromSeed(resets, Resets);
+            }
+
+            Grouping.AssignDefaultToUnassigned(Resets, resets);
         }
 
         /// <summary>

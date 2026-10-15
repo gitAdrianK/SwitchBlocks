@@ -27,6 +27,7 @@ namespace SwitchBlocks
             R:   _, G: 124, B: 238 = Off
             R:   _, G: 125, B: 238 = Off, from other mod
             R: 238, G:   _, B: 124 = Levers/Other
+            R: 238, G:   _, B: 125 = More Levers/Other
 
             R:  238, G: 110, B: 1-30 = On, Auto, conveyor speeds
             R: 1-30, G: 110, B:  238 = Off, Auto, conveyor speeds
@@ -189,6 +190,42 @@ namespace SwitchBlocks
         /// </summary>
         public static readonly Color BasicLeverSolidOff = new Color(238, 26, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSingleUse" />.</summary>
+        public static readonly Color BasicSingleUse = new Color(238, 21, 125);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicSingleUseOn" />, that can only turn the state
+        ///     on.
+        /// </summary>
+        public static readonly Color BasicSingleUseOn = new Color(238, 22, 125);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicSingleUseOff" />, that can only turn the state
+        ///     off.
+        /// </summary>
+        public static readonly Color BasicSingleUseOff = new Color(238, 23, 125);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicSingleUseSolid" />.</summary>
+        public static readonly Color BasicSingleUseSolid = new Color(238, 24, 125);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicSingleUseSolidOn" />, that can only turn the state
+        ///     on.
+        /// </summary>
+        public static readonly Color BasicSingleUseSolidOn = new Color(238, 25, 125);
+
+        /// <summary>
+        ///     <see cref="Color" /> that represents the <see cref="BlockBasicSingleUseSolidOff" />, that can only turn the state
+        ///     off.
+        /// </summary>
+        public static readonly Color BasicSingleUseSolidOff = new Color(238, 26, 125);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicReset" />.</summary>
+        public static readonly Color BasicReset = new Color(238, 27, 125);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockBasicResetSolid" />.</summary>
+        public static readonly Color BasicResetSolid = new Color(238, 28, 125);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color BasicWindEnable = new Color(238, 27, 124);
 
@@ -257,6 +294,12 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownCustomDurationSolid" />.</summary>
         public static readonly Color CountdownCustomDurationSolid = new Color(238, 36, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownReset" />.</summary>
+        public static readonly Color CountdownReset = new Color(238, 38, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockCountdownResetSolid" />.</summary>
+        public static readonly Color CountdownResetSolid = new Color(238, 39, 124);
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color CountdownWindEnable = new Color(238, 37, 124);
