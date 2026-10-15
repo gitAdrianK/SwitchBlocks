@@ -1,7 +1,6 @@
 ﻿namespace SwitchBlocks.Menus
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using BehaviorTree;
@@ -46,7 +45,6 @@
             var foregroundEntities = new List<EntityDraw>();
 
             var texturesPath = Path.Combine(directoryBin.FullName, ModConstants.Folder, ModConstants.Textures);
-            Debugger.Log(1, "", $"> {texturesPath}\n");
 
             this.ReloadAutoDrawables(debugInstance, directoryMod, texturesPath, foregroundEntities, midgroundEntities);
             this.ReloadBasicDrawables(debugInstance, directoryMod, texturesPath, foregroundEntities, midgroundEntities);

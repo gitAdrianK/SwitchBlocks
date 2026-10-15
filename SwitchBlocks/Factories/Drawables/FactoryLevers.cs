@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
@@ -134,7 +133,6 @@
                     var root = doc.Root;
                     if (root?.Name != "SingleUses")
                     {
-                        Debugger.Log(1, "", ">A\n");
                         return;
                     }
 
@@ -143,14 +141,12 @@
                         var lever = TryParseLeverElement(singleUseElement, texturePath);
                         if (lever == null)
                         {
-                            Debugger.Log(1, "", ">B\n");
                             continue;
                         }
 
                         var groupId = FindGroupId<T>(singleUseElement, screen, lever.Position);
                         if (groupId == 0)
                         {
-                            Debugger.Log(1, "", ">C\n");
                             continue;
                         }
 
@@ -178,7 +174,6 @@
         {
             if (leverElement == null)
             {
-                Debugger.Log(1, "", ">a\n");
                 return null;
             }
 
@@ -187,20 +182,17 @@
 
             if (textureElement == null || positionElement == null)
             {
-                Debugger.Log(1, "", ">b\n");
                 return null;
             }
 
             var textureFile = Path.Combine(texturePath, textureElement.Value);
             if (!File.Exists(textureFile + ".xnb"))
             {
-                Debugger.Log(1, "", $">c {textureFile}\n");
                 return null;
             }
 
             if (!TryParseVector2(positionElement, out var position))
             {
-                Debugger.Log(1, "", ">d\n");
                 return null;
             }
 
