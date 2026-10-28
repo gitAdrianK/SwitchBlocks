@@ -13,7 +13,6 @@ namespace SwitchBlocks
     using EntityComponent;
     using Factories;
     using HarmonyLib;
-    using JetBrains.Annotations;
     using JumpKing;
     using JumpKing.Level;
     using JumpKing.Mods;
@@ -35,7 +34,6 @@ namespace SwitchBlocks
         ///     -> OnGameStart
         /// </summary>
         [BeforeLevelLoad]
-        [UsedImplicitly]
         public static void BeforeLevelLoad()
         {
 #if DEBUG
@@ -82,7 +80,6 @@ namespace SwitchBlocks
         ///     Called by Jump King when the level starts.
         /// </summary>
         [OnLevelStart]
-        [UsedImplicitly]
         public static void OnLevelStart()
         {
             var contentManager = Game1.instance.contentManager;
@@ -165,7 +162,6 @@ namespace SwitchBlocks
         ///     Called by Jump King when the level ends.
         /// </summary>
         [OnLevelEnd]
-        [UsedImplicitly]
         public static void OnLevelEnd()
         {
             var contentManager = Game1.instance.contentManager;

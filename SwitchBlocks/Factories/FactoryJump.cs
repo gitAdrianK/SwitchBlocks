@@ -37,6 +37,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpSandOff,
             ModBlocks.JumpSlopeOn,
             ModBlocks.JumpSlopeOff,
+            ModBlocks.JumpReset,
+            ModBlocks.JumpResetSolid,
             ModBlocks.JumpInfinityJumpOn,
             ModBlocks.JumpInfinityJumpOnLegacy,
             ModBlocks.JumpInfinityJumpOff,
@@ -64,6 +66,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.JumpSandOff,
             ModBlocks.JumpSlopeOn,
             ModBlocks.JumpSlopeOff,
+            ModBlocks.JumpResetSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -92,6 +95,8 @@ namespace SwitchBlocks.Factories
                     new BlockJumpSlopeOn(rect, Slopes.GetSlopeType(src, screen, x, y)),
                 [ModBlocks.JumpSlopeOff] = (rect, src, screen, x, y) =>
                     new BlockJumpSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
+                [ModBlocks.JumpReset] = (rect, src, screen, x, y) => new BlockJumpReset(rect),
+                [ModBlocks.JumpResetSolid] = (rect, src, screen, x, y) => new BlockJumpResetSolid(rect),
                 [ModBlocks.JumpInfinityJumpOn] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOn(rect),
                 [ModBlocks.JumpInfinityJumpOnLegacy] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOn(rect),
                 [ModBlocks.JumpInfinityJumpOff] = (rect, src, screen, x, y) => new BlockJumpInfinityJumpOff(rect),

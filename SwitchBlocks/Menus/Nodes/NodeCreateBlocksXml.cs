@@ -186,6 +186,8 @@
             // TODO: Uncomment after Cloudy releases his map.
             //AddElementOrComment(elementJump, sourceJump, "CanJumpInAir", "false");
             //AddElementOrComment(elementJump, sourceJump, "Cooldown", "0");
+            XmlHelper.AddElementOrComment(elementJump, sourceJump, "LeverSideDisable",
+                "Up, Down, Left, Right", Comment);
         }
 
         /// <summary>

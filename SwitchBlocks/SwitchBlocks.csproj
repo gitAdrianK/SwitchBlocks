@@ -82,6 +82,7 @@
     <Compile Include="Behaviours\BehaviourBasicOff.cs"/>
     <Compile Include="Behaviours\BehaviourAutoReset.cs"/>
     <Compile Include="Behaviours\BehaviourBasicLever.cs"/>
+    <Compile Include="Behaviours\BehaviourJumpReset.cs"/>
     <Compile Include="Behaviours\BehaviourSandOff.cs"/>
     <Compile Include="Behaviours\BehaviourSandOn.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceDuration.cs"/>
@@ -185,6 +186,8 @@
     <Compile Include="Blocks\BlockJumpInfinityJumpOn.cs"/>
     <Compile Include="Blocks\BlockJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpOn.cs"/>
+    <Compile Include="Blocks\BlockJumpReset.cs"/>
+    <Compile Include="Blocks\BlockJumpResetSolid.cs"/>
     <Compile Include="Blocks\BlockJumpSandOff.cs"/>
     <Compile Include="Blocks\BlockJumpSandOn.cs"/>
     <Compile Include="Blocks\BlockJumpSlopeOff.cs"/>

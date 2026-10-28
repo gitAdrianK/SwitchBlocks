@@ -433,6 +433,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color JumpWindEnable = new Color(238, 77, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpReset" />.</summary>
+        public static readonly Color JumpReset = new Color(238, 71, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpResetSolid" />.</summary>
+        public static readonly Color JumpResetSolid = new Color(238, 74, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpOn" />.</summary>
         public static readonly Color JumpOnLegacy = new Color(31, 31, 31);
 

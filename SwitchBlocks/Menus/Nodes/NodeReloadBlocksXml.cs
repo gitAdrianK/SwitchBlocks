@@ -145,6 +145,7 @@
 
             var settingsJump = new SettingsJump(root?.Element("Jump"));
             debugInstance.EntityLogicJump?.UpdateSettings(settingsJump);
+            debugInstance.BehaviourJumpReset?.UpdateDirections(settingsJump.LeverDirections);
 
             PlayerEntity.OnJumpCall -= SetupJump.JumpSwitchSafe;
             PlayerEntity.OnJumpCall -= SetupJump.JumpSwitchUnsafe;
