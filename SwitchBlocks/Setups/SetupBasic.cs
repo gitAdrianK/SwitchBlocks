@@ -53,7 +53,7 @@ namespace SwitchBlocks.Setups
 
             var seedsId = SeedsBasic.TryDeserialize();
             var resets = ResetsBasic.TryDeserialize();
-            AssignByGroups(seedsId.Seeds, resets.Resets);
+            var hasChanged = AssignByGroups(seedsId.Seeds, resets.Resets);
 
             var entityLogic = new EntityLogicBasic(settings);
 
@@ -126,6 +126,11 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicBasic = entityLogic;
                 debugInstance.BehaviourBasicLever = behaviourLever;
 
+                if (!hasChanged)
+                {
+                    return;
+                }
+
                 seedsId.SaveToFile();
                 resets.SaveToFile();
             }
@@ -158,26 +163,30 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignByGroups(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByGroups(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
         {
             var groupId = 1;
+            var hasChanged = false;
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
+                hasChanged |= BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
                     ref groupId,
                     SingleUseLevers);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
 
             if (resets.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
+                hasChanged |= MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            hasChanged |= MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+
+            return hasChanged;
         }
     }
 }

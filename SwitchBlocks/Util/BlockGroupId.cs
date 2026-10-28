@@ -109,11 +109,13 @@ namespace SwitchBlocks.Util
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
         /// <param name="groupId">ID assigned to the groups, counted up for every group created.</param>
-        public static void AssignGroupIdsConsecutively(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignGroupIdsConsecutively(
             Dictionary<int, IBlockGroupId> blocks,
             Dictionary<int, int> seeds,
             ref int groupId)
         {
+            var hasChanged = false;
             foreach (var position in blocks.Select(kv => kv.Key))
             {
                 if (!PropagateGroupId(blocks, position, groupId))
@@ -121,9 +123,12 @@ namespace SwitchBlocks.Util
                     continue;
                 }
 
+                hasChanged = true;
                 seeds[position] = groupId;
                 groupId++;
             }
+
+            return hasChanged;
         }
 
         /// <summary>
@@ -133,7 +138,8 @@ namespace SwitchBlocks.Util
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="groupId">ID set to be larger than every seed ID.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
-        public static void AssignGroupIdsFromSeed(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignGroupIdsFromSeed(
             Dictionary<int, int> seeds,
             ref int groupId,
             params Dictionary<int, IBlockGroupId>[] allBlocks)
@@ -156,10 +162,17 @@ namespace SwitchBlocks.Util
                 }
             }
 
+            if (misses.Count == 0)
+            {
+                return false;
+            }
+
             foreach (var miss in misses)
             {
                 _ = seeds.Remove(miss);
             }
+
+            return true;
         }
     }
 }

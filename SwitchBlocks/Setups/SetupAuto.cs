@@ -48,7 +48,7 @@ namespace SwitchBlocks.Setups
             behaviourPre.Auto = data;
 
             var seedsDuration = DurationsAuto.TryDeserialize();
-            AssignByDuration(seedsDuration.Seeds);
+            var hasChanged = AssignByDuration(seedsDuration.Seeds);
 
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
@@ -102,7 +102,10 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
 
-                seedsDuration.SaveToFile();
+                if (hasChanged)
+                {
+                    seedsDuration.SaveToFile();
+                }
             }
             else
             {
@@ -130,16 +133,19 @@ namespace SwitchBlocks.Setups
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(Dictionary<int, float> seeds)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByDuration(Dictionary<int, float> seeds)
         {
+            var hasChanged = false;
             if (seeds.Count != 0)
             {
-                BlockDuration.AssignDurationsFromSeed(
+                hasChanged |= BlockDuration.AssignDurationsFromSeed(
                     seeds,
                     ChangeDuration);
             }
 
-            BlockDuration.AssignOtherDurations(ChangeDuration, seeds);
+            hasChanged |= BlockDuration.AssignOtherDurations(ChangeDuration, seeds);
+            return hasChanged;
         }
     }
 }

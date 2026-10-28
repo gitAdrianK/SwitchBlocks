@@ -53,7 +53,7 @@ namespace SwitchBlocks.Setups
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
             var resets = ResetsSequence.TryDeserialize();
-            AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets);
+            var hasChanged = AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets);
 
             if (SaveManager.instance.IsNewGame)
             {
@@ -102,6 +102,11 @@ namespace SwitchBlocks.Setups
                 debugInstance.BehaviourSequenceReset = behaviourReset;
                 debugInstance.DefaultActiveSequence = settings.DefaultActive;
 
+                if (!hasChanged)
+                {
+                    return;
+                }
+
                 seeds.SaveToFile();
                 resets.SaveToFile();
             }
@@ -129,14 +134,16 @@ namespace SwitchBlocks.Setups
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignSequenceIds(Dictionary<int, BlockGroup> groups, Dictionary<int, int> seeds,
             Dictionary<int, int[]> resets)
         {
             var sequenceId = 1;
+            var hasChanged = false;
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
+                hasChanged |= BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
                     ref sequenceId,
                     BlocksSequenceA,
@@ -145,19 +152,21 @@ namespace SwitchBlocks.Setups
                     BlocksSequenceD);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
-            BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
 
             BlockGroup.CreateGroupData(sequenceId, groups, false);
 
             if (resets.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
+                hasChanged |= MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            hasChanged |= MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+
+            return hasChanged;
         }
     }
 }

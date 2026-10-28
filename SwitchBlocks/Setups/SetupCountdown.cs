@@ -54,10 +54,10 @@ namespace SwitchBlocks.Setups
 
             var seedsId = SeedsCountdown.TryDeserialize();
             var resets = ResetsCountdown.TryDeserialize();
-            AssignByGroups(seedsId.Seeds, resets.Resets);
+            var hasChanged = AssignByGroups(seedsId.Seeds, resets.Resets);
 
             var seedsDuration = DurationsCountdown.TryDeserialize();
-            AssignByDuration(seedsDuration.Seeds);
+            hasChanged |= AssignByDuration(seedsDuration.Seeds);
 
             var entityLogic = new EntityLogicCountdown(settings);
 
@@ -140,6 +140,11 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicCountdown = entityLogic;
                 debugInstance.BehaviourCountdownLever = behaviourLever;
 
+                if (!hasChanged)
+                {
+                    return;
+                }
+
                 seedsId.SaveToFile();
                 seedsDuration.SaveToFile();
                 resets.SaveToFile();
@@ -172,42 +177,48 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignByGroups(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByGroups(Dictionary<int, int> seeds, Dictionary<int, int[]> resets)
         {
             var groupId = 1;
+            var hasChanged = false;
 
             if (seeds.Count != 0)
             {
-                BlockGroupId.AssignGroupIdsFromSeed(
+                hasChanged |= BlockGroupId.AssignGroupIdsFromSeed(
                     seeds,
                     ref groupId,
                     SingleUseLevers);
             }
 
-            BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            hasChanged |= BlockGroupId.AssignGroupIdsConsecutively(SingleUseLevers, seeds, ref groupId);
 
             if (resets.Count != 0)
             {
-                MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
+                hasChanged |= MultipleGroupIds.AssignMultipleIdsFromSeed(Resets, resets);
             }
 
-            MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            hasChanged |= MultipleGroupIds.AssignOtherMultipleIds(Resets, resets);
+            return hasChanged;
         }
 
         /// <summary>
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(Dictionary<int, float> seeds)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByDuration(Dictionary<int, float> seeds)
         {
+            var hasChanged = false;
             if (seeds.Count != 0)
             {
-                BlockDuration.AssignDurationsFromSeed(
+                hasChanged |= BlockDuration.AssignDurationsFromSeed(
                     seeds,
                     CustomDurationLevers);
             }
 
-            BlockDuration.AssignOtherDurations(CustomDurationLevers, seeds);
+            hasChanged |= BlockDuration.AssignOtherDurations(CustomDurationLevers, seeds);
+            return hasChanged;
         }
     }
 }

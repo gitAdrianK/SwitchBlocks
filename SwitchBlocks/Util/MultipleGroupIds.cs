@@ -100,7 +100,8 @@ namespace SwitchBlocks.Util
         /// </summary>
         /// <param name="blocks">Blocks to potentially propagate to.</param>
         /// <param name="seeds">Seeds to use for IDs assignment, failing to assign the seed removes it.</param>
-        public static void AssignMultipleIdsFromSeed(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignMultipleIdsFromSeed(
             Dictionary<int, IMultipleGroupIds> blocks,
             Dictionary<int, int[]> seeds)
         {
@@ -111,10 +112,17 @@ namespace SwitchBlocks.Util
                     where !PropagateMultipleIds(blocks, currentPos, resetIds)
                     select currentPos).ToList();
 
+            if (misses.Count == 0)
+            {
+                return false;
+            }
+
             foreach (var miss in misses)
             {
                 _ = seeds.Remove(miss);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -122,15 +130,20 @@ namespace SwitchBlocks.Util
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign to.</param>
         /// <param name="seeds">Seeds to add unassigned reset blocks positions to.</param>
-        public static void AssignOtherMultipleIds(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignOtherMultipleIds(
             Dictionary<int, IMultipleGroupIds> blocks,
             Dictionary<int, int[]> seeds)
         {
+            var hasChanged = false;
             foreach (var position in blocks.Select(kv => kv.Key)
                          .Where(position => PropagateMultipleIds(blocks, position, DefaultMultipleIds)))
             {
+                hasChanged = true;
                 seeds.Add(position, DefaultMultipleIds);
             }
+
+            return hasChanged;
         }
     }
 }

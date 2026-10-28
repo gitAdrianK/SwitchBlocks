@@ -110,7 +110,8 @@
         /// </summary>
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
-        public static void AssignDurationsFromSeed(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignDurationsFromSeed(
             Dictionary<int, float> seeds,
             params Dictionary<int, IBlockDuration>[] allBlocks)
         {
@@ -127,10 +128,17 @@
                 }
             }
 
+            if (misses.Count == 0)
+            {
+                return false;
+            }
+
             foreach (var miss in misses)
             {
                 _ = seeds.Remove(miss);
             }
+
+            return true;
         }
 
         /// <summary>
@@ -138,10 +146,11 @@
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
-        public static void AssignOtherDurations(
+        public static bool AssignOtherDurations(
             Dictionary<int, IBlockDuration> blocks,
             Dictionary<int, float> seeds)
         {
+            var hasChanged = false;
             foreach (var position in blocks.Select(kv => kv.Key))
             {
                 if (!PropagateDuration(blocks, position, DefaultTicks))
@@ -149,8 +158,11 @@
                     continue;
                 }
 
+                hasChanged = true;
                 seeds[position] = DefaultDuration;
             }
+
+            return hasChanged;
         }
     }
 }
