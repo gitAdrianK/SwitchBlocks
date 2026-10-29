@@ -249,6 +249,7 @@
     <Compile Include="Blocks\BlockThresholdOff.cs"/>
     <Compile Include="Blocks\BlockThresholdOn.cs"/>
     <Compile Include="Blocks\BlockThresholdReset.cs"/>
+    <Compile Include="Blocks\BlockThresholdResetSolid.cs"/>
     <Compile Include="Blocks\BlockThresholdSandOff.cs"/>
     <Compile Include="Blocks\BlockThresholdSandOn.cs"/>
     <Compile Include="Blocks\BlockThresholdSlopeOff.cs"/>

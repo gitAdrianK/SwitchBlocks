@@ -11,7 +11,7 @@ namespace SwitchBlocks.Blocks
         public BlockJumpResetSolid(Rectangle collider) : base(collider) { }
 
         /// <inheritdoc />
-        public override Color DebugColor => ModBlocks.JumpReset;
+        public override Color DebugColor => ModBlocks.JumpResetSolid;
 
         /// <inheritdoc />
         protected override bool CanBlockPlayer => true;

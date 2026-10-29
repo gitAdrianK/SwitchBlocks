@@ -209,7 +209,7 @@
 
             var settingsThreshold = new SettingsThreshold(root?.Element("Threshold"));
             debugInstance.EntityLogicThreshold?.UpdateSettings(settingsThreshold);
-            debugInstance.BehaviourThresholdReset?.UpdateStat(settingsThreshold.Stat);
+            debugInstance.BehaviourThresholdReset?.UpdateSettings(settingsThreshold);
         }
     }
 }

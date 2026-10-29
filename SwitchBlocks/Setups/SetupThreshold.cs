@@ -65,7 +65,7 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOn), new BehaviourThresholdOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdOff), new BehaviourThresholdOff());
-            var behaviourReset = new BehaviourThresholdReset(settings.Stat);
+            var behaviourReset = new BehaviourThresholdReset(settings);
             _ = body.RegisterBlockBehaviour(typeof(BlockThresholdReset), behaviourReset);
 
             // ReSharper disable once InvertIf

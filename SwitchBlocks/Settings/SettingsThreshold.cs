@@ -21,6 +21,7 @@ namespace SwitchBlocks.Settings
                 : ParseSettings.ParseDuration(element?.Element("Count"), 60.0f);
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
+            this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
         }
 
         /// <summary>The stat to check for.</summary>
@@ -34,5 +35,8 @@ namespace SwitchBlocks.Settings
 
         /// <summary>If the state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; }
+
+        /// <summary>Directions the reset can be activated from.</summary>
+        public Direction LeverDirections { get; }
     }
 }

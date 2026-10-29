@@ -594,5 +594,8 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdReset" />.</summary>
         public static readonly Color ThresholdReset = new Color(238, 81, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdReset" />.</summary>
+        public static readonly Color ThresholdResetSolid = new Color(238, 84, 124);
     }
 }
