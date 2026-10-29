@@ -76,6 +76,8 @@
             XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "DurationOff", "3.0", Comment);
             XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "ForceStateSwitch", addAs: Comment);
+            XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "LeverSideDisable",
+                "Up, Down, Left, Right", Comment);
 
             var warnElement = XmlHelper.AddElementOrComment(elementAuto, sourceAuto, "Warn", addAs: Parent);
             var sourceWarn = sourceAuto?.Element("Warn");
@@ -262,6 +264,8 @@
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Count", "0", Comment);
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "Multiplier", "1.0", Comment);
             XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "ForceStateSwitch", addAs: Comment);
+            XmlHelper.AddElementOrComment(elementThreshold, sourceThreshold, "LeverSideDisable",
+                "Up, Down, Left, Right", Comment);
         }
     }
 }
