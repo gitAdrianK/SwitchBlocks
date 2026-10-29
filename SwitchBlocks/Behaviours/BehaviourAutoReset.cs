@@ -1,11 +1,14 @@
 namespace SwitchBlocks.Behaviours
 {
+    using System.Linq;
     using Blocks;
     using Data;
     using JumpKing.API;
     using JumpKing.BodyCompBehaviours;
     using JumpKing.Level;
     using Patches;
+    using Settings;
+    using Util;
 
     /// <summary>
     ///     Behaviour attached to the <see cref="BlockAutoReset" />.
@@ -13,10 +16,11 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourAutoReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourAutoReset(int durationOff)
+        public BehaviourAutoReset(SettingsAuto settings)
         {
             this.Data = DataAuto.Instance;
-            this.DurationOff = durationOff;
+            this.DurationOff = settings.DurationOff;
+            this.LeverDirections = settings.LeverDirections;
         }
 
         /// <summary>Auto data.</summary>
@@ -24,6 +28,9 @@ namespace SwitchBlocks.Behaviours
 
         /// <summary>Off duration.</summary>
         private int DurationOff { get; set; }
+
+        /// <summary>Lever directions.</summary>
+        public Direction LeverDirections { get; private set; }
 
         /// <inheritdoc />
         public float BlockPriority => ModConstants.PrioNormal;
@@ -57,15 +64,32 @@ namespace SwitchBlocks.Behaviours
 
             var isReset = advCollisionInfo.IsCollidingWith<BlockAutoReset>();
             var isResetFull = advCollisionInfo.IsCollidingWith<BlockAutoResetFull>();
-            this.IsPlayerOnBlock = isReset || isResetFull;
+            var isResetSolid = advCollisionInfo.IsCollidingWith<BlockAutoResetSolid>();
+            var isResetFullSolid = advCollisionInfo.IsCollidingWith<BlockAutoResetFullSolid>();
+            this.IsPlayerOnBlock = isReset || isResetFull || isResetSolid || isResetFullSolid;
 
             if (!this.IsPlayerOnBlock)
             {
                 return true;
             }
 
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (isResetSolid || isResetFullSolid)
+            {
+                var block = isResetSolid
+                    ? advCollisionInfo.GetCollidedBlocks<BlockAutoResetSolid>().First()
+                    : advCollisionInfo.GetCollidedBlocks<BlockAutoResetFullSolid>().First();
+
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        this.LeverDirections,
+                        block))
+                {
+                    return true;
+                }
+            }
+
             this.Data.ResetTick = PatchAchievementManager.GetTick();
-            if (isReset && !this.Data.State)
+            if ((isReset || isResetSolid) && !this.Data.State)
             {
                 this.Data.ResetTick += this.DurationOff;
             }
@@ -74,9 +98,13 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>
-        ///     Updates the off duration.
+        ///     Updates the settings for auto.
         /// </summary>
-        /// <param name="durationOff">Duration of the off state.</param>
-        public void UpdateDuration(int durationOff) => this.DurationOff = durationOff;
+        /// <param name="settings">New auto settings.</param>
+        public void UpdateSettings(SettingsAuto settings)
+        {
+            this.DurationOff = settings.DurationOff;
+            this.LeverDirections = settings.LeverDirections;
+        }
     }
 }

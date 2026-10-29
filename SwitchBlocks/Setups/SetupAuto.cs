@@ -87,7 +87,7 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
 
-            var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
+            var behaviourReset = new BehaviourAutoReset(settings);
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
 
             if (ChangeDuration.Count != 0)

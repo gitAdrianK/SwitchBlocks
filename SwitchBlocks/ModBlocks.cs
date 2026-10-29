@@ -94,6 +94,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetFull" />.</summary>
         public static readonly Color AutoResetFull = new Color(238, 12, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetSolid" />.</summary>
+        public static readonly Color AutoResetSolid = new Color(238, 11, 125);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetFullSolid" />.</summary>
+        public static readonly Color AutoResetFullSolid = new Color(238, 12, 125);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoChangeDuration" />.</summary>
         public static readonly Color AutoChangeDuration = new Color(238, 13, 124);
 

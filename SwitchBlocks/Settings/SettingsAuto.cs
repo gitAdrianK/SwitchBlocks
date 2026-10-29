@@ -17,6 +17,7 @@ namespace SwitchBlocks.Settings
             this.DurationCycle = this.DurationOn + this.DurationOff;
             this.Multiplier = ParseSettings.ParseMultiplier(element?.Element("Multiplier"));
             this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
+            this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
 
             var warnElement = element?.Element("Warn");
             this.WarnCount = ParseSettings.ParseCount(warnElement?.Element("Count"), 2);
@@ -39,6 +40,9 @@ namespace SwitchBlocks.Settings
 
         /// <summary>If the state switch is supposed to be forced, ignoring the safe switch.</summary>
         public bool ForceSwitch { get; }
+
+        /// <summary>Directions the basic lever can be activated from.</summary>
+        public Direction LeverDirections { get; }
 
         /// <summary>Amount of times the warn sound is supposed to be played.</summary>
         public int WarnCount { get; }

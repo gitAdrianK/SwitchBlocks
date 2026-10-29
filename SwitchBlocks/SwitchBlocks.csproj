@@ -112,6 +112,8 @@
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
     <Compile Include="Blocks\BlockAutoOn.cs"/>
+    <Compile Include="Blocks\BlockAutoResetFullSolid.cs"/>
+    <Compile Include="Blocks\BlockAutoResetSolid.cs"/>
     <Compile Include="Blocks\BlockAutoSandOff.cs"/>
     <Compile Include="Blocks\BlockAutoSandOn.cs"/>
     <Compile Include="Blocks\BlockAutoSlopeOff.cs"/>
