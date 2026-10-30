@@ -34,6 +34,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoSlopeOff,
             ModBlocks.AutoReset,
             ModBlocks.AutoResetFull,
+            ModBlocks.AutoResetSolid,
+            ModBlocks.AutoResetFullSolid,
             ModBlocks.AutoChangeDuration,
             ModBlocks.AutoChangeDurationOn,
             ModBlocks.AutoChangeDurationOff,
@@ -53,6 +55,8 @@ namespace SwitchBlocks.Factories
             ModBlocks.AutoSandOff,
             ModBlocks.AutoSlopeOn,
             ModBlocks.AutoSlopeOff,
+            ModBlocks.AutoResetSolid,
+            ModBlocks.AutoResetFullSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -75,6 +79,8 @@ namespace SwitchBlocks.Factories
                     new BlockAutoSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
                 [ModBlocks.AutoReset] = (rect, src, screen, x, y) => new BlockAutoReset(rect),
                 [ModBlocks.AutoResetFull] = (rect, src, screen, x, y) => new BlockAutoResetFull(rect),
+                [ModBlocks.AutoResetSolid] = (rect, src, screen, x, y) => new BlockAutoResetSolid(rect),
+                [ModBlocks.AutoResetFullSolid] = (rect, src, screen, x, y) => new BlockAutoResetFullSolid(rect),
                 [ModBlocks.AutoChangeDuration] = (rect, src, screen, x, y) =>
                 {
                     var b = new BlockAutoChangeDuration(rect);

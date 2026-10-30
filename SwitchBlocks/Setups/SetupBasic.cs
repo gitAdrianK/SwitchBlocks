@@ -159,26 +159,29 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignByGroups(IdSeeds seeds, IdsSeeds resets)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByGroups(IdSeeds seeds, IdsSeeds resets)
         {
+            var hasChanged = false;
             var groupId = 1;
 
             if (seeds.Count != 0)
             {
-                Grouping.AssignIdsFromSeed(
+                hasChanged |= Grouping.AssignIdsFromSeed(
                     seeds,
                     ref groupId,
                     SingleUseLevers);
             }
 
-            Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
 
             if (resets.Count != 0)
             {
-                Grouping.AssignFromSeed(resets, Resets);
+                hasChanged |= Grouping.AssignFromSeed(resets, Resets);
             }
 
-            Grouping.AssignDefaultToUnassigned(Resets, resets);
+            hasChanged |= Grouping.AssignDefaultToUnassigned(Resets, resets);
+            return hasChanged;
         }
     }
 }

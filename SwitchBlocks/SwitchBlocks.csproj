@@ -82,6 +82,7 @@
     <Compile Include="Behaviours\BehaviourBasicOff.cs"/>
     <Compile Include="Behaviours\BehaviourAutoReset.cs"/>
     <Compile Include="Behaviours\BehaviourBasicLever.cs"/>
+    <Compile Include="Behaviours\BehaviourJumpReset.cs"/>
     <Compile Include="Behaviours\BehaviourSandOff.cs"/>
     <Compile Include="Behaviours\BehaviourSandOn.cs"/>
     <Compile Include="Behaviours\BehaviourSequenceDuration.cs"/>
@@ -111,6 +112,8 @@
     <Compile Include="Blocks\BlockAutoIceOn.cs"/>
     <Compile Include="Blocks\BlockAutoOff.cs"/>
     <Compile Include="Blocks\BlockAutoOn.cs"/>
+    <Compile Include="Blocks\BlockAutoResetFullSolid.cs"/>
+    <Compile Include="Blocks\BlockAutoResetSolid.cs"/>
     <Compile Include="Blocks\BlockAutoSandOff.cs"/>
     <Compile Include="Blocks\BlockAutoSandOn.cs"/>
     <Compile Include="Blocks\BlockAutoSlopeOff.cs"/>
@@ -185,6 +188,8 @@
     <Compile Include="Blocks\BlockJumpInfinityJumpOn.cs"/>
     <Compile Include="Blocks\BlockJumpOff.cs"/>
     <Compile Include="Blocks\BlockJumpOn.cs"/>
+    <Compile Include="Blocks\BlockJumpReset.cs"/>
+    <Compile Include="Blocks\BlockJumpResetSolid.cs"/>
     <Compile Include="Blocks\BlockJumpSandOff.cs"/>
     <Compile Include="Blocks\BlockJumpSandOn.cs"/>
     <Compile Include="Blocks\BlockJumpSlopeOff.cs"/>
@@ -246,6 +251,7 @@
     <Compile Include="Blocks\BlockThresholdOff.cs"/>
     <Compile Include="Blocks\BlockThresholdOn.cs"/>
     <Compile Include="Blocks\BlockThresholdReset.cs"/>
+    <Compile Include="Blocks\BlockThresholdResetSolid.cs"/>
     <Compile Include="Blocks\BlockThresholdSandOff.cs"/>
     <Compile Include="Blocks\BlockThresholdSandOn.cs"/>
     <Compile Include="Blocks\BlockThresholdSlopeOff.cs"/>

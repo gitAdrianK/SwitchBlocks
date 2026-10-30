@@ -75,6 +75,9 @@ namespace SwitchBlocks.Setups
             var body = player.m_body;
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOn), new BehaviourJumpOn());
             _ = body.RegisterBlockBehaviour(typeof(BlockJumpOff), new BehaviourJumpOff());
+            var reset = new BehaviourJumpReset(settings.LeverDirections);
+            _ = body.RegisterBlockBehaviour(typeof(BlockJumpReset), reset);
+
 
             if (settings.ForceSwitch)
             {
@@ -90,6 +93,7 @@ namespace SwitchBlocks.Setups
             {
                 var debugInstance = ModDebug.Instance;
                 debugInstance.EntityLogicJump = EntityLogicJump;
+                debugInstance.BehaviourJumpReset = reset;
             }
         }
 

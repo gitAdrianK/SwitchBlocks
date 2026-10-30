@@ -79,7 +79,8 @@
         /// </summary>
         /// <param name="seeds">Seeds to use for value assignment, failing to assign the seed removes it.</param>
         /// <param name="allBlocks">Blocks to potentially assign the value to and propagate from.</param>
-        public static void AssignFromSeed<TValue, TGroupable>(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignFromSeed<TValue, TGroupable>(
             Dictionary<int, TValue> seeds,
             params Dictionary<int, TGroupable>[] allBlocks)
             where TGroupable : class, IGroupable<TValue>
@@ -100,6 +101,8 @@
             {
                 _ = seeds.Remove(miss);
             }
+
+            return misses.Count != 0;
         }
 
         /// <summary>
@@ -109,7 +112,8 @@
         /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="groupId">ID set to be larger than every seed ID.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
-        public static void AssignIdsFromSeed(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignIdsFromSeed(
             IdSeeds seeds,
             ref int groupId,
             params Dictionary<int, IGroupId>[] allBlocks)
@@ -136,6 +140,8 @@
             {
                 _ = seeds.Remove(miss);
             }
+
+            return misses.Count != 0;
         }
 
         /// <summary>
@@ -145,11 +151,13 @@
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
         /// <param name="groupId">ID assigned to the groups, counted up for every group created.</param>
-        public static void AssignIdsConsecutively(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignIdsConsecutively(
             Dictionary<int, IGroupId> blocks,
             IdSeeds seeds,
             ref int groupId)
         {
+            var hasChanged = false;
             foreach (var position in blocks.Select(kv => kv.Key))
             {
                 if (!PropagateValue(blocks, position, groupId))
@@ -157,9 +165,12 @@
                     continue;
                 }
 
+                hasChanged = true;
                 seeds[position] = groupId;
                 groupId++;
             }
+
+            return hasChanged;
         }
 
         /// <summary>
@@ -167,21 +178,28 @@
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the value to and propagate from.</param>
         /// <param name="seeds">Seeds to add created block groups to.</param>
-        public static void AssignDefaultToUnassigned<TValue, TGroupable>(
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignDefaultToUnassigned<TValue, TGroupable>(
             Dictionary<int, TGroupable> blocks,
             Dictionary<int, TValue> seeds)
             where TGroupable : class, IGroupable<TValue>
         {
+            var hasChanged = false;
             foreach (var keyValuePair in blocks)
             {
                 var position = keyValuePair.Key;
                 var block = keyValuePair.Value;
 
-                if (PropagateValue(blocks, position, block.DefaultValue))
+                if (!PropagateValue(blocks, position, block.DefaultValue))
                 {
-                    seeds[position] = block.Value;
+                    continue;
                 }
+
+                seeds[position] = block.Value;
+                hasChanged = true;
             }
+
+            return hasChanged;
         }
     }
 }

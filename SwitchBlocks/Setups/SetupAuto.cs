@@ -48,7 +48,7 @@ namespace SwitchBlocks.Setups
             behaviourPre.Auto = data;
 
             var seedsDuration = DurationsAuto.TryDeserialize();
-            AssignByDuration(seedsDuration.Seeds);
+            var hasChanged = AssignByDuration(seedsDuration.Seeds);
 
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
@@ -87,7 +87,7 @@ namespace SwitchBlocks.Setups
 
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoOff), new BehaviourAutoOff());
 
-            var behaviourReset = new BehaviourAutoReset(settings.DurationOff);
+            var behaviourReset = new BehaviourAutoReset(settings);
             _ = body.RegisterBlockBehaviour(typeof(BlockAutoReset), behaviourReset);
 
             if (ChangeDuration.Count != 0)
@@ -102,7 +102,10 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicAuto = entityLogic;
                 debugInstance.BehaviourAutoReset = behaviourReset;
 
-                seedsDuration.SaveToFile();
+                if (hasChanged)
+                {
+                    seedsDuration.SaveToFile();
+                }
             }
             else
             {
@@ -130,14 +133,17 @@ namespace SwitchBlocks.Setups
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(DurationSeeds seeds)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByDuration(DurationSeeds seeds)
         {
+            var hasChanged = false;
             if (seeds.Count != 0)
             {
-                Grouping.AssignFromSeed(seeds, ChangeDuration);
+                hasChanged |= Grouping.AssignFromSeed(seeds, ChangeDuration);
             }
 
-            Grouping.AssignDefaultToUnassigned(ChangeDuration, seeds);
+            hasChanged |= Grouping.AssignDefaultToUnassigned(ChangeDuration, seeds);
+            return hasChanged;
         }
     }
 }

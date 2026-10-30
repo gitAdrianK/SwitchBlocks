@@ -93,6 +93,9 @@
         /// <summary>Logic entity of the jump block type.</summary>
         public EntityLogicJump EntityLogicJump { get; set; }
 
+        /// <summary>Behaviour attached to reset.</summary>
+        public BehaviourJumpReset BehaviourJumpReset { get; set; }
+
         /// <summary>Logic entity of the sand block type.</summary>
         public EntityLogicSand EntityLogicSand { get; set; }
 

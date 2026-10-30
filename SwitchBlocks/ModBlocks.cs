@@ -94,6 +94,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetFull" />.</summary>
         public static readonly Color AutoResetFull = new Color(238, 12, 124);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetSolid" />.</summary>
+        public static readonly Color AutoResetSolid = new Color(238, 11, 125);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoResetFullSolid" />.</summary>
+        public static readonly Color AutoResetFullSolid = new Color(238, 12, 125);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockAutoChangeDuration" />.</summary>
         public static readonly Color AutoChangeDuration = new Color(238, 13, 124);
 
@@ -430,6 +436,12 @@ namespace SwitchBlocks
         /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpInfinityJumpOff" />.</summary>
         public static readonly Color JumpInfinityJumpOff = new Color(71, 125, 238);
 
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpReset" />.</summary>
+        public static readonly Color JumpReset = new Color(238, 71, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockJumpResetSolid" />.</summary>
+        public static readonly Color JumpResetSolid = new Color(238, 74, 124);
+
         /// <summary><see cref="Color" /> that represents the <see cref="BlockWind" />. Enabling wind on the screen its placed.</summary>
         public static readonly Color JumpWindEnable = new Color(238, 77, 124);
 
@@ -588,5 +600,8 @@ namespace SwitchBlocks
 
         /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdReset" />.</summary>
         public static readonly Color ThresholdReset = new Color(238, 81, 124);
+
+        /// <summary><see cref="Color" /> that represents the <see cref="BlockThresholdReset" />.</summary>
+        public static readonly Color ThresholdResetSolid = new Color(238, 84, 124);
     }
 }

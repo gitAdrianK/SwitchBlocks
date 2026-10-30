@@ -31,6 +31,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.ThresholdSlopeOn,
             ModBlocks.ThresholdSlopeOff,
             ModBlocks.ThresholdReset,
+            ModBlocks.ThresholdResetSolid,
         };
 
         /// <summary>Solid Block Codes.</summary>
@@ -46,6 +47,7 @@ namespace SwitchBlocks.Factories
             ModBlocks.ThresholdSandOff,
             ModBlocks.ThresholdSlopeOn,
             ModBlocks.ThresholdSlopeOff,
+            ModBlocks.ThresholdResetSolid,
         };
 
         /// <summary>Dictionary mapping the block-code to a function to properly handle all the possible blocks.</summary>
@@ -67,6 +69,7 @@ namespace SwitchBlocks.Factories
                 [ModBlocks.ThresholdSlopeOff] = (rect, src, screen, x, y) =>
                     new BlockThresholdSlopeOff(rect, Slopes.GetSlopeType(src, screen, x, y)),
                 [ModBlocks.ThresholdReset] = (rect, src, screen, x, y) => new BlockThresholdReset(rect),
+                [ModBlocks.ThresholdResetSolid] = (rect, src, screen, x, y) => new BlockThresholdResetSolid(rect),
             };
 
         /// <summary>Last maps <c>ulong</c> steam id a block has been created for.</summary>

@@ -70,7 +70,7 @@
             // These should never be null at this point, but better safe than sorry.
             var settingsAuto = new SettingsAuto(root?.Element("Auto"));
             debugInstance.EntityLogicAuto?.UpdateSettings(settingsAuto);
-            debugInstance.BehaviourAutoReset?.UpdateDuration(settingsAuto.DurationOff);
+            debugInstance.BehaviourAutoReset?.UpdateSettings(settingsAuto);
         }
 
         /// <summary>
@@ -145,6 +145,7 @@
 
             var settingsJump = new SettingsJump(root?.Element("Jump"));
             debugInstance.EntityLogicJump?.UpdateSettings(settingsJump);
+            debugInstance.BehaviourJumpReset?.UpdateDirections(settingsJump.LeverDirections);
 
             PlayerEntity.OnJumpCall -= SetupJump.JumpSwitchSafe;
             PlayerEntity.OnJumpCall -= SetupJump.JumpSwitchUnsafe;
@@ -208,7 +209,7 @@
 
             var settingsThreshold = new SettingsThreshold(root?.Element("Threshold"));
             debugInstance.EntityLogicThreshold?.UpdateSettings(settingsThreshold);
-            debugInstance.BehaviourThresholdReset?.UpdateStat(settingsThreshold.Stat);
+            debugInstance.BehaviourThresholdReset?.UpdateSettings(settingsThreshold);
         }
     }
 }

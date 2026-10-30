@@ -1,6 +1,7 @@
 namespace SwitchBlocks.Behaviours
 {
     using System;
+    using System.Linq;
     using Blocks;
     using Data;
     using JumpKing;
@@ -9,6 +10,7 @@ namespace SwitchBlocks.Behaviours
     using JumpKing.Level;
     using JumpKing.SaveThread;
     using Patches;
+    using Settings;
     using Util;
 
     /// <summary>
@@ -17,14 +19,18 @@ namespace SwitchBlocks.Behaviours
     public class BehaviourThresholdReset : IBlockBehaviour
     {
         /// <summary>Ctor.</summary>
-        public BehaviourThresholdReset(Stat stat)
+        public BehaviourThresholdReset(SettingsThreshold settings)
         {
             this.Data = DataThreshold.Instance;
-            this.Stat = stat;
+            this.Stat = settings.Stat;
+            this.LeverDirections = settings.LeverDirections;
         }
 
         /// <summary>Threshold data.</summary>
         private DataThreshold Data { get; }
+
+        /// <summary>Lever directions.</summary>
+        private Direction LeverDirections { get; set; }
 
         /// <summary>The stat to look for.</summary>
         private Stat Stat { get; set; }
@@ -59,11 +65,24 @@ namespace SwitchBlocks.Behaviours
                 return true;
             }
 
-            this.IsPlayerOnBlock = advCollisionInfo.IsCollidingWith<BlockThresholdReset>();
-
+            var isOnBlock = advCollisionInfo.IsCollidingWith<BlockThresholdReset>();
+            var isOnBlockSolid = advCollisionInfo.IsCollidingWith<BlockThresholdResetSolid>();
+            this.IsPlayerOnBlock = isOnBlock || isOnBlockSolid;
             if (!this.IsPlayerOnBlock)
             {
                 return true;
+            }
+
+            // The collision is jank for the non-solid levers, so for now I'll limit this feature to the solid ones
+            if (isOnBlockSolid)
+            {
+                var block = advCollisionInfo.GetCollidedBlocks<BlockThresholdResetSolid>().First();
+                if (!Directions.ResolveCollisionDirection(behaviourContext,
+                        this.LeverDirections,
+                        block))
+                {
+                    return true;
+                }
             }
 
             this.Data.ResetTick = PatchAchievementManager.GetTick();
@@ -94,16 +113,18 @@ namespace SwitchBlocks.Behaviours
         }
 
         /// <summary>
-        ///     Updates the stat to check for.
+        ///     Updates the settings for threshold.
         /// </summary>
-        /// <param name="stat">Stat to check for.</param>
-        public void UpdateStat(Stat stat)
+        /// <param name="settings">New threshold settings.</param>
+        public void UpdateSettings(SettingsThreshold settings)
         {
-            this.Stat = stat;
+            this.Stat = settings.Stat;
             if (this.Stat == Stat.Victory)
             {
                 this.Data.State = CompletedUGCSave.ContainsCompletion(Game1.instance.contentManager.level.ID);
             }
+
+            this.LeverDirections = settings.LeverDirections;
         }
     }
 }

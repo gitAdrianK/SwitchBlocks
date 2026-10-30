@@ -57,10 +57,10 @@ namespace SwitchBlocks.Setups
 
             var seedsId = SeedsCountdown.TryDeserialize();
             var resets = ResetsCountdown.TryDeserialize();
-            AssignByGroups(seedsId.Seeds, resets.Resets);
+            var hasChanged = AssignByGroups(seedsId.Seeds, resets.Resets);
 
             var seedsDuration = DurationsCountdown.TryDeserialize();
-            AssignByDuration(seedsDuration.Seeds);
+            hasChanged |= AssignByDuration(seedsDuration.Seeds);
 
             var entityLogic = new EntityLogicCountdown(settings);
 
@@ -144,9 +144,12 @@ namespace SwitchBlocks.Setups
                 debugInstance.EntityLogicCountdown = entityLogic;
                 debugInstance.BehaviourCountdownLever = behaviourLever;
 
-                seedsId.SaveToFile();
-                seedsDuration.SaveToFile();
-                resets.SaveToFile();
+                if (hasChanged)
+                {
+                    seedsId.SaveToFile();
+                    seedsDuration.SaveToFile();
+                    resets.SaveToFile();
+                }
             }
             else
             {
@@ -176,37 +179,43 @@ namespace SwitchBlocks.Setups
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
-        public static void AssignByGroups(IdSeeds seeds, IdsSeeds resets)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByGroups(IdSeeds seeds, IdsSeeds resets)
         {
+            var hasChanged = false;
             var groupId = 1;
 
             if (seeds.Count != 0)
             {
-                Grouping.AssignIdsFromSeed(seeds, ref groupId, SingleUseLevers);
+                hasChanged |= Grouping.AssignIdsFromSeed(seeds, ref groupId, SingleUseLevers);
             }
 
-            Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
 
             if (resets.Count != 0)
             {
-                Grouping.AssignFromSeed(resets, Resets);
+                hasChanged |= Grouping.AssignFromSeed(resets, Resets);
             }
 
-            Grouping.AssignDefaultToUnassigned(Resets, resets);
+            hasChanged |= Grouping.AssignDefaultToUnassigned(Resets, resets);
+            return hasChanged;
         }
 
         /// <summary>
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
         /// <param name="seeds">Seeds to use for assignment.</param>
-        public static void AssignByDuration(DurationSeeds seeds)
+        /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
+        public static bool AssignByDuration(DurationSeeds seeds)
         {
+            var hasChanged = false;
             if (seeds.Count != 0)
             {
-                Grouping.AssignFromSeed(seeds, CustomDurationLevers);
+                hasChanged |= Grouping.AssignFromSeed(seeds, CustomDurationLevers);
             }
 
-            Grouping.AssignDefaultToUnassigned(CustomDurationLevers, seeds);
+            hasChanged |= Grouping.AssignDefaultToUnassigned(CustomDurationLevers, seeds);
+            return hasChanged;
         }
     }
 }

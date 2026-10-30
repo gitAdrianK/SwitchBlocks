@@ -16,6 +16,7 @@ namespace SwitchBlocks.Settings
             this.ForceSwitch = XmlHelper.ParseElementBool(element, "ForceStateSwitch");
             this.CanJumpInAir = XmlHelper.ParseElementBool(element, "CanJumpInAir");
             this.Cooldown = ParseSettings.ParseCount(element?.Element("Cooldown"), 0);
+            this.LeverDirections = ParseSettings.ParseSideDisable(element?.Element("LeverSideDisable"));
         }
 
         /// <summary>Multiplier of the deltaTime used in the animation of the jump block type.</summary>
@@ -29,5 +30,8 @@ namespace SwitchBlocks.Settings
 
         /// <summary>The amount of frames that have to pass before the player can switch in air again.</summary>
         public int Cooldown { get; }
+
+        /// <summary>Directions the reset can be activated from.</summary>
+        public Direction LeverDirections { get; }
     }
 }
