@@ -109,17 +109,17 @@
         ///     Assigns group IDs to unassigned blocks setting the id to be larger than every created
         ///     block group. Failures to create groups are removed from the "seeds" dictionary.
         /// </summary>
-        /// <param name="seeds">Seeds to use for id assignment, failing to assign the seed removes it.</param>
+        /// <param name="seedsDictionary">Seeds to use for id assignment, failing to assign the seed removes it.</param>
         /// <param name="groupId">ID set to be larger than every seed ID.</param>
         /// <param name="allBlocks">Blocks to potentially assign the id to and propagate from.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
         public static bool AssignIdsFromSeed(
-            IdSeeds seeds,
+            IdSeedsDictionary seedsDictionary,
             ref int groupId,
             params Dictionary<int, IGroupId>[] allBlocks)
         {
             var misses = new List<int>();
-            foreach (var kv in seeds)
+            foreach (var kv in seedsDictionary)
             {
                 var currentPos = kv.Key;
                 var currentId = kv.Value;
@@ -138,7 +138,7 @@
 
             foreach (var miss in misses)
             {
-                _ = seeds.Remove(miss);
+                _ = seedsDictionary.Remove(miss);
             }
 
             return misses.Count != 0;
@@ -149,12 +149,12 @@
         ///     block group. Successfully created groups are added to the "seeds" dictionary.
         /// </summary>
         /// <param name="blocks">Blocks to potentially assign the id to and propagate from.</param>
-        /// <param name="seeds">Seeds to add created block groups to.</param>
+        /// <param name="seedsDictionary">Seeds to add created block groups to.</param>
         /// <param name="groupId">ID assigned to the groups, counted up for every group created.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
         public static bool AssignIdsConsecutively(
             Dictionary<int, IGroupId> blocks,
-            IdSeeds seeds,
+            IdSeedsDictionary seedsDictionary,
             ref int groupId)
         {
             var hasChanged = false;
@@ -166,7 +166,7 @@
                 }
 
                 hasChanged = true;
-                seeds[position] = groupId;
+                seedsDictionary[position] = groupId;
                 groupId++;
             }
 

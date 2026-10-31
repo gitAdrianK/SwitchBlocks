@@ -313,11 +313,11 @@
     <Compile Include="Factories\Drawables\FactoryScrolling.cs"/>
     <Compile Include="Factories\FactorySequence.cs"/>
     <Compile Include="Factories\FactoryThreshold.cs"/>
-    <Compile Include="Grouping\DurationSeeds.cs"/>
+    <Compile Include="Grouping\DurationSeedsDictionary.cs"/>
     <Compile Include="Grouping\Grouping.cs"/>
-    <Compile Include="Grouping\IdsSeeds.cs"/>
+    <Compile Include="Grouping\IdsSeedsDictionary.cs"/>
     <Compile Include="Grouping\IGroupable.cs"/>
-    <Compile Include="Grouping\IdSeeds.cs"/>
+    <Compile Include="Grouping\IdSeedsDictionary.cs"/>
     <Compile Include="Menus\MenuBindButton.cs"/>
     <Compile Include="Menus\MenuBindDefault.cs"/>
     <Compile Include="Menus\MenuBindDisplay.cs"/>

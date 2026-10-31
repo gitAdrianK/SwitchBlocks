@@ -64,7 +64,7 @@ namespace SwitchBlocks.Setups
             var seeds = SeedsGroup.TryDeserialize();
             var resets = ResetsGroup.TryDeserialize();
             var deactivates = DeactivatesGroup.TryDeserialize();
-            var hasChanged = AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets,
+            var hasChanged = AssignGroupIds(DataGroup.Instance.Groups, seeds.SeedsDictionary, resets.Resets,
                 deactivates.Deactivates);
 
             var entityLogic = new EntityLogicGroup(settings);
@@ -134,19 +134,19 @@ namespace SwitchBlocks.Setups
         ///     Assigns group IDs to all groups blocks.
         /// </summary>
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
-        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="seedsDictionary">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
         /// <param name="deactivates">Positions to add deactivate IDs to deactivate blocks to.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
-        public static bool AssignGroupIds(Dictionary<int, BlockGroup> groups, IdSeeds seeds,
-            IdsSeeds resets, IdsSeeds deactivates)
+        public static bool AssignGroupIds(Dictionary<int, BlockGroup> groups, IdSeedsDictionary seedsDictionary,
+            IdsSeedsDictionary resets, IdsSeedsDictionary deactivates)
         {
             var hasChanged = false;
             var groupId = 1;
 
-            if (seeds.Count != 0)
+            if (seedsDictionary.Count != 0)
             {
-                hasChanged |= Grouping.AssignIdsFromSeed(seeds,
+                hasChanged |= Grouping.AssignIdsFromSeed(seedsDictionary,
                     ref groupId,
                     BlocksGroupA,
                     BlocksGroupB,
@@ -154,12 +154,12 @@ namespace SwitchBlocks.Setups
                     BlocksGroupD);
             }
 
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupA, seeds, ref groupId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupB, seeds, ref groupId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupC, seeds, ref groupId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupD, seeds, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupA, seedsDictionary, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupB, seedsDictionary, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupC, seedsDictionary, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksGroupD, seedsDictionary, ref groupId);
 
-            BlockGroup.CreateGroupData(seeds.Ids, groups, true);
+            BlockGroup.CreateGroupData(seedsDictionary.Ids, groups, true);
 
             if (resets.Count != 0)
             {

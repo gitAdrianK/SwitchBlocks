@@ -48,7 +48,7 @@ namespace SwitchBlocks.Setups
             behaviourPre.Auto = data;
 
             var seedsDuration = DurationsAuto.TryDeserialize();
-            var hasChanged = AssignByDuration(seedsDuration.Seeds);
+            var hasChanged = AssignByDuration(seedsDuration.SeedsDictionary);
 
             var entityLogic = new EntityLogicAuto(settings);
             if (data.DurationOn > 0 || data.DurationOff > 0)
@@ -132,17 +132,17 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Assigns durations to all custom duration blocks.
         /// </summary>
-        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="seedsDictionary">Seeds to use for assignment.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
-        public static bool AssignByDuration(DurationSeeds seeds)
+        public static bool AssignByDuration(DurationSeedsDictionary seedsDictionary)
         {
             var hasChanged = false;
-            if (seeds.Count != 0)
+            if (seedsDictionary.Count != 0)
             {
-                hasChanged |= Grouping.AssignFromSeed(seeds, ChangeDuration);
+                hasChanged |= Grouping.AssignFromSeed(seedsDictionary, ChangeDuration);
             }
 
-            hasChanged |= Grouping.AssignDefaultToUnassigned(ChangeDuration, seeds);
+            hasChanged |= Grouping.AssignDefaultToUnassigned(ChangeDuration, seedsDictionary);
             return hasChanged;
         }
     }

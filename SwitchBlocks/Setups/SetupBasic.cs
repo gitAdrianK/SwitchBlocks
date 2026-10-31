@@ -54,7 +54,7 @@ namespace SwitchBlocks.Setups
 
             var seedsId = SeedsBasic.TryDeserialize();
             var resets = ResetsBasic.TryDeserialize();
-            AssignByGroups(seedsId.Seeds, resets.Resets);
+            AssignByGroups(seedsId.SeedsDictionary, resets.Resets);
 
             var entityLogic = new EntityLogicBasic(settings);
 
@@ -157,23 +157,23 @@ namespace SwitchBlocks.Setups
         /// <summary>
         ///     Assigns group IDs to all single use blocks.
         /// </summary>
-        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="seedsDictionary">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
-        public static bool AssignByGroups(IdSeeds seeds, IdsSeeds resets)
+        public static bool AssignByGroups(IdSeedsDictionary seedsDictionary, IdsSeedsDictionary resets)
         {
             var hasChanged = false;
             var groupId = 1;
 
-            if (seeds.Count != 0)
+            if (seedsDictionary.Count != 0)
             {
                 hasChanged |= Grouping.AssignIdsFromSeed(
-                    seeds,
+                    seedsDictionary,
                     ref groupId,
                     SingleUseLevers);
             }
 
-            hasChanged |= Grouping.AssignIdsConsecutively(SingleUseLevers, seeds, ref groupId);
+            hasChanged |= Grouping.AssignIdsConsecutively(SingleUseLevers, seedsDictionary, ref groupId);
 
             if (resets.Count != 0)
             {

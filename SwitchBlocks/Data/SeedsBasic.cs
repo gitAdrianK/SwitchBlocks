@@ -15,12 +15,12 @@
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsBasic() => this.Seeds = new IdSeeds();
+        private SeedsBasic() => this.SeedsDictionary = new IdSeedsDictionary();
 
         /// <summary>
         ///     Mapping of the blocks position and id.
         /// </summary>
-        public IdSeeds Seeds { get; private set; }
+        public IdSeedsDictionary SeedsDictionary { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -49,7 +49,7 @@
 
                 return new SeedsBasic
                 {
-                    Seeds = new IdSeeds(xels.ToDictionary(
+                    SeedsDictionary = new IdSeedsDictionary(xels.ToDictionary(
                         key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                          throw new InvalidOperationException()),
                         value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
@@ -63,7 +63,7 @@
         /// </summary>
         public void SaveToFile()
         {
-            if (this.Seeds.Count == 0)
+            if (this.SeedsDictionary.Count == 0)
             {
                 return;
             }
@@ -80,8 +80,8 @@
             var doc = new XDocument(
                 new XElement("SeedsBasic",
                     new XElement(ModConstants.SaveSeeds,
-                        this.Seeds.Count != 0
-                            ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
+                        this.SeedsDictionary.Count != 0
+                            ? this.SeedsDictionary.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
                                     new XElement(ModConstants.SaveId, kv.Value)))

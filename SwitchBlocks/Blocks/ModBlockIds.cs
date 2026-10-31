@@ -24,6 +24,6 @@ namespace SwitchBlocks.Blocks
         public int[] DefaultValue => DefaultMultipleIds;
 
         /// <inheritdoc />
-        public int[] Value { get; set; }
+        public int[] Value { get; set; } = new int[0];
     }
 }

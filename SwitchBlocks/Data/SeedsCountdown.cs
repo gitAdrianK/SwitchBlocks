@@ -15,12 +15,12 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsCountdown() => this.Seeds = new IdSeeds();
+        private SeedsCountdown() => this.SeedsDictionary = new IdSeedsDictionary();
 
         /// <summary>
         ///     Mapping of the blocks position and id.
         /// </summary>
-        public IdSeeds Seeds { get; private set; }
+        public IdSeedsDictionary SeedsDictionary { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -49,7 +49,7 @@ namespace SwitchBlocks.Data
 
                 return new SeedsCountdown
                 {
-                    Seeds = new IdSeeds(xels.ToDictionary(
+                    SeedsDictionary = new IdSeedsDictionary(xels.ToDictionary(
                         key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                          throw new InvalidOperationException()),
                         value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
@@ -63,7 +63,7 @@ namespace SwitchBlocks.Data
         /// </summary>
         public void SaveToFile()
         {
-            if (this.Seeds.Count == 0)
+            if (this.SeedsDictionary.Count == 0)
             {
                 return;
             }
@@ -80,8 +80,8 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("SeedsCountdown",
                     new XElement(ModConstants.SaveSeeds,
-                        this.Seeds.Count != 0
-                            ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
+                        this.SeedsDictionary.Count != 0
+                            ? this.SeedsDictionary.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
                                     new XElement(ModConstants.SaveId, kv.Value)))

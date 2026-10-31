@@ -17,13 +17,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private ResetsGroup() => this.Resets = new IdsSeeds();
+        private ResetsGroup() => this.Resets = new IdsSeedsDictionary();
 
         /// <summary>
         ///     Mapping of the position and the IDs a reset block is supposed to be able to reset,
         ///     should a single 0 be the only id this block can reset, reset all.
         /// </summary>
-        public IdsSeeds Resets { get; private set; }
+        public IdsSeedsDictionary Resets { get; private set; }
 
         /// <summary>
         ///     Tries to load resets from file. Default otherwise.
@@ -68,7 +68,7 @@ namespace SwitchBlocks.Data
 
         private static ResetsGroup GetNewDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
-            Resets = new IdsSeeds(xels.ToDictionary(
+            Resets = new IdsSeedsDictionary(xels.ToDictionary(
                 key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result) ? result : 0,
                 value => value.Elements(ModConstants.SaveId).Select(id => int.Parse(id.Value)).ToArray())),
         };
@@ -80,7 +80,7 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static ResetsGroup GetLegacyDict(IEnumerable<XElement> xels) => new ResetsGroup
         {
-            Resets = new IdsSeeds(xels.ToDictionary(
+            Resets = new IdsSeedsDictionary(xels.ToDictionary(
                 key => int.TryParse(key.Element("key")?.Element("int")?.Value, out var result) ? result : 0,
                 value => value.Element("value")?.Element("ArrayOfInt")?.Elements("int")
                     .Select(id => int.Parse(id.Value))

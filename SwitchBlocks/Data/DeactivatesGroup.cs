@@ -16,13 +16,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private DeactivatesGroup() => this.Deactivates = new IdsSeeds();
+        private DeactivatesGroup() => this.Deactivates = new IdsSeedsDictionary();
 
         /// <summary>
         ///     Mapping of the position and the IDs a deactivate block is supposed to be able to deactivate,
         ///     should a single 0 be the only id this block can deactivate, deactivate all.
         /// </summary>
-        public IdsSeeds Deactivates { get; private set; }
+        public IdsSeedsDictionary Deactivates { get; private set; }
 
         /// <summary>
         ///     Tries to load deactivates from file. Default otherwise.
@@ -54,7 +54,7 @@ namespace SwitchBlocks.Data
                 {
                     return new DeactivatesGroup
                     {
-                        Deactivates = new IdsSeeds(xel.Elements(ModConstants.SaveDeactivate).ToDictionary(
+                        Deactivates = new IdsSeedsDictionary(xel.Elements(ModConstants.SaveDeactivate).ToDictionary(
                             key => int.TryParse(key.Element(ModConstants.SavePosition)?.Value, out var result)
                                 ? result
                                 : 0,

@@ -18,13 +18,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsGroup() => this.Seeds = new IdSeeds();
+        private SeedsGroup() => this.SeedsDictionary = new IdSeedsDictionary();
 
         /// <summary>
         ///     Groups belonging to the respective id.
         ///     A group has the data related to a platform.
         /// </summary>
-        public IdSeeds Seeds { get; private set; }
+        public IdSeedsDictionary SeedsDictionary { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -75,7 +75,7 @@ namespace SwitchBlocks.Data
 
             return new SeedsGroup
             {
-                Seeds = new IdSeeds(xElements.ToDictionary(
+                SeedsDictionary = new IdSeedsDictionary(xElements.ToDictionary(
                     key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                      throw new InvalidOperationException()),
                     value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
@@ -90,7 +90,7 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static SeedsGroup GetLegacySeeds(IEnumerable<XElement> xels) => new SeedsGroup
         {
-            Seeds = new IdSeeds(xels.ToDictionary(
+            SeedsDictionary = new IdSeedsDictionary(xels.ToDictionary(
                 key => int.Parse(key.Element("key")?.Element("int")?.Value ?? string.Empty),
                 value => int.Parse(value.Element("value")?.Element("int")?.Value ?? string.Empty))),
         };
@@ -100,7 +100,7 @@ namespace SwitchBlocks.Data
         /// </summary>
         public void SaveToFile()
         {
-            if (this.Seeds.Count == 0)
+            if (this.SeedsDictionary.Count == 0)
             {
                 return;
             }
@@ -117,8 +117,8 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("SeedsGroup",
                     new XElement(ModConstants.SaveSeeds,
-                        this.Seeds.Count != 0
-                            ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
+                        this.SeedsDictionary.Count != 0
+                            ? this.SeedsDictionary.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
                                     new XElement(ModConstants.SaveId, kv.Value)))

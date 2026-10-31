@@ -53,7 +53,7 @@ namespace SwitchBlocks.Setups
             var instance = DataSequence.Instance;
             var seeds = SeedsSequence.TryDeserialize();
             var resets = ResetsSequence.TryDeserialize();
-            var hasChanged = AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets);
+            var hasChanged = AssignSequenceIds(instance.Groups, seeds.SeedsDictionary, resets.Resets);
 
             if (SaveManager.instance.IsNewGame)
             {
@@ -132,18 +132,18 @@ namespace SwitchBlocks.Setups
         ///     Assigns sequence IDs to all sequence blocks.
         /// </summary>
         /// <param name="groups">Block groups to add groups to holding that groups data.</param>
-        /// <param name="seeds">Seeds to use for assignment.</param>
+        /// <param name="seedsDictionary">Seeds to use for assignment.</param>
         /// <param name="resets">Positions to add reset IDs to reset blocks to.</param>
         /// <returns><c>true</c> if the seeds file has changed, <c>false</c> otherwise.</returns>
-        public static bool AssignSequenceIds(Dictionary<int, BlockGroup> groups, IdSeeds seeds,
-            IdsSeeds resets)
+        public static bool AssignSequenceIds(Dictionary<int, BlockGroup> groups, IdSeedsDictionary seedsDictionary,
+            IdsSeedsDictionary resets)
         {
             var hasChanged = false;
             var sequenceId = 1;
 
-            if (seeds.Count != 0)
+            if (seedsDictionary.Count != 0)
             {
-                hasChanged |= Grouping.AssignIdsFromSeed(seeds,
+                hasChanged |= Grouping.AssignIdsFromSeed(seedsDictionary,
                     ref sequenceId,
                     BlocksSequenceA,
                     BlocksSequenceB,
@@ -151,12 +151,12 @@ namespace SwitchBlocks.Setups
                     BlocksSequenceD);
             }
 
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceA, seeds, ref sequenceId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceB, seeds, ref sequenceId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceC, seeds, ref sequenceId);
-            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceD, seeds, ref sequenceId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceA, seedsDictionary, ref sequenceId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceB, seedsDictionary, ref sequenceId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceC, seedsDictionary, ref sequenceId);
+            hasChanged |= Grouping.AssignIdsConsecutively(BlocksSequenceD, seedsDictionary, ref sequenceId);
 
-            BlockGroup.CreateGroupData(seeds.Ids, groups, false);
+            BlockGroup.CreateGroupData(seedsDictionary.Ids, groups, false);
 
             if (resets.Count != 0)
             {

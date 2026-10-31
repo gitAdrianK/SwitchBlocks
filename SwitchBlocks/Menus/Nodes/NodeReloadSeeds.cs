@@ -53,7 +53,7 @@
 
             var seedsDuration = DurationsAuto.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixDurations}{ModConstants.Auto}{ModConstants.SuffixSav}"));
-            if (SetupAuto.AssignByDuration(seedsDuration.Seeds))
+            if (SetupAuto.AssignByDuration(seedsDuration.SeedsDictionary))
             {
                 seedsDuration.SaveToFile();
             }
@@ -80,7 +80,7 @@
                 $"{ModConstants.PrefixSeeds}{ModConstants.Basic}{ModConstants.SuffixSav}"));
             var resets = ResetsBasic.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixResets}{ModConstants.Basic}{ModConstants.SuffixSav}"));
-            if (!SetupBasic.AssignByGroups(seedsId.Seeds, resets.Resets))
+            if (!SetupBasic.AssignByGroups(seedsId.SeedsDictionary, resets.Resets))
             {
                 return;
             }
@@ -116,7 +116,7 @@
             var resets = ResetsCountdown.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixResets}{ModConstants.Countdown}{ModConstants.SuffixSav}"));
 
-            if (SetupCountdown.AssignByGroups(seedsId.Seeds, resets.Resets))
+            if (SetupCountdown.AssignByGroups(seedsId.SeedsDictionary, resets.Resets))
             {
                 seedsId.SaveToFile();
                 resets.SaveToFile();
@@ -124,7 +124,7 @@
 
             var seedsDuration = DurationsCountdown.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixDurations}{ModConstants.Countdown}{ModConstants.SuffixSav}"));
-            if (SetupCountdown.AssignByDuration(seedsDuration.Seeds))
+            if (SetupCountdown.AssignByDuration(seedsDuration.SeedsDictionary))
             {
                 seedsDuration.SaveToFile();
             }
@@ -176,7 +176,7 @@
                 $"{ModConstants.PrefixResets}{ModConstants.Group}{ModConstants.SuffixSav}"));
             var deactivates = DeactivatesGroup.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixDeactivates}{ModConstants.Group}{ModConstants.SuffixSav}"));
-            if (!SetupGroup.AssignGroupIds(DataGroup.Instance.Groups, seeds.Seeds, resets.Resets,
+            if (!SetupGroup.AssignGroupIds(DataGroup.Instance.Groups, seeds.SeedsDictionary, resets.Resets,
                     deactivates.Deactivates))
             {
                 return;
@@ -227,7 +227,7 @@
             var resets = ResetsSequence.TryDeserialize(Path.Combine(directorySaves,
                 $"{ModConstants.PrefixResets}{ModConstants.Sequence}{ModConstants.SuffixSav}"));
 
-            if (SetupSequence.AssignSequenceIds(instance.Groups, seeds.Seeds, resets.Resets))
+            if (SetupSequence.AssignSequenceIds(instance.Groups, seeds.SeedsDictionary, resets.Resets))
             {
                 seeds.SaveToFile();
                 resets.SaveToFile();

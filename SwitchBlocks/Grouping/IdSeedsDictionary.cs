@@ -3,20 +3,20 @@
     using System.Collections.Generic;
 
     /// <summary>
-    ///     Special dictionary to hold the "position to ids" seeds.
+    ///     Special dictionary to hold the "position to id" seeds.
     /// </summary>
-    public class IdsSeeds : Dictionary<int, int[]>
+    public class IdSeedsDictionary : Dictionary<int, int>
     {
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public IdsSeeds() { }
+        public IdSeedsDictionary() { }
 
         /// <summary>
         ///     Ctor taking a dictionary.
         /// </summary>
         /// <param name="dictionary">The dictionary.</param>
-        public IdsSeeds(IDictionary<int, int[]> dictionary) : base(dictionary) { }
+        public IdSeedsDictionary(IDictionary<int, int> dictionary) : base(dictionary) { }
 
         /// <summary>
         ///     Positions of all seeds.

@@ -16,12 +16,12 @@
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private DurationsCountdown() => this.Seeds = new DurationSeeds();
+        private DurationsCountdown() => this.SeedsDictionary = new DurationSeedsDictionary();
 
         /// <summary>
         ///     Mapping of the blocks position and id.
         /// </summary>
-        public DurationSeeds Seeds { get; private set; }
+        public DurationSeedsDictionary SeedsDictionary { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -50,7 +50,7 @@
 
                 return new DurationsCountdown
                 {
-                    Seeds = new DurationSeeds(xels.ToDictionary(
+                    SeedsDictionary = new DurationSeedsDictionary(xels.ToDictionary(
                         key => int.Parse(
                             key.Element(ModConstants.SavePosition)?.Value
                             ?? throw new InvalidOperationException()),
@@ -69,7 +69,7 @@
         /// </summary>
         public void SaveToFile()
         {
-            if (this.Seeds.Count == 0)
+            if (this.SeedsDictionary.Count == 0)
             {
                 return;
             }
@@ -86,8 +86,8 @@
             var doc = new XDocument(
                 new XElement("DurationsCountdown",
                     new XElement(ModConstants.SaveSeeds,
-                        this.Seeds.Count != 0
-                            ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
+                        this.SeedsDictionary.Count != 0
+                            ? this.SeedsDictionary.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
                                     new XElement(

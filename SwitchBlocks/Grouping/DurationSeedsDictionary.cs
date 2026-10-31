@@ -5,18 +5,18 @@
     /// <summary>
     ///     Special dictionary to hold the "position to duration" seeds.
     /// </summary>
-    public class DurationSeeds : Dictionary<int, int>
+    public class DurationSeedsDictionary : Dictionary<int, int>
     {
         /// <summary>
         ///     Ctor.
         /// </summary>
-        public DurationSeeds() { }
+        public DurationSeedsDictionary() { }
 
         /// <summary>
         ///     Ctor taking a dictionary.
         /// </summary>
         /// <param name="dictionary">The dictionary.</param>
-        public DurationSeeds(IDictionary<int, int> dictionary) : base(dictionary) { }
+        public DurationSeedsDictionary(IDictionary<int, int> dictionary) : base(dictionary) { }
 
         /// <summary>
         ///     Positions of all seeds.

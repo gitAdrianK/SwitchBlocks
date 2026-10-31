@@ -16,13 +16,13 @@ namespace SwitchBlocks.Data
         /// <summary>
         ///     Private ctor.
         /// </summary>
-        private SeedsSequence() => this.Seeds = new IdSeeds();
+        private SeedsSequence() => this.SeedsDictionary = new IdSeedsDictionary();
 
         /// <summary>
         ///     Groups belonging to the respective id.
         ///     A group has the data related to a platform.
         /// </summary>
-        public IdSeeds Seeds { get; private set; }
+        public IdSeedsDictionary SeedsDictionary { get; private set; }
 
         /// <summary>
         ///     Tries to load seeds from file. Default otherwise.
@@ -65,7 +65,7 @@ namespace SwitchBlocks.Data
 
         private static SeedsSequence GetNewDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
-            Seeds = new IdSeeds(xels.ToDictionary(
+            SeedsDictionary = new IdSeedsDictionary(xels.ToDictionary(
                 key => int.Parse(key.Element(ModConstants.SavePosition)?.Value ??
                                  throw new InvalidOperationException()),
                 value => int.Parse(value.Element(ModConstants.SaveId)?.Value ??
@@ -79,7 +79,7 @@ namespace SwitchBlocks.Data
         /// <returns>Parsed <see cref="BlockGroup" />.</returns>
         private static SeedsSequence GetLegacyDict(IEnumerable<XElement> xels) => new SeedsSequence
         {
-            Seeds = new IdSeeds(xels.ToDictionary(
+            SeedsDictionary = new IdSeedsDictionary(xels.ToDictionary(
                 key => int.Parse(key.Element("key")?.Element("int")?.Value ?? throw new InvalidOperationException()),
                 value => int.Parse(value.Element("value")?.Element("int")?.Value ??
                                    throw new InvalidOperationException()))),
@@ -90,7 +90,7 @@ namespace SwitchBlocks.Data
         /// </summary>
         public void SaveToFile()
         {
-            if (this.Seeds.Count == 0)
+            if (this.SeedsDictionary.Count == 0)
             {
                 return;
             }
@@ -107,8 +107,8 @@ namespace SwitchBlocks.Data
             var doc = new XDocument(
                 new XElement("SeedsSequence",
                     new XElement(ModConstants.SaveSeeds,
-                        this.Seeds.Count != 0
-                            ? this.Seeds.OrderBy(kv => kv.Key).Select(kv =>
+                        this.SeedsDictionary.Count != 0
+                            ? this.SeedsDictionary.OrderBy(kv => kv.Key).Select(kv =>
                                 new XElement(ModConstants.SaveSeed,
                                     new XElement(ModConstants.SavePosition, kv.Key),
                                     new XElement(ModConstants.SaveId, kv.Value)))
